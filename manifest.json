@@ -1,0 +1,36 @@
+{
+	"manifest_version":1,
+	"type":"WebApp",
+	"meta":{
+		"name":"Manastorm - a Hearthstone replay viewer",
+		"author":"Sébastien Tromp",
+		"version":"1.0.0",
+		"minimum-overwolf-version":"0.77.10",
+		"access-name": "com.zerotoheroes.overwolf.hs",
+		"description":"A replay viewer to rewatch your Hearthstone games in a format that makes play analysis easier",
+		"dock_button_title": "Replay viewer",
+		"icon":"IconDock.png",
+		"icon_gray":"IconDockGray.png",
+		"store_icon": "IconStore.png"
+	},
+	"permissions": ["Logging", "GameInfo", "FileSystem"],
+	"data": {
+		"start_window":"MainWindow",
+		"windows": {
+			"MainWindow":{
+				"file": "Files/index.html",
+				"transparent": true,
+				"resizable": true,
+				"size": {"width": 730, "height": 910},
+				"min_size": {"width": 730, "height": 910},
+				"max_size": {"width": 730, "height": 910}
+			}
+		},
+		"game_events": ["9898"],
+		"externally_connectable": {
+			"matches": [
+				"http://www.zerotoheroes.com"
+			]
+		}
+	}
+}

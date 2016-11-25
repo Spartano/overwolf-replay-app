@@ -1,0 +1,109 @@
+﻿<!DOCTYPE html>
+<html>
+	<head> 
+		<link rel="stylesheet" href="style.css" />
+
+		<!-- TODO: group all deps in a single file -->
+		<link rel="stylesheet" href="manastorm/scaffolding.css" />
+		<link rel="stylesheet" href="manastorm/dependencies/hearthstone.css" />
+		<link rel="stylesheet" href="manastorm/manastorm.css" />
+		<!-- Bootstrap -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+		<title>Hearthstone Replay Viewer</title>
+		<script>
+			function dragResize(edge){
+				overwolf.windows.getCurrentWindow(function(result){
+					if (result.status=="success"){
+						overwolf.windows.dragResize(result.window.id, edge);
+					}
+				});
+			};
+			
+			function dragMove(){
+				overwolf.windows.getCurrentWindow(function(result){
+					if (result.status=="success"){
+						overwolf.windows.dragMove(result.window.id);
+					}
+				});
+			};
+			
+			function closeWindow(){
+				overwolf.windows.getCurrentWindow(function(result){
+					if (result.status=="success"){
+						overwolf.windows.close(result.window.id);
+					}
+				});
+			};
+			
+			function openSubWindow(){
+				alert("the subwindow will only be visible inside a game");
+				overwolf.windows.obtainDeclaredWindow("SubWindow", function(result){
+					if (result.status == "success"){
+						overwolf.windows.restore(result.window.id, function(result){
+								console.log(result);
+						});
+					}
+				});
+			};
+			
+			function takeScreenshot(){
+				overwolf.media.takeScreenshot(function(result){
+					if (result.status == "success"){
+						var img = document.getElementById("screenshot");
+						img.src = result.url;
+						img.onload = function() {
+							overwolf.media.shareImage(img, "Screen Shot");
+						};
+					}
+				});
+			}
+		</script>
+	</head>
+
+	<body>
+		<div class="resizeGrip" id="resizeGripTopLeft" onmousedown="dragResize('TopLeft');"></div>
+		<div class="resizeGrip" id="resizeGripTop" onmousedown="dragResize('Top');"></div>
+		<div class="resizeGrip" id="resizeGripTopRight" onmousedown="dragResize('TopRight');"></div>
+		<div class="resizeGrip" id="resizeGripRight" onmousedown="dragResize('Right');"></div>
+		<div class="resizeGrip" id="resizeGripBottomRight" onmousedown="dragResize('BottomRight');"></div>
+		<div class="resizeGrip" id="resizeGripBottom" onmousedown="dragResize('Bottom');"></div>
+		<div class="resizeGrip" id="resizeGripBottomLeft" onmousedown="dragResize('BottomLeft');"></div>
+		<div class="resizeGrip" id="resizeGripLeft" onmousedown="dragResize('Left');"></div>
+
+		<div class="hearthstone" id="content" onmousedown="dragMove();">
+			<button id="close" onclick="closeWindow();">Close</button>
+			<div class="manastorm main-container">
+				<div class="external-player-container">
+					<div id="dummy"></div>
+					<div id="externalPlayer" class="external-player">
+						Waiting waiting
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" ></script>
+		<script src="manastorm/dependencies/parseCardsText.js"></script>	
+		<script src="manastorm/manastorm.js"></script>
+		<script src="parser/parser.js"></script>
+		<script src="converter/converter.js"></script>
+
+		<script>
+			$.ajax({
+				url: 'manastorm/replay.xml',
+				dataType: 'xml',
+				success: function(response) {
+					manastorm.loadReplay(response)
+
+					if (window.location.search) {
+						var ts = window.location.search.split('?ts=')[1]
+						manastorm.goToTimestamp(ts)
+					}
+				}
+			})
+			// 
+		</script>
+	</body>
+</html>
