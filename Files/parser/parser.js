@@ -65,51 +65,57 @@ function registerLogMonitor() {
 	// TODO: deduce this from the game's running path
 	var logsLocation = 'F:\\Games\\Hearthstone\\Logs\\Power.log'
 
-	var input;
-	var lastMod;
+	plugin.get().fileExists(logsLocation, function(status) {
+		if (status === true) {
+	    	console.log(logsLocation + ' exists on disk')	
+    	} 
+    	else {
+    		console.error(logsLocation + ' DOES NOT exists on disk')	
+    		return
+    	}
+    })
 
-	function startWatching() {
-		var file;
+    plugin.get().getTextFile(logsLocation, false, function(status, data) {
+    	if (!status) {
+        	console.error('Could not retrieve ' + logsLocation + '')	
+    		return
+      	} 
+      	else {
+        	var fullLog = data
+        	console.log('retrieved data')
+      	}
+  	});
 
-		if (typeof window.FileReader !== 'function') {
-			console.error("The file API isn't supported on this browser yet.");
-			return;
-		}
-
-		input = document.getElementById('filename');
-		if (!input) {
-			display("Um, couldn't find the filename element.");
-		}
-		else if (!input.files) {
-			display("This browser doesn't seem to support the `files` property of file inputs.");
-		}
-		else if (!input.files[0]) {
-			display("Please select a file before clicking 'Show Size'");
-		}
-		else {
-			file = input.files[0];
-			lastMod = file.lastModifiedDate;
-			display("Last modified date: " + lastMod);
-			display("Change the file");
-			setInterval(tick, 250);
-		}
-	}
-
-	function tick() {
-		var file = input.files && input.files[0];
-		if (file && lastMod && file.lastModifiedDate.getTime() !== lastMod.getTime()) {
-			lastMod = file.lastModifiedDate;
-			display("File changed: " + lastMod);
-		}
-	}
+	plugin.get().listenOnFile("hs-logs-file", filename, false, function(id, status, data) { 
+		if (fileId == fileIdentifier) {
+    		if (status) {
+      			console.log("[" + fileId + "] " + data);
+    		} 
+    		else {
+      			console.log('something bad happened: ' + data);
+    		}
+  		}
+	});
 }
 
 
 // Start here
-overwolf.games.onGameInfoUpdated.addListener(function (res) {
-	console.log("onGameInfoUpdated: " + JSON.stringify(res));
-	if (gameLaunched(res)) {
-		registerEvents();
-		registerLogMonitor()
-	}
-});
+var plugin = new OverwolfPlugin("simple-io-plugin", true);
+console.log('initializing plugin')
+plugin.initialize(function(status) {
+	console.log('init done', status, plugin)
+  	if (status == false) {
+    	console.error("Plugin couldn't be loaded??")
+    	return;
+  	}
+  	console.log("Plugin " + plugin.get()._PluginName_ + " was loaded!");
+
+  	// Registering game listener
+	overwolf.games.onGameInfoUpdated.addListener(function (res) {
+		console.log("onGameInfoUpdated: " + JSON.stringify(res));
+		if (gameLaunched(res)) {
+			registerEvents()
+			registerLogMonitor()
+		}
+	})
+})

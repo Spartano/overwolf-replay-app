@@ -13,7 +13,7 @@
 		"icon_gray":"IconDockGray.png",
 		"store_icon": "IconStore.png"
 	},
-	"permissions": ["Logging", "GameInfo", "FileSystem"],
+	"permissions": ["Logging", "GameInfo", "FileSystem", "Extensions"],
 	"data": {
 		"start_window":"MainWindow",
 		"windows": {
@@ -31,6 +31,12 @@
 			"matches": [
 				"http://www.zerotoheroes.com"
 			]
+		},
+		"extra-objects": {
+			"simple-io-plugin": {
+				"file": "Files/plugins/simple-io-plugin.dll",
+				"class": "overwolf.plugins.SimpleIOPlugin"
+			}
 		}
 	}
 }
