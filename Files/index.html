@@ -94,18 +94,19 @@
 		<script src="converter/converter.js"></script>
 
 		<script>
-			$.ajax({
-				url: 'manastorm/replay.xml',
-				dataType: 'xml',
-				success: function(response) {
-					manastorm.loadReplay(response)
+			manastorm.initPlayer()
+			// $.ajax({
+			// 	url: 'manastorm/replay.xml',
+			// 	dataType: 'xml',
+			// 	success: function(response) {
+			// 		manastorm.loadReplay(response)
 
-					if (window.location.search) {
-						var ts = window.location.search.split('?ts=')[1]
-						manastorm.goToTimestamp(ts)
-					}
-				}
-			})
+			// 		// if (window.location.search) {
+			// 		// 	var ts = window.location.search.split('?ts=')[1]
+			// 		// 	manastorm.goToTimestamp(ts)
+			// 		// }
+			// 	}
+			// })
 			// 
 		</script>
 	</body>

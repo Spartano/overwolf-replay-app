@@ -1,21 +1,3 @@
-function registerEvents() {
-	// general events errors
-	overwolf.games.events.onError.addListener(function(info) {
-		console.log("Error: " + JSON.stringify(info));
-	});
-
-	// This will also be triggered the first time we register
-	// for events and will contain all the current information
-	overwolf.games.events.onInfoUpdates2.addListener(function(info) {
-		console.log("Info UPDATE: " + JSON.stringify(info));
-	});
-
-	// an event triggerd
-	overwolf.games.events.onNewEvents.addListener(function(info) {
-		console.log("EVENT FIRED: " + JSON.stringify(info));
-	});
-}
-
 function gameLaunched(gameInfoResult) {
 	if (!gameInfoResult) {
 		return false;
@@ -61,61 +43,124 @@ function gameRunning(gameInfo) {
 	return true;
 }
 
+var monitoring = false
+var fullLogs = ''
+var gameStarted = false
+
+// ========================
+// TODOs:
+// * Unhardcode the Power.log path
+// * Doesn't work when stop then start game once again
+// * Use offline parser instead of WS call
+// * Get a code review - looks dirty, thanks no JS experience :) Mainly interested in how to handle the listen of file if files doesn't exist yet
+// * Don't hardcode line separator?
+// * And work on the user flows
+// * Don't re-upload a game when exiting / launching HS back again
+// ========================
+
 function registerLogMonitor() {
+	if (monitoring) {
+		console.log('log hooks already registered, returning')
+		return
+	}
+	console.log('registering hooks')
 	// TODO: deduce this from the game's running path
 	var logsLocation = 'F:\\Games\\Hearthstone\\Logs\\Power.log'
 
-	plugin.get().fileExists(logsLocation, function(status) {
-		if (status === true) {
-	    	console.log(logsLocation + ' exists on disk')	
-    	} 
-    	else {
-    		console.error(logsLocation + ' DOES NOT exists on disk')	
-    		return
-    	}
-    })
+	var logItemIndex = 0
+    listenOnFile(logsLocation)
 
-    plugin.get().getTextFile(logsLocation, false, function(status, data) {
-    	if (!status) {
-        	console.error('Could not retrieve ' + logsLocation + '')	
-    		return
-      	} 
-      	else {
-        	var fullLog = data
-        	console.log('retrieved data')
-      	}
-  	});
+	monitoring = true
+}
 
-	plugin.get().listenOnFile("hs-logs-file", filename, false, function(id, status, data) { 
-		if (fileId == fileIdentifier) {
-    		if (status) {
-      			console.log("[" + fileId + "] " + data);
-    		} 
-    		else {
-      			console.log('something bad happened: ' + data);
-    		}
-  		}
+function listenOnFile(logsLocation) {
+	console.log('starting to listen on file')
+    var fileId = "hs-logs-file"
+	plugin.get().listenOnFile(fileId, logsLocation, false, function(id, status, data) { 
+		console.log('listenOnFile', id, status, data)
+
+		if (status) {
+  			// console.log("[" + fileId + "] ", id, status);
+  			plugin.get().onFileListenerChanged.addListener(function(fieldId, status, data) {
+				if (status) {
+					// Don't use the PowerTaskList
+					if (data.indexOf('PowerTaskList') != -1 || data.indexOf('PowerProcessor') != -1) {
+						return
+					}
+					console.log('file listening callback', fieldId, status, data)
+					// New game
+					if (data.indexOf('CREATE_GAME') != -1) {
+						console.log('reinit game')
+						fullLogs = ''
+						gameStarted = true
+					}
+					fullLogs += data + '\n'
+					// That's how we know a game is finished
+					if (data.indexOf('GOLD_REWARD_STATE') != -1 && gameStarted) {
+						console.log('game ended')
+						gameStarted = false
+						var xml = convertLogsToXml(fullLogs)
+						fullLogs = ''
+					}
+				}
+				else {
+					console.error('could not listen to file callback')
+				}
+			})
+		} 
+		else {
+  			console.log('something bad happened: ', id, status);
+  			// Power.log is only created once the first game starts
+  			setTimeout(function() { listenOnFile() }, 10000)
+		}
 	});
 }
 
-
 // Start here
 var plugin = new OverwolfPlugin("simple-io-plugin", true);
-console.log('initializing plugin')
+// console.log('initializing plugin')
 plugin.initialize(function(status) {
-	console.log('init done', status, plugin)
+	// console.log('init done', status, plugin)
   	if (status == false) {
     	console.error("Plugin couldn't be loaded??")
     	return;
   	}
-  	console.log("Plugin " + plugin.get()._PluginName_ + " was loaded!");
+  	// console.log("Plugin " + plugin.get()._PluginName_ + " was loaded!");
 
   	// Registering game listener
 	overwolf.games.onGameInfoUpdated.addListener(function (res) {
 		console.log("onGameInfoUpdated: " + JSON.stringify(res));
 		if (gameLaunched(res)) {
-			registerEvents()
+			// registerEvents()
+			registerLogMonitor()
+		}
+	})
+
+	overwolf.games.getRunningGameInfo(function (res) {
+		console.log("getRunningGameInfo: " + JSON.stringify(res));
+		if (res && res.isRunning && res.id && Math.floor(res.id / 10) == 9898) {
+			console.log('running!', res)
+			// registerEvents()
 			registerLogMonitor()
 		}
 	})
 })
+
+function convertLogsToXml(stringLogs) {
+	console.log('converting', stringLogs)
+	var data = new FormData()
+	data.append('data', stringLogs)
+	$.ajax({
+		url: 'http://localhost:8080/api/hearthstone/converter/replay',
+		data: data,
+	    cache: false,
+	    contentType: false,
+	    processData: false,
+	    type: 'POST',
+		// dataType: 'xml',
+		success: function(response) {
+			// console.log('converted', response
+			manastorm.reload(response)
+		}
+	})
+}
