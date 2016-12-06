@@ -3,11 +3,11 @@
   var bundle;
 
   bundle = {
-    init: function(replay) {
+    init: function(replay, configurationOptions) {
       var React;
       React = _dereq_('react');
       this.routes = _dereq_('./routes');
-      return this.routes.init(replay);
+      return this.routes.init(replay, configurationOptions);
     }
   };
 
@@ -124,6 +124,7 @@
       this.state = {
         replay: new ReplayPlayer(new HSReplayParser(props.route.replay))
       };
+      this.configurationOptions = props.route.configurationOptions;
       this.state.style = {};
       this.showAllCards = false;
       this.mainPlayerSwitched = false;
@@ -150,11 +151,13 @@
       this.displayConf = {
         showLog: false
       };
+      console.log('loaded');
     }
 
     Replay.prototype.bindKeypressHandlers = function() {
       return window.addEventListener('keydown', (function(_this) {
         return function(e) {
+          console.log('pressed key', e, 'mousing over', _this.mousingover);
           if (_this.mousingover) {
             return _this.handleKeyDown(e);
           }
@@ -165,6 +168,7 @@
     Replay.prototype.componentDidMount = function() {
       window.addEventListener('resize', this.updateDimensions);
       this.mounted = true;
+      console.log('component mounted');
       return this.updateDimensions();
     };
 
@@ -176,9 +180,13 @@
     };
 
     Replay.prototype.updateDimensions = function() {
+      console.log('trying to update dimensions');
       if (this.refs['root']) {
         this.state.style.fontSize = this.refs['root'].offsetWidth / 50.0 + 'px';
+        console.log('updated dimensions');
         return this.callProtectedCallback();
+      } else {
+        return setTimeout(this.updateDimensions, 200);
       }
     };
 
@@ -236,7 +244,8 @@
           "entity": replay.opponent,
           "inMulligan": inMulligan,
           "mulligan": replay.turns[1].opponentMulligan,
-          "isHidden": !this.showAllCards
+          "isHidden": !this.showAllCards,
+          "replay": replay
         }), React.createElement(Discover, {
           "entity": replay.opponent,
           "discoverController": replay.discoverController,
@@ -277,7 +286,8 @@
           "entity": replay.player,
           "inMulligan": inMulligan,
           "mulligan": replay.turns[1].playerMulligan,
-          "isHidden": false
+          "isHidden": false,
+          "replay": replay
         }), React.createElement(Discover, {
           "entity": replay.player,
           "discoverController": replay.discoverController,
@@ -362,7 +372,8 @@
         "show": this.displayConf.showLog,
         "replay": replay,
         "onTurnClick": this.onGoToTurnClick,
-        "onClose": this.onTurnClick
+        "onClose": this.onTurnClick,
+        "hide": this.configurationOptions.hideSideLog
       }), React.createElement("form", {
         "className": "replay__controls padded"
       }, React.createElement("div", {
@@ -410,12 +421,17 @@
       })), React.createElement(GameLog, {
         "replay": replay,
         "onLogClick": this.onTurnClick,
-        "logOpen": this.displayConf.showLog
+        "logOpen": this.displayConf.showLog,
+        "hide": this.configurationOptions.hideButtomLog
       }));
     };
 
     Replay.prototype.handleKeyDown = function(e) {
-      switch (e.code) {
+      var keyCode;
+      console.log('keydown', e);
+      keyCode = e.code || e.key;
+      console.log('keyCode', keyCode);
+      switch (keyCode) {
         case 'ArrowRight':
           return this.goNextAction(e);
         case 'ArrowLeft':
@@ -428,10 +444,12 @@
     };
 
     Replay.prototype.onMouseEnter = function(e) {
+      console.log('mouse entered', e);
       return this.mousingover = true;
     };
 
     Replay.prototype.onMouseLeave = function(e) {
+      console.log('mouse left', e);
       return this.mousingover = false;
     };
 
@@ -790,22 +808,27 @@
     }
 
     Card.prototype.render = function() {
-      var art, atkCls, cardTooltip, cardUtils, cls, cost, costCls, createdBy, damage, divineShield, effect, enchantmentClass, enchantments, entity, exhausted, frameCls, healing, healthClass, highlight, highlightCls, imageCls, imgSrc, legendaryCls, locale, originalAtk, originalCard, originalCost, originalHealth, overlay, premium, premiumClass, stats, statuses, style, suffix, tagAtk, tagCost, tagDurability, tagHealth, taunt, windfury, _ref, _ref1;
+      var art, atkCls, cardTooltip, cardUtils, cls, cost, costCls, createdBy, damage, divineShield, effect, enchantmentClass, enchantments, entity, exhausted, frameCls, healing, healthClass, highlight, highlightCls, imageCls, imgSrc, legendaryCls, locale, originalAtk, originalCard, originalCost, originalHealth, overlay, premium, premiumClass, stats, statuses, style, suffix, tagAtk, tagCost, tagDurability, tagHealth, taunt, windfury, _ref, _ref1, _ref2;
       locale = window.localStorage.language && window.localStorage.language !== 'en' ? '/' + window.localStorage.language : '';
       cardUtils = this.props.cardUtils;
       entity = this.props.entity;
+      if (entity.cardID) {
+        originalCard = cardUtils != null ? cardUtils.getCard(entity.cardID) : void 0;
+      }
       premium = '';
       premiumClass = '';
       suffix = '.png';
-      if (entity.tags.PREMIUM === 1) {
+      imageCls = "art ";
+      if (entity.tags.PREMIUM === 1 && (originalCard != null ? originalCard.goldenImage : void 0)) {
         premiumClass = 'golden';
         premium = premiumClass + '/';
         suffix = '.gif';
       }
+      if ((originalCard != null ? (_ref = originalCard.set) != null ? _ref.toLowerCase() : void 0 : void 0) === 'gangs' && !this.props.isHidden) {
+        imageCls += " quick-fix";
+      }
       art = ("https://s3.amazonaws.com/com.zerotoheroes/plugins/hearthstone/allCards" + locale + "/" + premium + entity.cardID) + suffix;
-      imageCls = "art ";
       if (entity.cardID && !this.props.isHidden) {
-        originalCard = cardUtils != null ? cardUtils.getCard(entity.cardID) : void 0;
         imgSrc = art;
         style = {
           backgroundImage: "url(" + art + ")"
@@ -930,7 +953,7 @@
           "className": "option-on"
         });
         imageCls += " img-option-on";
-        if (((_ref = this.props.controller) != null ? (_ref1 = _ref.tags) != null ? _ref1.COMBO_ACTIVE : void 0 : void 0) === 1 && entity.tags.COMBO === 1) {
+        if (((_ref1 = this.props.controller) != null ? (_ref2 = _ref1.tags) != null ? _ref2.COMBO_ACTIVE : void 0 : void 0) === 1 && entity.tags.COMBO === 1) {
           imageCls += " combo";
         }
         if (entity.tags.POWERED_UP === 1) {
@@ -1328,6 +1351,9 @@
 
     GameLog.prototype.render = function() {
       var buttonText;
+      if (!!this.props.hide) {
+        return null;
+      }
       buttonText = React.createElement("span", null, "Full log");
       if (this.props.logOpen) {
         buttonText = React.createElement("span", null, "Hide log");
@@ -1910,7 +1936,8 @@
             "entity": entity,
             "key": entity.id,
             "isHidden": hidden,
-            "isDiscarded": _this.props.mulligan.indexOf(entity.id) !== -1
+            "isDiscarded": _this.props.mulligan.indexOf(entity.id) !== -1,
+            "cardUtils": _this.props.replay.cardUtils
           });
         };
       })(this));
@@ -2532,7 +2559,7 @@ arguments[4][4][0].apply(exports,arguments)
       return this.replay.forceReemit();
     },
     render: function() {
-      if (!this.props.show) {
+      if (!(this.props.show && !this.props.hide)) {
         return null;
       }
       return React.createElement("div", {
@@ -3422,7 +3449,7 @@ arguments[4][4][0].apply(exports,arguments)
   var routes;
 
   routes = {
-    init: function(xmlReplay) {
+    init: function(xmlReplay, configurationOptions) {
       var Application, React, Route, Router, createMemoryHistory, externalPlayer, render, router, _ref;
       React = _dereq_('react');
       _ref = _dereq_('react-router'), Router = _ref.Router, Route = _ref.Route;
@@ -3436,7 +3463,8 @@ arguments[4][4][0].apply(exports,arguments)
       }, React.createElement(Route, {
         "path": "/replay",
         "component": this.Replay,
-        "replay": xmlReplay
+        "replay": xmlReplay,
+        "configurationOptions": configurationOptions
       }));
       router = React.createElement(Router, {
         "history": createMemoryHistory()
@@ -3717,7 +3745,7 @@ arguments[4][4][0].apply(exports,arguments)
               debug_entity: this.entities[item.node.entity],
               shouldExecute: (function(_this) {
                 return function() {
-                  return action.fullData.tags.ZONE !== 1;
+                  return true;
                 };
               })(this)
             };
@@ -3805,6 +3833,7 @@ arguments[4][4][0].apply(exports,arguments)
               debug_entity: this.entities[item.node.entity],
               shouldExecute: (function(_this) {
                 return function() {
+                  console.log('should execute discard?', action.fullData, action.fullData.tags.ZONE);
                   return action.fullData.tags.ZONE === 3;
                 };
               })(this)
@@ -5657,10 +5686,13 @@ arguments[4][4][0].apply(exports,arguments)
     };
 
     ReplayPlayer.prototype.goNextAction = function() {
-      this.newStep();
+      var actionIndex;
+      actionIndex = this.currentActionInTurn;
       if (this.currentTurn === this.turns.length && this.currentActionInTurn >= this.turns[this.currentTurn].actions.length - 1) {
+        console.log('doing nothing, end of the game', this.currentTurn, this.turns.length, actionIndex, this.turns[this.currentTurn].actions.length - 1);
         return null;
       }
+      this.newStep();
       this.currentActionInTurn++;
       if (this.turns[this.currentTurn] && this.currentActionInTurn <= this.turns[this.currentTurn].actions.length - 1) {
         this.goToAction();
@@ -5727,13 +5759,12 @@ arguments[4][4][0].apply(exports,arguments)
         targetTurn = this.currentTurn;
         targetAction = this.currentActionInTurn - 1;
       }
+      console.log('rollbackAction', rollbackAction, rollbackAction.shouldExecute, typeof rollbackAction.shouldExecute === "function" ? rollbackAction.shouldExecute() : void 0);
       if (rollbackAction.shouldExecute && !rollbackAction.shouldExecute() && !changeTurn) {
-        console.log('\tskipping back', rollbackAction, this.currentTurn, this.currentActionInTurn);
         this.currentActionInTurn = targetAction;
         this.currentTurn = targetTurn;
         return this.goPreviousAction(lastIteration);
       } else {
-        console.log('\trolling back action', rollbackAction, this.currentTurn, this.currentActionInTurn);
         this.rollbackAction(rollbackAction);
         this.notifyChangedTurn(this.turns[this.currentTurn].turn);
         this.emit('previous-action', rollbackAction);
@@ -5776,6 +5807,8 @@ arguments[4][4][0].apply(exports,arguments)
         action = this.turns[this.currentTurn].actions[this.currentActionInTurn];
         if (action.shouldExecute && !action.shouldExecute()) {
           if (!this.seeking) {
+            index = action.index - 1;
+            this.goToIndex(index);
             return this.goNextAction();
           }
         } else {
@@ -5791,6 +5824,8 @@ arguments[4][4][0].apply(exports,arguments)
           nextActionIndex = 1;
           nextAction = this.turns[this.currentTurn].actions[this.currentActionInTurn + nextActionIndex];
           while (nextAction && (nextAction.shouldExecute && !nextAction.shouldExecute())) {
+            index = nextAction.index - 1;
+            this.goToIndex(index, this.currentTurn, this.currentActionInTurn + nextActionIndex);
             nextAction = this.turns[this.currentTurn].actions[this.currentActionInTurn + ++nextActionIndex];
           }
           if (nextAction) {
@@ -5863,13 +5898,13 @@ arguments[4][4][0].apply(exports,arguments)
       return this.goToTurn(gameTurn);
     };
 
-    ReplayPlayer.prototype.goToIndex = function(index) {
+    ReplayPlayer.prototype.goToIndex = function(index, turn, actionIndex) {
       if (index < this.historyPosition) {
         this.historyPosition = 0;
         this.init();
       }
       this.targetIndex = index;
-      this.update();
+      this.update(turn, actionIndex);
       return this.emit('moved-timestamp');
     };
 
@@ -5976,11 +6011,13 @@ arguments[4][4][0].apply(exports,arguments)
       })(this));
     };
 
-    ReplayPlayer.prototype.update = function() {
+    ReplayPlayer.prototype.update = function(turn, actionIndex) {
       var action, ref;
+      turn = turn || this.currentTurn;
+      actionIndex = actionIndex || this.currentActionInTurn;
       while (this.history[this.historyPosition] && this.history[this.historyPosition].index <= this.targetIndex) {
-        if (this.turns[this.currentTurn]) {
-          action = this.turns[this.currentTurn].actions[this.currentActionInTurn];
+        if (this.turns[turn]) {
+          action = this.turns[turn].actions[actionIndex];
         }
         this.history[this.historyPosition].execute(this, action);
         if (this.history[this.historyPosition + 1]) {
@@ -6150,9 +6187,6 @@ arguments[4][4][0].apply(exports,arguments)
 
     ReplayPlayer.prototype.receiveTagChange = function(change, action) {
       var entity, tags;
-      if (change.tag === 'RESOURCES_USED') {
-        console.log('\t\treceiving tag change', change, this.entities[change.entity], change.value);
-      }
       tags = {};
       tags[change.tag] = change.value;
       if (this.entities[change.entity]) {
@@ -6503,9 +6537,9 @@ var manastorm = {
 		manastorm.loadReplay(replayXml);
 	},
 
-	initPlayer: function() {
+	initPlayer: function(configurationOptions) {
 		var bundle = _dereq_('./js/src/front/bundle.js');
-		bundle.init('');
+		bundle.init('', configurationOptions);
 	},
 
 	loadReplay: function(replayXml) {

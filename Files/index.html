@@ -1,26 +1,31 @@
 ﻿<!DOCTYPE html>
 <html>
 	<head> 
+		<title>Hearthstone Replay Viewer</title>
+    	<meta charset="UTF-8">
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+
+		<!-- Bootstrap -->
+		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+
+
+		<!-- OW default styles -->
 		<link rel="stylesheet" href="style.css" />
 
 		<!-- TODO: group all deps in a single file -->
 		<link rel="stylesheet" href="manastorm/scaffolding.css" />
 		<link rel="stylesheet" href="manastorm/dependencies/hearthstone.css" />
 		<link rel="stylesheet" href="manastorm/manastorm.css" />
-		<!-- Bootstrap -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		
+		<!-- Our styles styles -->
+		<link rel="stylesheet" href="styles.css" />
 
-		<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-		<title>Hearthstone Replay Viewer</title>
-		<script>
-			function dragResize(edge){
-				overwolf.windows.getCurrentWindow(function(result){
-					if (result.status=="success"){
-						overwolf.windows.dragResize(result.window.id, edge);
-					}
-				});
-			};
-			
+		<!-- Fonts -->
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+		<!-- Overwolf - won't be needed later on, but useful during dev to move the window out of the way -->
+		<script>			
 			function dragMove(){
 				overwolf.windows.getCurrentWindow(function(result){
 					if (result.status=="success"){
@@ -28,73 +33,36 @@
 					}
 				});
 			};
-			
-			function closeWindow(){
-				overwolf.windows.getCurrentWindow(function(result){
-					if (result.status=="success"){
-						overwolf.windows.close(result.window.id);
-					}
-				});
-			};
-			
-			function openSubWindow(){
-				alert("the subwindow will only be visible inside a game");
-				overwolf.windows.obtainDeclaredWindow("SubWindow", function(result){
-					if (result.status == "success"){
-						overwolf.windows.restore(result.window.id, function(result){
-								console.log(result);
-						});
-					}
-				});
-			};
-			
-			function takeScreenshot(){
-				overwolf.media.takeScreenshot(function(result){
-					if (result.status == "success"){
-						var img = document.getElementById("screenshot");
-						img.src = result.url;
-						img.onload = function() {
-							overwolf.media.shareImage(img, "Screen Shot");
-						};
-					}
-				});
-			}
 		</script>
+
+		<!-- from https://github.com/angular/quickstart -->
+    	<!-- Polyfill(s) for older browsers -->
+		<script src="node_modules/core-js/client/shim.min.js"></script>
+
+	    <script src="node_modules/zone.js/dist/zone.js"></script>
+	    <script src="node_modules/reflect-metadata/Reflect.js"></script>
+	    <script src="node_modules/systemjs/dist/system.src.js"></script>
+
+	    <script src="systemjs.config.js"></script>
+	    <script>
+	      System.import('app').catch(function(err){ console.error(err); });
+	    </script>
+
 	</head>
 
-	<body>
-		<div class="resizeGrip" id="resizeGripTopLeft" onmousedown="dragResize('TopLeft');"></div>
-		<div class="resizeGrip" id="resizeGripTop" onmousedown="dragResize('Top');"></div>
-		<div class="resizeGrip" id="resizeGripTopRight" onmousedown="dragResize('TopRight');"></div>
-		<div class="resizeGrip" id="resizeGripRight" onmousedown="dragResize('Right');"></div>
-		<div class="resizeGrip" id="resizeGripBottomRight" onmousedown="dragResize('BottomRight');"></div>
-		<div class="resizeGrip" id="resizeGripBottom" onmousedown="dragResize('Bottom');"></div>
-		<div class="resizeGrip" id="resizeGripBottomLeft" onmousedown="dragResize('BottomLeft');"></div>
-		<div class="resizeGrip" id="resizeGripLeft" onmousedown="dragResize('Left');"></div>
-
-		<div class="hearthstone" id="content" onmousedown="dragMove();">
-			<button id="close" onclick="closeWindow();">Close</button>
-			<div class="manastorm main-container">
-				<div class="external-player-container">
-					<div id="dummy"></div>
-					<div id="externalPlayer" class="external-player">
-						Waiting waiting
-					</div>
-				</div>
-			</div>
-		</div>
+	<body onmousedown="dragMove();">
+		<zh-app>Loading...</zh-app>
 
 
+		<!-- Third-party scripts -->
   		<script src="plugins/overwolfplugin.js"></script>
-
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" ></script>
+
+		<!-- Other Zero to Heroes libraries -->
 		<script src="manastorm/dependencies/parseCardsText.js"></script>	
 		<script src="manastorm/manastorm.js"></script>
-		<script src="parser/parser.js"></script>
-		<script src="converter/converter.js"></script>
 
 		<script>
-			manastorm.initPlayer()
 			// $.ajax({
 			// 	url: 'manastorm/replay.xml',
 			// 	dataType: 'xml',

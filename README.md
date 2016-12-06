@@ -9,3 +9,4 @@ TODOs:
 * Don't hardcode line separator?
 * Work on the user flows
 * Bug: Don't re-upload a game when exiting / launching HS back again 
+* Support keyboard shortcuts

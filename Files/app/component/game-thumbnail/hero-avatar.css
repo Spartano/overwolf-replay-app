@@ -1,0 +1,33 @@
+.hero-avatar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+}
+
+.hero-avatar .win-img {
+	width: 80%;
+}
+
+.hero-avatar .avatar {
+	width: 100%;
+	position: relative;
+	margin-top: -10%;
+}
+
+.hero-avatar .avatar img {
+	width: 100%;
+}
+
+.hero-avatar .avatar .portrait {
+	position: absolute;
+	width: 76%;
+    top: 14%;
+    left: 11%;
+	-webkit-clip-path: polygon(0 100%,0 40%,20% 10%,30% 3%,50% 0,70% 3%,80% 10%,100% 40%,100% 100%);
+	z-index: -1;
+}
+
+.hero-avatar .frame {
+}

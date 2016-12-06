@@ -1,0 +1,14 @@
+@import url(https://fonts.googleapis.com/css?family=Raleway:400,500,700);
+@import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:400,700);
+
+html {
+	background: #edd6aa;
+	background: #daac76;
+	font-family: 'Yanone Kaffeesatz', Arial, sans-serif;
+}
+
+body {
+	background-color: transparent;
+    height: 100%;
+    width: 100%;
+}

@@ -1,0 +1,52 @@
+.game {
+    display: flex;
+    flex-direction: column;
+    padding: 3px;
+}
+
+.game .matchup {
+	display: flex;
+	position: relative;
+}
+
+.matchup hero-avatar {
+	width: 45%;
+}
+
+.matchup .highlighter {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+    background-color: rgba(0, 0, 0, 0.27);
+    z-index: -2;
+}
+
+.selected .matchup .highlighter  {
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.game .separator {
+	align-self: center;
+	margin-top: 20%;
+	color: white;
+}
+
+.game .title {
+	color: #68471f;
+	font-weight: bold;
+}
+
+.game.won, .game.won .title {
+	color: blue;
+}
+
+.game.lost, .game.lost .title {
+	color: red;
+}
+
+.game.selected {
+    border: #68471f 1px solid;
+    background-color: rgba(104, 71, 31, 0.2);
+}

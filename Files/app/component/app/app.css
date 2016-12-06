@@ -1,0 +1,31 @@
+.shelf-container {
+	display: flex;
+	flex-direction: row;
+	height: 100%;
+}
+
+.matchup-title {
+	margin-top: 0;
+	text-align: center;
+	color: #68471f;
+	display: none;
+}
+
+.replay-zone {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+}
+
+carousel {
+	width: 25%;
+	margin-top: 25px;
+	margin-bottom: 25px;
+	overflow: auto;
+}
+
+game-replay {
+	position: relative;
+	flex-grow: 1;
+	height: 100%;
+}

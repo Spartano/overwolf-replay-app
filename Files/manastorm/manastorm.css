@@ -455,6 +455,11 @@
   -webkit-filter: drop-shadow(-0.2em -0.2em 1px #FFFF7A) drop-shadow(0.2em 0.2em 1px #FFFF7A) drop-shadow(-0.2em 0.2em 1px #FFFF7A) drop-shadow(0.2em -0.2em 1px #FFFF7A) drop-shadow(0px 0px 0.5em #DCD31A) drop-shadow(0px 0px 0.8em #DCD31A);
   filter: drop-shadow(-0.2em -0.2em 1px #FFFF7A) drop-shadow(0.2em 0.2em 1px #FFFF7A) drop-shadow(-0.2em 0.2em 1px #FFFF7A) drop-shadow(0.2em -0.2em 1px #FFFF7A) drop-shadow(0px 0px 0.5em #DCD31A) drop-shadow(0px 0px 0.8em #DCD31A);
 }
+.hearthstone .manastorm #externalPlayer .hand .game-card .art.quick-fix {
+  top: 2%;
+  width: 105%;
+  left: -1%;
+}
 .hearthstone .manastorm #externalPlayer .hand .game-card:last-child {
   margin-right: 0;
 }
@@ -585,6 +590,14 @@
   position: relative;
   display: block;
 }
+.hearthstone .manastorm #externalPlayer .mulligan .game-card .art.quick-fix {
+  top: 2%;
+  width: 105%;
+  left: -1%;
+}
+.hearthstone .manastorm #externalPlayer .mulligan .game-card .card__stats {
+  display: none;
+}
 .hearthstone .manastorm #externalPlayer .mulligan .discarded:after {
   content: "";
   position: absolute;
@@ -632,6 +645,11 @@
   padding-top: 148%;
   position: relative;
   display: block;
+}
+.hearthstone .manastorm #externalPlayer .discover .game-card .art.quick-fix {
+  top: 2%;
+  width: 105%;
+  left: -1%;
 }
 .hearthstone .manastorm #externalPlayer .discover .game-card .art.card--unknown {
   width: 80%;
@@ -735,6 +753,9 @@
   position: relative;
   display: block;
 }
+.hearthstone .manastorm #externalPlayer .board .game-card .art.quick-fix {
+  background-position: 49% 15%;
+}
 .hearthstone .manastorm #externalPlayer .board .game-card .frame.minion {
   display: block;
   position: absolute;
@@ -776,6 +797,11 @@
 .hearthstone .manastorm #externalPlayer .board .game-card .option-on {
   -webkit-filter: drop-shadow(-0.2em -0.2em 1px #86F953) drop-shadow(0.2em 0.2em 1px #86F953) drop-shadow(-0.2em 0.2em 1px #86F953) drop-shadow(0.2em -0.2em 1px #86F953) drop-shadow(0px 0px 0.5em #659B29) drop-shadow(0px 0px 0.8em #659B29);
   filter: drop-shadow(-0.2em -0.2em 1px #86F953) drop-shadow(0.2em 0.2em 1px #86F953) drop-shadow(-0.2em 0.2em 1px #86F953) drop-shadow(0.2em -0.2em 1px #86F953) drop-shadow(0px 0px 0.5em #659B29) drop-shadow(0px 0px 0.8em #659B29);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 .hearthstone .manastorm #externalPlayer .board .game-card .card__stats .card__stats__attack {
   width: 45%;

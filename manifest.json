@@ -20,10 +20,10 @@
 			"MainWindow":{
 				"file": "Files/index.html",
 				"transparent": true,
-				"resizable": true,
-				"size": {"width": 730, "height": 910},
-				"min_size": {"width": 730, "height": 910},
-				"max_size": {"width": 730, "height": 910}
+				"resizable": false,
+				"size": {"width": 800, "height": 600},
+				"min_size": {"width": 800, "height": 600},
+				"max_size": {"width": 800, "height": 600}
 			}
 		},
 		"game_events": ["9898"],

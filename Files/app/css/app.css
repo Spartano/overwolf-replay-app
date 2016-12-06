@@ -1,0 +1,48 @@
+// =======================================
+// Title elements
+// =======================================
+.matchup-title {
+	margin-top: 0;
+	text-align: center;
+	color: #68471f;
+}
+
+
+
+// =======================================
+// Caroussel
+// =======================================
+.games {
+	display: flex;
+}
+
+.games > li {
+	list-style-type: none;
+}
+
+.games .game {
+	height: 120px;
+  	position: relative;
+	display: flex;
+	flex-direction: column;
+}
+
+.games .separator {
+	background-color: red;
+}
+
+.games .player {
+	position: absolute;
+	height: 100%;
+
+	-webkit-clip-path: polygon(0 0, 59% 0, 29% 100%, 0% 100%);
+	clip-path: polygon(0 0, 59% 0, 29% 100%, 0% 100%);
+}
+
+.games .opponent {
+	position: absolute;
+	height: 100%;
+
+	-webkit-clip-path: polygon(100% 0, 63% 0, 33% 100%, 100% 100%);
+	clip-path: polygon(100% 0, 63% 0, 33% 100%, 100% 100%);
+}
