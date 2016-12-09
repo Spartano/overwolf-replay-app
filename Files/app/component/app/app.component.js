@@ -9,57 +9,63 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var game_replay_component_1 = require('../game-replay/game-replay.component');
-var carousel_component_1 = require('../carousel/carousel.component');
-// import { GameService } from './game.service';
-var game_service_1 = require('../../service/game.service');
+var log_listener_service_1 = require('../../service/log-listener.service');
 var AppComponent = (function () {
-    function AppComponent(gameService) {
-        this.gameService = gameService;
-        this.name = 'Hearthstone Replay Viewer';
-        this.games = [];
-        // console.log('in AppComponent constructor', gameService)
+    function AppComponent(logListenerService) {
+        this.logListenerService = logListenerService;
+        this.init();
     }
-    AppComponent.prototype.ngOnInit = function () {
+    AppComponent.prototype.init = function () {
         var _this = this;
-        this.zone = new core_1.NgZone({ enableLongStackTrace: false });
-        this.gameService.getGames().subscribe(function (game) {
-            // http://stackoverflow.com/questions/31706948/angular2-view-not-changing-after-data-is-updated
-            _this.zone.run(function () {
-                // console.debug('loading game via subscription', game);
-                _this.games.push(game);
-                _this.games.push(game);
-                _this.games.push(game);
-                _this.games.push(game);
-                _this.games.push(game);
-                _this.games.push(game);
-                _this.games.push(game);
-                _this.games.push(game);
-                _this.carouselComponent.newGame(game);
-            });
+        console.log('init gameservice', overwolf.egs);
+        this.logListenerService.addGameCompleteListener(function (game) {
+            if (!_this.requestedDisplayOnShelf) {
+                _this.requestDisplayOnShelf();
+            }
         });
     };
-    AppComponent.prototype.onGameSelected = function (game) {
-        console.log('reloading game', game);
-        this.selectedGame = game;
-        this.gameReplayComponent.reload(game.replay);
+    AppComponent.prototype.requestDisplayOnShelf = function () {
+        console.log('requesting display on shelf', overwolf.egs);
+        overwolf.egs.isEnabled(function (result) {
+            console.log('egs is enabled', result);
+            // result.status == ["success"| "error"]
+            // result.isEnabled == [true | false]
+            if (result.status == 'success' && result.isEnabled) {
+                console.log('requesting to display', result);
+                overwolf.egs.requestToDisplay(function (result) {
+                    // result.status == ["success" | "error"]
+                    // result.reason == [undefined | "EndGameScreen is disabled" | "Not accepting shelves"]
+                    console.log('requestToDisplay result', result);
+                    if (result.status == 'success') {
+                        console.log('request to display is a success, OW should call shelf.html which will trigger status listening process updates on its side');
+                        this.requestedDisplayOnShelf = true;
+                    }
+                });
+            }
+            // else {
+            // 	// Debug only
+            // 	this.showShelfWindow();
+            // }
+        });
     };
-    __decorate([
-        core_1.ViewChild(carousel_component_1.CarouselComponent), 
-        __metadata('design:type', carousel_component_1.CarouselComponent)
-    ], AppComponent.prototype, "carouselComponent", void 0);
-    __decorate([
-        core_1.ViewChild(game_replay_component_1.GameReplayComponent), 
-        __metadata('design:type', game_replay_component_1.GameReplayComponent)
-    ], AppComponent.prototype, "gameReplayComponent", void 0);
+    AppComponent.prototype.showShelfWindow = function () {
+        console.log('opening shelf window');
+        overwolf.windows.obtainDeclaredWindow('ShelfWindow', function (result) {
+            if (result.status == "success") {
+                overwolf.windows.restore(result.window.id, function (result) {
+                    console.log(result);
+                });
+            }
+        });
+    };
     AppComponent = __decorate([
         core_1.Component({
             moduleId: module.id,
             selector: 'zh-app',
             styleUrls: ["app.css"],
-            template: "\n\t\t<div class=\"shelf-container\">\n\t\t\t<div class=\"replay-zone\">\n\t\t\t\t<h1 class=\"matchup-title\" *ngIf=\"selectedGame && selectedGame.player\">{{selectedGame.player.name}} Vs. {{selectedGame.opponent.name}}</h1>\n\t\t\t\t<game-replay [game]=\"selectedGame\"></game-replay>\n\t\t\t</div>\n\t\t\t<carousel [games]=\"games\" (onGameSelected)=onGameSelected($event)></carousel>\n\t\t</div>\n\t"
+            template: "\n\t\t<div></div>\n\t"
         }), 
-        __metadata('design:paramtypes', [game_service_1.GameService])
+        __metadata('design:paramtypes', [log_listener_service_1.LogListenerService])
     ], AppComponent);
     return AppComponent;
 }());

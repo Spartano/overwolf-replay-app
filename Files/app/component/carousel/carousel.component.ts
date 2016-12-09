@@ -8,13 +8,11 @@ import { GameThumbnailComponent } from '..//game-thumbnail/game-thumbnail.compon
 	styleUrls: [`carousel.css`],
 	template: `
 		<div class="carousel">
-			<div [class.disabled]="startIndex == 0" class="arrow glyphicon glyphicon-chevron-up" (click)="showPrevious()"></div>
-			<ul class="games">
+			<ul class="games" *ngIf="games">
 				<li *ngFor="let game of games | slice:startIndex:endIndex" (click)="onSelect(game)">
 					<game-thumbnail [game]="game" [selected]="game === selectedGame"></game-thumbnail>
 				</li>
 			</ul>
-			<div class="arrow glyphicon glyphicon-chevron-down" [class.disabled]="endIndex >= games.length" (click)="showNext()"></div>
 		</div>
 	`
 })

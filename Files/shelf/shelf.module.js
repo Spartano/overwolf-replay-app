@@ -11,45 +11,43 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var platform_browser_1 = require('@angular/platform-browser');
 var http_1 = require('@angular/http');
+// import { LocalStorageService } from '../angular-2-local-storage/angular-2-local-storage'; 
 var angular_2_local_storage_1 = require('angular-2-local-storage');
-// import { ShelfComponent }  from './component/shelf/shelf.component';
-var app_component_1 = require('./component/app/app.component');
-var game_replay_component_1 = require('./component/game-replay/game-replay.component');
-var carousel_component_1 = require('./component/carousel/carousel.component');
-var game_thumbnail_component_1 = require('./component/game-thumbnail/game-thumbnail.component');
-var hero_avatar_component_1 = require('./component/game-thumbnail/hero-avatar.component');
+var shelf_component_1 = require('../app/component/shelf/shelf.component');
+var game_replay_component_1 = require('../app/component/game-replay/game-replay.component');
+var carousel_component_1 = require('../app/component/carousel/carousel.component');
+var game_thumbnail_component_1 = require('../app/component/game-thumbnail/game-thumbnail.component');
+var hero_avatar_component_1 = require('../app/component/game-thumbnail/hero-avatar.component');
 // import { GameService } from './game.service';
-var game_storage_service_1 = require('./service/game-storage.service');
-// import { GameRetrieveService } from './service/game-retrieve.service';
-var log_listener_service_1 = require('./service/log-listener.service');
-var game_parser_service_1 = require('./service/game-parser.service');
+var game_retrieve_service_1 = require('../app/service/game-retrieve.service');
+var log_listener_service_1 = require('../app/service/log-listener.service');
+var game_parser_service_1 = require('../app/service/game-parser.service');
+// Create config options (see ILocalStorageServiceConfigOptions) for deets:
 var localStorageServiceConfig = {
     prefix: 'replay-viewer',
     storageType: 'localStorage'
 };
-var AppModule = (function () {
-    function AppModule() {
+var ShelfModule = (function () {
+    function ShelfModule() {
     }
-    AppModule = __decorate([
+    ShelfModule = __decorate([
         core_1.NgModule({
             imports: [
                 platform_browser_1.BrowserModule,
                 http_1.HttpModule
             ],
             declarations: [
-                app_component_1.AppComponent,
-                // ShelfComponent,
+                shelf_component_1.ShelfComponent,
                 game_replay_component_1.GameReplayComponent,
                 carousel_component_1.CarouselComponent,
                 game_thumbnail_component_1.GameThumbnailComponent,
                 hero_avatar_component_1.HeroAvatarComponent
             ],
             bootstrap: [
-                app_component_1.AppComponent
+                shelf_component_1.ShelfComponent
             ],
             providers: [
-                game_storage_service_1.GameStorageService,
-                // GameService,
+                game_retrieve_service_1.GameRetrieveService,
                 log_listener_service_1.LogListenerService,
                 game_parser_service_1.GameParserService,
                 angular_2_local_storage_1.LocalStorageService,
@@ -59,8 +57,8 @@ var AppModule = (function () {
             ]
         }), 
         __metadata('design:paramtypes', [])
-    ], AppModule);
-    return AppModule;
+    ], ShelfModule);
+    return ShelfModule;
 }());
-exports.AppModule = AppModule;
-//# sourceMappingURL=app.module.js.map
+exports.ShelfModule = ShelfModule;
+//# sourceMappingURL=shelf.module.js.map

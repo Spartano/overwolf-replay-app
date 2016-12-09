@@ -1,62 +1,68 @@
 import { Component, OnInit, NgZone, ViewChild } from '@angular/core';
-import { GameReplayComponent } from '../game-replay/game-replay.component';
-import { CarouselComponent } from '../carousel/carousel.component';
+import { LogListenerService } from '../../service/log-listener.service';
+
 import { Game } from '../../model/game';
-// import { GameService } from './game.service';
-import { GameService } from '../../service/game.service';
+
+declare var overwolf:any
 
 @Component({
 	moduleId: module.id,
 	selector: 'zh-app',
 	styleUrls: [`app.css`],
 	template: `
-		<div class="shelf-container">
-			<div class="replay-zone">
-				<h1 class="matchup-title" *ngIf="selectedGame && selectedGame.player">{{selectedGame.player.name}} Vs. {{selectedGame.opponent.name}}</h1>
-				<game-replay [game]="selectedGame"></game-replay>
-			</div>
-			<carousel [games]="games" (onGameSelected)=onGameSelected($event)></carousel>
-		</div>
+		<div></div>
 	`
 })
-
 export class AppComponent { 
-	zone:NgZone;
 
-	@ViewChild(CarouselComponent) private carouselComponent: CarouselComponent;
-	@ViewChild(GameReplayComponent) private gameReplayComponent: GameReplayComponent;
+	requestedDisplayOnShelf:boolean;
 
-	name = 'Hearthstone Replay Viewer';
-	games: Game[] = [];
-	selectedGame:Game;
-
-	constructor(private gameService:GameService) {
-		// console.log('in AppComponent constructor', gameService)
+	constructor(private logListenerService:LogListenerService) {
+		this.init();
 	}
 
-	ngOnInit():void {
-		this.zone = new NgZone({enableLongStackTrace: false});
-
-		this.gameService.getGames().subscribe((game:Game) => {
-			// http://stackoverflow.com/questions/31706948/angular2-view-not-changing-after-data-is-updated
-			this.zone.run(() => {
-				// console.debug('loading game via subscription', game);
-				this.games.push(game);
-				this.games.push(game);
-				this.games.push(game);
-				this.games.push(game);
-				this.games.push(game);
-				this.games.push(game);
-				this.games.push(game);
-				this.games.push(game);
-				this.carouselComponent.newGame(game);
-			})
+	init():void {
+		console.log('init gameservice', overwolf.egs)
+		this.logListenerService.addGameCompleteListener((game:Game) => {
+			if (!this.requestedDisplayOnShelf) {
+				this.requestDisplayOnShelf();
+			}
 		})
 	}
 
-	onGameSelected(game:Game) {
-		console.log('reloading game', game);
-		this.selectedGame = game;
-		this.gameReplayComponent.reload(game.replay);
+	requestDisplayOnShelf():void {
+		console.log('requesting display on shelf', overwolf.egs);
+		overwolf.egs.isEnabled((result:any) => {
+			console.log('egs is enabled', result);
+		  	// result.status == ["success"| "error"]
+		  	// result.isEnabled == [true | false]
+			if (result.status == 'success' && result.isEnabled) {
+				console.log('requesting to display', result);
+				overwolf.egs.requestToDisplay(function(result:any) {
+				    // result.status == ["success" | "error"]
+				    // result.reason == [undefined | "EndGameScreen is disabled" | "Not accepting shelves"]
+				    console.log('requestToDisplay result', result);
+				    if (result.status == 'success') {
+				    	console.log('request to display is a success, OW should call shelf.html which will trigger status listening process updates on its side')
+						this.requestedDisplayOnShelf = true;
+				    }
+				});
+			}
+			// else {
+			// 	// Debug only
+			// 	this.showShelfWindow();
+			// }
+		});
+	}
+
+	showShelfWindow():void {
+		console.log('opening shelf window');
+		overwolf.windows.obtainDeclaredWindow('ShelfWindow', function(result:any) {
+			if (result.status == "success"){
+				overwolf.windows.restore(result.window.id, function(result:any) {
+					console.log(result);
+				});
+			}
+		})
 	}
 }

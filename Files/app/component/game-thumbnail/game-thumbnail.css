@@ -33,6 +33,11 @@
 	color: white;
 }
 
+.game .game-info {
+    display: flex;
+    flex-direction: column;
+}
+
 .game .title {
 	color: #68471f;
 	font-weight: bold;

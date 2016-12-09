@@ -40,11 +40,13 @@ export class GameReplayComponent {
 		manastorm.initPlayer(manastormOptions);
 	}
 
-	reload(replay:string):void {
-		manastorm.reload(replay);
-		setTimeout(() =>  {
-			// console.log('player height is ', this.elementRef.nativeElement.clientHeight, this.elementRef);
-			this.width = this.elementRef.nativeElement.clientHeight * this.aspectRatio;
+	reload(replay:string, callback:Function):void {
+		manastorm.reload(replay, () => {
+			setTimeout(() =>  {
+				// console.log('player height is ', this.elementRef.nativeElement.clientHeight, this.elementRef);
+				this.width = this.elementRef.nativeElement.clientHeight * this.aspectRatio;
+				callback();
+			});
 		});
 	}
 }

@@ -11,16 +11,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var angular_2_local_storage_1 = require('angular-2-local-storage');
 var log_listener_service_1 = require('./log-listener.service');
-var GameService = (function () {
+var GameStorageService = (function () {
     // games: Game[] = [];
     // subject:Subject<Game> = new Subject<Game>();
-    function GameService(logListenerService, localStorageService) {
+    function GameStorageService(logListenerService, localStorageService) {
         this.logListenerService = logListenerService;
         this.localStorageService = localStorageService;
-        // console.log('in GameService constructor');
+        console.log('in GameStorageService constructor');
         this.init();
     }
-    GameService.prototype.init = function () {
+    GameStorageService.prototype.init = function () {
         var _this = this;
         console.log('init gameservice', this.localStorageService.get('games'));
         this.localStorageService.clearAll('.*');
@@ -31,7 +31,7 @@ var GameService = (function () {
             // this.games.push(game);
         });
     };
-    GameService.prototype.addGame = function (game) {
+    GameStorageService.prototype.addGame = function (game) {
         // Get the games from the local storage
         var games = this.localStorageService.get('games') || [];
         games.push(game);
@@ -39,17 +39,11 @@ var GameService = (function () {
         console.log('after adding game', this.localStorageService.get('games'));
         // this.subject.next(game);
     };
-    // getGames():Observable<Game> {
-    // 	return this.subject.asObservable();
-    // }
-    GameService.prototype.getGames = function () {
-        return this.localStorageService.get('games') || [];
-    };
-    GameService = __decorate([
+    GameStorageService = __decorate([
         core_1.Injectable(), 
         __metadata('design:paramtypes', [log_listener_service_1.LogListenerService, angular_2_local_storage_1.LocalStorageService])
-    ], GameService);
-    return GameService;
+    ], GameStorageService);
+    return GameStorageService;
 }());
-exports.GameService = GameService;
-//# sourceMappingURL=game.service.js.map
+exports.GameStorageService = GameStorageService;
+//# sourceMappingURL=game-storage.service.js.map

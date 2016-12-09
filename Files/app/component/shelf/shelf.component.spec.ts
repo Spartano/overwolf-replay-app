@@ -1,25 +1,25 @@
 /* tslint:disable:no-unused-variable */
-import { AppComponent } from './app.component';
+import { ShelfComponent } from './shelf.component';
 
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By }           from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
 ////////  SPECS  /////////////
-describe('AppComponent', function () {
+describe('ShelfComponent', function () {
   let de: DebugElement;
-  let comp: AppComponent;
-  let fixture: ComponentFixture<AppComponent>;
+  let comp: ShelfComponent;
+  let fixture: ComponentFixture<ShelfComponent>;
 
   beforeEach(async(() => {
    TestBed.configureTestingModule({
-      declarations: [ AppComponent ]
+      declarations: [ ShelfComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AppComponent);
+    fixture = TestBed.createComponent(ShelfComponent);
     comp = fixture.componentInstance;
     de = fixture.debugElement.query(By.css('h1'));
   });

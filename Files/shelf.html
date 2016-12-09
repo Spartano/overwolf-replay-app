@@ -45,14 +45,13 @@
 
 	    <script src="systemjs.config.js"></script>
 	    <script>
-	      System.import('app').catch(function(err){ console.error(err); });
+	      System.import('shelf').catch(function(err){ console.error(err); });
 	    </script>
 
 	</head>
 
 	<body onmousedown="dragMove();">
-		<zh-app>Loading...</zh-app>
-
+		<zh-shelf>Loading...</zh-shelf>
 
 		<!-- Third-party scripts -->
   		<script src="plugins/overwolfplugin.js"></script>
@@ -61,21 +60,5 @@
 		<!-- Other Zero to Heroes libraries -->
 		<script src="manastorm/dependencies/parseCardsText.js"></script>	
 		<script src="manastorm/manastorm.js"></script>
-
-		<script>
-			// $.ajax({
-			// 	url: 'manastorm/replay.xml',
-			// 	dataType: 'xml',
-			// 	success: function(response) {
-			// 		manastorm.loadReplay(response)
-
-			// 		// if (window.location.search) {
-			// 		// 	var ts = window.location.search.split('?ts=')[1]
-			// 		// 	manastorm.goToTimestamp(ts)
-			// 		// }
-			// 	}
-			// })
-			// 
-		</script>
 	</body>
 </html>

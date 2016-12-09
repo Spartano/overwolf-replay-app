@@ -24,12 +24,14 @@ var GameReplayComponent = (function () {
         };
         manastorm.initPlayer(manastormOptions);
     };
-    GameReplayComponent.prototype.reload = function (replay) {
+    GameReplayComponent.prototype.reload = function (replay, callback) {
         var _this = this;
-        manastorm.reload(replay);
-        setTimeout(function () {
-            // console.log('player height is ', this.elementRef.nativeElement.clientHeight, this.elementRef);
-            _this.width = _this.elementRef.nativeElement.clientHeight * _this.aspectRatio;
+        manastorm.reload(replay, function () {
+            setTimeout(function () {
+                // console.log('player height is ', this.elementRef.nativeElement.clientHeight, this.elementRef);
+                _this.width = _this.elementRef.nativeElement.clientHeight * _this.aspectRatio;
+                callback();
+            });
         });
     };
     __decorate([

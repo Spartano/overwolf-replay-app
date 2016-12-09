@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var game_1 = require('../model/game');
 var game_parser_service_1 = require('./game-parser.service');
+var HEARTHSTONE_GAME_ID = 8032; //9898;
 var LogListenerService = (function () {
     function LogListenerService(gameParserService) {
         this.gameParserService = gameParserService;
@@ -46,7 +47,7 @@ var LogListenerService = (function () {
             });
             overwolf.games.getRunningGameInfo(function (res) {
                 console.log("getRunningGameInfo: " + JSON.stringify(res));
-                if (res && res.isRunning && res.id && Math.floor(res.id / 10) == 9898) {
+                if (res && res.isRunning && res.id && Math.floor(res.id / 10) == HEARTHSTONE_GAME_ID) {
                     console.log('running!', res);
                     that.logsLocation = res.executionPath.split('Hearthstone.exe')[0] + 'Logs\\Power.log';
                     console.log('getting logs from', that.logsLocation);
@@ -145,7 +146,7 @@ var LogListenerService = (function () {
             return false;
         }
         // NOTE: we divide by 10 to get the game class id without it's sequence number
-        if (Math.floor(gameInfoResult.gameInfo.id / 10) != 9898) {
+        if (Math.floor(gameInfoResult.gameInfo.id / 10) != HEARTHSTONE_GAME_ID) {
             return false;
         }
         console.log("HS Launched");
@@ -159,13 +160,14 @@ var LogListenerService = (function () {
             return false;
         }
         // NOTE: we divide by 10 to get the game class id without it's sequence number
-        if (Math.floor(gameInfo.id / 10) != 9898) {
+        if (Math.floor(gameInfo.id / 10) != HEARTHSTONE_GAME_ID) {
             return false;
         }
         console.log("HS running");
         return true;
     };
     LogListenerService = __decorate([
+        //9898;
         core_1.Injectable(), 
         __metadata('design:paramtypes', [game_parser_service_1.GameParserService])
     ], LogListenerService);

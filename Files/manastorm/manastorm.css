@@ -1705,6 +1705,9 @@
   padding-bottom: 10%;
   padding-top: 2%;
 }
+.hearthstone .manastorm #externalPlayer .card-tooltip .card-container .enchantments.quick-fix {
+  margin-top: -20%;
+}
 .hearthstone .manastorm #externalPlayer .card-tooltip .card-container .enchantments .enchantment {
   padding-left: 12%;
   padding-right: 12%;

@@ -5,6 +5,8 @@ import { GameParserService } from './game-parser.service';
 declare var OverwolfPlugin:any
 declare var overwolf:any
 
+const HEARTHSTONE_GAME_ID = 8032; //9898;
+
 @Injectable()
 export class LogListenerService {
 	monitoring: boolean;
@@ -53,7 +55,7 @@ export class LogListenerService {
 
 			overwolf.games.getRunningGameInfo(function (res:any) {
 				console.log("getRunningGameInfo: " + JSON.stringify(res));
-				if (res && res.isRunning && res.id && Math.floor(res.id / 10) == 9898) {
+				if (res && res.isRunning && res.id && Math.floor(res.id / 10) == HEARTHSTONE_GAME_ID) {
 					console.log('running!', res)
 					that.logsLocation = res.executionPath.split('Hearthstone.exe')[0] + 'Logs\\Power.log'
 					console.log('getting logs from', that.logsLocation)
@@ -173,7 +175,7 @@ export class LogListenerService {
 		}
 
 		// NOTE: we divide by 10 to get the game class id without it's sequence number
-		if (Math.floor(gameInfoResult.gameInfo.id/10) != 9898) {
+		if (Math.floor(gameInfoResult.gameInfo.id/10) != HEARTHSTONE_GAME_ID) {
 			return false;
 		}
 
@@ -192,7 +194,7 @@ export class LogListenerService {
 		}
 
 		// NOTE: we divide by 10 to get the game class id without it's sequence number
-		if (Math.floor(gameInfo.id/10) != 9898) {
+		if (Math.floor(gameInfo.id/10) != HEARTHSTONE_GAME_ID) {
 			return false;
 		}
 

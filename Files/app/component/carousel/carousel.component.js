@@ -55,7 +55,7 @@ var CarouselComponent = (function () {
             moduleId: module.id,
             selector: 'carousel',
             styleUrls: ["carousel.css"],
-            template: "\n\t\t<div class=\"carousel\">\n\t\t\t<div [class.disabled]=\"startIndex == 0\" class=\"arrow glyphicon glyphicon-chevron-up\" (click)=\"showPrevious()\"></div>\n\t\t\t<ul class=\"games\">\n\t\t\t\t<li *ngFor=\"let game of games | slice:startIndex:endIndex\" (click)=\"onSelect(game)\">\n\t\t\t\t\t<game-thumbnail [game]=\"game\" [selected]=\"game === selectedGame\"></game-thumbnail>\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t\t<div class=\"arrow glyphicon glyphicon-chevron-down\" [class.disabled]=\"endIndex >= games.length\" (click)=\"showNext()\"></div>\n\t\t</div>\n\t"
+            template: "\n\t\t<div class=\"carousel\">\n\t\t\t<ul class=\"games\" *ngIf=\"games\">\n\t\t\t\t<li *ngFor=\"let game of games | slice:startIndex:endIndex\" (click)=\"onSelect(game)\">\n\t\t\t\t\t<game-thumbnail [game]=\"game\" [selected]=\"game === selectedGame\"></game-thumbnail>\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t</div>\n\t"
         }), 
         __metadata('design:paramtypes', [])
     ], CarouselComponent);

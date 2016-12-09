@@ -14,16 +14,39 @@
 		"store_icon": "IconStore.png"
 	},
 	"permissions": ["Logging", "GameInfo", "FileSystem", "Extensions"],
+	"disable_dockbutton": true,
 	"data": {
 		"start_window":"MainWindow",
 		"windows": {
 			"MainWindow":{
-				"file": "Files/index.html",
+				"file": "Files/background.html",
+				"transparent": true,
+				"resizable": false,
+				"size": {"width": 0, "height": 0},
+				"min_size": {"width": 0, "height": 0},
+				"max_size": {"width": 0, "height": 0}
+			},
+			"ShelfWindow": {
+				"file": "Files/shelf.html",
 				"transparent": true,
 				"resizable": false,
 				"size": {"width": 800, "height": 600},
 				"min_size": {"width": 800, "height": 600},
 				"max_size": {"width": 800, "height": 600}
+			},
+			"egs_shelf_window": {
+				"file": "Files/shelf.html", 
+				"size": {"width": 800, "height": 600},
+			    "egs_shelf": {
+			      "title": "Hearthstone Replay Viewer",
+			      "loading_text": "Loading session games...",
+			      "tooltip_text": "The replays of all the games played during your last Hearthstone session",
+			      "tooltip_url": "http://www.zerotoheroes.com",
+			      "logo": "Files/shelf.png", 
+			      "background": "#FFFFFF", 
+			      "ftue_header": "Hearthstone Replay Viewer", 
+			      "ftue_body": "This shelf shows all your games from your last HS session"
+			    }    
 			}
 		},
 		"game_events": ["9898"],
