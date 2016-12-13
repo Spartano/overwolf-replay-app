@@ -12,33 +12,60 @@ var core_1 = require('@angular/core');
 var game_1 = require('../model/game');
 var GameParserService = (function () {
     function GameParserService() {
+        this.init();
     }
+    GameParserService.prototype.init = function () {
+        var _this = this;
+        console.log('init game conevrter plugin');
+        var plugin = this.plugin = new OverwolfPlugin("overwolf-replay-converter", true);
+        console.log('plugin', plugin);
+        var that = this;
+        plugin.initialize(function (status) {
+            if (status == false) {
+                console.error("Plugin couldn't be loaded??");
+                return;
+            }
+            _this.initialized = true;
+            console.log("Plugin " + plugin.get()._PluginName_ + " was loaded!");
+        });
+    };
     // Not externalized, as this will be done inline later on
     GameParserService.prototype.convertLogsToXml = function (stringLogs, game, callbacks) {
-        // console.log('converting')
-        var data = new FormData();
-        data.append('data', stringLogs);
         var _this = this;
-        $.ajax({
-            url: 'http://www.zerotoheroes.com/api/hearthstone/converter/replay',
-            data: data,
-            cache: false,
-            contentType: false,
-            processData: false,
-            type: 'POST',
-            // dataType: 'xml',
-            success: function (response) {
-                // console.debug('received conversion response')
-                game.replay = response;
-                _this.extractMatchup(game);
-                // console.log('converted', response
-                // console.debug('extracted matchup into', game)
-                for (var _i = 0, callbacks_1 = callbacks; _i < callbacks_1.length; _i++) {
-                    var callback = callbacks_1[_i];
-                    callback(game);
-                }
+        console.log('trying to convert');
+        if (!this.initialized) {
+            console.debug('waiting for game converter plugin initialization');
+            setTimeout(function () {
+                _this.convertLogsToXml(stringLogs, game, callbacks);
+            }, 100);
+            return;
+        }
+        console.log('converting');
+        this.plugin.get().convertLogsToXml(stringLogs, function (replayXml) {
+            console.debug('received conversion response');
+            game.replay = replayXml;
+            _this.extractMatchup(game);
+            // console.log('converted', response
+            // console.debug('extracted matchup into', game)
+            for (var _i = 0, callbacks_1 = callbacks; _i < callbacks_1.length; _i++) {
+                var callback = callbacks_1[_i];
+                callback(game);
             }
         });
+        // var data = new FormData()
+        // data.append('data', stringLogs)
+        // let _this = this;
+        // $.ajax({
+        // 	url: 'http://www.zerotoheroes.com/api/hearthstone/converter/replay',
+        // 	data: data,
+        //     cache: false,
+        //     contentType: false,
+        //     processData: false,
+        //     type: 'POST',
+        // 	// dataType: 'xml',
+        // 	success: function(response:any) {
+        // 	}
+        // })
     };
     GameParserService.prototype.extractMatchup = function (game) {
         var replayXml = $.parseXML(game.replay);

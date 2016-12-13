@@ -15,6 +15,7 @@
 	},
 	"permissions": ["Logging", "GameInfo", "FileSystem", "Extensions"],
 	"disable_dockbutton": true,
+	"hide_from_store": true,
 	"data": {
 		"start_window":"MainWindow",
 		"windows": {
@@ -22,6 +23,7 @@
 				"file": "Files/background.html",
 				"transparent": true,
 				"resizable": false,
+				"show_in_taskbar": false,
 				"size": {"width": 0, "height": 0},
 				"min_size": {"width": 0, "height": 0},
 				"max_size": {"width": 0, "height": 0}
@@ -30,6 +32,7 @@
 				"file": "Files/shelf.html",
 				"transparent": true,
 				"resizable": false,
+				"show_in_taskbar": false,
 				"size": {"width": 800, "height": 600},
 				"min_size": {"width": 800, "height": 600},
 				"max_size": {"width": 800, "height": 600}
@@ -59,6 +62,10 @@
 			"simple-io-plugin": {
 				"file": "Files/plugins/simple-io-plugin.dll",
 				"class": "overwolf.plugins.SimpleIOPlugin"
+			},
+			"overwolf-replay-converter": {
+				"file": "Files/plugins/HearthstoneReplays.dll",
+				"class": "HearthstoneReplays.ReplayConverterPlugin"
 			}
 		}
 	}
