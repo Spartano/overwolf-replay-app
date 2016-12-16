@@ -1,0 +1,38 @@
+.arrow {
+    background-color: #68471f;
+    color: white;
+    padding: 5px 25px;
+    display: none;
+}
+
+.arrow.disabled {
+    background-color: rgba(104, 71, 31, 0.3);
+}
+
+.carousel {
+	display: flex;
+	flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+
+    border-left: #68471f 2px solid;
+}
+
+.games {
+    margin: 0;
+    padding: 0 10%;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    flex-grow: 1;
+    // justify-content: space-between;
+}
+
+.games > li {
+	list-style-type: none;
+    margin-bottom: 5%;
+    // margin-top: 5%;
+    font-size: 0.9em;
+}

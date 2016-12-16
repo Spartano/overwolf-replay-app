@@ -1,0 +1,143 @@
+#container {
+	position: relative;
+    height: 100%;
+    width: 100%;
+    margin: auto;
+    background-color: transparent !important;
+}
+
+.main-container {
+    /* match size of .container, without influencing it */
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+#dummy {
+	display: none;
+}
+
+.external-player {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+
+.hearthstone .manastorm #externalPlayer {
+    .game {
+    	overflow: visible;
+    	height: 86%;
+
+        .game-area {
+            background-color: transparent;
+        }
+    }
+
+    .replay .game-log {
+        margin-top: 8px;
+        background-color: rgba(0,0,0,.1);
+
+        p {
+            font-weight: bold;
+            color: #000;
+        }
+    }
+
+    .replay__controls {
+    	background-color: transparent;
+    }
+
+    .bottom .mulligan {
+        top: 15%;
+    }
+
+    .game .card-tooltip {
+        width: 40%;
+    }
+
+    .replay__controls {
+        .btn {
+            // padding: 6px 12px;
+            padding: 4px 8px;
+            display: flex;
+        }
+        .glyphicon:before, .btn span {
+            font-size: 0.8em;
+        }
+
+    }
+}
+
+    
+@media screen and (max-width: 1070px) {
+    .hearthstone .manastorm #externalPlayer .card-tooltip {
+        width: 25%;
+    }
+}
+
+/*
+.hearthstone .manastorm #externalPlayer .replay__controls {
+    position: relative;
+    top: 4%;
+
+
+    position: absolute;
+    width: 30%;
+    bottom: 20%;
+    top: auto;
+    right: 0;
+}
+
+.hearthstone .manastorm #externalPlayer .additional-controls {
+    right: -4%;
+    top: -2%;
+}
+
+.hearthstone .manastorm #externalPlayer .top .hero .power-container {
+	align-items: flex-start;
+}
+.hearthstone .manastorm #externalPlayer .top .hero .weapon-container {
+	align-items: flex-end;
+}
+.hearthstone .manastorm #externalPlayer .top .mulligan {
+	top: 9%;
+}
+.hearthstone .manastorm #externalPlayer .game .top .player-name {
+	top: 35%;
+}
+.hearthstone .manastorm #externalPlayer .top .hand {
+	overflow-y: hidden;
+	height: 28%;
+	height: 23%;
+}
+
+.hearthstone .manastorm #externalPlayer .bottom .hand {
+	top: 6%;
+}
+.hearthstone .manastorm #externalPlayer .bottom .board {
+	height: 42%;
+	height: 64%;
+}
+.hearthstone .manastorm #externalPlayer .bottom .hero {
+	height: 26%;
+	height: 46%;
+}
+.hearthstone .manastorm #externalPlayer .bottom .mulligan {
+	top: 11%;
+}
+.hearthstone .manastorm #externalPlayer .game .bottom .player-name {
+	bottom: 35%;
+}
+.hearthstone .manastorm #externalPlayer .bottom .hero .power-container {
+    align-items: flex-start;
+    align-self: flex-start;
+}
+.hearthstone .manastorm #externalPlayer .hero .weapon-container {
+    align-items: flex-end;
+    align-self: flex-start;
+}*/

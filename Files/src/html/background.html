@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+<html>
+	<head> 
+		<title>Hearthstone Replay Viewer</title>
+    	<meta charset="UTF-8">
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+
+	    <!-- <link rel="stylesheet" href="lib/bootstrap.min.css">  -->
+
+	    <link rel="stylesheet" href="css/global/styles.min.css"> <!--compiled global scss styles-->
+	    
+	    <script src="lib/vendors.min.js"></script> <!--bundled dependencies-->
+	    
+		<!-- Third-party scripts -->
+  		<script src="plugins/overwolfplugin.js"></script>
+		<!-- Other Zero to Heroes libraries -->
+		<script src="manastorm/dependencies/parseCardsText.js"></script>	
+		<script src="manastorm/manastorm.js"></script>
+
+	    <script>
+	      System.import('background').catch(function(err){ console.error(err); });
+	    </script>
+
+	</head>
+
+	<body>
+		<zh-app></zh-app>
+		*
+	    <script src="background.min.js"></script> <!--bundled source-->
+	</body>
+</html>

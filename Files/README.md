@@ -1,145 +1,55 @@
-# Angular QuickStart Source
-[![Build Status][travis-badge]][travis-badge-url]
+# Typescript Angular 2 + Node.js Starter Project with Linting, Minification, and Bundling
 
-This repository holds the TypeScript source code of the [angular.io quickstart](https://angular.io/docs/ts/latest/quickstart.html),
-the foundation for most of the documentation samples and potentially a good starting point for your application.
+## About
+* Demo hosted on [Heroku](https://tour-of-heroes-typescript.herokuapp.com/)
+    (Using free dynos which sleep during inactivity, so initial load may be slow)
+* Angular 2 Code in Typescript 1.8 with SystemJS for module loading
+    * Decouples components, models, services, and templates
+    * Typings will be used to manage type definitions until [Typescript 2.0]
+    (https://blogs.msdn.microsoft.com/typescript/2016/06/15/the-future-of-declaration-files/)
+* Styles in SCSS
+    * Global styles are concatenated
+    * Component styles are lazy loaded individually
+* HTML templates as Typescript strings
+    * Allows for in-lining of templates at compilation, avoiding additional the network request that using "templateUrl" adds
+    * Allows templates to live in external files for code clarity and scaling
+    * Can be easily migrated to a plain HTML file once Typescript "import file as string" functionality is in place
+    * Webstorm html syntax highlighting still works correctly
+* Project building and bundling with Gulp
+    * Linting runs before compilation, minification, and bundling
+    * Express serves static files from "public" directory
+    * "public/dist" contains our compiled, bundled, and minified "src"
+    * "public/lib" contains our compiled, bundled, and minified dependencies
 
-It's been extended with testing support so you can start writing tests immediately.
+## Installation
+* `npm install -g gulp typings`: installs Gulp and Typings globally
+* `npm install`: installs node modules locally then triggers type definition
+ installation and builds the app
 
-**This is not the perfect arrangement for your application. It is not designed for production.
-It exists primarily to get you started quickly with learning and prototyping in Angular**
+## Build and Run
+### Automatically
+* `gulp`: lints, builds, and restarts web server on changes
+    (Branch changes will cause server to crash; stop and start before doing so)
 
-We are unlikely to accept suggestions about how to grow this QuickStart into something it is not.
-Please keep that in mind before posting issues and PRs.
+If no code has changed since your last build, you can just run:
 
-## Prerequisites
+* `gulp serve`: starts web server with a watcher that will recompile any changed files
+    (will not trigger recompilation on any files changed before task starts)
 
-Node.js and npm are essential to Angular development. 
-    
-<a href="https://docs.npmjs.com/getting-started/installing-node" target="_blank" title="Installing Node.js and updating npm">
-Get it now</a> if it's not already installed on your machine.
- 
-**Verify that you are running at least node `v4.x.x` and npm `3.x.x`**
-by running `node -v` and `npm -v` in a terminal/console window.
-Older versions produce errors.
+### Manually
+1. `gulp build`: lints, compiles, and compresses static files
+2. `npm start`: starts web server on port 8080
+3. Repeat steps 1 & 2 on any file change
 
-We recommend [nvm](https://github.com/creationix/nvm) for managing multiple versions of node and npm.
+## Testing with Jasmine
+* `npm run test`: watches and compiles files on changes, opens browser to see test runs
+    (Initially it may show "No specs found", but browser will automatically reload on changes.)
+* `gulp clean:tests`: optionally clear test build directory
 
-## Create a new project based on the QuickStart
-
-Clone this repo into new project folder (e.g., `my-proj`).
-```bash
-git clone  https://github.com/angular/quickstart  my-proj
-cd my-proj
-```
-
-We have no intention of updating the source on `angular/quickstart`.
-Discard everything "git-like" by deleting the `.git` folder.
-```bash
-rm -rf .git  # non-Windows
-rd .git /S/Q # windows
-```
-
-### Create a new git repo
-You could [start writing code](#start-development) now and throw it all away when you're done.
-If you'd rather preserve your work under source control, consider taking the following steps.
-
-Initialize this project as a *local git repo* and make the first commit:
-```bash
-git init
-git add .
-git commit -m "Initial commit"
-```
-
-Create a *remote repository* for this project on the service of your choice.
-
-Grab its address (e.g. *`https://github.com/<my-org>/my-proj.git`*) and push the *local repo* to the *remote*.
-```bash
-git remote add origin <repo-address>
-git push -u origin master
-```
-## Install npm packages
-
-> See npm and nvm version notes above
-
-Install the npm packages described in the `package.json` and verify that it works:
-
-```bash
-npm install
-npm start
-```
-
-The `npm start` command first compiles the application, 
-then simultaneously re-compiles and runs the `lite-server`.
-Both the compiler and the server watch for file changes.
-
-Shut it down manually with `Ctrl-C`.
-
-You're ready to write your application.
-
-### npm scripts
-
-We've captured many of the most useful commands in npm scripts defined in the `package.json`:
-
-* `npm start` - runs the compiler and a server at the same time, both in "watch mode".
-* `npm run tsc` - runs the TypeScript compiler once.
-* `npm run tsc:w` - runs the TypeScript compiler in watch mode; the process keeps running, awaiting changes to TypeScript files and re-compiling when it sees them.
-* `npm run lite` - runs the [lite-server](https://www.npmjs.com/package/lite-server), a light-weight, static file server, written and maintained by
-[John Papa](https://github.com/johnpapa) and
-[Christopher Martin](https://github.com/cgmartin)
-with excellent support for Angular apps that use routing.
-
-Here are the test related scripts:
-* `npm test` - compiles, runs and watches the karma unit tests
-* `npm run e2e` - run protractor e2e tests, written in JavaScript (*e2e-spec.js)
-
-## Testing
-
-The QuickStart documentation doesn't discuss testing.
-This repo adds both karma/jasmine unit test and protractor end-to-end testing support.
-
-These tools are configured for specific conventions described below.
-
-*It is unwise and rarely possible to run the application, the unit tests, and the e2e tests at the same time.
-We recommend that you shut down one before starting another.*
-
-### Unit Tests
-TypeScript unit-tests are usually in the `app` folder. Their filenames must end in `.spec`.
-
-Look for the example `app/app.component.spec.ts`.
-Add more `.spec.ts` files as you wish; we configured karma to find them.
-
-Run it with `npm test`
-
-That command first compiles the application, then simultaneously re-compiles and runs the karma test-runner.
-Both the compiler and the karma watch for (different) file changes.
-
-Shut it down manually with `Ctrl-C`.
-
-Test-runner output appears in the terminal window.
-We can update our app and our tests in real-time, keeping a weather eye on the console for broken tests.
-Karma is occasionally confused and it is often necessary to shut down its browser or even shut the command down (`Ctrl-C`) and
-restart it. No worries; it's pretty quick.
-
-### End-to-end (E2E) Tests
-
-E2E tests are in the `e2e` directory, side by side with the `app` folder.
-Their filenames must end in `.e2e-spec.ts`.
-
-Look for the example `e2e/app.e2e-spec.ts`.
-Add more `.e2e-spec.js` files as you wish (although one usually suffices for small projects);
-we configured protractor to find them.
-
-Thereafter, run them with `npm run e2e`.
-
-That command first compiles, then simultaneously starts the Http-Server at `localhost:8080`
-and launches protractor.  
-
-The pass/fail test results appear at the bottom of the terminal window.
-A custom reporter (see `protractor.config.js`) generates a  `./_test-output/protractor-results.txt` file
-which is easier to read; this file is excluded from source control.
-
-Shut it down manually with `Ctrl-C`.
-
-[travis-badge]: https://travis-ci.org/angular/quickstart.svg?branch=master
-[travis-badge-url]: https://travis-ci.org/angular/quickstart
+## Additional Commands
+* `gulp tsconfig-glob`: populates 'files' in tsconfig.json from 'filesGlob'
+* `gulp styles`: lints, compiles, compresses Sass to CSS only
+* `gulp scripts`: lints, compiles, compresses Typescript to JS only
+* `gulp lint`: lints Typescript and SCSS files
+* `gulp clean`: clears all built files
+* `typings install`: installs type definitions
