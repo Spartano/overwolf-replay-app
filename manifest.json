@@ -40,19 +40,28 @@
 			"egs_shelf_window": {
 				"file": "Files/shelf.html", 
 				"size": {"width": 800, "height": 600},
-			    "egs_shelf": {
-			      "title": "Hearthstone Replay Viewer",
-			      "loading_text": "Loading session games...",
-			      "tooltip_text": "The replays of all the games played during your last Hearthstone session",
-			      "tooltip_url": "http://www.zerotoheroes.com",
-			      "logo": "Files/shelf.png", 
-			      "background": "#FFFFFF", 
-			      "ftue_header": "Hearthstone Replay Viewer", 
-			      "ftue_body": "This shelf shows all your games from your last HS session"
-			    }    
+				"egs_shelf": {
+				  "title": "Hearthstone Replay Viewer",
+				  "loading_text": "Loading session games...",
+				  "tooltip_text": "The replays of all the games played during your last Hearthstone session",
+				  "tooltip_url": "http://www.zerotoheroes.com",
+				  "logo": "Files/shelf.png", 
+				  "background": "#FFFFFF", 
+				  "ftue_header": "Hearthstone Replay Viewer", 
+				  "ftue_body": "This shelf shows all your games from your last HS session"
+				}    
 			}
 		},
 		"game_events": ["9898"],
+		"launch_events": [
+			{
+				"event": "GameLaunch",
+				"event_data": {
+					"game_ids": [8032]
+				},
+				"start_minimized": false
+			}
+		],
 		"externally_connectable": {
 			"matches": [
 				"http://www.zerotoheroes.com"
