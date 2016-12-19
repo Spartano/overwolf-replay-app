@@ -7,7 +7,7 @@ import { Game } from '../models/game';
 	template: `
 		<div class="carousel">
 			<ul class="games" *ngIf="games">
-				<li *ngFor="let game of games | slice:startIndex:endIndex" (click)="onSelect(game)">
+				<li *ngFor="let game of games" (click)="onSelect(game)">
 					<game-thumbnail [game]="game" [selected]="game === selectedGame"></game-thumbnail>
 				</li>
 			</ul>
@@ -22,13 +22,13 @@ export class CarouselComponent {
 	selectedGame: Game;
 
 	displayedGames: number;
-	startIndex: number;
-	endIndex: number;
+	// startIndex: number;
+	// endIndex: number;
 
 	ngOnInit(): void {
 		this.displayedGames = 4;
-		this.startIndex = 0;
-		this.endIndex = this.startIndex + this.displayedGames;
+		// this.startIndex = 0;
+		// this.endIndex = this.startIndex + this.displayedGames;
 	}
 
 	newGame(game: Game): void {
@@ -43,17 +43,17 @@ export class CarouselComponent {
 		this.onGameSelected.emit(game);
 	}
 
-	showPrevious(): void {
-		if (this.startIndex === 0) return;
-		if (this.startIndex - this.displayedGames < 0) return;
-		this.startIndex = this.startIndex - this.displayedGames;
-		this.endIndex = this.startIndex + this.displayedGames;
-	}
+	// showPrevious(): void {
+	// 	if (this.startIndex === 0) return;
+	// 	if (this.startIndex - this.displayedGames < 0) return;
+	// 	this.startIndex = this.startIndex - this.displayedGames;
+	// 	this.endIndex = this.startIndex + this.displayedGames;
+	// }
 
-	showNext(): void {
-		if (this.startIndex + this.displayedGames >= this.games.length) return;
+	// showNext(): void {
+	// 	if (this.startIndex + this.displayedGames >= this.games.length) return;
 
-		this.startIndex = this.startIndex + this.displayedGames;
-		this.endIndex = Math.min(this.games.length, this.startIndex + this.displayedGames);
-	}
+	// 	this.startIndex = this.startIndex + this.displayedGames;
+	// 	this.endIndex = Math.min(this.games.length, this.startIndex + this.displayedGames);
+	// }
 }
