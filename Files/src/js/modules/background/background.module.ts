@@ -16,7 +16,7 @@ import { LogListenerService } from '../../services/log-listener.service';
 import { GameParserService } from '../../services/game-parser.service';
 
 @NgModule({
-	imports:      [
+	imports: [
 		BrowserModule,
 		HttpModule,
 		LocalStorageModule.withConfig({

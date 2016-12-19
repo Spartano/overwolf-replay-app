@@ -43,13 +43,13 @@ export class ShelfComponent {
 
 				for (let game of this.gameService.getGames()) {
 					this.games.push(game);
-					this.games.push(game);
-					this.games.push(game);
-					this.games.push(game);
-					this.games.push(game);
-					this.games.push(game);
-					this.games.push(game);
-					this.games.push(game);
+					// this.games.push(game);
+					// this.games.push(game);
+					// this.games.push(game);
+					// this.games.push(game);
+					// this.games.push(game);
+					// this.games.push(game);
+					// this.games.push(game);
 					this.carouselComponent.newGame(game);
 				}
 			}

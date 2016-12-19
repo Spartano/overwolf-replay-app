@@ -206,9 +206,13 @@ gulp.task('copy:libs', function() {
     'node_modules/systemjs/dist/system-polyfills.js.map'
   ]).pipe(gulp.dest('public/lib/js'));
 
+  // bootstrap
   gulp.src([
-    'node_modules/bootstrap/dist/css/bootstrap.*'
+    'node_modules/bootstrap/dist/css/bootstrap.min.css'
   ]).pipe(gulp.dest('public/dist/Files/lib'));
+  gulp.src([
+    'node_modules/bootstrap/fonts/glyphicons-halflings-regular.woff2'
+  ]).pipe(gulp.dest('public/dist/Files/fonts'));
 
   gulp.src([
     'node_modules/angular-2-local-storage/**/*'
