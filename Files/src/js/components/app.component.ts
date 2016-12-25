@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { LogListenerService } from '../services/log-listener.service';
+import { GameStorageService } from '../services/game-storage.service';
 
 import { Game } from '../models/game';
 
@@ -8,7 +9,7 @@ declare var overwolf: any;
 @Component({
 	selector: 'zh-app',
 	styleUrls: [`css/component/app.component.css`],
-	template: `
+	template: ` 
 		<div></div>
 	`,
 })
@@ -16,7 +17,7 @@ export class AppComponent {
 
 	requestedDisplayOnShelf: boolean;
 
-	constructor(private logListenerService: LogListenerService) {
+	constructor(private logListenerService: LogListenerService, private gameStorageService: GameStorageService) {
 		this.init();
 	}
 

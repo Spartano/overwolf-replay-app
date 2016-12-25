@@ -41,14 +41,14 @@
 				"file": "Files/shelf.html", 
 				"size": {"width": 800, "height": 600},
 				"egs_shelf": {
-				  "title": "Hearthstone Replay Viewer",
+				  "title": "Hearthstone Replay Viewer;Powered by Zero to Heroes",
 				  "loading_text": "Loading session games...",
-				  "tooltip_text": "The replays of all the games played during your last Hearthstone session",
+				  "tooltip_text": "Get play by play recaps based on your game log.<br>Reveal hidden opponent cards, fast forward to<br>epic moments, and make the most out of your<br>victories and losses",
 				  "tooltip_url": "http://www.zerotoheroes.com",
-				  "logo": "Files/shelf.png", 
-				  "background": "#FFFFFF", 
-				  "ftue_header": "Hearthstone Replay Viewer", 
-				  "ftue_body": "This shelf shows all your games from your last HS session"
+				  "logo" : "zero-to-heroes-logo.svg",
+				  "background" : "#f6f6f6;#131313;#a8a8a8",
+				  "ftue_header" : "Relive your matches", 
+				  "ftue_body" : "Get play by play recaps based on your game log. Reveal hidden opponent cards, fast forward to epic moments, and make the most out of your victories and losses"
 				}    
 			}
 		},
@@ -57,7 +57,7 @@
 			{
 				"event": "GameLaunch",
 				"event_data": {
-					"game_ids": [8032]
+					"game_ids": [9898]
 				},
 				"start_minimized": false
 			}

@@ -33,6 +33,7 @@ export class ShelfComponent {
 
 	constructor(private gameService: GameRetrieveService) {
 		console.log('in AppComponent constructor', gameService);
+		this.shelfLoaded = false;
 	}
 
 	ngOnInit(): void {
@@ -42,14 +43,8 @@ export class ShelfComponent {
 				console.log('getting games', this.carouselComponent, this.gameService.getGames());
 
 				for (let game of this.gameService.getGames()) {
+					console.log('retrieved games from gameService, adding', game);
 					this.games.push(game);
-					// this.games.push(game);
-					// this.games.push(game);
-					// this.games.push(game);
-					// this.games.push(game);
-					// this.games.push(game);
-					// this.games.push(game);
-					// this.games.push(game);
 					this.carouselComponent.newGame(game);
 				}
 			}
@@ -58,43 +53,20 @@ export class ShelfComponent {
 				throw e;
 			}
 		}, 50);
-
-		// this.gameService.getGames().subscribe((game:Game) => {
-		// 	// http://stackoverflow.com/questions/31706948/angular2-view-not-changing-after-data-is-updated
-		// 	this.zone.run(() => {
-		// 		// console.debug('loading game via subscription', game);
-		// 		this.games.push(game);
-		// 		this.games.push(game);
-		// 		this.games.push(game);
-		// 		this.games.push(game);
-		// 		this.games.push(game);
-		// 		this.games.push(game);
-		// 		this.games.push(game);
-		// 		this.games.push(game);
-			// this.carouselComponent.newGame(game);
-
-		// 		if (!this.shelfLoaded) {
-		// 			console.log('trying to load shelf');
-		// 	    	overwolf.egs.setStatus(overwolf.egs.enums.ShelfStatus.Loading, function(result:any) {
-		// 	    		console.log('confirmed loading');
-		// 	    	});
-		// 		}
-		// 	})
-		// })
 	}
 
 	onGameSelected(game: Game) {
 		console.log('reloading game', game);
 		this.selectedGame = game;
 		this.gameReplayComponent.reload(game.replay, () => {
-			this.shelfLoaded = true;
 			console.log('game reloaded');
 
 			if (!this.shelfLoaded) {
 				console.log('sending shelf ready message');
 				// Start loading the shelf page   	
-				overwolf.egs.setStatus(overwolf.egs.enums.ShelfStatus.Ready, function(result: any) {
+				overwolf.egs.setStatus(overwolf.egs.enums.ShelfStatus.Ready, (result: any) => {
 					console.log('confirmed ready');
+					this.shelfLoaded = false;
 				});
 			}
 		});

@@ -37,6 +37,13 @@
 					}
 				});
 			};
+			function dragResize(edge){
+				overwolf.windows.getCurrentWindow(function(result){
+					if (result.status=="success"){
+						overwolf.windows.dragResize(result.window.id, edge);
+					}
+				});
+			};
 		</script>
 
 	    <script>
@@ -46,9 +53,16 @@
 	</head>
 
 	<body onmousedown="dragMove();">
+		<div class="resizeGrip" id="resizeGripTopLeft" onmousedown="dragResize('TopLeft');"></div>
+		<div class="resizeGrip" id="resizeGripTop" onmousedown="dragResize('Top');"></div>
+		<div class="resizeGrip" id="resizeGripTopRight" onmousedown="dragResize('TopRight');"></div>
+		<div class="resizeGrip" id="resizeGripRight" onmousedown="dragResize('Right');"></div>
+		<div class="resizeGrip" id="resizeGripBottomRight" onmousedown="dragResize('BottomRight');"></div>
+		<div class="resizeGrip" id="resizeGripBottom" onmousedown="dragResize('Bottom');"></div>
+		<div class="resizeGrip" id="resizeGripBottomLeft" onmousedown="dragResize('BottomLeft');"></div>
+		<div class="resizeGrip" id="resizeGripLeft" onmousedown="dragResize('Left');"></div>
 		<zh-shelf>Loading...</zh-shelf>
 		
-	    <script src="common.min.js"></script> <!--bundled source-->
 	    <script src="shelf.min.js"></script> <!--bundled source-->
 	</body>
 </html>

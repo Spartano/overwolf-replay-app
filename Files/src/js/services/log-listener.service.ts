@@ -5,7 +5,7 @@ import { GameParserService } from './game-parser.service';
 declare var OverwolfPlugin: any;
 declare var overwolf: any;
 
-const HEARTHSTONE_GAME_ID = 8032; // 9898;
+const HEARTHSTONE_GAME_ID = 9898;
 
 @Injectable()
 export class LogListenerService {

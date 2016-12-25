@@ -29,6 +29,7 @@ export class GameStorageService {
 
 	addGame(game: Game): void {
 		// Get the games from the local storage
+		console.log('adding game to local storage', game);
 		let games: Game[] = this.localStorageService.get<Game[]>('games') || [];
 		games.push(game);
 		this.localStorageService.set('games', games);
