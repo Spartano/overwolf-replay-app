@@ -1,4 +1,4 @@
-import { Component, Input, ViewEncapsulation, ElementRef } from '@angular/core';
+import { Component, Input, ViewEncapsulation, ElementRef, HostListener } from '@angular/core';
 import { Game } from '../models/game';
 
 declare var manastorm: any;
@@ -35,6 +35,8 @@ export class GameReplayComponent {
 			// hideButtomLog: true,
 			hideSideLog: true,
 			showGameBorder: true,
+			useCompressedImages: true,
+			noGolden: true,
 		};
 		manastorm.initPlayer(manastormOptions);
 	}
@@ -46,6 +48,14 @@ export class GameReplayComponent {
 				this.width = this.elementRef.nativeElement.clientHeight * this.aspectRatio;
 				callback();
 			});
+		});
+	}
+
+	@HostListener('window:resize', ['$event'])
+	onResize(event) {
+		setTimeout(() =>  {
+			// console.log('player height is ', this.elementRef.nativeElement.clientHeight, this.elementRef);
+			this.width = this.elementRef.nativeElement.clientHeight * this.aspectRatio;
 		});
 	}
 }

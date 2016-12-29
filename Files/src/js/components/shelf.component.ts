@@ -45,6 +45,22 @@ export class ShelfComponent {
 				for (let game of this.gameService.getGames()) {
 					console.log('retrieved games from gameService, adding', game);
 					this.games.unshift(game);
+					this.games.unshift(game);
+					this.games.unshift(game);
+					this.games.unshift(game);
+					this.games.unshift(game);
+					this.games.unshift(game);
+					this.games.unshift(game);
+					this.games.unshift(game);
+					this.games.unshift(game);
+					this.games.unshift(game);
+					this.games.unshift(game);
+					this.games.unshift(game);
+					this.games.unshift(game);
+					this.games.unshift(game);
+					this.games.unshift(game);
+					this.games.unshift(game);
+					this.games.unshift(game);
 					this.carouselComponent.newGame(game);
 				}
 			}

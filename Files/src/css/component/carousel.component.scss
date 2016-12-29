@@ -9,30 +9,129 @@
     background-color: rgba(104, 71, 31, 0.3);
 }
 
-.carousel {
-	display: flex;
-	flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    height: 100%;
+nav {
+	// display: flex;
+	// flex-direction: column;
+ //    align-items: center;
+ //    justify-content: space-between;
+ //    height: 100%;
 
-    border-left: #68471f 2px solid;
-}
-
-.games {
-    margin: 0;
-    padding: 0 10%;
-    align-self: stretch;
+    flex: 0 0 20%;
+    // min-width: 200px; // change according to you design
+    // max-width: 300px; // change according to you design
     display: flex;
     flex-direction: column;
-    align-items: stretch;
-    flex-grow: 1;
-    // justify-content: space-between;
+    align-items: center;
+    height: 100%;
+
+    .svg-icon-stroke {
+      fill: none;
+      stroke: currentcolor;
+      stroke-width: 2px;
+    }
 }
 
-.games > li {
-	list-style-type: none;
-    margin-bottom: 5%;
-    // margin-top: 5%;
-    font-size: 0.9em;
+
+.carousel-nav-bottom {
+  align-items: flex-end;
+
+  svg {
+    transform: scaleY(-1);
+  }
 }
+
+.carousel-nav svg {
+  transition: .15s;
+  width: 50px;
+  height: 20px;
+  color: #c3aa7d;
+  background-color: rgba(0, 0, 0, .4);
+}
+
+.carousel-nav:hover svg {
+  background-color: rgba(0, 0, 0, .8);
+}
+
+.carousel-nav.carousel-nav-disabled {
+  pointer-events: none;
+
+  svg {
+    background-color: rgba(0, 0, 0, .2);
+  }
+}
+
+
+.carousel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+    padding: 0;
+}
+
+.carousel li {
+  flex: 0 0 25%; // change according to you design
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  // font-size: 40px;
+  transition: .15s;
+  transition: transform 1s cubic-bezier(.3, .3, 0, 1.1);
+
+  &:hover {
+    background-color: rgba(0, 0, 0, .1);
+  }
+}
+
+.carousel li .carousel-item-selected,
+.carousel li .carousel-item-selected:hover {
+  background-color: rgba(0, 0, 0, .1);
+  box-shadow: inset 0 0 0 1px black;
+}
+
+// for demo
+// .carousel.transform li {
+//   transform: translateY(-400%); // 100% x number of visible items
+// }
+
+@media screen and (max-height: 600px) { // change according to you design
+
+  .carousel li {
+    flex: 0 0 33.333%;
+  }
+
+  // .carousel.transform li {
+  //   transform: translateY(-300%); // 100% x number of visible items
+  // }
+
+}
+
+@media screen and (min-height: 800px) { // change according to you design
+
+  .carousel li {
+    flex: 0 0 20%;
+  }
+
+  // .carousel.transform li {
+  //   transform: translateY(-500%); // 100% x number of visible items
+  // }
+
+}
+
+// .games {
+//     margin: 0;
+//     padding: 0 10%;
+//     align-self: stretch;
+//     display: flex;
+//     flex-direction: column;
+//     align-items: stretch;
+//     flex-grow: 1;
+//     // justify-content: space-between;
+// }
+
+// .games > li {
+// 	list-style-type: none;
+//     margin-bottom: 5%;
+//     // margin-top: 5%;
+//     font-size: 0.9em;
+// }

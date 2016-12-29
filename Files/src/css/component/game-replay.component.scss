@@ -80,6 +80,8 @@
         }
 
     }
+
+    // Make sure the tooltips don't overflow
 }
 
     
@@ -88,65 +90,3 @@
         width: 25%;
     }
 }
-
-/*
-.hearthstone .manastorm #externalPlayer .replay__controls {
-    position: relative;
-    top: 4%;
-
-
-    position: absolute;
-    width: 30%;
-    bottom: 20%;
-    top: auto;
-    right: 0;
-}
-
-.hearthstone .manastorm #externalPlayer .additional-controls {
-    right: -4%;
-    top: -2%;
-}
-
-.hearthstone .manastorm #externalPlayer .top .hero .power-container {
-	align-items: flex-start;
-}
-.hearthstone .manastorm #externalPlayer .top .hero .weapon-container {
-	align-items: flex-end;
-}
-.hearthstone .manastorm #externalPlayer .top .mulligan {
-	top: 9%;
-}
-.hearthstone .manastorm #externalPlayer .game .top .player-name {
-	top: 35%;
-}
-.hearthstone .manastorm #externalPlayer .top .hand {
-	overflow-y: hidden;
-	height: 28%;
-	height: 23%;
-}
-
-.hearthstone .manastorm #externalPlayer .bottom .hand {
-	top: 6%;
-}
-.hearthstone .manastorm #externalPlayer .bottom .board {
-	height: 42%;
-	height: 64%;
-}
-.hearthstone .manastorm #externalPlayer .bottom .hero {
-	height: 26%;
-	height: 46%;
-}
-.hearthstone .manastorm #externalPlayer .bottom .mulligan {
-	top: 11%;
-}
-.hearthstone .manastorm #externalPlayer .game .bottom .player-name {
-	bottom: 35%;
-}
-.hearthstone .manastorm #externalPlayer .bottom .hero .power-container {
-    align-items: flex-start;
-    align-self: flex-start;
-}
-.hearthstone .manastorm #externalPlayer .hero .weapon-container {
-    align-items: flex-end;
-    align-self: flex-start;
-}*/

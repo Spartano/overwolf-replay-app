@@ -1,17 +1,37 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, HostListener } from '@angular/core';
 import { Game } from '../models/game';
+
+declare var $: any;
 
 @Component({
 	selector: 'carousel',
 	styleUrls: [`css/component/carousel.component.css`],
 	template: `
-		<div class="carousel">
-			<ul class="games" *ngIf="games">
-				<li *ngFor="let game of games" (click)="onSelect(game)">
-					<game-thumbnail [game]="game" [selected]="game === selectedGame"></game-thumbnail>
+		<nav>
+			<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+				<symbol id="carousel-nav-icon" viewBox="0 0 50 20">
+					<polyline points="18 12 25 8 32 12" stroke-linecap="round" stroke-miterlimit="10" />
+				</symbol>
+			</svg>
+
+			<i class="carousel-nav carousel-nav-top" [class.carousel-nav-disabled]="!showTopArrow" (click)="showPrevious()">
+				<svg class="svg-icon-stroke">
+					<use xlink:href="#carousel-nav-icon" />
+				</svg>
+			</i>
+
+			<ul class="carousel" *ngIf="games">
+				<li *ngFor="let game of games | slice:startIndex:endIndex" (click)="onSelect(game)" [style.transform]="'translateY(-' + translateAmount + '%)'">
+					<game-thumbnail [game]="game" [class.carousel-item-selected]="game === selectedGame"></game-thumbnail>
 				</li>
 			</ul>
-		</div>
+
+			<i class="carousel-nav carousel-nav-bottom" [class.carousel-nav-disabled]="!showBottomArrow" (click)="showNext()">
+				<svg class="svg-icon-stroke">
+					<use xlink:href="#carousel-nav-icon" />
+				</svg>
+			</i>
+		</nav>
 	`,
 })
 
@@ -20,13 +40,19 @@ export class CarouselComponent {
 	@Output() onGameSelected = new EventEmitter<Game>();
 
 	selectedGame: Game;
+	showTopArrow: boolean;
+	showBottomArrow: boolean;
+	numberOfDisplayedGames: number;
+	firstDisplayedGameIndex: number;
+	translateAmount: number;
+	bouncing: boolean;
 
-	displayedGames: number;
+	// displayedGames: number;
 	// startIndex: number;
 	// endIndex: number;
 
 	ngOnInit(): void {
-		this.displayedGames = 4;
+		// this.displayedGames = 4;
 		// this.startIndex = 0;
 		// this.endIndex = this.startIndex + this.displayedGames;
 	}
@@ -35,6 +61,7 @@ export class CarouselComponent {
 		if (!this.selectedGame) {
 			this.onSelect(game);
 		}
+		this.recomputeVisibleElements();
 	}
 
 	onSelect(game: Game): void {
@@ -56,4 +83,74 @@ export class CarouselComponent {
 	// 	this.startIndex = this.startIndex + this.displayedGames;
 	// 	this.endIndex = Math.min(this.games.length, this.startIndex + this.displayedGames);
 	// }
+
+
+
+	showPrevious(): void {
+		if (this.showTopArrow) {
+			this.translateAmount = (this.firstDisplayedGameIndex - this.numberOfDisplayedGames) * 100;
+			this.recomputeVisibleElements();
+		}
+	}
+
+	showNext(): void {
+		if (this.showBottomArrow) {
+			this.translateAmount = (this.firstDisplayedGameIndex + this.numberOfDisplayedGames) * 100;
+			this.recomputeVisibleElements();
+		}
+	}
+
+	@HostListener('window:resize', ['$event'])
+	onResize(event) {
+		this.recomputeVisibleElements();
+	}
+
+	isElementInViewport (el: any): boolean {
+		let rect = el.getBoundingClientRect();
+
+		return (
+			rect.top >= 0 &&
+			rect.left >= 0 &&
+			rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && /*or $(window).height() */
+			rect.right <= (window.innerWidth || document.documentElement.clientWidth) /*or $(window).width() */
+		);
+	}
+
+	recomputeVisibleElements(): void {
+		if (!this.bouncing) {
+			this.bouncing = true;
+			setTimeout(() =>  {
+				console.log('recomputing visible elements');
+				this.showTopArrow = false;
+				this.showBottomArrow = false;
+				this.numberOfDisplayedGames = 0;
+				this.firstDisplayedGameIndex = -1;
+
+				let thumbnailElements = $('game-thumbnail');
+				console.log('thumbnailElements', thumbnailElements);
+				if (!thumbnailElements || thumbnailElements.length === 0) {
+					return;
+				}
+
+				let index = 0;
+				for (let el of thumbnailElements) {
+					console.log('considering', el, this.isElementInViewport(el), el.getBoundingClientRect());
+					if (this.isElementInViewport(el)) {
+						this.numberOfDisplayedGames++;
+						if (this.firstDisplayedGameIndex === -1) {
+							this.firstDisplayedGameIndex = index;
+						}
+					}
+					index++;
+					console.log('increased index', index);
+				}
+				this.showTopArrow = this.firstDisplayedGameIndex > 0;
+				this.showBottomArrow = (this.firstDisplayedGameIndex + this.numberOfDisplayedGames) < thumbnailElements.length - 1;
+				console.log('showing arrows', this.showTopArrow, this.showBottomArrow);
+
+				console.log('number of displayed games', this.numberOfDisplayedGames, this.firstDisplayedGameIndex);
+				this.bouncing = false;
+			}, 1100);
+		}
+	}
 }

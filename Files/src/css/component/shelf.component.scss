@@ -18,11 +18,13 @@
 }
 
 carousel {
-	width: 25%;
-	margin-top: 25px;
-	margin-bottom: 25px;
+	width: 22%;
+	// margin-top: 25px;
+	// margin-bottom: 25px;
 	margin-right: 15px;
-	overflow: auto;
+	// overflow: auto;
+    border-left: #68471f 2px solid;
+    padding-left: 2%;
 
 	&::-webkit-scrollbar { 
 	  	width: 8px;

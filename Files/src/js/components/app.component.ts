@@ -32,7 +32,7 @@ export class AppComponent {
 
 	requestDisplayOnShelf(): void {
 		console.log('requesting display on shelf', overwolf.egs);
-		// this.showShelfWindow();
+		this.showShelfWindow();
 		overwolf.egs.isEnabled((result: any) => {
 			console.log('egs is enabled', result);
 			// result.status == ["success"| "error"]
