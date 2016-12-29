@@ -44,7 +44,7 @@ export class ShelfComponent {
 
 				for (let game of this.gameService.getGames()) {
 					console.log('retrieved games from gameService, adding', game);
-					this.games.push(game);
+					this.games.unshift(game);
 					this.carouselComponent.newGame(game);
 				}
 			}
@@ -65,7 +65,7 @@ export class ShelfComponent {
 				console.log('sending shelf ready message');
 				// Start loading the shelf page   	
 				overwolf.egs.setStatus(overwolf.egs.enums.ShelfStatus.Ready, (result: any) => {
-					console.log('confirmed ready');
+					console.log('confirmed ready', result);
 					this.shelfLoaded = false;
 				});
 			}
