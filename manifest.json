@@ -31,15 +31,10 @@
 			"ShelfWindow": {
 				"file": "Files/shelf.html",
 				"transparent": true,
-				"resizable": false,
 				"show_in_taskbar": false,
-				"size": {"width": 800, "height": 600},
-				"min_size": {"width": 800, "height": 600},
-				"max_size": {"width": 800, "height": 600}
 			},
 			"egs_shelf_window": {
 				"file": "Files/shelf.html", 
-				"size": {"width": 800, "height": 600},
 				"egs_shelf": {
 				  "title": "Hearthstone Replay Viewer;Powered by Zero to Heroes",
 				  "loading_text": "Loading session games...",
