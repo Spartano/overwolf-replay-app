@@ -39,7 +39,7 @@ export class AppComponent {
 			// result.isEnabled == [true | false]
 			if (result.status === 'success' && result.isEnabled) {
 				console.log('requesting to display', result);
-				overwolf.egs.requestToDisplay(function(result2: any) {
+				overwolf.egs.requestToDisplay((result2: any) => {
 					// result.status == ["success" | "error"]
 					// result.reason == [undefined | "EndGameScreen is disabled" | "Not accepting shelves"]
 					console.log('requestToDisplay result', result2);
@@ -52,6 +52,15 @@ export class AppComponent {
 			else {
 				// Debug only
 				// this.showShelfWindow();
+			}
+		});
+	}
+
+	closeWindow() {
+		overwolf.windows.getCurrentWindow((result) => {
+			if (result.status === "success") {
+				console.log('closing');
+				// overwolf.windows.close(result.window.id);
 			}
 		});
 	}

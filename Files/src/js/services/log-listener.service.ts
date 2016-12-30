@@ -35,7 +35,7 @@ export class LogListenerService {
 		console.log('plugin', plugin);
 		let that = this;
 
-		plugin.initialize(function(status: boolean) {
+		plugin.initialize((status: boolean) => {
 			if (status === false) {
 				console.error("Plugin couldn't be loaded??");
 				return;
@@ -43,13 +43,16 @@ export class LogListenerService {
 			console.log("Plugin " + plugin.get()._PluginName_ + " was loaded!");
 
 			// Registering game listener
-			overwolf.games.onGameInfoUpdated.addListener(function (res: any) {
+			overwolf.games.onGameInfoUpdated.addListener((res: any) => {
 				console.log("onGameInfoUpdated: " + JSON.stringify(res));
 				if (that.gameLaunched(res)) {
 					// registerEvents()
 					that.logsLocation = res.gameInfo.executionPath.split('Hearthstone.exe')[0] + 'Logs\\Power.log';
 					console.log('getting logs from', that.logsLocation);
 					that.registerLogMonitor();
+				}
+				else if (this.exitGame(res)) {
+					this.closeWindow(); 
 				}
 			});
 
@@ -63,6 +66,16 @@ export class LogListenerService {
 					that.registerLogMonitor();
 				}
 			});
+		});
+	}
+
+	// This whole game running info mechanism should be externalized to another script
+	closeWindow() {
+		overwolf.windows.getCurrentWindow((result) => {
+			if (result.status === "success") {
+				console.log('closing');
+				overwolf.windows.close(result.window.id);
+			}
 		});
 	}
 
@@ -155,6 +168,10 @@ export class LogListenerService {
 				}
 			}
 		});
+	}
+
+	exitGame(gameInfoResult: any): boolean {
+		return (!gameInfoResult || !gameInfoResult.gameInfo || !gameInfoResult.gameInfo.isRunning);
 	}
 
 	gameLaunched(gameInfoResult: any): boolean {
