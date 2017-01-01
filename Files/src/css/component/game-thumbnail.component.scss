@@ -27,7 +27,7 @@
     background-color: rgba(0, 0, 0, 0.6);
 }
 
-.game .separator {
+.game .matchup .separator {
 	align-self: center;
 	margin-top: 20%;
 	color: white;
@@ -41,6 +41,19 @@
 .game .title {
 	color: #68471f;
 	font-weight: bold;
+	display: flex;
+
+	.hero-name {
+		width: 40%;
+		text-align: center;
+    	overflow: hidden;
+	}
+
+	.separator {
+		width: 20%;
+		text-align: center;
+	}
+
 }
 
 .game.won, .game.won .title {

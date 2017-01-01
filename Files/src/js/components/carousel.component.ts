@@ -58,9 +58,9 @@ export class CarouselComponent {
 	}
 
 	newGame(game: Game): void {
-		if (!this.selectedGame) {
-			this.onSelect(game);
-		}
+		// if (!this.selectedGame) {
+		this.onSelect(game);
+		// }
 		this.recomputeVisibleElements();
 	}
 

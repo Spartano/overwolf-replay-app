@@ -67,6 +67,7 @@ nav {
   flex-direction: column;
   overflow: hidden;
     padding: 0;
+    width: 100%;
 }
 
 .carousel li {
@@ -81,6 +82,10 @@ nav {
   &:hover {
     background-color: rgba(0, 0, 0, .1);
   }
+}
+
+.carousel game-thumbnail {
+  width: 100%;
 }
 
 .carousel li .carousel-item-selected,
