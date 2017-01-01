@@ -52,7 +52,7 @@ export class LogListenerService {
 					that.registerLogMonitor();
 				}
 				else if (this.exitGame(res)) {
-					this.closeWindow(); 
+					this.closeWindow();
 				}
 			});
 
