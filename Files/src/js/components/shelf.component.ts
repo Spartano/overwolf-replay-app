@@ -34,6 +34,7 @@ export class ShelfComponent {
 	constructor(private gameService: GameRetrieveService) {
 		console.log('in AppComponent constructor', gameService);
 		this.shelfLoaded = false;
+		this.postMessage();
 	}
 
 	ngOnInit(): void {
@@ -71,4 +72,34 @@ export class ShelfComponent {
 			}
 		});
 	}
+
+	// https://github.com/Microsoft/TypeScript/issues/9548
+	postMessage() {
+		let el = document.getElementById('.shelf-container');
+		console.log('content element', el);
+		if (!el) {
+			console.error('could not find shelf container element');
+			return;
+		}
+
+		(el.addEventListener as WhatWGAddEventListener)('wheel', (evt: any) => {
+			console.log('scrolling', evt);
+			window.parent.postMessage({deltaY: evt.deltaY}, "*");
+		}, { passive: true });
+	}
 }
+
+interface WhatWGEventListenerArgs {
+	capture?: boolean;
+}
+
+interface WhatWGAddEventListenerArgs extends WhatWGEventListenerArgs {
+	passive?: boolean;
+	once?: boolean;
+}
+
+type WhatWGAddEventListener = (
+	type: string,
+	listener: (event: Event) => void,
+	options?: WhatWGAddEventListenerArgs
+) => void;
