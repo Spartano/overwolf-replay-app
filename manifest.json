@@ -36,6 +36,7 @@
 				"min_size": {"width": 694, "height": 420},
 			},
 			"egs_shelf_window": {
+				"min_size": {"width": 694, "height": 420},
 				"file": "Files/shelf.html", 
 				"egs_shelf": {
 					"show_as_iframe": true, 
