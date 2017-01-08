@@ -67,6 +67,15 @@
 
     .game .card-tooltip {
         width: 40%;
+        max-width: 250px;
+    }
+
+    // Hack until https://github.com/wwayne/react-tooltip/issues/241 is fixed
+    .top .hand .card-tooltip {
+        margin-top: 40px;
+    }
+    .bottom .hand .card-tooltip {
+        margin-bottom: 40px;
     }
 
     .replay__controls {
