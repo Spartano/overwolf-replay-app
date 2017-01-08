@@ -61,21 +61,22 @@ export class GameParserService {
 
 	extractMatchup(game: Game): void {
 		let replayXml = $.parseXML(game.replay);
-		// console.log('replayXML', replayXml);
+		console.log('replayXML', replayXml);
 
-		// console.debug('parsing replay', replayXml)
-		let mainPlayerId = this.getMainPlayerId(replayXml);
-		// console.log('main player ID', mainPlayerId);
+		console.debug('parsing replay', replayXml);
+		let mainPlayerId: number = this.getMainPlayerId(replayXml);
+		let mainPlayerEntityId: number = mainPlayerId + 1;
+		console.log('main player ID', mainPlayerId);
 
-		// console.debug('players', players)
 		let gamePlayers: Player[] = this.extractPlayers(replayXml, mainPlayerId);
+		console.debug('players', gamePlayers);
 
 		game.player = gamePlayers[0];
 		game.opponent = gamePlayers[1];
 
 		game.title = game.player.name + ' vs ' + game.opponent.name;
 
-		game.result = this.extractResult(replayXml, mainPlayerId);
+		game.result = this.extractResult(replayXml, mainPlayerEntityId);
 		console.log('parsed game', game);
 	}
 
@@ -98,7 +99,7 @@ export class GameParserService {
 		return gamePlayers;
 	}
 
-	getMainPlayerId(replayXml: any) {
+	getMainPlayerId(replayXml: any): number {
 		let showEntities = replayXml.getElementsByTagName('ShowEntity');
 		// console.log('there are ' + showEntities.length + ' ShowEntity elements')
 		let fullEntities = replayXml.getElementsByTagName('FullEntity');
@@ -118,7 +119,7 @@ export class GameParserService {
 						// ENCHANTMENT
 						if (cardType !== 6) {
 							// CONTROLLER
-							let controllerId = this.getTagValue(fullEntity, 50);
+							let controllerId: number = this.getTagValue(fullEntity, 50);
 							// console.log('foundit', controllerId);
 							return controllerId;
 						}
@@ -177,7 +178,7 @@ export class GameParserService {
 	extractResult(replayXml: any, mainPlayerId: number): string {
 
 		let tagChanges = replayXml.getElementsByTagName('TagChange');
-		// console.log('found ' + tagChanges.length + ' tag changes');
+		console.log('found ' + tagChanges.length + ' tag changes');
 		let winnerTag: any;
 		for (let tagChange of tagChanges) {
 			// if (tagChange.getAttribute('tag') == '17') {
@@ -185,12 +186,13 @@ export class GameParserService {
 			// }
 			// PLAYSTATE and WON
 			if (parseInt(tagChange.getAttribute('value')) === 4) {
-				// console.log('\t==================found a winner', winnerTag);
 				winnerTag = tagChange;
+				console.log('\t==================found a winner', winnerTag);
 				break;
 			}
 		}
 
+		console.log('finding winner', winnerTag, mainPlayerId);
 		let status = 'unknown';
 		if (winnerTag) {
 			if (mainPlayerId === parseInt(winnerTag.getAttribute('entity'))) {
