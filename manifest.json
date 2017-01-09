@@ -45,7 +45,7 @@
 					"tooltip_text": "Get play by play recaps based on your game log.<br>Reveal hidden opponent cards, fast forward to<br>epic moments, and make the most out of your<br>victories and losses",
 					"tooltip_url": "http://www.zerotoheroes.com",
 					"logo" : "zero-to-heroes-logo.svg",
-					"background" : "#f6f6f6;#131313;#a8a8a8",
+					"background":"#daac76;#131313;#131313",
 					"ftue_header" : "Relive your matches", 
 					"ftue_body" : "Get play by play recaps based on your game log. Reveal hidden opponent cards, fast forward to epic moments, and make the most out of your victories and losses"
 				}    
