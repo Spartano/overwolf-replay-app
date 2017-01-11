@@ -62,11 +62,15 @@ export class GameParserService {
 	extractMatchup(game: Game): void {
 		let replayXml = $.parseXML(game.replay);
 		console.log('replayXML', replayXml);
+		if (!replayXml) {
+			console.warn('invalid game, not adding any meta data', game);
+			return;
+		}
 
-		console.debug('parsing replay', replayXml);
 		let mainPlayerId: number = this.getMainPlayerId(replayXml);
-		let mainPlayerEntityId: number = mainPlayerId + 1;
 		console.log('main player ID', mainPlayerId);
+		let mainPlayerEntityId: number = mainPlayerId + 1;
+		console.log('mainPlayerEntityId: ', mainPlayerEntityId);
 
 		let gamePlayers: Player[] = this.extractPlayers(replayXml, mainPlayerId);
 		console.debug('players', gamePlayers);
@@ -88,11 +92,13 @@ export class GameParserService {
 			gamePlayer.name = player.getAttribute('name');
 			gamePlayer.hero = this.extractClassCard(replayXml, player);
 			gamePlayer.class = this.extractClassFromHero(gamePlayer.hero);
-			// console.log('is main player', gamePlayer.name, mainPlayerId, parseInt(player.getAttribute('playerID')), gamePlayer)
+			console.log('is main player', gamePlayer.name, mainPlayerId, parseInt(player.getAttribute('playerID')), gamePlayer);
 			if (parseInt(player.getAttribute('playerID')) === mainPlayerId) {
+				console.log('matching player to', gamePlayer, player);
 				gamePlayers[0] = gamePlayer;
 			}
 			else {
+				console.log('matching opponent to', gamePlayer, player);
 				gamePlayers[1] = gamePlayer;
 			}
 		}
@@ -181,11 +187,11 @@ export class GameParserService {
 		console.log('found ' + tagChanges.length + ' tag changes');
 		let winnerTag: any;
 		for (let tagChange of tagChanges) {
-			// if (tagChange.getAttribute('tag') == '17') {
+			// if (tagChange.getAttribute('tag') === '17') {
 			// 	console.log('considering', tagChange.getAttribute('tag'), tagChange.getAttribute('value'), tagChange);
 			// }
 			// PLAYSTATE and WON
-			if (parseInt(tagChange.getAttribute('value')) === 4) {
+			if (parseInt(tagChange.getAttribute('tag')) === 17 && parseInt(tagChange.getAttribute('value')) === 4) {
 				winnerTag = tagChange;
 				console.log('\t==================found a winner', winnerTag);
 				break;

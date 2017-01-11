@@ -6,6 +6,7 @@ import { Game } from '../models/game';
 import { GameRetrieveService } from '../services/game-retrieve.service';
 
 declare var overwolf: any;
+declare var $: any;
 
 @Component({
 	selector: 'zh-shelf',
@@ -75,10 +76,11 @@ export class ShelfComponent {
 
 	// https://github.com/Microsoft/TypeScript/issues/9548
 	postMessage() {
-		let el = document.getElementById('.shelf-container');
+		let el = $('.shelf-container')[0];
 		console.log('content element', el);
 		if (!el) {
-			console.error('could not find shelf container element');
+			console.error('could not find shelf container element, retrying', document);
+			setTimeout( () => this.postMessage(), 50);
 			return;
 		}
 

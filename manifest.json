@@ -31,9 +31,7 @@
 			"ShelfWindow": {
 				"file": "Files/shelf.html",
 				"transparent": true,
-				"show_in_taskbar": false,
-				"size": {"width": 694, "height": 420},
-				"min_size": {"width": 694, "height": 420},
+				"show_in_taskbar": false
 			},
 			"egs_shelf_window": {
 				"min_size": {"width": 694, "height": 420},
@@ -45,7 +43,7 @@
 					"tooltip_text": "Get play by play recaps based on your game log.<br>Reveal hidden opponent cards, fast forward to<br>epic moments, and make the most out of your<br>victories and losses",
 					"tooltip_url": "http://www.zerotoheroes.com",
 					"logo" : "zero-to-heroes-logo.svg",
-					"background" : "#daac76;#131313;#333333",
+					"background":"#daac76;#131313;#131313",
 					"ftue_header" : "Relive your matches", 
 					"ftue_body" : "Get play by play recaps based on your game log. Reveal hidden opponent cards, fast forward to epic moments, and make the most out of your victories and losses"
 				}    

@@ -54,7 +54,7 @@ export class GameReplayComponent {
 	@HostListener('window:resize', ['$event'])
 	onResize(event) {
 		setTimeout(() =>  {
-			// console.log('player height is ', this.elementRef.nativeElement.clientHeight, this.elementRef);
+			console.log('player height is ', this.elementRef.nativeElement.clientHeight, this.elementRef);
 			this.width = this.elementRef.nativeElement.clientHeight * this.aspectRatio;
 		});
 	}
