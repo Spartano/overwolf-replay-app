@@ -15,7 +15,7 @@ import { Game } from '../models/game';
 			<div class="game-info">
 				<span class="title">
 					<span class="hero-name">{{game.player.name}}</span>
-					<span class="separator">vs</span>
+					<span class="separator">Vs.</span>
 					<span class="hero-name">{{game.opponent.name}}</span>
 				</span>
 				<span class="result">{{getGameResultString(game.result)}}</span>
