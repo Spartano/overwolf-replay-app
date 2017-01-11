@@ -31,9 +31,7 @@
 			"ShelfWindow": {
 				"file": "Files/shelf.html",
 				"transparent": true,
-				"show_in_taskbar": false,
-				"size": {"width": 694, "height": 420},
-				"min_size": {"width": 694, "height": 420},
+				"show_in_taskbar": false
 			},
 			"egs_shelf_window": {
 				"min_size": {"width": 694, "height": 420},

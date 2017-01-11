@@ -179,7 +179,7 @@ export class GameParserService {
 		let playerClass = parseCardsText.getCard(hero).playerClass.toLowerCase();
 		// console.debug('playerClass', playerClass)
 		return playerClass;
-	}	
+	}
 
 	extractResult(replayXml: any, mainPlayerId: number): string {
 
