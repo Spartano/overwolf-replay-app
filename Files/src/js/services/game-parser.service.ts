@@ -148,7 +148,7 @@ export class GameParserService {
 	}
 
 	extractClassCard(replayXml: any, player: any) {
-		// console.debug('building playerClass for ', player, replayXml)
+		console.debug('building playerClass for ', player, replayXml);
 		let playerId: any;
 		let nodes = player.childNodes;
 		// console.debug('\tchildNodes ', nodes)
@@ -158,7 +158,7 @@ export class GameParserService {
 				playerId = node.getAttribute('value');
 			}
 		}
-		// console.debug('playerId', playerId)
+		console.debug('playerId', playerId);
 
 		let cardId: any;
 		let entities = replayXml.getElementsByTagName('FullEntity');
@@ -169,12 +169,14 @@ export class GameParserService {
 				cardId = entity.getAttribute('cardID');
 			}
 		}
+		console.log('cardId', cardId);
 
 		return cardId;
 	}
 
 	extractClassFromHero(hero: string) {
 		// console.debug('cardId', cardId)
+		console.log('extractClassFromHero', hero, parseCardsText.getCard(hero));
 
 		let playerClass = parseCardsText.getCard(hero).playerClass.toLowerCase();
 		// console.debug('playerClass', playerClass)

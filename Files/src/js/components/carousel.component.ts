@@ -22,7 +22,7 @@ declare var $: any;
 
 			<ul class="carousel" *ngIf="games">
 				<li *ngFor="let game of games | slice:startIndex:endIndex" (click)="onSelect(game)" [style.transform]="'translateY(-' + translateAmount + '%)'">
-					<game-thumbnail [game]="game" [class.carousel-item-selected]="game === selectedGame"></game-thumbnail>
+					<game-thumbnail [game]="game" [selected]="game === selectedGame" [class.carousel-item-selected]="game === selectedGame"></game-thumbnail>
 				</li>
 			</ul>
 
