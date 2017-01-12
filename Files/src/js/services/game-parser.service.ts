@@ -18,9 +18,9 @@ export class GameParserService {
 	}
 
 	init(): void {
-		console.log('init game conevrter plugin');
+		// console.log('init game conevrter plugin');
 		let plugin = this.plugin = new OverwolfPlugin("overwolf-replay-converter", true);
-		console.log('plugin', plugin);
+		// console.log('plugin', plugin);
 		// let that = this;
 
 		plugin.initialize((status: boolean) => {
@@ -30,13 +30,17 @@ export class GameParserService {
 			}
 			this.initialized = true;
 			console.log("Plugin " + plugin.get()._PluginName_ + " was loaded!");
+
+			// plugin.get().onGlobalEvent.addListener(function(first, second) {
+			// 	console.log('received global event', first, second);
+			// });
 		});
 	}
 
 	// Not externalized, as this will be done inline later on
 	convertLogsToXml(stringLogs: string, game: Game, callbacks: Function[]): void {
 
-		console.log('trying to convert');
+		// console.log('trying to convert');
 
 		if (!this.initialized) {
 			console.debug('waiting for game converter plugin initialization');
@@ -50,6 +54,9 @@ export class GameParserService {
 		this.plugin.get().convertLogsToXml(stringLogs, (replayXml: string) => {
 				console.debug('received conversion response');
 				game.replay = replayXml;
+				if (!replayXml) {
+					console.warn('could not convert replay', game, stringLogs);
+				}
 				this.extractMatchup(game);
 				// console.log('converted', response
 				// console.debug('extracted matchup into', game)
@@ -68,12 +75,12 @@ export class GameParserService {
 		}
 
 		let mainPlayerId: number = this.getMainPlayerId(replayXml);
-		console.log('main player ID', mainPlayerId);
+		// console.log('main player ID', mainPlayerId);
 		let mainPlayerEntityId: number = mainPlayerId + 1;
-		console.log('mainPlayerEntityId: ', mainPlayerEntityId);
+		// console.log('mainPlayerEntityId: ', mainPlayerEntityId);
 
 		let gamePlayers: Player[] = this.extractPlayers(replayXml, mainPlayerId);
-		console.debug('players', gamePlayers);
+		// console.debug('players', gamePlayers);
 
 		game.player = gamePlayers[0];
 		game.opponent = gamePlayers[1];
@@ -92,13 +99,13 @@ export class GameParserService {
 			gamePlayer.name = player.getAttribute('name');
 			gamePlayer.hero = this.extractClassCard(replayXml, player);
 			gamePlayer.class = this.extractClassFromHero(gamePlayer.hero);
-			console.log('is main player', gamePlayer.name, mainPlayerId, parseInt(player.getAttribute('playerID')), gamePlayer);
+			// console.log('is main player', gamePlayer.name, mainPlayerId, parseInt(player.getAttribute('playerID')), gamePlayer);
 			if (parseInt(player.getAttribute('playerID')) === mainPlayerId) {
-				console.log('matching player to', gamePlayer, player);
+				// console.log('matching player to', gamePlayer, player);
 				gamePlayers[0] = gamePlayer;
 			}
 			else {
-				console.log('matching opponent to', gamePlayer, player);
+				// console.log('matching opponent to', gamePlayer, player);
 				gamePlayers[1] = gamePlayer;
 			}
 		}
@@ -148,7 +155,7 @@ export class GameParserService {
 	}
 
 	extractClassCard(replayXml: any, player: any) {
-		console.debug('building playerClass for ', player, replayXml);
+		// console.debug('building playerClass for ', player, replayXml);
 		let playerId: any;
 		let nodes = player.childNodes;
 		// console.debug('\tchildNodes ', nodes)
@@ -158,7 +165,7 @@ export class GameParserService {
 				playerId = node.getAttribute('value');
 			}
 		}
-		console.debug('playerId', playerId);
+		// console.debug('playerId', playerId);
 
 		let cardId: any;
 		let entities = replayXml.getElementsByTagName('FullEntity');
@@ -169,14 +176,14 @@ export class GameParserService {
 				cardId = entity.getAttribute('cardID');
 			}
 		}
-		console.log('cardId', cardId);
+		// console.log('cardId', cardId);
 
 		return cardId;
 	}
 
 	extractClassFromHero(hero: string) {
 		// console.debug('cardId', cardId)
-		console.log('extractClassFromHero', hero, parseCardsText.getCard(hero));
+		// console.log('extractClassFromHero', hero, parseCardsText.getCard(hero));
 
 		let playerClass = parseCardsText.getCard(hero).playerClass.toLowerCase();
 		// console.debug('playerClass', playerClass)
@@ -186,7 +193,7 @@ export class GameParserService {
 	extractResult(replayXml: any, mainPlayerId: number): string {
 
 		let tagChanges = replayXml.getElementsByTagName('TagChange');
-		console.log('found ' + tagChanges.length + ' tag changes');
+		// console.log('found ' + tagChanges.length + ' tag changes');
 		let winnerTag: any;
 		for (let tagChange of tagChanges) {
 			// if (tagChange.getAttribute('tag') === '17') {
@@ -195,12 +202,12 @@ export class GameParserService {
 			// PLAYSTATE and WON
 			if (parseInt(tagChange.getAttribute('tag')) === 17 && parseInt(tagChange.getAttribute('value')) === 4) {
 				winnerTag = tagChange;
-				console.log('\t==================found a winner', winnerTag);
+				// console.log('\t==================found a winner', winnerTag);
 				break;
 			}
 		}
 
-		console.log('finding winner', winnerTag, mainPlayerId);
+		// console.log('finding winner', winnerTag, mainPlayerId);
 		let status = 'unknown';
 		if (winnerTag) {
 			if (mainPlayerId === parseInt(winnerTag.getAttribute('entity'))) {

@@ -147,7 +147,6 @@ export class LogListenerService {
 					that.gameStarted = false;
 
 					let game = new Game();
-					// Will be synchronous later on
 					that.gameParserService.convertLogsToXml(that.fullLogs, game, that.gameCompleteListeners);
 
 					that.fullLogs = '';
