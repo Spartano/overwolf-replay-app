@@ -75,12 +75,12 @@ export class GameParserService {
 		}
 
 		let mainPlayerId: number = this.getMainPlayerId(replayXml);
-		// console.log('main player ID', mainPlayerId);
+		console.log('main player ID', mainPlayerId);
 		let mainPlayerEntityId: number = mainPlayerId + 1;
-		// console.log('mainPlayerEntityId: ', mainPlayerEntityId);
+		console.log('mainPlayerEntityId: ', mainPlayerEntityId);
 
 		let gamePlayers: Player[] = this.extractPlayers(replayXml, mainPlayerId);
-		// console.debug('players', gamePlayers);
+		console.debug('players', gamePlayers);
 
 		game.player = gamePlayers[0];
 		game.opponent = gamePlayers[1];
@@ -99,13 +99,13 @@ export class GameParserService {
 			gamePlayer.name = player.getAttribute('name');
 			gamePlayer.hero = this.extractClassCard(replayXml, player);
 			gamePlayer.class = this.extractClassFromHero(gamePlayer.hero);
-			// console.log('is main player', gamePlayer.name, mainPlayerId, parseInt(player.getAttribute('playerID')), gamePlayer);
+			console.log('is main player', gamePlayer.name, mainPlayerId, parseInt(player.getAttribute('playerID')), gamePlayer);
 			if (parseInt(player.getAttribute('playerID')) === mainPlayerId) {
-				// console.log('matching player to', gamePlayer, player);
+				console.log('matching player to', gamePlayer, player);
 				gamePlayers[0] = gamePlayer;
 			}
 			else {
-				// console.log('matching opponent to', gamePlayer, player);
+				console.log('matching opponent to', gamePlayer, player);
 				gamePlayers[1] = gamePlayer;
 			}
 		}
@@ -155,7 +155,7 @@ export class GameParserService {
 	}
 
 	extractClassCard(replayXml: any, player: any) {
-		// console.debug('building playerClass for ', player, replayXml);
+		console.debug('building playerClass for ', player, replayXml);
 		let playerId: any;
 		let nodes = player.childNodes;
 		// console.debug('\tchildNodes ', nodes)
@@ -165,7 +165,7 @@ export class GameParserService {
 				playerId = node.getAttribute('value');
 			}
 		}
-		// console.debug('playerId', playerId);
+		console.debug('playerId', playerId);
 
 		let cardId: any;
 		let entities = replayXml.getElementsByTagName('FullEntity');
@@ -176,17 +176,17 @@ export class GameParserService {
 				cardId = entity.getAttribute('cardID');
 			}
 		}
-		// console.log('cardId', cardId);
+		console.log('cardId', cardId);
 
 		return cardId;
 	}
 
 	extractClassFromHero(hero: string) {
 		// console.debug('cardId', cardId)
-		// console.log('extractClassFromHero', hero, parseCardsText.getCard(hero));
+		console.log('extractClassFromHero', hero, parseCardsText.getCard(hero));
 
 		let playerClass = parseCardsText.getCard(hero).playerClass.toLowerCase();
-		// console.debug('playerClass', playerClass)
+		console.debug('playerClass', playerClass);
 		return playerClass;
 	}
 

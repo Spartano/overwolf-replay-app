@@ -134,12 +134,18 @@ export class CarouselComponent {
 
 				let index = 0;
 				for (let el of thumbnailElements) {
+					// console.log('element', el, $(el));
+					// Hide elements that are outside of the visible viewport
+					$(el).css('opacity', '1');
 					console.log('considering', el, this.isElementInViewport(el), el.getBoundingClientRect());
 					if (this.isElementInViewport(el)) {
 						this.numberOfDisplayedGames++;
 						if (this.firstDisplayedGameIndex === -1) {
 							this.firstDisplayedGameIndex = index;
 						}
+					}
+					else {
+						$(el).css('opacity', '0');
 					}
 					index++;
 					console.log('increased index', index);
