@@ -28,39 +28,9 @@
 		<!-- Fonts -->
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
 
-		<!-- Overwolf - won't be needed later on, but useful during dev to move the window out of the way -->
-		<script>			
-			function dragMove(){
-				overwolf.windows.getCurrentWindow(function(result){
-					if (result.status=="success"){
-						overwolf.windows.dragMove(result.window.id);
-					}
-				});
-			};
-			function dragResize(edge){
-				overwolf.windows.getCurrentWindow(function(result){
-					if (result.status=="success"){
-						overwolf.windows.dragResize(result.window.id, edge);
-					}
-				});
-			};
-		</script>
-
-	    <script>
-	      // System.import('shelf').catch(function(err){ console.error(err); });
-	    </script>
-
 	</head>
 
-	<body onmousedown="dragMove();">
-		<div class="resizeGrip" id="resizeGripTopLeft" onmousedown="dragResize('TopLeft');"></div>
-		<div class="resizeGrip" id="resizeGripTop" onmousedown="dragResize('Top');"></div>
-		<div class="resizeGrip" id="resizeGripTopRight" onmousedown="dragResize('TopRight');"></div>
-		<div class="resizeGrip" id="resizeGripRight" onmousedown="dragResize('Right');"></div>
-		<div class="resizeGrip" id="resizeGripBottomRight" onmousedown="dragResize('BottomRight');"></div>
-		<div class="resizeGrip" id="resizeGripBottom" onmousedown="dragResize('Bottom');"></div>
-		<div class="resizeGrip" id="resizeGripBottomLeft" onmousedown="dragResize('BottomLeft');"></div>
-		<div class="resizeGrip" id="resizeGripLeft" onmousedown="dragResize('Left');"></div>
+	<body>
 		<zh-shelf>Loading...</zh-shelf>
 		
 	    <script src="shelf.min.js"></script> <!--bundled source-->
