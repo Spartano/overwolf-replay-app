@@ -15,7 +15,7 @@ export class LogListenerService {
 	// gameStartDate: Date;
 	// games: Game[] = [];
 	gameCompleteListeners: Function[] = [];
-	initCompleteListeners: Function[] = [];
+	// initCompleteListeners: Function[] = [];
 	// TODO: deduce this from the game's running path
 	logsLocation: string;
 	plugin: any;
@@ -87,9 +87,9 @@ export class LogListenerService {
 		this.gameCompleteListeners.push(listener);
 	}
 
-	addInitCompleteListener(listener: Function): void {
-		this.initCompleteListeners.push(listener);
-	}
+	// addInitCompleteListener(listener: Function): void {
+	// 	this.initCompleteListeners.push(listener);
+	// }
 
 	registerLogMonitor() {
 		console.log('registering hooks?', this.plugin.get(), this.monitoring, this);

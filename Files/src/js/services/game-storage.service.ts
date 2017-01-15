@@ -11,24 +11,24 @@ export class GameStorageService {
 	// subject:Subject<Game> = new Subject<Game>();
 
 	constructor(private logListenerService: LogListenerService, private localStorageService: LocalStorageService) {
-		console.log('in GameStorageService constructor');
+		// console.log('in GameStorageService constructor');
 		this.init();
 	}
 
 	init(): void {
-		console.log('init gameservice', this.localStorageService.get<Game[]>('games'));
+		// console.log('init gameservice', this.localStorageService.get<Game[]>('games'));
 		this.localStorageService.clearAll('.*');
-		console.log('after init', this.localStorageService.get<Game[]>('games'));
+		// console.log('after init', this.localStorageService.get<Game[]>('games'));
 
 		this.logListenerService.addGameCompleteListener((game: Game) => {
-			console.log('game complete', game);
+			// console.log('game complete', game);
 			this.addGame(game);
 			// this.games.push(game);
 		});
 
-		this.logListenerService.addInitCompleteListener(() => {
-			this.resetGames();
-		});
+		// this.logListenerService.addInitCompleteListener(() => {
+		// 	this.resetGames();
+		// });
 	}
 
 	resetGames(): void {
@@ -39,7 +39,7 @@ export class GameStorageService {
 
 	addGame(game: Game): void {
 		// Get the games from the local storage
-		console.log('adding game to local storage', game);
+		// console.log('adding game to local storage', game);
 		let games: Game[] = this.localStorageService.get<Game[]>('games') || [];
 		games.push(game);
 		this.localStorageService.set('games', games);
