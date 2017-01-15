@@ -15,6 +15,7 @@ export class LogListenerService {
 	// gameStartDate: Date;
 	// games: Game[] = [];
 	gameCompleteListeners: Function[] = [];
+	initCompleteListeners: Function[] = [];
 	// TODO: deduce this from the game's running path
 	logsLocation: string;
 	plugin: any;
@@ -33,7 +34,7 @@ export class LogListenerService {
 
 		let plugin = this.plugin = new OverwolfPlugin("simple-io-plugin", true);
 		console.log('plugin', plugin);
-		let that = this;
+		// let that = this;
 
 		plugin.initialize((status: boolean) => {
 			if (status === false) {
@@ -41,31 +42,34 @@ export class LogListenerService {
 				return;
 			}
 			console.log("Plugin " + plugin.get()._PluginName_ + " was loaded!");
+			this.configureLogListeners();
+		});
+	}
 
-			// Registering game listener
-			overwolf.games.onGameInfoUpdated.addListener((res: any) => {
-				console.log("onGameInfoUpdated: " + JSON.stringify(res));
-				if (that.gameLaunched(res)) {
-					// registerEvents()
-					that.logsLocation = res.gameInfo.executionPath.split('Hearthstone.exe')[0] + 'Logs\\Power.log';
-					console.log('getting logs from', that.logsLocation);
-					that.registerLogMonitor();
-				}
-				else if (this.exitGame(res)) {
-					this.closeWindow();
-				}
-			});
+	configureLogListeners(): void {
+		// Registering game listener
+		overwolf.games.onGameInfoUpdated.addListener((res: any) => {
+			console.log("onGameInfoUpdated: " + JSON.stringify(res));
+			if (this.gameLaunched(res)) {
+				// registerEvents()
+				this.logsLocation = res.gameInfo.executionPath.split('Hearthstone.exe')[0] + 'Logs\\Power.log';
+				console.log('getting logs from', this.logsLocation);
+				this.registerLogMonitor();
+			}
+			else if (this.exitGame(res)) {
+				this.closeWindow();
+			}
+		});
 
-			overwolf.games.getRunningGameInfo(function (res: any) {
-				console.log("getRunningGameInfo: " + JSON.stringify(res));
-				if (res && res.isRunning && res.id && Math.floor(res.id / 10) === HEARTHSTONE_GAME_ID) {
-					console.log('running!', res);
-					that.logsLocation = res.executionPath.split('Hearthstone.exe')[0] + 'Logs\\Power.log';
-					console.log('getting logs from', that.logsLocation);
-					// registerEvents()
-					that.registerLogMonitor();
-				}
-			});
+		overwolf.games.getRunningGameInfo((res: any) => {
+			console.log("getRunningGameInfo: " + JSON.stringify(res));
+			if (res && res.isRunning && res.id && Math.floor(res.id / 10) === HEARTHSTONE_GAME_ID) {
+				console.log('running!', res);
+				this.logsLocation = res.executionPath.split('Hearthstone.exe')[0] + 'Logs\\Power.log';
+				console.log('getting logs from', this.logsLocation);
+				// registerEvents()
+				this.registerLogMonitor();
+			}
 		});
 	}
 
@@ -83,44 +87,62 @@ export class LogListenerService {
 		this.gameCompleteListeners.push(listener);
 	}
 
-	registerLogMonitor(): void {
+	addInitCompleteListener(listener: Function): void {
+		this.initCompleteListeners.push(listener);
+	}
+
+	registerLogMonitor() {
+		console.log('registering hooks?', this.plugin.get(), this.monitoring, this);
+		console.log('listeners', this.plugin.get().onFileListenerChanged);
 		if (this.monitoring) {
 			console.log('log hooks already registered, returning');
 			return;
 		}
-		console.log('registering hooks');
 
 		// let logItemIndex = 0;
 		this.listenOnFile(this.logsLocation);
 
 		this.monitoring = true;
+
+		// We have no way today to know when the initial game log has been parsed,
+		// since parsing is asynchronous
+		// We might be able to do a first read on the file to know how many games are 
+		// in it, then remove these games, but we'd still have to know when all the games
+		// are parsed
+		// Here we take a pretty safe assumption that:
+		// - games are parsed in less than 10s
+		// - no game is completed 10s after HS is initially launched
+		// setTimeout(() => {
+		// 	for (let initListener of this.initCompleteListeners) {
+		// 		initListener();
+		// 	}
+		// }, 10000);
 	}
 
 	listenOnFile(logsLocation: string): void {
-		console.log('starting to listen on file', logsLocation);
-
 		this.listenOnFileCreation(logsLocation);
 	}
 
 	listenOnFileCreation(logsLocation: string): void {
-		let that = this;
+		console.log('starting to listen on file', logsLocation);
+		// let that = this;
 
-		this.plugin.get().fileExists(logsLocation, function(status: boolean) {
+		this.plugin.get().fileExists(logsLocation, (status: boolean) => {
 			if (status === true) {
-				that.listenOnFileUpdate(logsLocation);
+				this.listenOnFileUpdate(logsLocation);
 			}
 			else {
-				setTimeout( function() { that.listenOnFileCreation(logsLocation); }, 1000);
+				setTimeout( () => { this.listenOnFileCreation(logsLocation); }, 1000);
 			}
 		});
 	}
 
 	listenOnFileUpdate(logsLocation: string): void {
 		let fileIdentifier = "hs-logs-file";
-		let that = this;
+		console.log('listening on file update', logsLocation);
 
 		// Register file listener
-		this.plugin.get().onFileListenerChanged.addListener(function(id: any, status: any, data: string) {
+		this.plugin.get().onFileListenerChanged.addListener((id: any, status: any, data: string) => {
 
 			if (!status) {
 				console.error("received an error on file: " + id + ": " + data);
@@ -130,26 +152,33 @@ export class LogListenerService {
 			if (id === fileIdentifier) {
 				// Don't use the PowerTaskList
 				if (data.indexOf('PowerTaskList') !== -1 || data.indexOf('PowerProcessor') !== -1) {
+					// if (data.indexOf('CREATE_GAME') !== -1) {
+					// 	console.debug('Received unsupported start', data);
+					// }
+					// if (data.indexOf('GOLD_REWARD_STATE') !== -1) {
+					// 	console.debug('Received unsupported end', data);
+					// }
 					return;
 				}
+				// console.log('file changed', data, id, fileIdentifier, status);
 				// console.log('file listening callback', fieldId, status, data)
 				// New game
 				if (data.indexOf('CREATE_GAME') !== -1) {
-					console.log('reinit game');
-					that.fullLogs = '';
-					that.gameStarted = true;
+					console.debug('reinit game', data);
+					this.fullLogs = '';
+					this.gameStarted = true;
 				}
-				that.fullLogs += data + '\n';
+				this.fullLogs += data + '\n';
 
 				// that's how we know a game is finished
-				if (data.indexOf('GOLD_REWARD_STATE') !== -1 && that.gameStarted) {
-					console.log('game ended');
-					that.gameStarted = false;
+				if (data.indexOf('GOLD_REWARD_STATE') !== -1 && this.gameStarted) {
+					console.debug('game ended', data);
+					this.gameStarted = false;
 
 					let game = new Game();
-					that.gameParserService.convertLogsToXml(that.fullLogs, game, that.gameCompleteListeners);
+					this.gameParserService.convertLogsToXml(this.fullLogs, game, this.gameCompleteListeners);
 
-					that.fullLogs = '';
+					this.fullLogs = '';
 				}
 			}
 			else {
@@ -157,7 +186,7 @@ export class LogListenerService {
 			}
 		});
 
-		this.plugin.get().listenOnFile(fileIdentifier, logsLocation, false, function(id: string, status: boolean, initData: any) {
+		this.plugin.get().listenOnFile(fileIdentifier, logsLocation, true, (id: string, status: boolean, initData: any) => {
 			if (id === fileIdentifier) {
 				if (status) {
 					console.log("[" + id + "] now streaming...");
@@ -175,23 +204,28 @@ export class LogListenerService {
 
 	gameLaunched(gameInfoResult: any): boolean {
 		if (!gameInfoResult) {
+			console.log('No gameInfoResult, returning');
 			return false;
 		}
 
 		if (!gameInfoResult.gameInfo) {
+			console.log('No gameInfoResult.gameInfo, returning');
 			return false;
 		}
 
-		if (!gameInfoResult.runningChanged && !gameInfoResult.gameChanged) {
-			return false;
-		}
+		// if (!gameInfoResult.runningChanged && !gameInfoResult.gameChanged) {
+		// 	console.log('Running didnt change, returning');
+		// 	return false;
+		// }
 
 		if (!gameInfoResult.gameInfo.isRunning) {
+			console.log('Game not running, returning');
 			return false;
 		}
 
 		// NOTE: we divide by 10 to get the game class id without it's sequence number
 		if (Math.floor(gameInfoResult.gameInfo.id / 10) !== HEARTHSTONE_GAME_ID) {
+			console.log('Not HS, returning');
 			return false;
 		}
 

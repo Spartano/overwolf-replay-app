@@ -57,12 +57,15 @@ export class AppComponent {
 	}
 
 	closeWindow() {
-		overwolf.windows.getCurrentWindow((result) => {
-			if (result.status === "success") {
-				console.log('closing');
-				// overwolf.windows.close(result.window.id);
-			}
-		});
+		// Wait for a bit to give a chance to the game parser to finish parsing everything
+		setTimeout(() => {
+			overwolf.windows.getCurrentWindow((result) => {
+				if (result.status === "success") {
+					console.log('closing');
+					// overwolf.windows.close(result.window.id);
+				}
+			});
+		}, 2000);
 	}
 
 	showShelfWindow(): void {

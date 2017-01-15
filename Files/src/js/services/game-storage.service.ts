@@ -25,6 +25,16 @@ export class GameStorageService {
 			this.addGame(game);
 			// this.games.push(game);
 		});
+
+		this.logListenerService.addInitCompleteListener(() => {
+			this.resetGames();
+		});
+	}
+
+	resetGames(): void {
+		// Get the games from the local storage
+		console.log('resetting games');
+		this.localStorageService.set('games', <Game[]>[]);
 	}
 
 	addGame(game: Game): void {
