@@ -70,6 +70,9 @@
 
 	.hero-name {
 		max-width: 45%;
+	    text-overflow: ellipsis;
+	    overflow: hidden;
+	    white-space: nowrap;
 	}
 
 	> * + .hero-name {
