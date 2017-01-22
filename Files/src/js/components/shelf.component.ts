@@ -44,11 +44,13 @@ export class ShelfComponent {
 			try {
 				console.log('getting games', this.carouselComponent, this.gameService.getGames());
 
-				for (let game of this.gameService.getGames()) {
-					console.log('retrieved games from gameService, adding', game);
-					this.games.unshift(game);
-					this.carouselComponent.newGame(game);
-				}
+				this.games = this.gameService.getGames().reverse();
+				// for (let game of this.gameService.getGames()) {
+				// 	console.log('retrieved games from gameService, adding', game);
+				// 	this.games.unshift(game);
+				// 	// this.carouselComponent.newGame(game);
+				// }
+				this.carouselComponent.onSelect(this.games[0])
 			}
 			catch (e) {
 				console.error(e);
