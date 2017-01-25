@@ -88,6 +88,7 @@ export class CarouselComponent {
 
 
 	showPrevious(): void {
+		// console.log('showPrevious?', this.showTopArrow, (this.firstDisplayedGameIndex - this.numberOfDisplayedGames) * 100);
 		if (this.showTopArrow) {
 			this.translateAmount = (this.firstDisplayedGameIndex - this.numberOfDisplayedGames) * 100;
 			this.recomputeVisibleElements();
@@ -127,7 +128,7 @@ export class CarouselComponent {
 				this.numberOfDisplayedGames = 0;
 				this.firstDisplayedGameIndex = -1;
 
-				let thumbnailElements = $('game-thumbnail');
+				let thumbnailElements = $('.carousel li');
 				console.log('thumbnailElements', thumbnailElements);
 				if (!thumbnailElements || thumbnailElements.length === 0) {
 					return;
