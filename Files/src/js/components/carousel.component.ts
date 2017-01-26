@@ -61,12 +61,12 @@ export class CarouselComponent {
 		// if (!this.selectedGame) {
 		// this.onSelect(game);
 		// }
-		this.recomputeVisibleElements();
+		this.recomputeVisibleElements(50);
 	}
 
 	onSelect(game: Game): void {
 		// console.log('loading game', game);
-		this.recomputeVisibleElements();
+		this.recomputeVisibleElements(50);
 		this.selectedGame = game;
 		this.onGameSelected.emit(game);
 	}
@@ -91,20 +91,20 @@ export class CarouselComponent {
 		// console.log('showPrevious?', this.showTopArrow, (this.firstDisplayedGameIndex - this.numberOfDisplayedGames) * 100);
 		if (this.showTopArrow) {
 			this.translateAmount = (this.firstDisplayedGameIndex - this.numberOfDisplayedGames) * 100;
-			this.recomputeVisibleElements();
+			this.recomputeVisibleElements(700);
 		}
 	}
 
 	showNext(): void {
 		if (this.showBottomArrow) {
 			this.translateAmount = (this.firstDisplayedGameIndex + this.numberOfDisplayedGames) * 100;
-			this.recomputeVisibleElements();
+			this.recomputeVisibleElements(700);
 		}
 	}
 
 	@HostListener('window:resize', ['$event'])
 	onResize(event) {
-		this.recomputeVisibleElements();
+		this.recomputeVisibleElements(50);
 	}
 
 	isElementInViewport (el: any): boolean {
@@ -118,7 +118,7 @@ export class CarouselComponent {
 		);
 	}
 
-	recomputeVisibleElements(): void {
+	recomputeVisibleElements(delay:number): void {
 		if (!this.bouncing) {
 			this.bouncing = true;
 			setTimeout(() =>  {
@@ -158,7 +158,7 @@ export class CarouselComponent {
 
 				console.log('number of displayed games', this.numberOfDisplayedGames, this.firstDisplayedGameIndex);
 				this.bouncing = false;
-			}, 1100);
+			}, delay );
 		}
 	}
 }
