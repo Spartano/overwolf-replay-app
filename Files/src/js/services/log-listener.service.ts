@@ -10,6 +10,7 @@ const HEARTHSTONE_GAME_ID = 9898;
 @Injectable()
 export class LogListenerService {
 	monitoring: boolean;
+	fileInitiallyPresent: boolean;
 	fullLogs: string;
 	gameStarted: boolean;
 	// gameStartDate: Date;
@@ -30,6 +31,7 @@ export class LogListenerService {
 		this.monitoring = false;
 		this.gameStarted = false;
 		this.fullLogs = '';
+		this.fileInitiallyPresent = true;
 		// this.logsLocation = 'F:\\Games\\Hearthstone\\Logs\\Power.log';
 
 		let plugin = this.plugin = new OverwolfPlugin("simple-io-plugin", true);
@@ -132,6 +134,7 @@ export class LogListenerService {
 				this.listenOnFileUpdate(logsLocation);
 			}
 			else {
+				this.fileInitiallyPresent = false;
 				setTimeout( () => { this.listenOnFileCreation(logsLocation); }, 1000);
 			}
 		});
@@ -186,10 +189,10 @@ export class LogListenerService {
 			}
 		});
 
-		this.plugin.get().listenOnFile(fileIdentifier, logsLocation, true, (id: string, status: boolean, initData: any) => {
+		this.plugin.get().listenOnFile(fileIdentifier, logsLocation, this.fileInitiallyPresent, (id: string, status: boolean, initData: any) => {
 			if (id === fileIdentifier) {
 				if (status) {
-					console.log("[" + id + "] now streaming...");
+					console.log("[" + id + "] now streaming...", this.fileInitiallyPresent);
 				}
 				else {
 					console.log("something bad happened with: " + id);
