@@ -88,7 +88,7 @@ export class GameParserService {
 		game.title = game.player.name + ' vs ' + game.opponent.name;
 
 		game.result = this.extractResult(replayXml, mainPlayerEntityId);
-		console.log('parsed game', game);
+		// console.log('parsed game', game);
 	}
 
 	extractPlayers(replayXml: any, mainPlayerId: number): Player[] {

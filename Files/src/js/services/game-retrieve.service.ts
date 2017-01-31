@@ -19,7 +19,7 @@ export class GameRetrieveService {
 	// }
 
 	getGames(): Game[] {
-		console.log('retrieving games from localStorage', this.localStorageService.get<Game[]>('games'));
+		// console.log('retrieving games from localStorage', this.localStorageService.get<Game[]>('games'));
 		return this.localStorageService.get<Game[]>('games') || [];
 	}
 }

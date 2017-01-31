@@ -153,7 +153,7 @@ export class CarouselComponent {
 					console.log('increased index', index);
 				}
 				this.showTopArrow = this.firstDisplayedGameIndex > 0;
-				this.showBottomArrow = (this.firstDisplayedGameIndex + this.numberOfDisplayedGames) < thumbnailElements.length - 1;
+				this.showBottomArrow = (this.firstDisplayedGameIndex + this.numberOfDisplayedGames) < thumbnailElements.length;
 				console.log('showing arrows', this.showTopArrow, this.showBottomArrow);
 
 				console.log('number of displayed games', this.numberOfDisplayedGames, this.firstDisplayedGameIndex);
