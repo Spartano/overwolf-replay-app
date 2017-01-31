@@ -36,13 +36,38 @@ export class ShelfComponent {
 		console.log('in AppComponent constructor', gameService);
 		this.shelfLoaded = false;
 		this.postMessage();
+
+		// Change logging for debug
+		let oldConsoleLogFunc = console.log;
+		let debugMode = true
+		if (debugMode) {
+		    console.log = function() {
+		    	let argsString:string = "";
+		        for (var i = 0; i < arguments.length; i++) {
+		            var cache = [];
+					argsString += JSON.stringify(arguments[i], function(key, value) {
+					    if (typeof value === 'object' && value !== null) {
+					        if (cache.indexOf(value) !== -1) {
+					            // Circular reference found, discard key
+					            return;
+					        }
+					        // Store value in our collection
+					        cache.push(value);
+					    }
+					    return value;
+					});
+					cache = null; // Enable garbage collection + " | "
+		        }
+		        oldConsoleLogFunc.apply(console, [argsString]);
+		    };
+		}
 	}
 
 	ngOnInit(): void {
 		// this.zone = new NgZone({enableLongStackTrace: false});
 		setTimeout(() => {
 			try {
-				console.log('getting games', this.carouselComponent, this.gameService.getGames());
+				// console.log('getting games', this.carouselComponent, this.gameService.getGames());
 
 				this.games = this.gameService.getGames().reverse();
 				// for (let game of this.gameService.getGames()) {
@@ -57,10 +82,12 @@ export class ShelfComponent {
 				throw e;
 			}
 		}, 50);
+
+
 	}
 
 	onGameSelected(game: Game) {
-		console.log('reloading game', game);
+		// console.log('reloading game', game);
 		this.selectedGame = game;
 		this.gameReplayComponent.reload(game.replay, () => {
 			console.log('game reloaded');
@@ -87,7 +114,7 @@ export class ShelfComponent {
 		}
 
 		(el.addEventListener as WhatWGAddEventListener)('wheel', (evt: any) => {
-			console.log('scrolling', evt);
+			// console.log('scrolling', evt);
 			window.parent.postMessage({deltaY: evt.deltaY}, "*");
 		}, { passive: true });
 	}
