@@ -55,7 +55,7 @@ export class ShelfComponent {
 					        cache.push(value);
 					    }
 					    return value;
-					});
+					}) + ' | ';
 					cache = null; // Enable garbage collection + " | "
 		        }
 		        oldConsoleLogFunc.apply(console, [argsString]);
