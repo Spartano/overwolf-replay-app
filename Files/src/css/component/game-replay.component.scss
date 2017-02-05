@@ -51,9 +51,10 @@
 
     .replay .game-log {
         margin-top: 8px;
-        background-color: rgba(0,0,0,.1);
+        background-color: transparent;
 
         p {
+            background-color: rgba(0,0,0,.1);
             font-weight: bold;
             color: #000;
         }
