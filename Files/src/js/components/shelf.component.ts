@@ -39,27 +39,27 @@ export class ShelfComponent {
 
 		// Change logging for debug
 		let oldConsoleLogFunc = console.log;
-		let debugMode = false
+		let debugMode = false;
 		if (debugMode) {
-		    console.log = function() {
-		    	let argsString:string = "";
-		        for (var i = 0; i < arguments.length; i++) {
-		            var cache = [];
+			console.log = function() {
+				let argsString = "";
+				for (let i = 0; i < arguments.length; i++) {
+					let cache = [];
 					argsString += JSON.stringify(arguments[i], function(key, value) {
-					    if (typeof value === 'object' && value !== null) {
-					        if (cache.indexOf(value) !== -1) {
-					            // Circular reference found, discard key
-					            return;
-					        }
-					        // Store value in our collection
-					        cache.push(value);
-					    }
-					    return value;
+						if (typeof value === 'object' && value !== null) {
+							if (cache.indexOf(value) !== -1) {
+								// Circular reference found, discard key
+								return;
+							}
+							// Store value in our collection
+							cache.push(value);
+						}
+						return value;
 					}) + ' | ';
 					cache = null; // Enable garbage collection + " | "
-		        }
-		        oldConsoleLogFunc.apply(console, [argsString]);
-		    };
+				}
+				oldConsoleLogFunc.apply(console, [argsString]);
+			};
 		}
 	}
 
@@ -75,7 +75,7 @@ export class ShelfComponent {
 				// 	this.games.unshift(game);
 				// 	// this.carouselComponent.newGame(game);
 				// }
-				this.carouselComponent.onSelect(this.games[0])
+				this.carouselComponent.onSelect(this.games[0]);
 			}
 			catch (e) {
 				console.error(e);

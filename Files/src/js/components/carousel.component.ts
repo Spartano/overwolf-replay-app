@@ -88,16 +88,17 @@ export class CarouselComponent {
 
 
 	showPrevious(): void {
-		// console.log('showPrevious?', this.showTopArrow, (this.firstDisplayedGameIndex - this.numberOfDisplayedGames) * 100);
+		console.log('showPrevious?', this.showTopArrow, this.firstDisplayedGameIndex, this.numberOfDisplayedGames, (this.firstDisplayedGameIndex - this.numberOfDisplayedGames) * 100);
 		if (this.showTopArrow) {
-			this.translateAmount = (this.firstDisplayedGameIndex - this.numberOfDisplayedGames) * 100;
+			this.translateAmount = Math.max(0, this.firstDisplayedGameIndex - this.numberOfDisplayedGames) * 100;
 			this.recomputeVisibleElements(700);
 		}
 	}
 
 	showNext(): void {
 		if (this.showBottomArrow) {
-			this.translateAmount = (this.firstDisplayedGameIndex + this.numberOfDisplayedGames) * 100;
+			console.log('moving down', this.games.length - 1, this.firstDisplayedGameIndex, this.numberOfDisplayedGames);
+			this.translateAmount = Math.min(this.games.length - this.numberOfDisplayedGames, this.firstDisplayedGameIndex + this.numberOfDisplayedGames) * 100;
 			this.recomputeVisibleElements(700);
 		}
 	}
@@ -118,7 +119,7 @@ export class CarouselComponent {
 		);
 	}
 
-	recomputeVisibleElements(delay:number): void {
+	recomputeVisibleElements(delay: number): void {
 		if (!this.bouncing) {
 			this.bouncing = true;
 			setTimeout(() =>  {
