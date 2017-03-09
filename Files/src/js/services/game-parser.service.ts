@@ -75,12 +75,12 @@ export class GameParserService {
 		}
 
 		let mainPlayerId: number = this.getMainPlayerId(replayXml);
-		// console.log('main player ID', mainPlayerId);
+		console.log('main player ID', mainPlayerId);
 		let mainPlayerEntityId: number = mainPlayerId + 1;
-		// console.log('mainPlayerEntityId: ', mainPlayerEntityId);
+		console.log('mainPlayerEntityId: ', mainPlayerEntityId);
 
 		let gamePlayers: Player[] = this.extractPlayers(replayXml, mainPlayerId);
-		// console.debug('players', gamePlayers);
+		console.debug('players', gamePlayers);
 
 		game.player = gamePlayers[0];
 		game.opponent = gamePlayers[1];
@@ -88,7 +88,7 @@ export class GameParserService {
 		game.title = game.player.name + ' vs ' + game.opponent.name;
 
 		game.result = this.extractResult(replayXml, mainPlayerEntityId);
-		// console.log('parsed game', game);
+		console.log('parsed game', game);
 	}
 
 	extractPlayers(replayXml: any, mainPlayerId: number): Player[] {
@@ -128,9 +128,10 @@ export class GameParserService {
 						// console.log('\t\tmatch')
 						// CARDTYPE is 202
 						let cardType: number = this.getTagValue(fullEntity, 202);
+						let zone: number = this.getTagValue(fullEntity, 49);
 						// console.log('\t\tcardType', cardType)
-						// ENCHANTMENT
-						if (cardType !== 6) {
+						// ENCHANTMENT and SETASIDE
+						if (cardType !== 6 && zone !== 6) {
 							// CONTROLLER
 							let controllerId: number = this.getTagValue(fullEntity, 50);
 							// console.log('foundit', controllerId);
