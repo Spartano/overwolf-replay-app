@@ -1,5 +1,6 @@
 export class Game {
 	replay: string;
+	spectating: boolean;
 	title: string;
 	result: string;
 	player: Player = new Player();

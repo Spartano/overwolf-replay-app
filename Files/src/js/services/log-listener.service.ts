@@ -13,6 +13,7 @@ export class LogListenerService {
 	fileInitiallyPresent: boolean;
 	fullLogs: string;
 	gameStarted: boolean;
+	spectating: boolean;
 	// gameStartDate: Date;
 	// games: Game[] = [];
 	gameCompleteListeners: Function[] = [];
@@ -163,6 +164,13 @@ export class LogListenerService {
 					// }
 					return;
 				}
+
+				if (data.indexOf('Begin Spectating') !== -1) {
+					this.spectating = true;
+				}
+				if (data.indexOf('End Spectator Mode') !== -1) {
+					this.spectating = false;
+				}
 				// console.log('file changed', data, id, fileIdentifier, status);
 				// console.log('file listening callback', fieldId, status, data)
 				// New game
@@ -179,9 +187,11 @@ export class LogListenerService {
 					this.gameStarted = false;
 
 					let game = new Game();
+					game.spectating = this.spectating;
 					this.gameParserService.convertLogsToXml(this.fullLogs, game, this.gameCompleteListeners);
 
 					this.fullLogs = '';
+					// this.spectating = false;
 				}
 			}
 			else {
