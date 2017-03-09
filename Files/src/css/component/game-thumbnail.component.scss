@@ -62,7 +62,7 @@
 	font-weight: bold;
 	display: flex;
 	margin-bottom: 3px;
-	    height: 20px;
+	height: 20px;
 
 	> * + * {
 		margin-left: 5px;
@@ -73,11 +73,10 @@
 	    text-overflow: ellipsis;
 	    overflow: hidden;
 	    white-space: nowrap;
+	    line-height: 1;
 	}
 
-	> * + .hero-name {
-		overflow: hidden;
-		text-overflow: ellipsis;
+	.separator {
 		line-height: 1;
 	}
 }

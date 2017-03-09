@@ -65,7 +65,7 @@ export class CarouselComponent {
 	}
 
 	onSelect(game: Game): void {
-		// console.log('loading game', game);
+		console.log('loading game', game);
 		this.recomputeVisibleElements(50);
 		this.selectedGame = game;
 		this.onGameSelected.emit(game);
