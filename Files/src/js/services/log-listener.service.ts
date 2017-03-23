@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Game } from '../models/game';
 import { GameParserService } from './game-parser.service';
+import { GameModeParser } from './gameparsing/game-mode-parser.service';
 
 declare var OverwolfPlugin: any;
 declare var overwolf: any;
@@ -14,6 +15,7 @@ export class LogListenerService {
 	fullLogs: string;
 	gameStarted: boolean;
 	spectating: boolean;
+	gameMode: string;
 	// gameStartDate: Date;
 	// games: Game[] = [];
 	gameCompleteListeners: Function[] = [];
@@ -22,7 +24,7 @@ export class LogListenerService {
 	logsLocation: string;
 	plugin: any;
 
-	constructor(private gameParserService: GameParserService) {
+	constructor(private gameParserService: GameParserService, private gameModeParser: GameModeParser) {
 		// console.log('in LogListener constructor');
 		this.init();
 	}
@@ -171,6 +173,8 @@ export class LogListenerService {
 				if (data.indexOf('End Spectator Mode') !== -1) {
 					this.spectating = false;
 				}
+
+				this.gameMode = this.gameModeParser.inferGameMode(this.gameMode, data);
 				// console.log('file changed', data, id, fileIdentifier, status);
 				// console.log('file listening callback', fieldId, status, data)
 				// New game
@@ -178,16 +182,19 @@ export class LogListenerService {
 					console.debug('reinit game', data);
 					this.fullLogs = '';
 					this.gameStarted = true;
+					this.gameMode = undefined;
 				}
 				this.fullLogs += data + '\n';
 
 				// that's how we know a game is finished
 				if (data.indexOf('GOLD_REWARD_STATE') !== -1 && this.gameStarted) {
 					console.debug('game ended', data);
+					let game = new Game();
 					this.gameStarted = false;
 
-					let game = new Game();
 					game.spectating = this.spectating;
+					game.gameMode = this.gameMode;
+
 					this.gameParserService.convertLogsToXml(this.fullLogs, game, this.gameCompleteListeners);
 
 					this.fullLogs = '';

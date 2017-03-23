@@ -14,6 +14,8 @@ import { GameStorageService } from '../../services/game-storage.service';
 // import { GameRetrieveService } from './service/game-retrieve.service';
 import { LogListenerService } from '../../services/log-listener.service';
 import { GameParserService } from '../../services/game-parser.service';
+import { GameModeParser } from '../../services/gameparsing/game-mode-parser.service';
+import { LogUtils } from '../../services/gameparsing/log-utils.service';
 
 @NgModule({
 	imports: [
@@ -40,6 +42,8 @@ import { GameParserService } from '../../services/game-parser.service';
 		LogListenerService,
 		GameParserService,
 		LocalStorageService,
+		GameModeParser,
+		LogUtils,
 		// {
 		//     provide: LOCAL_STORAGE_SERVICE_CONFIG, useValue: localStorageServiceConfig
 		// }

@@ -5,7 +5,7 @@ import { Game } from '../models/game';
 	selector: 'game-thumbnail',
 	styleUrls: [`css/component/game-thumbnail.component.css`],
 	template: `
-		<div class="game {{game.spectating ? 'spectating' : game.result}}" [class.selected]="selected" *ngIf="game">
+		<div class="game {{game.spectating ? 'spectating' : game.result}} {{game.gameMode}}" [class.selected]="selected" *ngIf="game">
 			<div class="matchup">
 				<div class="highlighter"></div>
 				<hero-avatar [hero]="game.player.hero" [won]="game.result == 'won'"></hero-avatar>

@@ -42,6 +42,7 @@
 	color: white;
 }
 
+
 .game .game-info {
     display: flex;
     flex-direction: column;
@@ -83,3 +84,88 @@
 		text-align: center;
 	}
 }
+
+.game.adventure, .game.tavern-brawl {
+	.game-info {
+		flex: 1 1 30%;
+		flex-direction: row;
+		align-items: center;
+		color: rgb(0, 0, 0);
+		span {
+			display: none;
+		}
+	}
+	.game-info::before {
+		background-size: contain;
+		background-repeat: no-repeat;
+		background-position: center center;
+		height: 100%;
+		width: 40%;
+	}
+	.game-info::after {
+		flex-grow: 1;
+	}
+}
+
+
+
+.game.adventure {
+	
+	&.brm .game-info {
+
+		&::before {
+			content: "";
+			background-image: url('static/images/adventure-brm.png');
+		}
+
+		&::after {
+			content: "Adventure - BRM";
+		}
+	}
+	&.naxx .game-info {
+
+		&::before {
+			content: "";
+			background-image: url('static/images/adventure-naxx.png');
+		}
+
+		&::after {
+			content: "Adventure - NAXX";
+		}
+	}
+	&.kara .game-info {
+
+		&::before {
+			content: "";
+			background-image: url('static/images/adventure-kara.png');
+		}
+
+		&::after {
+			content: "Adventure - KARA";
+		}
+	}
+	&.loe .game-info {
+
+		&::before {
+			content: "";
+			background-image: url('static/images/adventure-loe.png');
+		}
+
+		&::after {
+			content: "Adventure - LOE";
+		}
+	}
+}
+
+.game.tavern-brawl .game-info {
+
+	&::before {
+		content: "";
+		background-image: url('static/images/tavernbrawl.png');
+	}
+
+	&::after {
+		content: "Tavern Brawl";
+	}
+}
+
