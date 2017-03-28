@@ -13,6 +13,7 @@ declare var overwolf: any;
 		<div></div>
 	`,
 })
+// 7.1.1.17994
 export class AppComponent {
 
 	requestedDisplayOnShelf: boolean;
