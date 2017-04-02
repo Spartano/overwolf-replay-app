@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { LogListenerService } from '../services/log-listener.service';
 import { GameStorageService } from '../services/game-storage.service';
+import { ReplayManager } from '../services/replay-manager.service';
 
 import { Game } from '../models/game';
 
@@ -18,7 +19,11 @@ export class AppComponent {
 
 	requestedDisplayOnShelf: boolean;
 
-	constructor(private logListenerService: LogListenerService, private gameStorageService: GameStorageService) {
+	constructor(
+		private logListenerService: LogListenerService,
+		private gameStorageService: GameStorageService,
+		private replayManager: ReplayManager) {
+
 		this.init();
 	}
 
@@ -28,6 +33,7 @@ export class AppComponent {
 			if (!this.requestedDisplayOnShelf) {
 				this.requestDisplayOnShelf();
 			}
+			this.replayManager.saveLocally(game);
 		});
 	}
 

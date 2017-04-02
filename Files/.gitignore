@@ -9,7 +9,6 @@ public/
 ###################
 *.com
 *.class
-*.dll
 *.exe
 *.o
 *.so

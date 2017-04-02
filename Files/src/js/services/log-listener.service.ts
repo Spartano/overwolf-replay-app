@@ -16,13 +16,11 @@ export class LogListenerService {
 	gameStarted: boolean;
 	spectating: boolean;
 	gameMode: string;
-	// gameStartDate: Date;
-	// games: Game[] = [];
-	gameCompleteListeners: Function[] = [];
-	// initCompleteListeners: Function[] = [];
-	// TODO: deduce this from the game's running path
 	logsLocation: string;
 	plugin: any;
+
+	// Events
+	gameCompleteListeners: Function[] = [];
 
 	constructor(private gameParserService: GameParserService, private gameModeParser: GameModeParser) {
 		// console.log('in LogListener constructor');
@@ -37,7 +35,7 @@ export class LogListenerService {
 		this.fileInitiallyPresent = true;
 		// this.logsLocation = 'F:\\Games\\Hearthstone\\Logs\\Power.log';
 
-		let plugin = this.plugin = new OverwolfPlugin("simple-io-plugin", true);
+		let plugin = this.plugin = new OverwolfPlugin("simple-io-plugin-zip", true);
 		console.log('plugin', plugin);
 		// let that = this;
 

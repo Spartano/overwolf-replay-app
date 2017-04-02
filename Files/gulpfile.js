@@ -79,16 +79,6 @@ gulp.task('bundle:js', function() {
   var builder = new sysBuilder('public', './system.config.js');
 
   // console.log('bundling shelf');
-  // builder.buildStatic('shelf', 'public/dist/Files/shelf.min.js')
-  //   .then(function () {
-  //     console.log('shelf bundled');
-  //     // return del(['public/.tmp/js/**/*']);
-  //   })
-  //   .catch(function(err) {
-  //     console.error('>>> [systemjs-builder] Bundling shelf failed'.bold.red, err);
-  //   });
-
-  // console.log('bundling shelf');
   builder.buildStatic('.tmp/js/modules/shelf/main.js', 'public/dist/Files/shelf.min.js')
     .then(function () {
       // console.log('shelf bundled');
