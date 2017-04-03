@@ -16,7 +16,7 @@ export class ReplayManager {
 	}
 
 	public saveLocally(game: Game) {
-		let directory = this.plugin.get().LOCALAPPDATA + '/ZeroToHeroes/Overwolf/Replays/';
+		let directory = this.plugin.get().LOCALAPPDATA + '/Overwolf/ZeroToHeroes/Replays/';
 		let fileName = game.player.name + '(' + game.player.class + ')_vs_' + game.opponent.name + '(' + game.opponent.class + ')_' + new Date().getTime() + '.hszip';
 		console.log('saving locally', directory + fileName);
 		this.plugin.get().writeLocalAppDataZipFile(directory + fileName, "replay.xml", game.replay, (status, message) => {
