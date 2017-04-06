@@ -35,7 +35,7 @@ export class GameReplayComponent {
 			// hideButtomLog: true,
 			hideSideLog: true,
 			showGameBorder: true,
-			// useCompressedImages: true,
+			useCompressedImages: true,
 			noGolden: true,
 		};
 		manastorm.initPlayer(manastormOptions);
