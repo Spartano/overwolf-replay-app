@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { LogListenerService } from '../services/log-listener.service';
 import { GameStorageService } from '../services/game-storage.service';
 import { ReplayManager } from '../services/replay-manager.service';
+import { ReplayUploader } from '../services/replay-uploader.service';
 
 import { Game } from '../models/game';
 
@@ -22,7 +23,8 @@ export class AppComponent {
 	constructor(
 		private logListenerService: LogListenerService,
 		private gameStorageService: GameStorageService,
-		private replayManager: ReplayManager) {
+		private replayManager: ReplayManager,
+		private replayUploader: ReplayUploader) {
 
 		this.init();
 	}

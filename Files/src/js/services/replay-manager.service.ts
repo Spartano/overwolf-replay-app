@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Game } from '../models/game';
+import { Events } from './events.service';
 
 declare var OverwolfPlugin: any;
 declare var overwolf: any;
@@ -11,7 +12,7 @@ export class ReplayManager {
 
 	plugin: any;
 
-	constructor() {
+	constructor(private events: Events) {
 		this.init();
 	}
 
@@ -21,6 +22,7 @@ export class ReplayManager {
 		console.log('saving locally', directory + fileName);
 		this.plugin.get().writeLocalAppDataZipFile(directory + fileName, "replay.xml", game.replay, (status, message) => {
 			console.log('local zip file saved', status, message);
+			this.events.broadcast('replay-saved', directory + fileName);
 		});
 	}
 
