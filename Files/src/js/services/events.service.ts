@@ -10,7 +10,7 @@ interface BroadcastEvent {
 
 // https://blog.lacolaco.net/post/event-broadcasting-in-angular-2/
 export class Events {
-	
+
 	public static REPLAY_SAVED = 'replay-saved';
 
 	private _eventBus: Subject<BroadcastEvent>;

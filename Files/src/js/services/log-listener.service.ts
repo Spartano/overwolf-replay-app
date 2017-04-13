@@ -149,7 +149,7 @@ export class LogListenerService {
 		this.plugin.get().onFileListenerChanged.addListener((id: any, status: any, data: string) => {
 
 			if (!status) {
-				if (data == 'truncated') {
+				if (data === 'truncated') {
 					console.log('truncated log file - HS probably just overwrote the file. Retrying', status, data);
 					this.listenOnFileUpdate(logsLocation);
 				}

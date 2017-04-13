@@ -13,7 +13,7 @@
 		"icon_gray":"IconDockGray.png",
 		"store_icon": "IconStore.png"
 	},
-	"permissions": ["Logging", "GameInfo", "FileSystem", "Extensions"],
+	"permissions": ["Logging", "GameInfo", "FileSystem", "Extensions", "Profile"],
 	"disable_dockbutton": true,
 	"hide_from_store": true,
 	"data": {
