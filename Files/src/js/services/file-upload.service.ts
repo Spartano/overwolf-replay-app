@@ -70,6 +70,7 @@ export class FileUploadService {
 							'application-key': 'overwolf',
 							'user-key': userId,
 							'review-id': review.id,
+							'review-text': 'Created by [Overwolf](http://www.overwolf.com)',
 							'file-type': 'hszip',
 						},
 					};
