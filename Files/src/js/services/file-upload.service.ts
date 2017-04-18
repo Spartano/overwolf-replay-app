@@ -14,11 +14,6 @@ export class FileUploadService {
 	private REVIEW_INIT_ENDPOINT = 'http://www.zerotoheroes.com/api/hearthstone/upload/createEmptyReview/hearthstone';
 	// private REVIEW_INIT_ENDPOINT = 'http://localhost:8080/api/hearthstone/upload/createEmptyReview/hearthstone';
 
-	private creds = {
-		bucket: 'com.zerotoheroes.batch',
-		access_key: 'AKIAJHSXPMPE223KS7PA',
-		secret_key: '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',
-	};
 
 	constructor(private http: Http) {
 		this.init();
@@ -57,14 +52,14 @@ export class FileUploadService {
 					console.debug('built file', file);
 
 					// Configure The S3 Object 
-					AWS.config.update({ accessKeyId: this.creds.access_key, secretAccessKey: this.creds.secret_key });
 					AWS.config.region = 'us-west-2';
 					AWS.config.httpOptions.timeout = 3600 * 1000 * 10;
 
-					let s3 = new AWS.S3({ params: { Bucket: this.creds.bucket } });
+					let s3 = new AWS.S3();
 					let params = {
+						Bucket: 'com.zerotoheroes.batch',
 						Key: fileKey,
-						// ContentType: 'application/zip', 
+						ACL: 'public-read-write',
 						Body: blob,
 						Metadata: {
 							'application-key': 'overwolf',
@@ -75,8 +70,7 @@ export class FileUploadService {
 						},
 					};
 					console.debug('uploading with params', AWS, s3, params);
-
-					s3.upload(params, function(err, data2) {
+					s3.makeUnauthenticatedRequest('putObject', params, function(err, data2) {
 						// There Was An Error With Your S3 Config
 						if (err) {
 							console.error('An error during upload', err);
@@ -84,7 +78,7 @@ export class FileUploadService {
 						else {
 							console.log('Uploaded game', data2, review.id);
 						}
-					});
+					})
 				});
 			});
 		});
