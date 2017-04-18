@@ -147,7 +147,6 @@ export class LogListenerService {
 
 		// Register file listener
 		let handler = (id: any, status: any, data: string) => {
-			console.log('onFileListenerChanged', id, status)
 
 			if (!status) {
 				if (data === 'truncated') {
