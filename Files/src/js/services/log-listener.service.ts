@@ -146,10 +146,14 @@ export class LogListenerService {
 		console.log('listening on file update', logsLocation);
 
 		// Register file listener
-		this.plugin.get().onFileListenerChanged.addListener((id: any, status: any, data: string) => {
+		let handler = (id: any, status: any, data: string) => {
+			console.log('onFileListenerChanged', id, status)
 
 			if (!status) {
-				if (data == 'truncated') {
+				if (data === 'truncated') {
+					this.plugin.get().stopFileListen(fileIdentifier);
+					this.plugin.get().onFileListenerChanged.removeListener(handler);
+					this.fileInitiallyPresent = false;
 					console.log('truncated log file - HS probably just overwrote the file. Retrying', status, data);
 					this.listenOnFileUpdate(logsLocation);
 				}
@@ -208,7 +212,8 @@ export class LogListenerService {
 			else {
 				console.error('could not listen to file callback');
 			}
-		});
+		};
+		this.plugin.get().onFileListenerChanged.addListener(handler);
 
 		this.plugin.get().listenOnFile(fileIdentifier, logsLocation, this.fileInitiallyPresent, (id: string, status: boolean, initData: any) => {
 		// this.plugin.get().listenOnFile(fileIdentifier, logsLocation, false, (id: string, status: boolean, initData: any) => {
