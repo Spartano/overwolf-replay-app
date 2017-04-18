@@ -14,7 +14,6 @@ export class FileUploadService {
 	private REVIEW_INIT_ENDPOINT = 'http://www.zerotoheroes.com/api/hearthstone/upload/createEmptyReview/hearthstone';
 	// private REVIEW_INIT_ENDPOINT = 'http://localhost:8080/api/hearthstone/upload/createEmptyReview/hearthstone';
 
-
 	constructor(private http: Http) {
 		this.init();
 	}
