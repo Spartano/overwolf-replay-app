@@ -1,8 +1,9 @@
 import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule }    from '@angular/http';
-// import { LocalStorageService } from '../angular-2-local-storage/angular-2-local-storage'; 
+
 import { LocalStorageService, LocalStorageModule } from 'angular-2-local-storage';
+import { ShareButtonsModule } from 'ng2-sharebuttons';
 
 import { ShelfComponent }  from '../../components/shelf.component';
 import { GameReplayComponent } from '../../components/game-replay.component';
@@ -10,16 +11,10 @@ import { CarouselComponent } from '../../components/carousel.component';
 import { GameThumbnailComponent } from '../../components/game-thumbnail.component';
 import { HeroAvatarComponent } from '../../components/hero-avatar.component';
 
-// import { GameService } from './game.service';
 import { GameRetrieveService } from '../../services/game-retrieve.service';
 import { LogListenerService } from '../../services/log-listener.service';
 import { GameParserService } from '../../services/game-parser.service';
-
-// Create config options (see ILocalStorageServiceConfigOptions) for deets:
-// let localStorageServiceConfig = {
-//     prefix: 'replay-viewer',
-//     storageType: 'localStorage'
-// };
+import { AccountService } from '../../services/account.service';
 
 @NgModule({
 	imports:      [
@@ -29,6 +24,7 @@ import { GameParserService } from '../../services/game-parser.service';
 			prefix: 'replay-viewer',
 			storageType: 'localStorage',
 		}),
+		ShareButtonsModule.forRoot(),
 	],
 	declarations: [
 		CarouselComponent,
@@ -45,9 +41,7 @@ import { GameParserService } from '../../services/game-parser.service';
 		LogListenerService,
 		GameParserService,
 		LocalStorageService,
-		// {
-		//     provide: LOCAL_STORAGE_SERVICE_CONFIG, useValue: localStorageServiceConfig
-		// }
+		AccountService,
 	],
 })
 

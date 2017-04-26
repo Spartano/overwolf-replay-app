@@ -3,6 +3,7 @@ import { Game } from '../models/game';
 
 declare var manastorm: any;
 
+// https://murhafsousli.github.io/ng2-sharebuttons/
 @Component({
 	selector: 'game-replay',
 	styleUrls: [`css/component/game-replay.component.css`],

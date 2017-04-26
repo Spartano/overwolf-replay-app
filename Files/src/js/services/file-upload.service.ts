@@ -6,13 +6,18 @@ declare var OverwolfPlugin: any;
 declare var overwolf: any;
 declare var AWS: any;
 
+
+const REVIEW_INIT_ENDPOINT = 'http://www.zerotoheroes.com/api/hearthstone/upload/createEmptyReview/hearthstone';
+const BUCKET = 'com.zerotoheroes.batch';
+
+// const REVIEW_INIT_ENDPOINT = 'http://localhost:8080/api/hearthstone/upload/createEmptyReview/hearthstone';
+// const BUCKET = 'com.zerotoheroes.test.batch';
+
 @Injectable()
 export class FileUploadService {
 
 	private plugin: any;
 
-	private REVIEW_INIT_ENDPOINT = 'http://www.zerotoheroes.com/api/hearthstone/upload/createEmptyReview/hearthstone';
-	// private REVIEW_INIT_ENDPOINT = 'http://localhost:8080/api/hearthstone/upload/createEmptyReview/hearthstone';
 
 	constructor(private http: Http) {
 		this.init();
@@ -26,7 +31,7 @@ export class FileUploadService {
 			let userId = user.userId || user.machineId || user.username || 'unauthenticated_user';
 
 			// Build an empty review 
-			this.http.post(this.REVIEW_INIT_ENDPOINT, null).subscribe((res) => {
+			this.http.post(REVIEW_INIT_ENDPOINT, null).subscribe((res) => {
 				let review = res.json();
 				console.debug('Created empty shell review', res, review);
 
@@ -56,7 +61,7 @@ export class FileUploadService {
 
 					let s3 = new AWS.S3();
 					let params = {
-						Bucket: 'com.zerotoheroes.batch',
+						Bucket: BUCKET,
 						Key: fileKey,
 						ACL: 'public-read-write',
 						Body: blob,
@@ -77,7 +82,7 @@ export class FileUploadService {
 						else {
 							console.log('Uploaded game', data2, review.id);
 						}
-					})
+					});
 				});
 			});
 		});

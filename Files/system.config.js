@@ -6,6 +6,7 @@ var map = {
   '@angular':                           'lib/js/@angular',
   'zone.js':                            'lib/js/zone.js/dist',
   'angular-2-local-storage':            'lib/js/angular-2-local-storage',
+  'ng2-sharebuttons':                   'lib/js/ng2-sharebuttons',
 };
 
 // packages tells the System loader how to load when no filename and/or no extension
@@ -14,7 +15,8 @@ var packages = {
   'shelf':                              { main: 'modules/shelf/main', defaultExtension: 'js' },
   'rxjs':                               { defaultExtension: 'js' },
   'zone.js':                            { main: 'zone', defaultExtension: 'js' },
-  'angular-2-local-storage':            { main: 'dist/index.js', defaultExtension: 'js' } 
+  'angular-2-local-storage':            { main: 'dist/index.js', defaultExtension: 'js' },
+  'ng2-sharebuttons':                   { main: 'index.js', defaultExtension: 'js' },
 };
 
 var packageNames = [

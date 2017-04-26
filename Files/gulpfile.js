@@ -208,6 +208,10 @@ gulp.task('copy:libs', function() {
     'node_modules/angular-2-local-storage/**/*'
   ]).pipe(gulp.dest('public/lib/js/angular-2-local-storage'));
 
+  gulp.src([
+    'node_modules/ng2-sharebuttons/**/*',
+  ]).pipe(gulp.dest('public/lib/js/ng2-sharebuttons'));
+
   return gulp.src(['node_modules/@angular/**/*'])
     .pipe(gulp.dest('public/lib/js/@angular'));
 });

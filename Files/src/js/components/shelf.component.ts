@@ -1,9 +1,12 @@
 import { Component, NgZone, ViewChild } from '@angular/core';
+
 import { GameReplayComponent } from '../components/game-replay.component';
 import { CarouselComponent } from '../components/carousel.component';
+
 import { Game } from '../models/game';
-// import { GameService } from './game.service';
+
 import { GameRetrieveService } from '../services/game-retrieve.service';
+import { AccountService } from '../services/account.service';
 
 declare var overwolf: any;
 declare var $: any;
@@ -14,6 +17,12 @@ declare var $: any;
 	template: `
 		<div class="shelf-container">
 			<div class="replay-zone">
+				<div *ngIf="!accountClaimed && accountClaimUrl" class="claim-account">
+					Your Zero to Heroes account has not been claimed. Please 
+						<a href="{{accountClaimUrl}}" target="_blank" (click)="accountService.startListeningForClaimChanges()">click here</a> 
+					to claim it 
+					<span class="help-text" title="Claiming your account will let you post your post public reviews of your games to receive advise on them"> (?)</span>
+				</div>
 				<game-replay [game]="selectedGame"></game-replay>
 			</div>
 			<carousel [games]="games" (onGameSelected)=onGameSelected($event)></carousel>
@@ -24,6 +33,8 @@ export class ShelfComponent {
 	zone: NgZone;
 	// requestedDisplayOnShelf:boolean;
 	shelfLoaded: boolean;
+	accountClaimed: boolean;
+	accountClaimUrl: string;
 
 	name = 'Hearthstone Replay Viewer';
 	games: Game[] = [];
@@ -32,7 +43,7 @@ export class ShelfComponent {
 	@ViewChild(CarouselComponent) private carouselComponent: CarouselComponent;
 	@ViewChild(GameReplayComponent) private gameReplayComponent: GameReplayComponent;
 
-	constructor(private gameService: GameRetrieveService) {
+	constructor(private gameService: GameRetrieveService, private accountService: AccountService) {
 		console.log('in AppComponent constructor', gameService);
 		this.shelfLoaded = false;
 		this.postMessage();
@@ -64,17 +75,9 @@ export class ShelfComponent {
 	}
 
 	ngOnInit(): void {
-		// this.zone = new NgZone({enableLongStackTrace: false});
 		setTimeout(() => {
 			try {
-				// console.log('getting games', this.carouselComponent, this.gameService.getGames());
-
 				this.games = this.gameService.getGames().reverse();
-				// for (let game of this.gameService.getGames()) {
-				// 	console.log('retrieved games from gameService, adding', game);
-				// 	this.games.unshift(game);
-				// 	// this.carouselComponent.newGame(game);
-				// }
 				this.carouselComponent.onSelect(this.games[0]);
 			}
 			catch (e) {
@@ -83,7 +86,15 @@ export class ShelfComponent {
 			}
 		}, 50);
 
+		this.accountService.accountClaimUrlSubject.subscribe((value) => {
+			this.accountClaimUrl = value.toString();
+			console.log('built claimAccountUrl', this.accountClaimUrl);
+		});
 
+		this.accountService.accountClaimStatusSubject.subscribe((value) => {
+			this.accountClaimed = value;
+			console.log('accountClaimedStatus', value);
+		});
 	}
 
 	onGameSelected(game: Game) {
