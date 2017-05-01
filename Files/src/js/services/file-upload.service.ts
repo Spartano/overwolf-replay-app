@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Http } from "@angular/http";
+
 import 'rxjs/add/operator/share';
+
+import { Game } from '../models/game';
+import { GameStorageService } from './game-storage.service';
 
 declare var OverwolfPlugin: any;
 declare var overwolf: any;
@@ -19,11 +23,11 @@ export class FileUploadService {
 	private plugin: any;
 
 
-	constructor(private http: Http) {
+	constructor(private http: Http, private gameStorageService: GameStorageService) {
 		this.init();
 	}
 
-	public uploadFromPath(filePath: string) {
+	public uploadFromPath(filePath: string, game: Game) {
 		console.log('Requesting reading file from disk', filePath, Date.now());
 
 		overwolf.profile.getCurrentUser((user) => {
@@ -74,13 +78,15 @@ export class FileUploadService {
 						},
 					};
 					console.debug('uploading with params', AWS, s3, params);
-					s3.makeUnauthenticatedRequest('putObject', params, function(err, data2) {
+					s3.makeUnauthenticatedRequest('putObject', params, (err, data2) => {
 						// There Was An Error With Your S3 Config
 						if (err) {
 							console.error('An error during upload', err);
 						}
 						else {
 							console.log('Uploaded game', data2, review.id);
+							game.reviewId = review.id;
+							this.gameStorageService.updateGame(game);
 						}
 					});
 				});

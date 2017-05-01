@@ -54,7 +54,7 @@ gulp.task('clean:tests', function () {
 
 // Lint Typescript
 gulp.task('lint:ts', function() {
-  return gulp.src('src/**/*.ts')
+  return gulp.src(['src/**/*.ts', '!src/lib/**/*'])
     .pipe(tslint())
     .pipe(tslint.report('verbose', { emitError: false }));
 });
@@ -124,7 +124,7 @@ gulp.task('lint:sass', function() {
 gulp.task('compile:sass', function () {
   // concat and minify global scss files
   gulp
-    .src('src/css/global/*.scss')
+    .src(['src/lib/**/*.scss', 'src/css/global/*.scss'])
     .pipe(plumber({
       errorHandler: function (err) {
         console.error('>>> [sass] Sass global style compilation failed'.bold.red);
@@ -209,7 +209,7 @@ gulp.task('copy:libs', function() {
   ]).pipe(gulp.dest('public/lib/js/angular-2-local-storage'));
 
   gulp.src([
-    'node_modules/ng2-sharebuttons/**/*',
+    'src/lib/ng2-sharebuttons/**/*',
   ]).pipe(gulp.dest('public/lib/js/ng2-sharebuttons'));
 
   return gulp.src(['node_modules/@angular/**/*'])

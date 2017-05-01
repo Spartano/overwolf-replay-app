@@ -1,4 +1,5 @@
 export class Game {
+	id: string;
 	replay: string;
 	spectating: boolean;
 	gameMode: string;
@@ -6,6 +7,15 @@ export class Game {
 	result: string;
 	player: Player = new Player();
 	opponent: Player = new Player();
+	reviewId: string;
+
+	private _url: string;
+
+	static createEmptyGame(): Game {
+		let game = new Game();
+		game.id = '' + Date.now();
+		return game;
+	}
 }
 
 export class Player {

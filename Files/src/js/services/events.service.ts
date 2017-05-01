@@ -5,7 +5,7 @@ import 'rxjs/add/operator/map';
 
 interface BroadcastEvent {
 	key: any;
-	data?: any;
+	data: any[];
 }
 
 // https://blog.lacolaco.net/post/event-broadcasting-in-angular-2/
@@ -19,13 +19,13 @@ export class Events {
 		this._eventBus = new Subject<BroadcastEvent>();
 	}
 
-	broadcast(key: any, data?: any) {
+	broadcast(key: any, ...data: any[]) {
 		this._eventBus.next({key, data});
 	}
 
-	on<T>(key: any): Observable<T> {
+	on(key: any): Observable<BroadcastEvent> {
 		return this._eventBus.asObservable()
 			.filter(event => event.key === key)
-			.map(event => <T>event.data);
+			.map(event => event);
 	}
 }

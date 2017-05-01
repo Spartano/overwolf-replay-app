@@ -1,0 +1,165 @@
+// Breakpoints
+$x-large-screen: 1200px;
+$large-screen: 769px;
+$medium-screen: 480px;
+$small-screen: 320px;
+
+// Colors
+$twitter: #00acee;
+$facebook: #4267B2;
+$googleplus: #DB4437;
+$stumbleupon: #eb4924;
+$linkedin: #006fa6;
+$pinterest: #BD081C;
+$reddit: #FF4006;
+$tumbler: #36465D;
+$whatsapp: #25D366;
+$zerotoheroes: #860412;
+
+
+@function tint($color, $percentage) {
+	@return mix(white, $color, $percentage);
+}
+@function shade($color, $percentage) {
+	@return mix(black, $color, $percentage);
+}
+
+@mixin btnBgColor($color){
+
+	background: $color;
+	&:hover {
+		background: shade($color, 20%);
+	}
+}
+
+.sb-style.sb-style-colors {
+
+	.facebook button {
+		@include btnBgColor($facebook);
+	}
+
+	.twitter button {
+		@include btnBgColor($twitter);
+	}
+
+	.googleplus button {
+		@include btnBgColor($googleplus);
+	}
+
+	.stumbleupon button {
+		@include btnBgColor($stumbleupon);
+	}
+
+	.linkedin button {
+		@include btnBgColor($linkedin);
+	}
+
+	.pinterest button {
+		@include btnBgColor($pinterest);
+	}
+
+	.reddit button {
+		@include btnBgColor($reddit);
+	}
+
+	.tumblr button {
+		@include btnBgColor($tumbler);
+	}
+
+	.whatsapp button {
+		@include btnBgColor($whatsapp);
+	}
+
+	.zerotoheroes button {
+		@include btnBgColor($zerotoheroes);
+		height: 28px;
+		padding: 0;
+
+		a {
+			display: flex;
+
+			img {
+			    width: 20px;
+			    height: 20px;
+			}
+		}
+	}
+}
+
+.sb-style {
+	display: inline-flex;
+	margin: 1em auto;
+	flex-wrap: wrap;
+
+	.sb-button {
+		min-width: 60px;
+		padding: 5px;
+		display: flex;
+		flex-direction: column;
+	}
+
+	button {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+    	justify-content: center;
+
+		background-color: transparent;
+		border-radius: .2em;
+		padding: .5em .9em;
+		font-size: 1em;
+		color: white;
+
+		&:hover {
+			transition: all ease 300ms;
+		}
+	}
+
+	.sb-show-count {
+		justify-content: space-around;
+		max-width: 6em;
+	}
+
+	.sb-template {
+		margin: 0 auto;
+	}
+
+	.sb-count {
+		margin-left: .8em;
+		font-size: .75em;
+		font-family: Tahoma;
+		text-align: center;
+		position: relative;
+		color: white;
+		font-weight: bold;
+	}
+
+}
+
+.sb-style-neat {
+
+}
+
+button, a:hover {
+	cursor: pointer;
+	outline: 0;
+	border: 0;
+}
+
+.sharing-zone {
+
+	display: flex;
+	flex-direction: column;
+	padding-left: 20px;
+
+	h2 {
+		font-size: 20px;
+		text-align: center;
+		margin-top: 5px;
+	}
+
+	.share-buttons {
+		flex-direction: column;
+	}
+
+}

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Events } from './events.service';
+import { Game } from '../models/game';
 import { FileUploadService } from './file-upload.service';
 
 @Injectable()
@@ -14,11 +15,12 @@ export class ReplayUploader {
 	}
 
 	private init() {
-		this.events.on<string>(Events.REPLAY_SAVED)
-			.subscribe(path => {
-				console.log('ReplayUploader: saved game', path);
-				// this.fileUpload.uploadFromPath('C:\\Users\\Daedin\\AppData\\Local\\Overwolf\\ZeroToHeroes\\Replays\\Daedin(paladin)_vs_The Innkeeper(warrior)_1491764147603\\replay.xml');
-				this.fileUpload.uploadFromPath(path);
+		this.events.on(Events.REPLAY_SAVED)
+			.subscribe(event => {
+				console.log('ReplayUploader: saved game', event);
+				let path: string = event.data[0];
+				let game: Game = event.data[1];
+				this.fileUpload.uploadFromPath(path, game);
 			});
 	}
 }

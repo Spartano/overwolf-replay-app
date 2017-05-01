@@ -15,15 +15,20 @@ declare var $: any;
 	selector: 'zh-shelf',
 	styleUrls: [`css/component/shelf.component.css`],
 	template: `
-		<div class="shelf-container">
-			<div class="replay-zone">
+		<div class="shelf-container"> 
+			<div class="main-zone">
 				<div *ngIf="!accountClaimed && accountClaimUrl" class="claim-account">
 					Your Zero to Heroes account has not been claimed. Please 
 						<a href="{{accountClaimUrl}}" target="_blank" (click)="accountService.startListeningForClaimChanges()">click here</a> 
 					to claim it 
-					<span class="help-text" title="Claiming your account will let you post your post public reviews of your games to receive advise on them"> (?)</span>
+					<span class="help-text" title="Claiming your account will let you store all your games online and post public reviews of your games to receive advise on them"> (?)</span>
 				</div>
-				<game-replay [game]="selectedGame"></game-replay>
+				<div class="content-zone">
+					<sharing-zone [game]="selectedGame" *ngIf="selectedGame"></sharing-zone>
+					<div class="replay-zone">
+						<game-replay [game]="selectedGame"></game-replay>
+					</div>
+				</div>
 			</div>
 			<carousel [games]="games" (onGameSelected)=onGameSelected($event)></carousel>
 		</div>
@@ -98,7 +103,7 @@ export class ShelfComponent {
 	}
 
 	onGameSelected(game: Game) {
-		// console.log('reloading game', game);
+		console.log('reloading game', game);
 		this.selectedGame = game;
 		this.gameReplayComponent.reload(game.replay, () => {
 			console.log('game reloaded');
@@ -119,7 +124,7 @@ export class ShelfComponent {
 		let el = $('.shelf-container')[0];
 		console.log('content element', el);
 		if (!el) {
-			console.error('could not find shelf container element, retrying', document);
+			console.warn('could not find shelf container element, retrying', document);
 			setTimeout( () => this.postMessage(), 50);
 			return;
 		}

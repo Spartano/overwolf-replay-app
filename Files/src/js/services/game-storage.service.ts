@@ -47,11 +47,19 @@ export class GameStorageService {
 		// this.subject.next(game);
 	}
 
-	// getGames():Observable<Game> {
-	// 	return this.subject.asObservable();
-	// }
-
-	// getGames():Game[] {
-	// 	return this.localStorageService.get<Game[]>('games') || [];
-	// }
+	updateGame(game: Game) {
+		console.log('starting game update', game);
+		let games: Game[] = this.localStorageService.get<Game[]>('games') || [];
+		let newGames: Game[] = [];
+		for (let currentGame of games) {
+			if (currentGame.id = game.id) {
+				newGames.push(game);
+			}
+			else {
+				newGames.push(currentGame);
+			}
+		}
+		this.localStorageService.set('games', newGames);
+		console.log('updated games', newGames);
+	}
 }

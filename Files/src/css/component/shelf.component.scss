@@ -2,6 +2,39 @@
 	display: flex;
 	flex-direction: row;
 	height: 100%;
+
+	.main-zone {
+		display: flex;
+		flex-grow: 1;
+		flex-direction: column;
+
+		.claim-account {
+		    text-align: center;
+		    padding-left: 20px;
+		    padding-right: 20px;
+		    padding-bottom: 20px;
+		
+			a {
+				cursor: pointer;
+			}
+		}
+
+		.content-zone {
+			display: flex;
+			flex-direction: row;
+    		flex-grow: 1;
+
+			.replay-zone {
+				display: flex;
+				flex-direction: column;
+				flex-grow: 1;
+			}
+
+			sharing-zone {
+				flex-grow: 1;
+			}
+		}
+	}
 }
 
 .matchup-title {
@@ -9,22 +42,6 @@
 	text-align: center;
 	color: #68471f;
 	display: none;
-}
-
-.replay-zone {
-	display: flex;
-	flex-direction: column;
-	flex-grow: 1;
-
-	.claim-account {
-	    text-align: center;
-	    padding-left: 20px;
-	    padding-right: 20px;
-	}
-
-	a {
-		cursor: pointer;
-	}
 }
 
 carousel {

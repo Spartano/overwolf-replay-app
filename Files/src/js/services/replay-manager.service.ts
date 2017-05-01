@@ -22,7 +22,7 @@ export class ReplayManager {
 		console.log('saving locally', directory + fileName);
 		this.plugin.get().writeLocalAppDataZipFile(directory + fileName, "replay.xml", game.replay, (status, message) => {
 			console.log('local zip file saved', status, message);
-			this.events.broadcast('replay-saved', directory + fileName);
+			this.events.broadcast(Events.REPLAY_SAVED, directory + fileName, game);
 		});
 	}
 

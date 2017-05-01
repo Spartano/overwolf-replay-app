@@ -196,7 +196,7 @@ export class LogListenerService {
 				// that's how we know a game is finished
 				if (data.indexOf('GOLD_REWARD_STATE') !== -1 && this.gameStarted) {
 					console.debug('game ended', data);
-					let game = new Game();
+					let game = Game.createEmptyGame();
 					this.gameStarted = false;
 
 					game.spectating = this.spectating;

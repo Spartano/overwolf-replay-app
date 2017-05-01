@@ -8,6 +8,7 @@ import { ShareButtonsModule } from 'ng2-sharebuttons';
 import { ShelfComponent }  from '../../components/shelf.component';
 import { GameReplayComponent } from '../../components/game-replay.component';
 import { CarouselComponent } from '../../components/carousel.component';
+import { SharingZoneComponent } from '../../components/sharing-zone.component';
 import { GameThumbnailComponent } from '../../components/game-thumbnail.component';
 import { HeroAvatarComponent } from '../../components/hero-avatar.component';
 
@@ -29,6 +30,7 @@ import { AccountService } from '../../services/account.service';
 	declarations: [
 		CarouselComponent,
 		GameReplayComponent,
+		SharingZoneComponent,
 		GameThumbnailComponent,
 		HeroAvatarComponent,
 		ShelfComponent,
