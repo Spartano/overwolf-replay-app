@@ -37,27 +37,27 @@ export class FileUploadService {
 			// Build an empty review 
 			this.http.post(REVIEW_INIT_ENDPOINT, null).subscribe((res) => {
 				let review = res.json();
-				console.debug('Created empty shell review', res, review);
+				console.log('Created empty shell review', res, review);
 
 				this.plugin.get().getBinaryFile(filePath, -1, (status, data) => {
-					console.debug('reading binary file', filePath, status);
+					console.log('reading binary file', filePath, status);
 					let split = data.split(',');
 					let bytes = [];
 					for (let i = 0; i < split.length; i++) {
 						bytes[i] = parseInt(split[i]);
 					}
-					console.debug('built byte array', bytes);
+					console.log('built byte array', bytes);
 					let fileName = this.extractFileName(filePath);
-					console.debug('extracted filename', fileName);
+					console.log('extracted filename', fileName);
 					let fileKey = fileName + Date.now() + '.hszip';
-					console.debug('built file key', fileKey);
+					console.log('built file key', fileKey);
 
 					// http://stackoverflow.com/questions/35038884/download-file-from-bytes-in-javascript
 					let byteArray = new Uint8Array(bytes);
 					let blob = new Blob([byteArray], { type: 'application/zip' });
-					console.debug('built blob', blob);
+					console.log('built blob', blob);
 					let file = new File([blob], fileKey);
-					console.debug('built file', file);
+					console.log('built file', file);
 
 					// Configure The S3 Object 
 					AWS.config.region = 'us-west-2';
@@ -77,7 +77,7 @@ export class FileUploadService {
 							'file-type': 'hszip',
 						},
 					};
-					console.debug('uploading with params', AWS, s3, params);
+					console.log('uploading with params', AWS, s3, params);
 					s3.makeUnauthenticatedRequest('putObject', params, (err, data2) => {
 						// There Was An Error With Your S3 Config
 						if (err) {

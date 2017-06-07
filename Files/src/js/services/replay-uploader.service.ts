@@ -17,7 +17,7 @@ export class ReplayUploader {
 	private init() {
 		this.events.on(Events.REPLAY_SAVED)
 			.subscribe(event => {
-				console.log('ReplayUploader: saved game', event);
+				console.log('ReplayUploader: saved game', event.data[0]);
 				let path: string = event.data[0];
 				let game: Game = event.data[1];
 				this.fileUpload.uploadFromPath(path, game);
