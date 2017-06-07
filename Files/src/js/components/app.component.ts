@@ -18,7 +18,7 @@ declare var overwolf: any;
 // 7.1.1.17994
 export class AppComponent {
 
-	requestedDisplayOnShelf: boolean;
+	// requestedDisplayOnShelf: boolean;
 
 	constructor(
 		private logListenerService: LogListenerService,
@@ -32,11 +32,9 @@ export class AppComponent {
 	init(): void {
 		console.log('init gameservice', overwolf.egs);
 		this.logListenerService.addGameCompleteListener((game: Game) => {
-			if (!this.requestedDisplayOnShelf) {
-				this.requestDisplayOnShelf();
-			}
 			this.replayManager.saveLocally(game);
 		});
+		this.requestDisplayOnShelf();
 	}
 
 	requestDisplayOnShelf(): void {
@@ -49,18 +47,11 @@ export class AppComponent {
 			if (result.status === 'success' && result.isEnabled) {
 				console.log('requesting to display', result);
 				overwolf.egs.requestToDisplay((result2: any) => {
-					// result.status == ["success" | "error"]
-					// result.reason == [undefined | "EndGameScreen is disabled" | "Not accepting shelves"]
 					console.log('requestToDisplay result', result2);
 					if (result2.status === 'success') {
 						console.log('request to display is a success, OW should call shelf.html which will trigger status listening process updates on its side');
-						this.requestedDisplayOnShelf = true;
 					}
 				});
-			}
-			else {
-				// Debug only
-				// this.showShelfWindow();
 			}
 		});
 	}

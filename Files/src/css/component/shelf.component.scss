@@ -3,37 +3,56 @@
 	flex-direction: row;
 	height: 100%;
 
-	.main-zone {
+	.shelf-with-games {
 		display: flex;
-		flex-grow: 1;
-		flex-direction: column;
+		flex-direction: row;
+		height: 100%;
 
-		.claim-account {
-		    text-align: center;
-		    padding-left: 20px;
-		    padding-right: 20px;
-		    padding-bottom: 20px;
-		
-			a {
-				cursor: pointer;
-			}
-		}
-
-		.content-zone {
+		.main-zone {
 			display: flex;
-			flex-direction: row;
-    		flex-grow: 1;
+			flex-grow: 1;
+			flex-direction: column;
 
-			.replay-zone {
-				display: flex;
-				flex-direction: column;
-				flex-grow: 1;
+			.claim-account {
+			    text-align: center;
+			    padding-left: 20px;
+			    padding-right: 20px;
+			    padding-bottom: 20px;
+			
+				a {
+					cursor: pointer;
+				}
 			}
 
-			sharing-zone {
-				flex-grow: 1;
+			.content-zone {
+				display: flex;
+				flex-direction: row;
+	    		flex-grow: 1;
+
+				.replay-zone {
+					display: flex;
+					flex-direction: column;
+					flex-grow: 1;
+				}
+
+				sharing-zone {
+					flex-grow: 1;
+				}
 			}
 		}
+	}
+
+	.empty-shelf {
+		display: flex;
+		flex-direction: column;
+		height: 100%;	
+		align-items: center;
+		justify-content: center;
+
+		width: 600px;
+		height: 600px;
+		padding: 30px;
+		text-align: center;	
 	}
 }
 

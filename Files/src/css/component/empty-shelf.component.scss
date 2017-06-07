@@ -1,0 +1,36 @@
+@font-face {
+	font-family: 'lhf-uncial';
+	src: url('/static/fonts/lhf-uncial/lhf-uncial-caps-regular.woff') format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
+
+h1 {
+	font-family: 'lhf-uncial', sans-serif;
+	font-size: 32px;
+	margin-top: 30px;
+	margin-bottom: 10px;
+}
+
+p {
+	font-size: 14px;
+	line-height: 16px;
+}
+
+a {
+	color: inherit;
+	text-decoration: underline;
+}
+
+img {
+	max-width: 220px;
+	filter: drop-shadow(-3px -3px 3px rgba(0, 0, 0, .4));
+	mix-blend-mode: luminosity;
+	opacity: .9;
+}
+
+main {
+	width: 100%;
+	height: 100%;
+	text-align: center;
+}

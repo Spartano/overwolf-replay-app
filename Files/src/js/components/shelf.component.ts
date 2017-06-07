@@ -2,6 +2,7 @@ import { Component, NgZone, ViewChild } from '@angular/core';
 
 import { GameReplayComponent } from '../components/game-replay.component';
 import { CarouselComponent } from '../components/carousel.component';
+import { EmptyShelfComponent } from '../components/empty-shelf.component';
 
 import { Game } from '../models/game';
 
@@ -15,22 +16,25 @@ declare var $: any;
 	selector: 'zh-shelf',
 	styleUrls: [`css/component/shelf.component.css`],
 	template: `
-		<div class="shelf-container"> 
-			<div class="main-zone">
-				<div *ngIf="!accountClaimed && accountClaimUrl" class="claim-account">
-					Your Zero to Heroes account has not been claimed. Please 
-						<a href="{{accountClaimUrl}}" target="_blank" (click)="accountService.startListeningForClaimChanges()">click here</a> 
-					to claim it 
-					<span class="help-text" title="Claiming your account will let you store all your games online and post public reviews of your games to receive advise on them"> (?)</span>
-				</div>
-				<div class="content-zone">
-					<sharing-zone [game]="selectedGame" *ngIf="selectedGame"></sharing-zone>
-					<div class="replay-zone">
-						<game-replay [game]="selectedGame"></game-replay>
+		<div class="shelf-container">
+			<div class="shelf-with-games" *ngIf="games && games.length > 0"> 
+				<div class="main-zone">
+					<div *ngIf="!accountClaimed && accountClaimUrl" class="claim-account">
+						Your Zero to Heroes account has not been claimed. Please 
+							<a href="{{accountClaimUrl}}" target="_blank" (click)="accountService.startListeningForClaimChanges()">click here</a> 
+						to claim it 
+						<span class="help-text" title="Claiming your account will let you store all your games online and post public reviews of your games to receive advise on them"> (?)</span>
+					</div>
+					<div class="content-zone">
+						<sharing-zone [game]="selectedGame" *ngIf="selectedGame"></sharing-zone>
+						<div class="replay-zone">
+							<game-replay [game]="selectedGame"></game-replay>
+						</div>
 					</div>
 				</div>
+				<carousel [games]="games" (onGameSelected)=onGameSelected($event)></carousel>
 			</div>
-			<carousel [games]="games" (onGameSelected)=onGameSelected($event)></carousel>
+			<empty-shelf class="empty-shelf" *ngIf="!games || games.length === 0"></empty-shelf>
 		</div>
 	`,
 })
@@ -80,26 +84,30 @@ export class ShelfComponent {
 	}
 
 	ngOnInit(): void {
-		setTimeout(() => {
-			try {
-				this.games = this.gameService.getGames().reverse();
-				this.carouselComponent.onSelect(this.games[0]);
-			}
-			catch (e) {
-				console.error(e);
-				throw e;
-			}
-		}, 50);
+		console.log('games', this.games);
+		if (this.games && this.games.length > 0) {
+			setTimeout(() => {
+				try {
+					this.games = this.gameService.getGames().reverse();
+					this.carouselComponent.onSelect(this.games[0]);
+				}
+				catch (e) {
+					console.error(e);
+					throw e;
+				}
+			}, 50);
 
-		this.accountService.accountClaimUrlSubject.subscribe((value) => {
-			this.accountClaimUrl = value.toString();
-			console.log('built claimAccountUrl', this.accountClaimUrl);
-		});
+			console.log('subscribing to account claim subjects');
+			this.accountService.accountClaimUrlSubject.subscribe((value) => {
+				this.accountClaimUrl = value.toString();
+				console.log('built claimAccountUrl', this.accountClaimUrl);
+			});
 
-		this.accountService.accountClaimStatusSubject.subscribe((value) => {
-			this.accountClaimed = value;
-			console.log('accountClaimedStatus', value);
-		});
+			this.accountService.accountClaimStatusSubject.subscribe((value) => {
+				this.accountClaimed = value;
+				console.log('accountClaimedStatus', value);
+			});
+		}
 	}
 
 	onGameSelected(game: Game) {

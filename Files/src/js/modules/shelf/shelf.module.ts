@@ -6,6 +6,7 @@ import { LocalStorageService, LocalStorageModule } from 'angular-2-local-storage
 import { ShareButtonsModule } from 'ng2-sharebuttons';
 
 import { ShelfComponent }  from '../../components/shelf.component';
+import { EmptyShelfComponent }  from '../../components/empty-shelf.component';
 import { GameReplayComponent } from '../../components/game-replay.component';
 import { CarouselComponent } from '../../components/carousel.component';
 import { SharingZoneComponent } from '../../components/sharing-zone.component';
@@ -34,6 +35,7 @@ import { AccountService } from '../../services/account.service';
 		GameThumbnailComponent,
 		HeroAvatarComponent,
 		ShelfComponent,
+		EmptyShelfComponent,
 	],
 	bootstrap: [
 		ShelfComponent,
