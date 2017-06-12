@@ -43,7 +43,7 @@ export class GameStorageService {
 		let games: Game[] = this.localStorageService.get<Game[]>('games') || [];
 		games.push(game);
 		this.localStorageService.set('games', games);
-		// console.log('after adding game', this.localStorageService.get<Game[]>('games'));
+		console.log('after adding game', this.localStorageService.get<Game[]>('games'));
 		// this.subject.next(game);
 	}
 
