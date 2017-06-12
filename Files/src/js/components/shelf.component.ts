@@ -17,7 +17,7 @@ declare var $: any;
 	styleUrls: [`css/component/shelf.component.css`],
 	template: `
 		<div class="shelf-container">
-			<div class="shelf-with-games" *ngIf="games && games.length > 0"> 
+			<div class="shelf-with-games" *ngIf="!games || games.length > 0"> 
 				<div class="main-zone">
 					<div *ngIf="!accountClaimed && accountClaimUrl" class="claim-account">
 						Your Zero to Heroes account has not been claimed. Please 
@@ -34,7 +34,7 @@ declare var $: any;
 				</div>
 				<carousel [games]="games" (onGameSelected)=onGameSelected($event)></carousel>
 			</div>
-			<empty-shelf class="empty-shelf" *ngIf="!games || games.length === 0"></empty-shelf>
+			<empty-shelf class="empty-shelf" *ngIf="games && games.length === 0"></empty-shelf>
 		</div>
 	`,
 })
@@ -46,7 +46,7 @@ export class ShelfComponent {
 	accountClaimUrl: string;
 
 	name = 'Hearthstone Replay Viewer';
-	games: Game[] = [];
+	games: Game[] = null;
 	selectedGame: Game;
 
 	@ViewChild(CarouselComponent) private carouselComponent: CarouselComponent;
@@ -84,30 +84,31 @@ export class ShelfComponent {
 	}
 
 	ngOnInit(): void {
-		console.log('games', this.games);
-		if (this.games && this.games.length > 0) {
-			setTimeout(() => {
-				try {
-					this.games = this.gameService.getGames().reverse();
+		setTimeout(() => {
+			try {
+				this.games = this.gameService.getGames().reverse();
+				console.log('games in shelf', this.games);
+				if (this.games && this.games.length > 0) {
 					this.carouselComponent.onSelect(this.games[0]);
 				}
-				catch (e) {
-					console.error(e);
-					throw e;
-				}
-			}, 50);
-
-			console.log('subscribing to account claim subjects');
-			this.accountService.accountClaimUrlSubject.subscribe((value) => {
-				this.accountClaimUrl = value.toString();
-				console.log('built claimAccountUrl', this.accountClaimUrl);
-			});
-
-			this.accountService.accountClaimStatusSubject.subscribe((value) => {
-				this.accountClaimed = value;
-				console.log('accountClaimedStatus', value);
-			});
+			}
+			catch (e) {
+				console.error(e);
+				throw e;
+			}
 		}
+		, 50);
+
+		console.log('subscribing to account claim subjects');
+		this.accountService.accountClaimUrlSubject.subscribe((value) => {
+			this.accountClaimUrl = value.toString();
+			console.log('built claimAccountUrl', this.accountClaimUrl);
+		});
+
+		this.accountService.accountClaimStatusSubject.subscribe((value) => {
+			this.accountClaimed = value;
+			console.log('accountClaimedStatus', value);
+		});
 	}
 
 	onGameSelected(game: Game) {
