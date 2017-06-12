@@ -3,6 +3,8 @@ export class Game {
 	replay: string;
 	spectating: boolean;
 	gameMode: string;
+	gameFormat: string;
+	rank: string;
 	title: string;
 	result: string;
 	player: Player = new Player();

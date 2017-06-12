@@ -10,14 +10,19 @@ const HEARTHSTONE_GAME_ID = 9898;
 
 @Injectable()
 export class LogListenerService {
+	plugin: any;
+	mindvisionPlugin: any;
+
 	monitoring: boolean;
 	fileInitiallyPresent: boolean;
-	fullLogs: string;
+	logsLocation: string;
+	
 	gameStarted: boolean;
 	spectating: boolean;
 	gameMode: string;
-	logsLocation: string;
-	plugin: any;
+	fullLogs: string;
+	matchInfo: any;
+	gameFormat: any;
 
 	// Events
 	gameCompleteListeners: Function[] = [];
@@ -46,6 +51,19 @@ export class LogListenerService {
 			}
 			console.log("Plugin " + plugin.get()._PluginName_ + " was loaded!");
 			this.configureLogListeners();
+		});
+
+		console.log("loading mindvision");
+		this.mindvisionPlugin = new OverwolfPlugin("mindvision", true);
+		this.mindvisionPlugin.initialize((status: boolean) => {
+			if (status === false) {
+				console.error("Plugin mindvision couldn't be loaded");
+				return;
+			}
+			console.log("Plugin " + this.mindvisionPlugin.get()._PluginName_ + " was loaded!", this.mindvisionPlugin.get());
+			this.mindvisionPlugin.get().onGlobalEvent.addListener(function(first, second) {
+				console.log('received global event mindvision', first, second);
+			});
 		});
 	}
 
@@ -181,7 +199,7 @@ export class LogListenerService {
 					this.spectating = false;
 				}
 
-				this.gameMode = this.gameModeParser.inferGameMode(this.gameMode, data);
+				// this.gameMode = this.gameModeParser.inferGameMode(this.gameMode, data);
 				// console.log('file changed', data, id, fileIdentifier, status);
 				// console.log('file listening callback', fieldId, status, data)
 				// New game
@@ -190,8 +208,13 @@ export class LogListenerService {
 					this.fullLogs = '';
 					this.gameStarted = true;
 					this.gameMode = undefined;
+					this.matchInfo = undefined;
 				}
 				this.fullLogs += data + '\n';
+
+				this.parseMatchInfo();
+				this.parseGameType();
+				this.parseGameFormat();
 
 				// that's how we know a game is finished
 				if (data.indexOf('GOLD_REWARD_STATE') !== -1 && this.gameStarted) {
@@ -201,10 +224,31 @@ export class LogListenerService {
 
 					game.spectating = this.spectating;
 					game.gameMode = this.gameMode;
+					game.gameFormat = this.gameFormat;
+
+					if (this.matchInfo != null && this.matchInfo.LocalPlayer != null) {
+						console.debug('setting game info', game, this.matchInfo);
+						if ('Wild' === game.gameFormat) {
+							if (this.matchInfo.LocalPlayer.WildLegendRank > 0) {
+								game.rank = 'legend';
+							}
+							else {
+								game.rank = this.matchInfo.LocalPlayer.WildRank;
+							}
+						}
+						else if ('Standard' === game.gameFormat) {
+							if (this.matchInfo.LocalPlayer.StandardLegendRank > 0) {
+								game.rank = 'legend';
+							}
+							else {
+								game.rank = this.matchInfo.LocalPlayer.StandardRank;
+							}
+						}
+					}
 
 					this.gameParserService.convertLogsToXml(this.fullLogs, game, this.gameCompleteListeners);
 
-					this.fullLogs = '';
+					this.fullLogs = ''; 
 					// this.spectating = false;
 				}
 			}
@@ -225,6 +269,33 @@ export class LogListenerService {
 				}
 			}
 		});
+	}
+
+	parseMatchInfo() {
+		if (!this.matchInfo) {
+			this.mindvisionPlugin.get().getMatchInfo((matchInfo) => {
+				console.log('received matchinfo callback', matchInfo);
+				this.matchInfo = matchInfo;
+			});
+		}
+	}
+
+	parseGameFormat() {
+		if (!this.gameFormat) {
+			this.mindvisionPlugin.get().getGameFormat((gameFormat) => {
+				console.log('received gameFormat callback', gameFormat);
+				this.gameFormat = gameFormat;
+			});
+		}
+	}
+
+	parseGameType() {
+		if (!this.gameMode) {
+			this.mindvisionPlugin.get().getGameMode((gameMode) => {
+				console.log('received gameMode callback', gameMode);
+				this.gameMode = gameMode;
+			});
+		}
 	}
 
 	exitGame(gameInfoResult: any): boolean {

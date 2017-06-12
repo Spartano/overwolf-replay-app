@@ -35,6 +35,30 @@ export class AppComponent {
 			this.replayManager.saveLocally(game);
 		});
 		this.requestDisplayOnShelf();
+
+		let oldConsoleLogFunc = console.log;
+		let debugMode = false;
+		if (debugMode) {
+			console.log = function() {
+				let argsString = "";
+				for (let i = 0; i < arguments.length; i++) {
+					let cache = [];
+					argsString += JSON.stringify(arguments[i], function(key, value) {
+						if (typeof value === 'object' && value !== null) {
+							if (cache.indexOf(value) !== -1) {
+								// Circular reference found, discard key
+								return;
+							}
+							// Store value in our collection
+							cache.push(value);
+						}
+						return value;
+					}) + ' | ';
+					cache = null; // Enable garbage collection + " | "
+				}
+				oldConsoleLogFunc.apply(console, [argsString]);
+			};
+		}
 	}
 
 	requestDisplayOnShelf(): void {
