@@ -26,7 +26,7 @@ declare var $: any;
 						<span class="help-text" title="Claiming your account will let you store all your games online and post public reviews of your games to receive advise on them"> (?)</span>
 					</div>
 					<div class="content-zone">
-						<sharing-zone [game]="selectedGame" *ngIf="selectedGame"></sharing-zone>
+						<sharing-zone [game]="selectedGame" *ngIf="false && selectedGame"></sharing-zone>
 						<div class="replay-zone">
 							<game-replay [game]="selectedGame"></game-replay>
 						</div>
