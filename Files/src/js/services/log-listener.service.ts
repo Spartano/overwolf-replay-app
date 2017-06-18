@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Game } from '../models/game';
 import { GameParserService } from './game-parser.service';
+import { LogParserService } from './gameparsing/log-parser.service';
 import { GameModeParser } from './gameparsing/game-mode-parser.service';
 
 declare var OverwolfPlugin: any;
@@ -16,18 +17,11 @@ export class LogListenerService {
 	monitoring: boolean;
 	fileInitiallyPresent: boolean;
 	logsLocation: string;
-	
-	gameStarted: boolean;
-	spectating: boolean;
-	gameMode: string;
-	fullLogs: string;
-	matchInfo: any;
-	gameFormat: any;
 
-	// Events
-	gameCompleteListeners: Function[] = [];
-
-	constructor(private gameParserService: GameParserService, private gameModeParser: GameModeParser) {
+	constructor(
+		private gameParserService: GameParserService, 
+		private gameModeParser: GameModeParser,
+		private logParserService: LogParserService) {
 		// console.log('in LogListener constructor');
 		this.init();
 	}
@@ -35,14 +29,12 @@ export class LogListenerService {
 	init(): void {
 		console.log('initializing LogListenerService', this.plugin);
 		this.monitoring = false;
-		this.gameStarted = false;
-		this.fullLogs = '';
+		// this.gameStarted = false;
+		// this.fullLogs = '';
 		this.fileInitiallyPresent = true;
-		// this.logsLocation = 'F:\\Games\\Hearthstone\\Logs\\Power.log';
 
 		let plugin = this.plugin = new OverwolfPlugin("simple-io-plugin-zip", true);
 		console.log('plugin', plugin);
-		// let that = this;
 
 		plugin.initialize((status: boolean) => {
 			if (status === false) {
@@ -51,19 +43,6 @@ export class LogListenerService {
 			}
 			console.log("Plugin " + plugin.get()._PluginName_ + " was loaded!");
 			this.configureLogListeners();
-		});
-
-		console.log("loading mindvision");
-		this.mindvisionPlugin = new OverwolfPlugin("mindvision", true);
-		this.mindvisionPlugin.initialize((status: boolean) => {
-			if (status === false) {
-				console.error("Plugin mindvision couldn't be loaded");
-				return;
-			}
-			console.log("Plugin " + this.mindvisionPlugin.get()._PluginName_ + " was loaded!", this.mindvisionPlugin.get());
-			this.mindvisionPlugin.get().onGlobalEvent.addListener(function(first, second) {
-				console.log('received global event mindvision', first, second);
-			});
 		});
 	}
 
@@ -105,12 +84,8 @@ export class LogListenerService {
 	}
 
 	addGameCompleteListener(listener: Function): void {
-		this.gameCompleteListeners.push(listener);
+		this.logParserService.addGameCompleteListener(listener);
 	}
-
-	// addInitCompleteListener(listener: Function): void {
-	// 	this.initCompleteListeners.push(listener);
-	// }
 
 	registerLogMonitor() {
 		console.log('registering hooks?', this.plugin.get(), this.monitoring, this);
@@ -124,20 +99,6 @@ export class LogListenerService {
 		this.listenOnFile(this.logsLocation);
 
 		this.monitoring = true;
-
-		// We have no way today to know when the initial game log has been parsed,
-		// since parsing is asynchronous
-		// We might be able to do a first read on the file to know how many games are 
-		// in it, then remove these games, but we'd still have to know when all the games
-		// are parsed
-		// Here we take a pretty safe assumption that:
-		// - games are parsed in less than 10s
-		// - no game is completed 10s after HS is initially launched
-		// setTimeout(() => {
-		// 	for (let initListener of this.initCompleteListeners) {
-		// 		initListener();
-		// 	}
-		// }, 10000);
 	}
 
 	listenOnFile(logsLocation: string): void {
@@ -181,76 +142,7 @@ export class LogListenerService {
 			}
 
 			if (id === fileIdentifier) {
-				// Don't use the PowerTaskList
-				if (data.indexOf('PowerTaskList') !== -1 || data.indexOf('PowerProcessor') !== -1) {
-					// if (data.indexOf('CREATE_GAME') !== -1) {
-					// 	console.debug('Received unsupported start', data);
-					// }
-					// if (data.indexOf('GOLD_REWARD_STATE') !== -1) {
-					// 	console.debug('Received unsupported end', data);
-					// }
-					return;
-				}
-
-				if (data.indexOf('Begin Spectating') !== -1) {
-					this.spectating = true;
-				}
-				if (data.indexOf('End Spectator Mode') !== -1) {
-					this.spectating = false;
-				}
-
-				// this.gameMode = this.gameModeParser.inferGameMode(this.gameMode, data);
-				// console.log('file changed', data, id, fileIdentifier, status);
-				// console.log('file listening callback', fieldId, status, data)
-				// New game
-				if (data.indexOf('CREATE_GAME') !== -1) {
-					console.debug('reinit game', data);
-					this.fullLogs = '';
-					this.gameStarted = true;
-					this.gameMode = undefined;
-					this.matchInfo = undefined;
-				}
-				this.fullLogs += data + '\n';
-
-				this.parseMatchInfo();
-				this.parseGameType();
-				this.parseGameFormat();
-
-				// that's how we know a game is finished
-				if (data.indexOf('GOLD_REWARD_STATE') !== -1 && this.gameStarted) {
-					console.debug('game ended', data);
-					let game = Game.createEmptyGame();
-					this.gameStarted = false;
-
-					game.spectating = this.spectating;
-					game.gameMode = this.gameMode;
-					game.gameFormat = this.gameFormat;
-
-					if (this.matchInfo != null && this.matchInfo.LocalPlayer != null) {
-						console.debug('setting game info', game, this.matchInfo);
-						if ('Wild' === game.gameFormat) {
-							if (this.matchInfo.LocalPlayer.WildLegendRank > 0) {
-								game.rank = 'legend';
-							}
-							else {
-								game.rank = this.matchInfo.LocalPlayer.WildRank;
-							}
-						}
-						else if ('Standard' === game.gameFormat) {
-							if (this.matchInfo.LocalPlayer.StandardLegendRank > 0) {
-								game.rank = 'legend';
-							}
-							else {
-								game.rank = this.matchInfo.LocalPlayer.StandardRank;
-							}
-						}
-					}
-
-					this.gameParserService.convertLogsToXml(this.fullLogs, game, this.gameCompleteListeners);
-
-					this.fullLogs = ''; 
-					// this.spectating = false;
-				}
+				this.logParserService.receiveLogLine(data);
 			}
 			else {
 				console.error('could not listen to file callback');
@@ -269,33 +161,6 @@ export class LogListenerService {
 				}
 			}
 		});
-	}
-
-	parseMatchInfo() {
-		if (!this.matchInfo) {
-			this.mindvisionPlugin.get().getMatchInfo((matchInfo) => {
-				console.log('received matchinfo callback', matchInfo);
-				this.matchInfo = matchInfo;
-			});
-		}
-	}
-
-	parseGameFormat() {
-		if (!this.gameFormat) {
-			this.mindvisionPlugin.get().getGameFormat((gameFormat) => {
-				console.log('received gameFormat callback', gameFormat);
-				this.gameFormat = gameFormat;
-			});
-		}
-	}
-
-	parseGameType() {
-		if (!this.gameMode) {
-			this.mindvisionPlugin.get().getGameMode((gameMode) => {
-				console.log('received gameMode callback', gameMode);
-				this.gameMode = gameMode;
-			});
-		}
 	}
 
 	exitGame(gameInfoResult: any): boolean {

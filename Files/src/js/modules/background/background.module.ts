@@ -14,6 +14,7 @@ import { GameStorageService } from '../../services/game-storage.service';
 // import { GameRetrieveService } from './service/game-retrieve.service';
 import { LogListenerService } from '../../services/log-listener.service';
 import { GameParserService } from '../../services/game-parser.service';
+import { LogParserService } from '../../services/gameparsing/log-parser.service';
 import { GameModeParser } from '../../services/gameparsing/game-mode-parser.service';
 import { ReplayManager } from '../../services/replay-manager.service';
 import { LogUtils } from '../../services/gameparsing/log-utils.service';
@@ -45,6 +46,7 @@ import { FileUploadService } from '../../services/file-upload.service';
 		// GameService,
 		LogListenerService,
 		GameParserService,
+		LogParserService,
 		LocalStorageService,
 		GameModeParser,
 		ReplayManager,
