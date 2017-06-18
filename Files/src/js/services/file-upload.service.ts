@@ -63,6 +63,11 @@ export class FileUploadService {
 					AWS.config.region = 'us-west-2';
 					AWS.config.httpOptions.timeout = 3600 * 1000 * 10;
 
+					let rank = game.rank;
+					if ('Arena' === game.gameMode) {
+						rank = game.arenaInfo.Wins;
+					}
+					console.debug('setting rank', rank);
 					let s3 = new AWS.S3();
 					let params = {
 						Bucket: BUCKET,
@@ -70,11 +75,15 @@ export class FileUploadService {
 						ACL: 'public-read-write',
 						Body: blob,
 						Metadata: {
+							'review-id': review.id,
 							'application-key': 'overwolf',
 							'user-key': userId,
-							'review-id': review.id,
-							'review-text': 'Created by [Overwolf](http://www.overwolf.com)',
 							'file-type': 'hszip',
+							'review-text': 'Created by [Overwolf](http://www.overwolf.com)',
+							'game-rank': rank != 'legend' ? rank.toString() : '',
+							'game-legend-rank': rank == 'legend' ? rank.toString() : '',
+							'game-format': game.gameFormat,
+							'game-mode': game.gameMode,
 						},
 					};
 					console.log('uploading with params', AWS, s3, params);

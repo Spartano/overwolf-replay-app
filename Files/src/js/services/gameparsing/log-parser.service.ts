@@ -73,6 +73,7 @@ export class LogParserService {
 		this.game.fullLogs += data + '\n';
 
 		this.parseMatchInfo();
+		this.parseArenaInfo();
 		this.parseGameType();
 		this.parseGameFormat();
 
@@ -98,6 +99,15 @@ export class LogParserService {
 			this.mindvisionPlugin.get().getMatchInfo((matchInfo) => {
 				console.log('received matchinfo callback', matchInfo);
 				this.game.matchInfo = matchInfo;
+			});
+		}
+	}
+
+	private parseArenaInfo() {
+		if (this.game && this.game.gameMode === 'Arena' && !this.game.arenaInfo) {
+			this.mindvisionPlugin.get().getArenaInfo((arenaInfo) => {
+				console.log('received arenaInfo callback', arenaInfo);
+				this.game.arenaInfo = arenaInfo;
 			});
 		}
 	}

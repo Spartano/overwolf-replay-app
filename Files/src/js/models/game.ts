@@ -11,8 +11,9 @@ export class Game {
 	gameMode: string;
 	gameFormat: string;
 	rank: string;
-	matchInfo: any;
 	result: string;
+	matchInfo: any;
+	arenaInfo: any;
 
 	player: Player = new Player();
 	opponent: Player = new Player();
