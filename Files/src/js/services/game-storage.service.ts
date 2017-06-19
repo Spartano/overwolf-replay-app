@@ -52,7 +52,7 @@ export class GameStorageService {
 		let games: Game[] = this.localStorageService.get<Game[]>('games') || [];
 		let newGames: Game[] = [];
 		for (let currentGame of games) {
-			if (currentGame.id = game.id) {
+			if (currentGame.id === game.id) {
 				newGames.push(game);
 			}
 			else {
