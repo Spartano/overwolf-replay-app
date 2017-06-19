@@ -1,0 +1,25 @@
+.game-info {
+	margin-top: 30px;
+	display: flex;
+    flex-direction: column;
+
+	h2 {
+		font-size: 20px;
+		text-align: center;
+		margin-top: 5px;
+	}
+
+	img {
+		width: 80px;
+	}
+
+	.summary {
+		display: flex;
+    	align-items: center;
+    	justify-content: space-around;
+	}
+
+	& > span {
+		padding-left: 20px;
+	}
+}

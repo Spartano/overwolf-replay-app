@@ -10,6 +10,8 @@ import { EmptyShelfComponent }  from '../../components/empty-shelf.component';
 import { GameReplayComponent } from '../../components/game-replay.component';
 import { CarouselComponent } from '../../components/carousel.component';
 import { SharingZoneComponent } from '../../components/sharing-zone.component';
+import { InfoZoneComponent } from '../../components/info-zone.component';
+import { GameInfoComponent } from '../../components/game-info.component';
 import { GameThumbnailComponent } from '../../components/game-thumbnail.component';
 import { HeroAvatarComponent } from '../../components/hero-avatar.component';
 
@@ -32,6 +34,8 @@ import { AccountService } from '../../services/account.service';
 		CarouselComponent,
 		GameReplayComponent,
 		SharingZoneComponent,
+		InfoZoneComponent,
+		GameInfoComponent,
 		GameThumbnailComponent,
 		HeroAvatarComponent,
 		ShelfComponent,

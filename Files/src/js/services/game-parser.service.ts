@@ -58,12 +58,33 @@ export class GameParserService {
 					console.warn('could not convert replay', game, stringLogs);
 				}
 				this.extractMatchup(game);
+				this.extractDuration(game);
 				// console.log('converted', response
 				// console.debug('extracted matchup into', game)
 				for (let callback of callbacks) {
 					callback(game);
 				}
 		});
+	}
+
+	extractDuration(game: Game) {
+		let replayXml = $.parseXML(game.replay);
+		
+		let timestampedNodes = $(replayXml).find("[ts]");
+		let firstTimestampInSeconds = this.toTimestamp($(timestampedNodes[0]).attr('ts'));
+		let lastTimestampInSeconds = this.toTimestamp($(timestampedNodes[timestampedNodes.length - 1]).attr('ts'));
+		let durationInSeconds = lastTimestampInSeconds - firstTimestampInSeconds;
+		game.durationTimeSeconds = durationInSeconds;
+
+		let tagChangeNodes = $(replayXml).find('TagChange[entity="1"][tag="19"][value="6"]');
+		// Count the number of times the player gets a turn
+		game.durationTurns = (tagChangeNodes.length + 1) / 2;
+	}
+
+	toTimestamp(ts: string): number {
+		let split = ts.split(':');
+		let total = parseInt(split[0]) * 3600 + parseInt(split[1]) * 60 + parseInt(split[2].split('.')[0]);
+		return total;
 	}
 
 	extractMatchup(game: Game): void {

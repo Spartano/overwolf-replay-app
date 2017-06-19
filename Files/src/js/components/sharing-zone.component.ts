@@ -13,7 +13,8 @@ import { Game } from '../models/game';
 			<div class="share-buttons sb-buttons sb-style sb-style-colors">
 				<div class="sb-button facebook">
 					<button [shareButton]="'facebook'" 
-							[sbUrl]="buildUrl()">
+							[sbUrl]="buildUrl()"
+							title="Share on Facebook">
 						<i class="fa fa-facebook"></i>
 					</button>
 				</div>
@@ -21,7 +22,8 @@ import { Game } from '../models/game';
 					<button [shareButton]="'twitter'" 
 							[sbUrl]="buildUrl()"
 							[sbTitle]="buildTitle()"
-							[sbTags]="'hearthstone'">
+							[sbTags]="'hearthstone'"
+							title="Share on Twitter">
 						<i class="fa fa-twitter"></i>
 					</button>
 				</div>
@@ -29,12 +31,13 @@ import { Game } from '../models/game';
 					<button [shareButton]="'reddit'" 
 							[sbUrl]="buildUrl()"
 							[sbTitle]="buildTitle()"
-							[sbVia]="'hearthstone'">
+							[sbVia]="'hearthstone'"
+							title="Share on reddit">
 						<i class="fa fa-reddit"></i>
 					</button>
 				</div>
 				<div class="sb-button zerotoheroes">
-					<button>
+					<button title="Share on Zero to Heroes">
 						<a class="zerotoheroes" href="{{ buildUrl() }}" target="_blank">
 							<img src="static/images/zero-to-heroes-logo.svg">
 						</a>

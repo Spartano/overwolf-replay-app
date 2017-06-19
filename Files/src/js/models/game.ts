@@ -14,6 +14,8 @@ export class Game {
 	result: string;
 	matchInfo: any;
 	arenaInfo: any;
+	durationTimeSeconds: number;
+	durationTurns: number;
 
 	player: Player = new Player();
 	opponent: Player = new Player();

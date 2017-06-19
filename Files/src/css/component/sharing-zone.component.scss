@@ -92,7 +92,7 @@ $zerotoheroes: #860412;
 	flex-wrap: wrap;
 
 	.sb-button {
-		min-width: 60px;
+		min-width: 50px;
 		padding: 5px;
 		display: flex;
 		flex-direction: column;
@@ -147,10 +147,9 @@ button, a:hover {
 }
 
 .sharing-zone {
-
 	display: flex;
 	flex-direction: column;
-	padding-left: 20px;
+	// padding-left: 20px;
 
 	h2 {
 		font-size: 20px;
@@ -159,7 +158,9 @@ button, a:hover {
 	}
 
 	.share-buttons {
-		flex-direction: column;
+		flex-direction: row;
+		margin: 0;
+		justify-content: center;
 	}
 
 }
