@@ -59,13 +59,13 @@ export class ShelfComponent {
 
 		// Change logging for debug
 		let oldConsoleLogFunc = console.log;
-		let debugMode = false;
+		let debugMode = true;
 		if (debugMode) {
 			console.log = function() {
 				let argsString = "";
 				for (let i = 0; i < arguments.length; i++) {
 					let cache = [];
-					argsString += JSON.stringify(arguments[i], function(key, value) {
+					argsString += (JSON.stringify(arguments[i], function(key, value) {
 						if (typeof value === 'object' && value !== null) {
 							if (cache.indexOf(value) !== -1) {
 								// Circular reference found, discard key
@@ -75,7 +75,7 @@ export class ShelfComponent {
 							cache.push(value);
 						}
 						return value;
-					}) + ' | ';
+					}) || '').substring(0, 500) + ' | ';
 					cache = null; // Enable garbage collection + " | "
 				}
 				oldConsoleLogFunc.apply(console, [argsString]);

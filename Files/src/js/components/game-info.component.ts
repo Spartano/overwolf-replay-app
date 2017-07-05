@@ -26,7 +26,8 @@ export class GameInfoComponent {
 
 	private durationTime(): string {
 		if (this.game.durationTimeSeconds > 60) {
-			return this.game.durationTimeSeconds / 60 + ' minutes';
+			// TODO: integer division
+			return Math.round(this.game.durationTimeSeconds / 60) + ' minutes';
 		}
 		return 'a few seconds';
 	}
