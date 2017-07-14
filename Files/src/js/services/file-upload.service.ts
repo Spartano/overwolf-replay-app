@@ -2,15 +2,16 @@ import { Injectable } from '@angular/core';
 import { Http } from "@angular/http";
 
 import 'rxjs/add/operator/share';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { Game } from '../models/game';
 import { GameStorageService } from './game-storage.service';
 
-declare var OverwolfPlugin: any;
 declare var overwolf: any;
 declare var AWS: any;
 
 
+const GET_REVIEW_ENDPOINT = 'http://www.zerotoheroes.com/api/reviews/';
 const REVIEW_INIT_ENDPOINT = 'http://www.zerotoheroes.com/api/hearthstone/upload/createEmptyReview/hearthstone';
 const BUCKET = 'com.zerotoheroes.batch';
 
@@ -20,101 +21,95 @@ const BUCKET = 'com.zerotoheroes.batch';
 @Injectable()
 export class FileUploadService {
 
-	private plugin: any;
-
-
 	constructor(private http: Http, private gameStorageService: GameStorageService) {
-		this.init();
 	}
 
-	public uploadFromPath(filePath: string, game: Game) {
+	public getRemoteReview(reviewId: string, callback: Function) {
+		this.http.get(GET_REVIEW_ENDPOINT + reviewId).subscribe((res) => {
+			console.log('retrieved review', res);
+			callback(res);
+		});
+	}
+
+	public uploadFromPath(filePath: string, game: Game, progressMonitor?: BehaviorSubject<string>) {
 		console.log('Requesting reading file from disk', filePath, Date.now());
 
 		overwolf.profile.getCurrentUser((user) => {
 			console.log('current user', user);
 			let userId = user.userId || user.machineId || user.username || 'unauthenticated_user';
 
-			// Build an empty review 
+			// Build an empty review
 			this.http.post(REVIEW_INIT_ENDPOINT, null).subscribe((res) => {
 				let review = res.json();
 				console.log('Created empty shell review', res, review);
+				if (progressMonitor) {
+					progressMonitor.next('EMPTY_SHELL_CREATED');
+				}
 
-				this.plugin.get().getBinaryFile(filePath, -1, (status, data) => {
-					console.log('reading binary file', filePath, status);
-					let split = data.split(',');
-					let bytes = [];
-					for (let i = 0; i < split.length; i++) {
-						bytes[i] = parseInt(split[i]);
-					}
-					console.log('built byte array', bytes);
-					let fileName = this.extractFileName(filePath);
-					console.log('extracted filename', fileName);
-					let fileKey = fileName + Date.now() + '.hszip';
-					console.log('built file key', fileKey);
+				let bytes = game.replayBytes;
+				console.log('loaded bytes', bytes);
 
-					// http://stackoverflow.com/questions/35038884/download-file-from-bytes-in-javascript
-					let byteArray = new Uint8Array(bytes);
-					let blob = new Blob([byteArray], { type: 'application/zip' });
-					console.log('built blob', blob);
-					let file = new File([blob], fileKey);
-					console.log('built file', file);
+				// http://stackoverflow.com/questions/35038884/download-file-from-bytes-in-javascript
+				let byteArray = new Uint8Array(bytes);
+				let blob = new Blob([byteArray], { type: 'application/zip' });
+				console.log('built blob', blob);
 
-					// Configure The S3 Object 
-					AWS.config.region = 'us-west-2';
-					AWS.config.httpOptions.timeout = 3600 * 1000 * 10;
+				let fileName = this.extractFileName(filePath);
+				console.log('extracted filename', fileName);
+				let fileKey = fileName + Date.now() + '.hszip';
+				console.log('built file key', fileKey);
 
-					let rank = game.rank;
-					if ('Arena' === game.gameMode) {
-						rank = game.arenaInfo.Wins;
-					}
-					console.debug('setting rank', rank);
-					let s3 = new AWS.S3();
-					let params = {
-						Bucket: BUCKET,
-						Key: fileKey,
-						ACL: 'public-read-write',
-						Body: blob,
-						Metadata: {
-							'review-id': review.id,
-							'application-key': 'overwolf',
-							'user-key': userId,
-							'file-type': 'hszip',
-							'review-text': 'Created by [Overwolf](http://www.overwolf.com)',
-							'game-rank': rank != 'legend' ? rank.toString() : '',
-							'game-legend-rank': rank == 'legend' ? rank.toString() : '',
-							'game-format': game.gameFormat,
-							'game-mode': game.gameMode,
-						},
-					};
-					console.log('uploading with params', AWS, s3, params);
-					s3.makeUnauthenticatedRequest('putObject', params, (err, data2) => {
-						// There Was An Error With Your S3 Config
-						if (err) {
-							console.error('An error during upload', err);
+				let file = new File([blob], fileKey);
+				console.log('built file', file);
+
+				// Configure The S3 Object
+				AWS.config.region = 'us-west-2';
+				AWS.config.httpOptions.timeout = 3600 * 1000 * 10;
+
+				let rank = game.rank;
+				if ('Arena' === game.gameMode) {
+					rank = game.arenaInfo.Wins;
+				}
+				console.debug('setting rank', rank);
+				let s3 = new AWS.S3();
+				let params = {
+					Bucket: BUCKET,
+					Key: fileKey,
+					ACL: 'public-read-write',
+					Body: blob,
+					Metadata: {
+						'review-id': review.id,
+						'application-key': 'overwolf',
+						'user-key': userId,
+						'file-type': 'hszip',
+						'review-text': 'Created by [Overwolf](http://www.overwolf.com)',
+						'game-rank': rank != 'legend' ? rank.toString() : '',
+						'game-legend-rank': rank == 'legend' ? rank.toString() : '',
+						'game-format': game.gameFormat,
+						'game-mode': game.gameMode,
+					},
+				};
+				console.log('uploading with params', AWS, s3, params);
+				if (progressMonitor) {
+					progressMonitor.next('SENDING_GAME_REPLAY');
+				}
+				s3.makeUnauthenticatedRequest('putObject', params, (err, data2) => {
+					// There Was An Error With Your S3 Config
+					if (err) {
+						console.error('An error during upload', err);
+						if (progressMonitor) {
+							progressMonitor.next('ERROR_SENDING_GAME_REPLAY');
 						}
-						else {
-							console.log('Uploaded game', data2, review.id);
-							game.reviewId = review.id;
-							this.gameStorageService.updateGame(game);
+					}
+					else {
+						console.log('Uploaded game', data2, review.id);
+						game.reviewId = review.id;
+						this.gameStorageService.updateGame(game);
+						if (progressMonitor) {
+							progressMonitor.next('GAME_REPLAY_SENT');
 						}
-					});
+					}
 				});
-			});
-		});
-	}
-
-	private init() {
-		this.plugin = new OverwolfPlugin("simple-io-plugin-zip", true);
-
-		this.plugin.initialize((status: boolean) => {
-			if (status === false) {
-				console.error("Plugin couldn't be loaded??");
-				return;
-			}
-			console.log("Plugin " + this.plugin.get()._PluginName_ + " was loaded!", this.plugin.get());
-
-			this.plugin.get().onOutputDebugString.addListener(function(first, second, third) {
-				console.log('received global event', first, second, third);
 			});
 		});
 	}

@@ -3,6 +3,7 @@ import { LogListenerService } from '../services/log-listener.service';
 import { GameStorageService } from '../services/game-storage.service';
 import { ReplayManager } from '../services/replay-manager.service';
 import { ReplayUploader } from '../services/replay-uploader.service';
+import { Events } from '../services/events.service';
 
 import { Game } from '../models/game';
 
@@ -11,7 +12,7 @@ declare var overwolf: any;
 @Component({
 	selector: 'zh-app',
 	styleUrls: [`css/component/app.component.css`],
-	template: ` 
+	template: `
 		<div></div>
 	`,
 })
@@ -23,6 +24,7 @@ export class AppComponent {
 	constructor(
 		private logListenerService: LogListenerService,
 		private gameStorageService: GameStorageService,
+		private events: Events,
 		private replayManager: ReplayManager,
 		private replayUploader: ReplayUploader) {
 
@@ -31,9 +33,13 @@ export class AppComponent {
 
 	init(): void {
 		console.log('init gameservice', overwolf.egs);
-		this.logListenerService.addGameCompleteListener((game: Game) => {
-			this.replayManager.saveLocally(game);
-		});
+		this.gameStorageService.resetGames();
+
+		this.events.on(Events.REPLAY_CREATED)
+			.subscribe(event => {
+				this.replayManager.saveLocally(event.data[0]);
+			});
+
 		this.requestDisplayOnShelf();
 
 		let oldConsoleLogFunc = console.log;

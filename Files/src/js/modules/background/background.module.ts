@@ -21,6 +21,7 @@ import { LogUtils } from '../../services/gameparsing/log-utils.service';
 import { Events } from '../../services/events.service';
 import { ReplayUploader } from '../../services/replay-uploader.service';
 import { FileUploadService } from '../../services/file-upload.service';
+import { UserPreferences } from '../../services/user-preferences.service';
 
 @NgModule({
 	imports: [
@@ -43,7 +44,7 @@ import { FileUploadService } from '../../services/file-upload.service';
 	],
 	providers: [
 		GameStorageService,
-		// GameService,
+		UserPreferences,
 		LogListenerService,
 		GameParserService,
 		LogParserService,
@@ -54,9 +55,6 @@ import { FileUploadService } from '../../services/file-upload.service';
 		Events,
 		ReplayUploader,
 		FileUploadService,
-		// {
-		//     provide: LOCAL_STORAGE_SERVICE_CONFIG, useValue: localStorageServiceConfig
-		// }
 	],
 })
 

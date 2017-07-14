@@ -1,6 +1,7 @@
 import { OnChanges, SimpleChanges, EventEmitter } from '@angular/core';
 import { ShareButtonsService } from '../../services/share-buttons.service';
 import { ShareProvider } from '../../helpers/index';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 export declare class ShareButtonDirective implements OnChanges {
     private sbService;
     /** Button type e.g. fb, twitter, reddit...etc */
@@ -14,6 +15,7 @@ export declare class ShareButtonDirective implements OnChanges {
     sbTags: string;
     sbShowCount: boolean;
     sbVia: string;
+    sbPreHook: BehaviorSubject<boolean>;
     /** Output button count to calculate total share counts */
     sbCount: EventEmitter<number>;
     /** Output pop up closed*/

@@ -16,9 +16,15 @@ import { GameThumbnailComponent } from '../../components/game-thumbnail.componen
 import { HeroAvatarComponent } from '../../components/hero-avatar.component';
 
 import { GameRetrieveService } from '../../services/game-retrieve.service';
-import { LogListenerService } from '../../services/log-listener.service';
 import { GameParserService } from '../../services/game-parser.service';
 import { AccountService } from '../../services/account.service';
+import { UserPreferences } from '../../services/user-preferences.service';
+import { FileUploadService } from '../../services/file-upload.service';
+import { GameStorageService } from '../../services/game-storage.service';
+// import { LogUtils } from '../../services/gameparsing/log-utils.service';
+import { Events } from '../../services/events.service';
+import { LogParserService } from '../../services/gameparsing/log-parser.service';
+// import { GameModeParser } from '../../services/gameparsing/game-mode-parser.service';
 
 @NgModule({
 	imports:      [
@@ -46,10 +52,15 @@ import { AccountService } from '../../services/account.service';
 	],
 	providers: [
 		GameRetrieveService,
-		LogListenerService,
 		GameParserService,
+		UserPreferences,
 		LocalStorageService,
 		AccountService,
+		FileUploadService,
+		GameStorageService,
+		Events,
+		// GameModeParser,
+		// LogUtils,
 	],
 })
 

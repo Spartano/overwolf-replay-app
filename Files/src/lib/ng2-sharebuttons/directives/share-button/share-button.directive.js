@@ -20,7 +20,17 @@ export var ShareButtonDirective = (function () {
         configurable: true
     });
     ShareButtonDirective.prototype.onClick = function () {
-        this.share();
+        var _this = this;
+        if (!this.sbPreHook) {
+            this.share();
+        }
+        else {
+            this.sbPreHook.subscribe(function (bool) {
+                if (bool) {
+                    _this.share();
+                }
+            });
+        }
     };
     ShareButtonDirective.prototype.ngOnChanges = function (changes) {
         /** Validate URL */
@@ -59,6 +69,7 @@ export var ShareButtonDirective = (function () {
         'sbTags': [{ type: Input },],
         'sbShowCount': [{ type: Input },],
         'sbVia': [{ type: Input },],
+        'sbPreHook': [{ type: Input },],
         'sbCount': [{ type: Output },],
         'sbPopUpClosed': [{ type: Output },],
         'onClick': [{ type: HostListener, args: ['click',] },],

@@ -28,7 +28,13 @@ $zerotoheroes: #860412;
 
 	background: $color;
 	&:hover {
+		// transition: all ease 300ms;
 		background: shade($color, 20%);
+
+		.zth-tooltip {
+			transition-delay: .5s;
+			opacity: 1;
+		}
 	}
 }
 
@@ -109,10 +115,7 @@ $zerotoheroes: #860412;
 		padding: .5em .9em;
 		font-size: 1em;
 		color: white;
-
-		&:hover {
-			transition: all ease 300ms;
-		}
+		position: relative;
 	}
 
 	.sb-show-count {
@@ -148,19 +151,85 @@ button, a:hover {
 
 .sharing-zone {
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
+	height: 100%;
+	align-items: center;
 	// padding-left: 20px;
 
 	h2 {
-		font-size: 20px;
+		font-size: 18px;
 		text-align: center;
-		margin-top: 5px;
+		// margin-top: 5px;
+		margin: 0;
 	}
 
 	.share-buttons {
 		flex-direction: row;
 		margin: 0;
-		justify-content: center;
+		// justify-content: flex-end;
+		// flex-grow: 1;
+		align-items: center;
 	}
+
+	// .tooltip {
+	// 	background-color: currentcolor;
+	// 	text-align: center;
+	// 	cursor: default;
+	// 	opacity: 0;
+	// 	position: absolute;
+	// 	min-width: 40px;
+	// 	top: -2px;
+	// 	left: 50%;
+	// 	transform: translateX(-50%) translateY(-100%) translateZ(0);
+	// 	-webkit-filter: blur(0);
+	// 	pointer-events: none;
+	// 	z-index: 100;
+	// 	transition: .15s;
+	// 	color: black;
+	// 	padding: 5px 8px;
+
+	// 	&:before {
+	// 		content: "";
+	// 		position: absolute;
+	// 		top: -20px;
+	// 		bottom: 0;
+	// 		left: 0;
+	// 		right: 0;
+	// 		z-index: -1;
+	// 	}
+
+	// 	.tooltip-arrow {
+	// 		position: absolute;
+	// 		left: 50%;
+	// 		// transform: translateX(-50%);
+	// 		bottom: -4px;
+	// 		width: 12px;
+	// 		height: 4px;
+	// 		stroke: transparent;
+	// 		fill: currentcolor;
+	// 	}
+
+	// 	p {
+	// 		white-space: nowrap;
+	// 		cursor: default;
+	// 		color: white;
+	// 		margin: 0;
+	// 	}
+
+	// 	&.bottom {
+	// 		top: auto;
+	// 		bottom: -2px;
+	// 		transform: translateX(-50%) translateY(100%) translateZ(0);
+
+	// 		&:before {
+	// 			top: -20px;
+	// 			bottom: 0;
+	// 		}
+
+	// 		.tooltip-arrow {
+	// 			top: -4px;
+	// 		}
+	// 	}
+	// }
 
 }

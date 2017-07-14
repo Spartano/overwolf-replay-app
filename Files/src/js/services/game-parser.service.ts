@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Game, Player } from '../models/game';
+import { Events } from './events.service';
 
 declare var $: any;
 declare var parseCardsText: any;
@@ -13,7 +14,7 @@ export class GameParserService {
 	plugin: any;
 	initialized: boolean;
 
-	constructor() {
+	constructor(private events: Events) {
 		this.init();
 	}
 
@@ -38,14 +39,14 @@ export class GameParserService {
 	}
 
 	// Not externalized, as this will be done inline later on
-	convertLogsToXml(stringLogs: string, game: Game, callbacks: Function[]): void {
+	convertLogsToXml(stringLogs: string, game: Game): void {
 
 		// console.log('trying to convert');
 
 		if (!this.initialized) {
 			// console.debug('waiting for game converter plugin initialization');
 			setTimeout(() => {
-				this.convertLogsToXml(stringLogs, game, callbacks);
+				this.convertLogsToXml(stringLogs, game);
 			}, 100);
 			return;
 		}
@@ -59,17 +60,14 @@ export class GameParserService {
 				}
 				this.extractMatchup(game);
 				this.extractDuration(game);
-				// console.log('converted', response
-				// console.debug('extracted matchup into', game)
-				for (let callback of callbacks) {
-					callback(game);
-				}
+
+				this.events.broadcast(Events.REPLAY_CREATED, game);
 		});
 	}
 
 	extractDuration(game: Game) {
 		let replayXml = $.parseXML(game.replay);
-		
+
 		let timestampedNodes = $(replayXml).find("[ts]");
 		let firstTimestampInSeconds = this.toTimestamp($(timestampedNodes[0]).attr('ts'));
 		let lastTimestampInSeconds = this.toTimestamp($(timestampedNodes[timestampedNodes.length - 1]).attr('ts'));

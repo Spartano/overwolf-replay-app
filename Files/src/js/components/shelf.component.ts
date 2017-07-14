@@ -8,6 +8,9 @@ import { Game } from '../models/game';
 
 import { GameRetrieveService } from '../services/game-retrieve.service';
 import { AccountService } from '../services/account.service';
+import { LogListenerService } from '../services/log-listener.service';
+import { GameStorageService } from '../services/game-storage.service';
+import { UserPreferences } from '../services/user-preferences.service';
 
 declare var overwolf: any;
 declare var $: any;
@@ -17,16 +20,29 @@ declare var $: any;
 	styleUrls: [`css/component/shelf.component.css`],
 	template: `
 		<div class="shelf-container">
-			<div class="shelf-with-games" *ngIf="!games || games.length > 0"> 
+			<div class="shelf-with-games" *ngIf="!games || games.length > 0">
 				<div class="main-zone">
-					<div *ngIf="!accountClaimed && accountClaimUrl" class="claim-account">
-						Your Zero to Heroes account has not been claimed. Please 
-							<a href="{{accountClaimUrl}}" target="_blank" (click)="accountService.startListeningForClaimChanges()">click here</a> 
-						to claim it 
-						<span class="help-text" title="Claiming your account will let you store all your games online and post public reviews of your games to receive advise on them"> (?)</span>
-					</div>
+					<info-zone [game]="selectedGame" *ngIf="selectedGame"></info-zone>
 					<div class="content-zone">
-						<info-zone [game]="selectedGame" *ngIf="selectedGame"></info-zone>
+						<div class="messages" *ngIf="(!accountClaimed && accountClaimUrl) || (!wasAutoUploadActive && !wasDontAskAutoUpload && !closedAutoUploadPopin)">
+							<div *ngIf="!wasAutoUploadActive && !wasDontAskAutoUpload && !closedAutoUploadPopin" class="ask-auto-upload message-element">
+								<p>Automatically upload your replays online? (<a>Why?</a>)</p>
+								<div class="buttons">
+									<button (click)="setAutoUpload(true)">Yes</button>
+									<button (click)="setAutoUpload(false)">No</button>
+								</div>
+								<div>
+									<input type="checkbox" [checked]="dontAskAgain" id="dontaskagain">
+									<label for="dontaskagain">Don't ask again</label>
+								</div>
+							</div>
+							<div *ngIf="!accountClaimed && accountClaimUrl" class="claim-account message-element">
+								Your Zero to Heroes account has not been claimed. Please
+									<a href="{{accountClaimUrl}}" target="_blank" (click)="accountService.startListeningForClaimChanges()">click here</a>
+								to claim it
+								<span class="help-text" title="Claiming your account will let you store all your games online and post public reviews of your games to receive advise on them"> (?)</span>
+							</div>
+						</div>
 						<div class="replay-zone">
 							<game-replay [game]="selectedGame"></game-replay>
 						</div>
@@ -42,6 +58,11 @@ export class ShelfComponent {
 	zone: NgZone;
 	// requestedDisplayOnShelf:boolean;
 	shelfLoaded: boolean;
+	wasAutoUploadActive: boolean;
+	wasDontAskAutoUpload: boolean;
+	dontAskAgain: boolean;
+	closedAutoUploadPopin: boolean;
+
 	accountClaimed: boolean;
 	accountClaimUrl: string;
 
@@ -52,14 +73,23 @@ export class ShelfComponent {
 	@ViewChild(CarouselComponent) private carouselComponent: CarouselComponent;
 	@ViewChild(GameReplayComponent) private gameReplayComponent: GameReplayComponent;
 
-	constructor(private gameService: GameRetrieveService, private accountService: AccountService) {
+	constructor(
+		private gameStorageService: GameStorageService,
+		private gameService: GameRetrieveService,
+		private accountService: AccountService,
+		private userPreferences: UserPreferences) {
+
 		console.log('in AppComponent constructor', gameService);
 		this.shelfLoaded = false;
+		this.wasAutoUploadActive = this.userPreferences.isAutoUpload();
+		this.wasDontAskAutoUpload = this.userPreferences.isDontAskAutoUpload();
+		console.log('preferences', this.wasAutoUploadActive, this.wasDontAskAutoUpload);
+
 		this.postMessage();
 
 		// Change logging for debug
 		let oldConsoleLogFunc = console.log;
-		let debugMode = true;
+		let debugMode = false;
 		if (debugMode) {
 			console.log = function() {
 				let argsString = "";
@@ -119,7 +149,7 @@ export class ShelfComponent {
 
 			if (!this.shelfLoaded) {
 				console.log('sending shelf ready message');
-				// Start loading the shelf page   	
+				// Start loading the shelf page
 				overwolf.egs.setStatus(overwolf.egs.enums.ShelfStatus.Ready, (result: any) => {
 					console.log('confirmed ready', result);
 					this.shelfLoaded = false;
@@ -142,6 +172,12 @@ export class ShelfComponent {
 			// console.log('scrolling', evt);
 			window.parent.postMessage({deltaY: evt.deltaY}, "*");
 		}, { passive: true });
+	}
+
+	setAutoUpload(value: boolean) {
+		this.closedAutoUploadPopin = true;
+		this.userPreferences.setAutoUpload(value);
+		this.userPreferences.setDontAskAutoUpload(this.dontAskAgain);
 	}
 }
 

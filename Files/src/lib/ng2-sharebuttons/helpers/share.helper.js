@@ -25,6 +25,8 @@ export var Helper;
         switch (type) {
             case ShareProvider.FACEBOOK:
                 return ShareLinks.fbShare(args);
+            case ShareProvider.ZEROTOHEROES:
+                return ShareLinks.zetohShare(args);
             case ShareProvider.TWITTER:
                 return ShareLinks.twitterShare(args);
             case ShareProvider.LINKEDIN:

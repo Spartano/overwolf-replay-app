@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Game } from '../models/game';
 import { Events } from './events.service';
+import { GameStorageService } from './game-storage.service';
 
 declare var OverwolfPlugin: any;
 declare var overwolf: any;
@@ -12,7 +13,7 @@ export class ReplayManager {
 
 	plugin: any;
 
-	constructor(private events: Events) {
+	constructor(private events: Events, private gameStorage: GameStorageService) {
 		this.init();
 	}
 
@@ -22,7 +23,22 @@ export class ReplayManager {
 		console.log('saving locally', directory + fileName);
 		this.plugin.get().writeLocalAppDataZipFile(directory + fileName, "replay.xml", game.replay, (status, message) => {
 			console.log('local zip file saved', status, message);
-			this.events.broadcast(Events.REPLAY_SAVED, directory + fileName, game);
+			game.path = directory + fileName;
+
+			this.plugin.get().getBinaryFile(game.path, -1, (status, data) => {
+				console.log('reading binary file before storing it in localstorage', game.path, status);
+				let split = data.split(',');
+				let bytes = [];
+				for (let i = 0; i < split.length; i++) {
+					bytes[i] = parseInt(split[i]);
+				}
+				console.log('built byte array', bytes);
+
+				game.replayBytes = bytes;
+				this.gameStorage.addGame(game);
+				this.events.broadcast(Events.REPLAY_SAVED, directory + fileName, game);
+			});
+
 		});
 	}
 

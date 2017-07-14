@@ -9,8 +9,8 @@ import { Game } from '../models/game';
 	styleUrls: [`css/component/info-zone.component.css`],
 	template: `
 		<div class="info-zone">
-			<sharing-zone [game]="game"></sharing-zone>
 			<game-info [game]="game"></game-info>
+			<sharing-zone [game]="game"></sharing-zone>
 		</div>
 	`,
 })

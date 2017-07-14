@@ -7,15 +7,13 @@ import { Game } from '../models/game';
 	styleUrls: [`css/component/game-info.component.css`],
 	template: `
 		<div class="game-info">
-			<!--<h2>Game information</h2>-->
-			<div class="summary">
-				<img *ngIf="rankImage()" src="https://s3.amazonaws.com/com.zerotoheroes/plugins/hearthstone/ranks/{{rankImage()}}.png">
-				<div class="info">
-					<span class="game-mode">{{gameMode()}}</span>
-				</div>
+			<img *ngIf="rankImage()" src="https://s3.amazonaws.com/com.zerotoheroes/plugins/hearthstone/ranks/{{rankImage()}}.png">
+			<div class="zth-tooltip bottom">
+				<p>{{gameMode()}}</p>
+				<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 4">
+					<polygon points="12,0 6,4 0,0 "/>
+				</svg>
 			</div>
-			<span class="duration-time">{{durationTime()}}</span>
-			<span class="duration-turns">{{game.durationTurns + ' turns'}}</span>
 		</div>
 	`,
 })

@@ -12,6 +12,7 @@ interface BroadcastEvent {
 export class Events {
 
 	public static REPLAY_SAVED = 'replay-saved';
+	public static REPLAY_CREATED = 'replay-created';
 
 	private _eventBus: Subject<BroadcastEvent>;
 

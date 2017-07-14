@@ -18,6 +18,10 @@ export var ShareLinks;
         return shareUrl;
     }
     ShareLinks.fbShare = fbShare;
+    function zetohShare(args) {
+        return args.url;
+    }
+    ShareLinks.zetohShare = zetohShare;
     // TWITTER DOCS: https://dev.twitter.com/web/tweet-button/web-intent
     function twitterShare(args) {
         var shareUrl = 'https://twitter.com/intent/tweet';

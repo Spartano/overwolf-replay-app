@@ -3,9 +3,6 @@ export class Game {
 	reviewId: string;
 	title: string;
 
-	fullLogs: string;
-	replay: string;
-
 	spectating: boolean;
 
 	gameMode: string;
@@ -19,6 +16,11 @@ export class Game {
 
 	player: Player = new Player();
 	opponent: Player = new Player();
+
+	fullLogs: string;
+	replay: string;
+	path: string;
+	replayBytes: any[];
 
 	private _url: string;
 

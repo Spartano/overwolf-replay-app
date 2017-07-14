@@ -18,6 +18,7 @@ export var ShareButtonsComponent = (function () {
         this.stumbleUpOn = '<i class="fa fa-stumbleupon"></i>';
         this.reddit = '<i class="fa fa-reddit-alien"></i>';
         this.whatsApp = '<i class="fa fa-whatsapp"></i>';
+        this.zetoh = '<i class="fa fa-zetoh"></i>';
         this.count = new EventEmitter();
         this.popUpClosed = new EventEmitter();
         /** Total Count: the sum of all buttons share count */
@@ -27,6 +28,9 @@ export var ShareButtonsComponent = (function () {
         this.buttons = [];
         if (this.facebook) {
             this.buttons.push(new ShareButton(ShareProvider.FACEBOOK, this.facebook, "facebook " + this.buttonClass));
+        }
+        if (this.zetoh) {
+            this.buttons.push(new ShareButton(ShareProvider.ZEROTOHEROES, this.zetoh, "zetoh " + this.buttonClass));
         }
         if (this.twitter) {
             this.buttons.push(new ShareButton(ShareProvider.TWITTER, this.twitter, "twitter " + this.buttonClass));
@@ -100,6 +104,7 @@ export var ShareButtonsComponent = (function () {
         'stumbleUpOn': [{ type: Input },],
         'reddit': [{ type: Input },],
         'whatsApp': [{ type: Input },],
+        'zetoh': [{ type: Input },],
         'count': [{ type: Output },],
         'popUpClosed': [{ type: Output },],
     };

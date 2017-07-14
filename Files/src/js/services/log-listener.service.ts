@@ -19,7 +19,7 @@ export class LogListenerService {
 	logsLocation: string;
 
 	constructor(
-		private gameParserService: GameParserService, 
+		private gameParserService: GameParserService,
 		private gameModeParser: GameModeParser,
 		private logParserService: LogParserService) {
 		// console.log('in LogListener constructor');
@@ -38,7 +38,7 @@ export class LogListenerService {
 
 		plugin.initialize((status: boolean) => {
 			if (status === false) {
-				console.error("Plugin couldn't be loaded??");
+				console.error("Plugin couldn't be loaded??", status);
 				return;
 			}
 			console.log("Plugin " + plugin.get()._PluginName_ + " was loaded!");
@@ -81,10 +81,6 @@ export class LogListenerService {
 				overwolf.windows.close(result.window.id);
 			}
 		});
-	}
-
-	addGameCompleteListener(listener: Function): void {
-		this.logParserService.addGameCompleteListener(listener);
 	}
 
 	registerLogMonitor() {

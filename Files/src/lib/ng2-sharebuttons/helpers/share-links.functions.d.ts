@@ -4,6 +4,7 @@
 import { ShareArgs } from './share-buttons.class';
 export declare module ShareLinks {
     function fbShare(args: ShareArgs): string;
+    function zetohShare(args: ShareArgs): string;
     function twitterShare(args: ShareArgs): string;
     function linkedInShare(args: ShareArgs): string;
     function redditShare(args: ShareArgs): string;

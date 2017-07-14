@@ -2,36 +2,23 @@ import { Injectable } from '@angular/core';
 import { LocalStorageService } from 'angular-2-local-storage';
 
 import { Game } from '../models/game';
-import { LogListenerService } from './log-listener.service';
+import { Events } from './events.service';
 
 @Injectable()
 export class GameStorageService {
 
-	// games: Game[] = [];
-	// subject:Subject<Game> = new Subject<Game>();
-
-	constructor(private logListenerService: LogListenerService, private localStorageService: LocalStorageService) {
-		// console.log('in GameStorageService constructor');
+	constructor(private events: Events, private localStorageService: LocalStorageService) {
 		this.init();
 	}
 
 	init(): void {
-		// console.log('init gameservice', this.localStorageService.get<Game[]>('games'));
-		this.localStorageService.clearAll('.*');
-		// console.log('after init', this.localStorageService.get<Game[]>('games'));
-
-		this.logListenerService.addGameCompleteListener((game: Game) => {
-			// console.log('game complete', game);
-			this.addGame(game);
-			// this.games.push(game);
-		});
-
-		// this.logListenerService.addInitCompleteListener(() => {
-		// 	this.resetGames();
-		// });
+		// this.events.on(Events.REPLAY_CREATED)
+		// 	.subscribe(event => {
+		// 		this.addGame(event.data[0]);
+		// 	});
 	}
 
-	resetGames(): void {
+	public resetGames(): void {
 		// Get the games from the local storage
 		console.log('resetting games');
 		this.localStorageService.set('games', <Game[]>[]);
@@ -44,7 +31,6 @@ export class GameStorageService {
 		games.push(game);
 		this.localStorageService.set('games', games);
 		console.log('after adding game', this.localStorageService.get<Game[]>('games'));
-		// this.subject.next(game);
 	}
 
 	updateGame(game: Game) {

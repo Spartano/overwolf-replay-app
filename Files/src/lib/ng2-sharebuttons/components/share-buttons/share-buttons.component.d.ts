@@ -23,6 +23,7 @@ export declare class ShareButtonsComponent implements OnInit, OnChanges {
     stumbleUpOn: any;
     reddit: any;
     whatsApp: any;
+    zetoh: any;
     count: EventEmitter<number>;
     popUpClosed: EventEmitter<ShareProvider>;
     /** Share buttons to be displayed   */

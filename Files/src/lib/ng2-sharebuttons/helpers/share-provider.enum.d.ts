@@ -8,4 +8,5 @@ export declare enum ShareProvider {
     TUMBLR = 6,
     PINTEREST = 7,
     WHATSAPP = 8,
+    ZEROTOHEROES = 9,
 }

@@ -9,7 +9,7 @@ declare var OverwolfPlugin: any;
 export class LogParserService {
 	plugin: any;
 	mindvisionPlugin: any;
-	
+
 	// The start / end spectating can be set outside of game start / end, so we need to keep it separate
 	spectating: boolean;
 
@@ -21,9 +21,12 @@ export class LogParserService {
 	// gameFormat: any;
 
 	// Events
-	gameCompleteListeners: Function[] = [];
+	// gameCompleteListeners: Function[] = [];
 
-	constructor(private gameParserService: GameParserService, private gameModeParser: GameModeParser) {
+	constructor(
+		private gameParserService: GameParserService,
+		private gameModeParser: GameModeParser) {
+
 		console.log("loading mindvision");
 		this.mindvisionPlugin = new OverwolfPlugin("mindvision", true);
 		this.mindvisionPlugin.initialize((status: boolean) => {
@@ -38,9 +41,9 @@ export class LogParserService {
 		});
 	}
 
-	addGameCompleteListener(listener: Function): void {
-		this.gameCompleteListeners.push(listener);
-	}
+	// addGameCompleteListener(listener: Function): void {
+	// 	this.gameCompleteListeners.push(listener);
+	// }
 
 	public receiveLogLine(data: string) {
 		// Don't use the PowerTaskList
@@ -69,7 +72,7 @@ export class LogParserService {
 		if (!this.game) {
 			return;
 		}
-		
+
 		this.game.fullLogs += data + '\n';
 
 		this.parseMatchInfo();
@@ -88,7 +91,7 @@ export class LogParserService {
 
 			this.game.extractMatchInfoData();
 
-			this.gameParserService.convertLogsToXml(this.game.fullLogs, this.game, this.gameCompleteListeners);
+			this.gameParserService.convertLogsToXml(this.game.fullLogs, this.game);
 
 			this.game = undefined;
 		}

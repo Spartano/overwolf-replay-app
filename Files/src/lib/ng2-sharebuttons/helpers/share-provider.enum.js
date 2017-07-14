@@ -9,5 +9,6 @@ export var ShareProvider;
     ShareProvider[ShareProvider["TUMBLR"] = 6] = "TUMBLR";
     ShareProvider[ShareProvider["PINTEREST"] = 7] = "PINTEREST";
     ShareProvider[ShareProvider["WHATSAPP"] = 8] = "WHATSAPP";
+    ShareProvider[ShareProvider["ZEROTOHEROES"] = 9] = "ZEROTOHEROES";
 })(ShareProvider || (ShareProvider = {}));
 //# sourceMappingURL=share-provider.enum.js.map

@@ -7,8 +7,8 @@ html {
 	// color: #131313;
 	font-family: 'Yanone Kaffeesatz', Arial, sans-serif;
 	overflow: hidden;
-    height: 100%;
-    width: 100%;
+		height: 100%;
+		width: 100%;
 }
 
 body {
@@ -18,14 +18,75 @@ body {
 }
 
 * {
-   -moz-user-select: -moz-none;
-   -khtml-user-select: none;
-   -webkit-user-select: none;
+	 -moz-user-select: -moz-none;
+	 -khtml-user-select: none;
+	 -webkit-user-select: none;
 
-   /*
-     Introduced in IE 10.
-     See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/
-   */
-   -ms-user-select: none;
-   user-select: none;
+	 /*
+		 Introduced in IE 10.
+		 See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/
+	 */
+	 -ms-user-select: none;
+	 user-select: none;
+}
+
+.zth-tooltip {
+	background-color: currentcolor;
+	text-align: center;
+	cursor: default;
+	opacity: 0;
+	position: absolute;
+	min-width: 40px;
+	top: -2px;
+	left: 50%;
+	transform: translateX(-50%) translateY(-100%) translateZ(0);
+	-webkit-filter: blur(0);
+	pointer-events: none;
+	z-index: 100;
+	transition: .15s;
+	color: black;
+	padding: 5px 8px;
+
+	&:before {
+		content: "";
+		position: absolute;
+		top: -20px;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		z-index: -1;
+	}
+
+	.tooltip-arrow {
+		position: absolute;
+		left: 50%;
+		// transform: translateX(-50%);
+		bottom: -4px;
+		width: 12px;
+		height: 4px;
+		stroke: transparent;
+		fill: currentcolor;
+	}
+
+	p {
+		white-space: nowrap;
+		cursor: default;
+		color: white;
+		margin: 0;
+	}
+
+	&.bottom {
+		top: auto;
+		bottom: -2px;
+		transform: translateX(-50%) translateY(100%) translateZ(0);
+
+		&:before {
+			top: -20px;
+			bottom: 0;
+		}
+
+		.tooltip-arrow {
+			top: -4px;
+		}
+	}
 }

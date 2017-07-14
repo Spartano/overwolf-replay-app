@@ -1,28 +1,29 @@
 ﻿<!DOCTYPE html>
 <html>
-	<head> 
+	<head>
 		<title>Hearthstone Replay Viewer</title>
     	<meta charset="UTF-8">
 		<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
 
 		<!-- Bootstrap -->
 		<!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"> -->
-	    <link rel="stylesheet" href="lib/bootstrap.min.css"> 
+	    <link rel="stylesheet" href="lib/bootstrap.min.css">
 
 		<!-- TODO: group all deps in a single file -->
 		<link rel="stylesheet" href="manastorm/scaffolding.css" />
 		<link rel="stylesheet" href="manastorm/dependencies/hearthstone.css" />
 		<link rel="stylesheet" href="manastorm/manastorm.css" />
 
-	    
+
 	    <link rel="stylesheet" href="css/global/styles.min.css"> <!--compiled global scss styles-->
 
 	    <script src="lib/vendors.min.js"></script> <!--bundled dependencies-->
-	    
+
 		<!-- Third-party scripts -->
   		<script src="plugins/overwolfplugin.js"></script>
+  		<script src="https://sdk.amazonaws.com/js/aws-sdk-2.7.20.min.js"></script>
 		<!-- Other Zero to Heroes libraries -->
-		<script src="manastorm/dependencies/parseCardsText.js"></script>	
+		<script src="manastorm/dependencies/parseCardsText.js"></script>
 		<script src="manastorm/manastorm.js"></script>
 
 		<!-- Fonts -->
@@ -33,7 +34,7 @@
 
 	<body>
 		<zh-shelf>Loading...</zh-shelf>
-		
+
 	    <script src="shelf.min.js"></script> <!--bundled source-->
 	</body>
 </html>
