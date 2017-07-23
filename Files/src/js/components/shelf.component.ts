@@ -24,18 +24,7 @@ declare var $: any;
 				<div class="main-zone">
 					<info-zone [game]="selectedGame" *ngIf="selectedGame"></info-zone>
 					<div class="content-zone">
-						<div class="messages" *ngIf="(!accountClaimed && accountClaimUrl) || (!wasAutoUploadActive && !wasDontAskAutoUpload && !closedAutoUploadPopin)">
-							<div *ngIf="!wasAutoUploadActive && !wasDontAskAutoUpload && !closedAutoUploadPopin" class="ask-auto-upload message-element">
-								<p>Automatically upload your replays online? (<a>Why?</a>)</p>
-								<div class="buttons">
-									<button (click)="setAutoUpload(true)">Yes</button>
-									<button (click)="setAutoUpload(false)">No</button>
-								</div>
-								<div>
-									<input type="checkbox" [checked]="dontAskAgain" id="dontaskagain">
-									<label for="dontaskagain">Don't ask again</label>
-								</div>
-							</div>
+						<div class="messages" *ngIf="!accountClaimed && accountClaimUrl">
 							<div *ngIf="!accountClaimed && accountClaimUrl" class="claim-account message-element">
 								Your Zero to Heroes account has not been claimed. Please
 									<a href="{{accountClaimUrl}}" target="_blank" (click)="accountService.startListeningForClaimChanges()">click here</a>
@@ -58,11 +47,6 @@ export class ShelfComponent {
 	zone: NgZone;
 	// requestedDisplayOnShelf:boolean;
 	shelfLoaded: boolean;
-	wasAutoUploadActive: boolean;
-	wasDontAskAutoUpload: boolean;
-	dontAskAgain: boolean;
-	closedAutoUploadPopin: boolean;
-
 	accountClaimed: boolean;
 	accountClaimUrl: string;
 
@@ -81,9 +65,6 @@ export class ShelfComponent {
 
 		console.log('in AppComponent constructor', gameService);
 		this.shelfLoaded = false;
-		this.wasAutoUploadActive = this.userPreferences.isAutoUpload();
-		this.wasDontAskAutoUpload = this.userPreferences.isDontAskAutoUpload();
-		console.log('preferences', this.wasAutoUploadActive, this.wasDontAskAutoUpload);
 
 		this.postMessage();
 
@@ -172,12 +153,6 @@ export class ShelfComponent {
 			// console.log('scrolling', evt);
 			window.parent.postMessage({deltaY: evt.deltaY}, "*");
 		}, { passive: true });
-	}
-
-	setAutoUpload(value: boolean) {
-		this.closedAutoUploadPopin = true;
-		this.userPreferences.setAutoUpload(value);
-		this.userPreferences.setDontAskAutoUpload(this.dontAskAgain);
 	}
 }
 
