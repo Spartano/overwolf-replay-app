@@ -1,12 +1,13 @@
 .info-zone {
 	display: flex;
-	justify-content: center;
+	justify-content: flex-start;
+	padding-left: 40px;
 
 	game-info {
-		flex-basis: 10%;
+		// flex-basis: 10%;
 	}
 
 	sharing-zone {
-		// flex-grow: 1;
+		flex-grow: 1;
 	}
 }

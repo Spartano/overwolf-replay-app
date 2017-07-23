@@ -24,7 +24,7 @@ declare var $: any;
 				<div class="main-zone">
 					<info-zone [game]="selectedGame" *ngIf="selectedGame"></info-zone>
 					<div class="content-zone">
-						<div class="messages" *ngIf="!accountClaimed && accountClaimUrl">
+						<div class="messages" *ngIf="true || !accountClaimed && accountClaimUrl">
 							<div *ngIf="!accountClaimed && accountClaimUrl" class="claim-account message-element">
 								Your Zero to Heroes account has not been claimed. Please
 									<a href="{{accountClaimUrl}}" target="_blank" (click)="accountService.startListeningForClaimChanges()">click here</a>

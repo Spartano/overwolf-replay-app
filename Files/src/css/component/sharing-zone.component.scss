@@ -158,9 +158,9 @@ button, a:hover {
 
 	h2 {
 		font-size: 18px;
-		text-align: center;
-		// margin-top: 5px;
+		text-align: left;
 		margin: 0;
+		flex-grow: 1;
 	}
 
 	.share-buttons {
