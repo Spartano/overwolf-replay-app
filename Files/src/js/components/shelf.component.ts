@@ -23,19 +23,20 @@ declare var $: any;
 			<div class="shelf-with-games" *ngIf="!games || games.length > 0">
 				<div class="main-zone">
 					<info-zone [game]="selectedGame" *ngIf="selectedGame"></info-zone>
-					<div class="content-zone">
-						<div class="messages" *ngIf="true || !accountClaimed && accountClaimUrl">
-							<div *ngIf="!accountClaimed && accountClaimUrl" class="claim-account message-element">
-								Your Zero to Heroes account has not been claimed. Please
-									<a href="{{accountClaimUrl}}" target="_blank" (click)="accountService.startListeningForClaimChanges()">click here</a>
-								to claim it
-								<span class="help-text" title="Claiming your account will let you store all your games online and post public reviews of your games to receive advise on them"> (?)</span>
+					<div *ngIf="true || !accountClaimed && accountClaimUrl" class="claim-account">
+						Your Zero to Heroes account has not been claimed. Please
+							<a href="{{accountClaimUrl}}" target="_blank" (click)="accountService.startListeningForClaimChanges()">click here</a>
+						to claim it
+						<div class="help-text"> (?)
+							<div class="zth-tooltip bottom">
+								<p>Claiming your account will let you store all your games online and post public reviews of your games to receive advise on them</p>
+								<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 4">
+									<polygon points="12,0 6,4 0,0 "/>
+								</svg>
 							</div>
 						</div>
-						<div class="replay-zone">
-							<game-replay [game]="selectedGame"></game-replay>
-						</div>
 					</div>
+					<game-replay [game]="selectedGame"></game-replay>
 				</div>
 				<carousel [games]="games" (onGameSelected)=onGameSelected($event)></carousel>
 			</div>
