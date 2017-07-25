@@ -14,36 +14,43 @@
 			flex-grow: 1;
 			flex-direction: column;
 
+			.header {
+				display: flex;
+				margin-left: 20px;
+
+				info-zone {
+					width: 100%;
+				}
+			}
+
 			.claim-account {
-				padding-left: 20px;
-				padding-right: 20px;
 				position: relative;
+				order: -1;
+				width: 80px;
+				min-width: 80px;
+				height: 60px;
 
 				a {
 					cursor: pointer;
 				}
 
-				.help-text {
-					display: inline-block;
+				.zth-tooltip {
+					width: 500px;
+					left: 0;
+					transform: translateX(0) translateY(100%) translateZ(0);
 
-					.zth-tooltip {
-						width: 500px;
-
-						p {
-							white-space: normal;
-						}
-					}
-
-					&:hover {
-
-						.zth-tooltip {
-							transition-delay: .5s;
-							opacity: 1;
-						}
+					p {
+						white-space: normal;
 					}
 				}
 
+				&:hover {
 
+					.zth-tooltip {
+						transition-delay: .5s;
+						opacity: 1;
+					}
+				}
 			}
 
 			.ask-auto-upload {
@@ -55,33 +62,6 @@
 					font-weight: normal;
 				}
 			}
-
-			// .replay-zone {
-			// 	display: flex;
-			// 	flex-direction: column;
-			// 	flex-grow: 1;
-			// }
-
-			// .content-zone {
-			// 	display: flex;
-			// 	flex-direction: row;
-	  //   		flex-grow: 1;
-
-
-			// 	sharing-zone {
-			// 		flex-grow: 1;
-			// 	}
-
-			// 	// .messages {
-			// 	// 	max-width: 20%;
-			// 	//     padding-left: 10px;
-			// 	//     padding-top: 15px;
-
-			// 	// 	a {
-			// 	// 		cursor: pointer;
-			// 	// 	}
-			// 	// }
-			// }
 		}
 	}
 

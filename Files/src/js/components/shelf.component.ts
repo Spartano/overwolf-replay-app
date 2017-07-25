@@ -22,19 +22,17 @@ declare var $: any;
 		<div class="shelf-container">
 			<div class="shelf-with-games" *ngIf="!games || games.length > 0">
 				<div class="main-zone">
-					<info-zone [game]="selectedGame" *ngIf="selectedGame"></info-zone>
-					<div *ngIf="true || !accountClaimed && accountClaimUrl" class="claim-account">
-						Your Zero to Heroes account has not been claimed. Please
-							<a href="{{accountClaimUrl}}" target="_blank" (click)="accountService.startListeningForClaimChanges()">click here</a>
-						to claim it
-						<div class="help-text"> (?)
+					<div class="header">
+						<info-zone [game]="selectedGame" *ngIf="selectedGame"></info-zone>
+						<button *ngIf="true || !accountClaimed && accountClaimUrl" class="claim-account" (click)="claimAccount()">
+							Claim my account
 							<div class="zth-tooltip bottom">
-								<p>Claiming your account will let you store all your games online and post public reviews of your games to receive advise on them</p>
+								<p>Claim your Zero to Heroes account now to store all your games online and post your games for advice!</p>
 								<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 4">
 									<polygon points="12,0 6,4 0,0 "/>
 								</svg>
 							</div>
-						</div>
+						</button>
 					</div>
 					<game-replay [game]="selectedGame"></game-replay>
 				</div>
@@ -154,6 +152,11 @@ export class ShelfComponent {
 			// console.log('scrolling', evt);
 			window.parent.postMessage({deltaY: evt.deltaY}, "*");
 		}, { passive: true });
+	}
+
+	claimAccount() {
+		window.open(this.accountClaimUrl, '_blank');
+		this.accountService.startListeningForClaimChanges();
 	}
 }
 
