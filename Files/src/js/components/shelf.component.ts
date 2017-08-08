@@ -26,7 +26,7 @@ import * as $ from 'jquery';
 				<div class="main-zone">
 					<div class="header">
 						<info-zone [game]="selectedGame" *ngIf="selectedGame"></info-zone>
-						<button *ngIf="true || !accountClaimed && accountClaimUrl" class="claim-account" (click)="claimAccount()">
+						<button *ngIf="!accountClaimed && accountClaimUrl" class="claim-account" (click)="claimAccount()">
 							Claim my account
 							<div class="zth-tooltip bottom">
 								<p>Claim your Zero to Heroes account now to store all your games online and post your games for advice!</p>
