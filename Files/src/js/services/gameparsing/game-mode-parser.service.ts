@@ -23,7 +23,13 @@ export class GameModeParser {
 		else if (!currentMode) {
 			let cardId = this.logUtils.extractCardId(logLine);
 			let card: any = parseCardsText.getCard(cardId);
-			if (card && card.set && card.type === 'Hero' && ['core', 'hero_skins'].indexOf(card.set.toLowerCase()) === -1) {
+			if (card && 
+				card.set && 
+				card.type === 'Hero' && 
+				['core', 'hero_skins'].indexOf(card.set.toLowerCase()) === -1 && 
+				!card.collectible) {
+				
+				console.debug('adventure mode!', card);
 				return 'adventure ' + card.set.toLowerCase();
 			}
 		}
