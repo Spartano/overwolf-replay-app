@@ -20,19 +20,19 @@ export class GameModeParser {
 		if (logLine.indexOf('TB_') !== -1) {
 			return 'tavern-brawl';
 		}
-		else if (!currentMode) {
-			let cardId = this.logUtils.extractCardId(logLine);
-			let card: any = parseCardsText.getCard(cardId);
-			if (card && 
-				card.set && 
-				card.type === 'Hero' && 
-				['core', 'hero_skins'].indexOf(card.set.toLowerCase()) === -1 && 
-				!card.collectible) {
+		// else if (!currentMode) {
+		// 	let cardId = this.logUtils.extractCardId(logLine);
+		// 	let card: any = parseCardsText.getCard(cardId);
+		// 	if (card && 
+		// 		card.set && 
+		// 		card.type === 'Hero' && 
+		// 		['core', 'hero_skins'].indexOf(card.set.toLowerCase()) === -1 && 
+		// 		!card.collectible) {
 				
-				console.debug('adventure mode!', card);
-				return 'adventure ' + card.set.toLowerCase();
-			}
-		}
+		// 		console.debug('adventure mode!', card);
+		// 		return 'adventure ' + card.set.toLowerCase();
+		// 	}
+		// }
 		return currentMode;
 	}
 }
