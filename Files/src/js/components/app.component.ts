@@ -11,7 +11,7 @@ declare var overwolf: any;
 
 @Component({
 	selector: 'zh-app',
-	styleUrls: [`css/component/app.component.css`],
+	styleUrls: [`../../css/component/app.component.scss`],
 	template: `
 		<div></div>
 	`,

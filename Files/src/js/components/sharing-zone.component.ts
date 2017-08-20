@@ -1,17 +1,17 @@
 import { Component, Input, ChangeDetectorRef } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
-import { ShareProvider, ShareButton } from 'ng2-sharebuttons';
+import { ShareProvider, ShareButton } from 'ng2-sharebuttons-ow';
 
 import { Game } from '../models/game';
 import { UserPreferences } from '../services/user-preferences.service';
 import { FileUploadService } from '../services/file-upload.service';
 
-declare var $: any;
+import * as $ from 'jquery';
 
 @Component({
 	selector: 'sharing-zone',
-	styleUrls: [`css/component/sharing-zone.component.css`],
+	styleUrls: [`../../css/component/sharing-zone.component.scss`],
 	template: `
 		<div class="sharing-zone">
 			<h2>Share your replay</h2>
@@ -19,7 +19,7 @@ declare var $: any;
 				<div class="sb-button zerotoheroes">
 					<button title="Share on Zero to Heroes">
 						<a class="zerotoheroes" (click)="shareZetoh()">
-							<img src="static/images/zero-to-heroes-logo.svg">
+							<img src="../assets/images/zero-to-heroes-logo.svg">
 						</a>
 						<div class="zth-tooltip bottom">
 							<p>Watch or discuss this game online on Zero to Heroes</p>

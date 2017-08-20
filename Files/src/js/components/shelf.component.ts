@@ -1,4 +1,5 @@
 import { Component, NgZone, ViewChild } from '@angular/core';
+import {ViewEncapsulation} from '@angular/core';
 
 import { GameReplayComponent } from '../components/game-replay.component';
 import { CarouselComponent } from '../components/carousel.component';
@@ -13,11 +14,12 @@ import { GameStorageService } from '../services/game-storage.service';
 import { UserPreferences } from '../services/user-preferences.service';
 
 declare var overwolf: any;
-declare var $: any;
+import * as $ from 'jquery';
 
 @Component({
 	selector: 'zh-shelf',
-	styleUrls: [`css/component/shelf.component.css`],
+	styleUrls: [`../../css/component/shelf.component.scss`, '../../css/global/global.scss'],
+	encapsulation: ViewEncapsulation.None,
 	template: `
 		<div class="shelf-container">
 			<div class="shelf-with-games" *ngIf="!games || games.length > 0">

@@ -6,7 +6,7 @@ declare var manastorm: any;
 // https://murhafsousli.github.io/ng2-sharebuttons/
 @Component({
 	selector: 'game-replay',
-	styleUrls: [`css/component/game-replay.component.css`],
+	styleUrls: [`../../css/component/game-replay.component.scss`],
 	encapsulation: ViewEncapsulation.None,
 	template: `
 		<div class="hearthstone" id="container" [class.hidden]="!game" [style.width]="width + 'px'">

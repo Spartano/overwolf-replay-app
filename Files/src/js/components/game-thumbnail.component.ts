@@ -3,7 +3,7 @@ import { Game } from '../models/game';
 
 @Component({
 	selector: 'game-thumbnail',
-	styleUrls: [`css/component/game-thumbnail.component.css`],
+	styleUrls: [`../../css/component/game-thumbnail.component.scss`],
 	template: `
 		<div class="game {{game.spectating ? 'spectating' : game.result}} {{game.gameMode}}" [class.selected]="selected" *ngIf="game">
 			<div class="matchup">

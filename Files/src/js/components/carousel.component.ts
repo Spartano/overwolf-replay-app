@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, Output, HostListener } from '@angular/core';
 import { Game } from '../models/game';
 
-declare var $: any;
+import * as $ from 'jquery';
 
 @Component({
 	selector: 'carousel',
-	styleUrls: [`css/component/carousel.component.css`],
+	styleUrls: [`../../css/component/carousel.component.scss`],
 	template: `
 		<nav>
 			<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
@@ -130,13 +130,14 @@ export class CarouselComponent {
 				this.firstDisplayedGameIndex = -1;
 
 				let thumbnailElements = $('.carousel li');
-				console.log('thumbnailElements', thumbnailElements);
+				console.log('thumbnailElements', thumbnailElements, thumbnailElements.length);
 				if (!thumbnailElements || thumbnailElements.length === 0) {
 					return;
 				}
 
 				let index = 0;
-				for (let el of thumbnailElements) {
+				for (let i = 0; i < thumbnailElements.length; i++) {
+					let el = thumbnailElements[i];
 					// console.log('element', el, $(el));
 					// Hide elements that are outside of the visible viewport
 					$(el).css('opacity', '1');

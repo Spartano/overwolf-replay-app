@@ -20,7 +20,7 @@
 		"start_window":"MainWindow",
 		"windows": {
 			"MainWindow":{
-				"file": "Files/background.html",
+				"file": "Files/html/background.html",
 				"transparent": true,
 				"resizable": false,
 				"show_in_taskbar": false,
@@ -29,13 +29,13 @@
 				"max_size": {"width": 0, "height": 0}
 			},
 			"ShelfWindow": {
-				"file": "Files/shelf.html",
+				"file": "Files/html/shelf.html",
 				"transparent": true,
 				"show_in_taskbar": false
 			},
 			"egs_shelf_window": {
 				"min_size": {"width": 694, "height": 420},
-				"file": "Files/shelf.html",
+				"file": "Files/html/shelf.html",
 				"egs_shelf": {
 					"show_as_iframe": true,
 					"title": "Hearthstone Replay Viewer;Powered by Zero to Heroes",

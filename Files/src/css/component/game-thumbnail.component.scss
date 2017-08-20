@@ -23,7 +23,7 @@
 	left: 0;
 	bottom: 0;
 	right: 0;
-	background-image: url('static/images/highlighter-bg.jpg');
+	background-image: url('../../assets/images/highlighter-bg.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
@@ -116,7 +116,7 @@
 
 		&::before {
 			content: "";
-			background-image: url('static/images/adventure-brm.png');
+			background-image: url('../../assets/images/adventure-brm.png');
 		}
 
 		&::after {
@@ -127,7 +127,7 @@
 
 		&::before {
 			content: "";
-			background-image: url('static/images/adventure-naxx.png');
+			background-image: url('../../assets/images/adventure-naxx.png');
 		}
 
 		&::after {
@@ -138,7 +138,7 @@
 
 		&::before {
 			content: "";
-			background-image: url('static/images/adventure-kara.png');
+			background-image: url('../../assets/images/adventure-kara.png');
 		}
 
 		&::after {
@@ -149,7 +149,7 @@
 
 		&::before {
 			content: "";
-			background-image: url('static/images/adventure-loe.png');
+			background-image: url('../../assets/images/adventure-loe.png');
 		}
 
 		&::after {
@@ -162,7 +162,7 @@
 
 	&::before {
 		content: "";
-		background-image: url('static/images/tavernbrawl.png');
+		background-image: url('../../assets/images/tavernbrawl.png');
 	}
 
 	&::after {

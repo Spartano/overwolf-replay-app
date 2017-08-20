@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule }    from '@angular/http';
 
 import { LocalStorageService, LocalStorageModule } from 'angular-2-local-storage';
-import { ShareButtonsModule } from 'ng2-sharebuttons';
+import { ShareButtonsModule } from 'ng2-sharebuttons-ow';
 
 import { ShelfComponent }  from '../../components/shelf.component';
 import { EmptyShelfComponent }  from '../../components/empty-shelf.component';

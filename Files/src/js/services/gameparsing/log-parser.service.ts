@@ -75,10 +75,10 @@ export class LogParserService {
 
 		this.game.fullLogs += data + '\n';
 
-		this.parseMatchInfo();
-		this.parseArenaInfo();
-		this.parseGameType();
-		this.parseGameFormat();
+		// this.parseMatchInfo();
+		// this.parseArenaInfo();
+		// this.parseGameType();
+		// this.parseGameFormat();
 
 		// that's how we know a game is finished
 		if (data.indexOf('GOLD_REWARD_STATE') !== -1 && this.game) {

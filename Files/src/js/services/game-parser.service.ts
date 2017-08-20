@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Game, Player } from '../models/game';
 import { Events } from './events.service';
+import * as $ from 'jquery';
 
-declare var $: any;
 declare var parseCardsText: any;
 
 declare var OverwolfPlugin: any;

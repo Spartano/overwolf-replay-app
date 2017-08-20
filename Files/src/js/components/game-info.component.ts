@@ -4,7 +4,7 @@ import { Game } from '../models/game';
 
 @Component({
 	selector: 'game-info',
-	styleUrls: [`css/component/game-info.component.css`],
+	styleUrls: [`../../css/component/game-info.component.scss`],
 	template: `
 		<div class="game-info">
 			<img *ngIf="rankImage()" src="https://s3.amazonaws.com/com.zerotoheroes/plugins/hearthstone/ranks/{{rankImage()}}.png">
