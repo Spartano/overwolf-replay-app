@@ -1,6 +1,9 @@
-import { NgModule }      from '@angular/core';
+import { NgModule, ErrorHandler }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule }    from '@angular/http';
+
+import * as Raven from 'raven-js';
+
 import { LocalStorageService, LocalStorageModule } from 'angular-2-local-storage';
 
 import { AppComponent }  from '../../components/app.component';
@@ -22,6 +25,16 @@ import { Events } from '../../services/events.service';
 import { ReplayUploader } from '../../services/replay-uploader.service';
 import { FileUploadService } from '../../services/file-upload.service';
 import { UserPreferences } from '../../services/user-preferences.service';
+
+Raven
+  .config('https://c08a7bdf3f174ff2b45ad33bcf8c48f6@sentry.io/202626')
+  .install();
+
+ export class RavenErrorHandler implements ErrorHandler {
+  handleError(err:any) : void {
+    Raven.captureException(err);
+  }
+}
 
 @NgModule({
 	imports: [
@@ -55,6 +68,7 @@ import { UserPreferences } from '../../services/user-preferences.service';
 		Events,
 		ReplayUploader,
 		FileUploadService,
+		{ provide: ErrorHandler, useClass: RavenErrorHandler },
 	],
 })
 
