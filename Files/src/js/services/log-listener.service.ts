@@ -1,4 +1,7 @@
 import { Injectable } from '@angular/core';
+
+import * as Raven from 'raven-js';
+
 import { Game } from '../models/game';
 import { GameParserService } from './game-parser.service';
 import { LogParserService } from './gameparsing/log-parser.service';
@@ -39,6 +42,7 @@ export class LogListenerService {
 		plugin.initialize((status: boolean) => {
 			if (status === false) {
 				console.error("Plugin couldn't be loaded??", status);
+				Raven.captureMessage('simple-io-plugin could not be loaded');
 				return;
 			}
 			console.log("Plugin " + plugin.get()._PluginName_ + " was loaded!");
@@ -133,6 +137,12 @@ export class LogListenerService {
 				}
 				else {
 					console.error("received an error on file: " + id + ": " + data);
+					Raven.captureMessage('Error while trying to read log file', { extra: {
+						id: id,
+						data: data,
+						status: status,
+						path: logsLocation
+					}});
 				}
 				return;
 			}
@@ -142,6 +152,12 @@ export class LogListenerService {
 			}
 			else {
 				console.error('could not listen to file callback');
+				Raven.captureMessage('Could not listen to file callback', { extra: {
+					id: id,
+					data: data,
+					status: status,
+					path: logsLocation
+				}});
 			}
 		};
 		this.plugin.get().onFileListenerChanged.addListener(handler);
@@ -153,7 +169,14 @@ export class LogListenerService {
 					console.log("[" + id + "] now streaming...", this.fileInitiallyPresent);
 				}
 				else {
-					console.log("something bad happened with: " + id);
+					console.error("something bad happened with: " + id);
+					Raven.captureMessage('listenOnFile returned wrong id', { extra: {
+						id: id,
+						fileIdentifier: fileIdentifier,
+						fileInitiallyPresent: this.fileInitiallyPresent,
+						initData: initData,
+						path: logsLocation
+					}});
 				}
 			}
 		});

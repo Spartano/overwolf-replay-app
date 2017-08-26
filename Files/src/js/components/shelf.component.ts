@@ -1,5 +1,7 @@
 import { Component, NgZone, ViewChild } from '@angular/core';
-import {ViewEncapsulation} from '@angular/core';
+import { ViewEncapsulation } from '@angular/core';
+
+import * as Raven from 'raven-js';
 
 import { GameReplayComponent } from '../components/game-replay.component';
 import { CarouselComponent } from '../components/carousel.component';
@@ -106,6 +108,7 @@ export class ShelfComponent {
 			}
 			catch (e) {
 				console.error(e);
+				Raven.captureException(e);
 				throw e;
 			}
 		}

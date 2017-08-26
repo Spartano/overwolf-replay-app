@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+
+import * as Raven from 'raven-js';
+
 import { LogListenerService } from '../services/log-listener.service';
 import { GameStorageService } from '../services/game-storage.service';
 import { ReplayManager } from '../services/replay-manager.service';
@@ -81,7 +84,22 @@ export class AppComponent {
 					if (result2.status === 'success') {
 						console.log('request to display is a success, OW should call shelf.html which will trigger status listening process updates on its side');
 					}
+					else {
+						let extra = {
+							status: result2.status,
+							result: result2
+						}
+						Raven.captureMessage('Request to display shelf failed', { extra: extra });
+					}
 				});
+			}
+			else {
+				let extra = {
+					status: result.status,
+					isEnabled: result.isEnabled,
+					result: result
+				}
+				Raven.captureMessage('EGS is not enabled', { extra: extra });
 			}
 		});
 	}

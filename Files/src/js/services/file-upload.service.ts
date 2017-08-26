@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Http } from "@angular/http";
 
+import * as Raven from 'raven-js';
+
 import 'rxjs/add/operator/share';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
@@ -96,10 +98,15 @@ export class FileUploadService {
 				s3.makeUnauthenticatedRequest('putObject', params, (err, data2) => {
 					// There Was An Error With Your S3 Config
 					if (err) {
-						console.error('An error during upload', err);
 						if (progressMonitor) {
 							progressMonitor.next('ERROR_SENDING_GAME_REPLAY');
 						}
+
+						console.error('An error during upload', err);
+						Raven.captureMessage('Error while sending game replay to AWS', { extra: {
+							error: err,
+							params: params,
+						}});
 					}
 					else {
 						console.log('Uploaded game', data2, review.id);
