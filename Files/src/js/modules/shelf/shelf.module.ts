@@ -16,6 +16,7 @@ import { GameThumbnailComponent } from '../../components/game-thumbnail.componen
 import { HeroAvatarComponent } from '../../components/hero-avatar.component';
 
 import { GameRetrieveService } from '../../services/game-retrieve.service';
+import { StorageHelperService } from '../../services/storage-helper.service';
 import { GameParserService } from '../../services/game-parser.service';
 import { AccountService } from '../../services/account.service';
 import { UserPreferences } from '../../services/user-preferences.service';
@@ -59,6 +60,7 @@ import { LogParserService } from '../../services/gameparsing/log-parser.service'
 		FileUploadService,
 		GameStorageService,
 		Events,
+		StorageHelperService,
 		// GameModeParser,
 		// LogUtils,
 	],

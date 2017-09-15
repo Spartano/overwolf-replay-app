@@ -4,6 +4,7 @@ import * as Raven from 'raven-js';
 
 import { LogListenerService } from '../services/log-listener.service';
 import { GameStorageService } from '../services/game-storage.service';
+import { OwCommunicationService } from '../services/ow-communcation.service';
 import { ReplayManager } from '../services/replay-manager.service';
 import { ReplayUploader } from '../services/replay-uploader.service';
 import { Events } from '../services/events.service';
@@ -27,6 +28,7 @@ export class AppComponent {
 	constructor(
 		private logListenerService: LogListenerService,
 		private gameStorageService: GameStorageService,
+		private owCommunicationService: OwCommunicationService,
 		private events: Events,
 		private replayManager: ReplayManager,
 		private replayUploader: ReplayUploader) {
@@ -36,7 +38,17 @@ export class AppComponent {
 
 	init(): void {
 		console.log('init gameservice', overwolf.egs);
-		this.gameStorageService.resetGames();
+		this.gameStorageService.resetGames(null);
+
+		overwolf.games.getRunningGameInfo((res: any) => {
+			setTimeout(() => {
+				console.log("getRunningGameInfo to retrieve sessionId");
+				if (res && res.sessionId) {
+					this.gameStorageService.resetGames(res.sessionId);
+					console.log('games reset');
+				}
+			}, 1000);
+		});
 
 		this.events.on(Events.REPLAY_CREATED)
 			.subscribe(event => {
@@ -89,6 +101,7 @@ export class AppComponent {
 							status: result2.status,
 							result: result2
 						}
+						console.warn('Request to display shelf failed', { extra: extra });
 						Raven.captureMessage('Request to display shelf failed', { extra: extra });
 					}
 				});
@@ -99,6 +112,7 @@ export class AppComponent {
 					isEnabled: result.isEnabled,
 					result: result
 				}
+				console.warn('EGS is not enabled', { extra: extra });
 				Raven.captureMessage('EGS is not enabled', { extra: extra });
 			}
 		});

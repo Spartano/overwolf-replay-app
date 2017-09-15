@@ -102,7 +102,7 @@ export class FileUploadService {
 							progressMonitor.next('ERROR_SENDING_GAME_REPLAY');
 						}
 
-						console.error('An error during upload', err);
+						console.warn('An error during upload', err);
 						Raven.captureMessage('Error while sending game replay to AWS', { extra: {
 							error: err,
 							params: params,
@@ -111,10 +111,15 @@ export class FileUploadService {
 					else {
 						console.log('Uploaded game', data2, review.id);
 						game.reviewId = review.id;
-						this.gameStorageService.updateGame(game);
-						if (progressMonitor) {
-							progressMonitor.next('GAME_REPLAY_SENT');
-						}
+						overwolf.games.getRunningGameInfo((res: any) => {
+							console.log("getRunningGameInfo to update game: " + JSON.stringify(res));
+							if (res && res.sessionId) {
+								this.gameStorageService.updateGame(res.sessionId, game);
+								if (progressMonitor) {
+									progressMonitor.next('GAME_REPLAY_SENT');
+								}
+							}
+						});
 					}
 				});
 			});

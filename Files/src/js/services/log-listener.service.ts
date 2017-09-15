@@ -41,7 +41,7 @@ export class LogListenerService {
 
 		plugin.initialize((status: boolean) => {
 			if (status === false) {
-				console.error("Plugin couldn't be loaded??", status);
+				console.warn("Plugin couldn't be loaded??", status);
 				Raven.captureMessage('simple-io-plugin could not be loaded');
 				return;
 			}
@@ -136,7 +136,7 @@ export class LogListenerService {
 					this.listenOnFileUpdate(logsLocation);
 				}
 				else {
-					console.error("received an error on file: " + id + ": " + data);
+					console.warn("received an error on file: " + id + ": " + data);
 					Raven.captureMessage('Error while trying to read log file', { extra: {
 						id: id,
 						data: data,
@@ -151,7 +151,7 @@ export class LogListenerService {
 				this.logParserService.receiveLogLine(data);
 			}
 			else {
-				console.error('could not listen to file callback');
+				console.warn('could not listen to file callback');
 				Raven.captureMessage('Could not listen to file callback', { extra: {
 					id: id,
 					data: data,
@@ -169,7 +169,7 @@ export class LogListenerService {
 					console.log("[" + id + "] now streaming...", this.fileInitiallyPresent);
 				}
 				else {
-					console.error("something bad happened with: " + id);
+					console.warn("something bad happened with: " + id);
 					Raven.captureMessage('listenOnFile returned wrong id', { extra: {
 						id: id,
 						fileIdentifier: fileIdentifier,

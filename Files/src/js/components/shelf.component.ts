@@ -1,6 +1,7 @@
 import { Component, NgZone, ViewChild } from '@angular/core';
 import { ViewEncapsulation } from '@angular/core';
 
+import { LocalStorageService } from 'angular-2-local-storage';
 import * as Raven from 'raven-js';
 
 import { GameReplayComponent } from '../components/game-replay.component';
@@ -61,6 +62,7 @@ export class ShelfComponent {
 	@ViewChild(GameReplayComponent) private gameReplayComponent: GameReplayComponent;
 
 	constructor(
+		private localStorageService: LocalStorageService,
 		private gameStorageService: GameStorageService,
 		private gameService: GameRetrieveService,
 		private accountService: AccountService,
@@ -73,7 +75,7 @@ export class ShelfComponent {
 
 		// Change logging for debug
 		let oldConsoleLogFunc = console.log;
-		let debugMode = false;
+		let debugMode = true;
 		if (debugMode) {
 			console.log = function() {
 				let argsString = "";
@@ -98,18 +100,16 @@ export class ShelfComponent {
 	}
 
 	ngOnInit(): void {
+		window.addEventListener("message", () => this.receiveMessage, false);
+
 		setTimeout(() => {
 			try {
-				this.games = this.gameService.getGames().reverse();
-				console.log('games in shelf', this.games);
-				if (this.games && this.games.length > 0) {
-					this.carouselComponent.onSelect(this.games[0]);
-				}
+				this.loadGamesFromSession(this.localStorageService.get<string>('lastSessionId'));
 			}
 			catch (e) {
-				console.error(e);
+				console.warn(e);
 				Raven.captureException(e);
-				throw e;
+				// throw e;
 			}
 		}
 		, 50);
@@ -124,6 +124,22 @@ export class ShelfComponent {
 			this.accountClaimed = value;
 			console.log('accountClaimedStatus', value);
 		});
+	}
+
+	receiveMessage(message) {
+		console.log('received postMessage', message, this.loadGamesFromSession);
+		let sessionId = message.sessionId;
+		if (sessionId) {
+			this.loadGamesFromSession(sessionId);
+		}
+	}
+
+	loadGamesFromSession(sessionId: string) {
+		this.games = this.gameService.getGames(sessionId).reverse();
+		console.log('games in shelf', this.games);
+		if (this.games && this.games.length > 0) {
+			this.carouselComponent.onSelect(this.games[0]);
+		}
 	}
 
 	onGameSelected(game: Game) {

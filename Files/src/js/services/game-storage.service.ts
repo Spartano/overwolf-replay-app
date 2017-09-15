@@ -1,41 +1,47 @@
 import { Injectable } from '@angular/core';
-import { LocalStorageService } from 'angular-2-local-storage';
 
+import { StorageHelperService } from '../services/storage-helper.service';
+
+import { Session } from '../models/storage';
 import { Game } from '../models/game';
 import { Events } from './events.service';
 
 @Injectable()
 export class GameStorageService {
 
-	constructor(private events: Events, private localStorageService: LocalStorageService) {
-		this.init();
+	constructor(
+		private events: Events,
+		private storageHelper: StorageHelperService) {
 	}
 
-	init(): void {
-		// this.events.on(Events.REPLAY_CREATED)
-		// 	.subscribe(event => {
-		// 		this.addGame(event.data[0]);
-		// 	});
-	}
-
-	public resetGames(): void {
+	public resetGames(sessionId: string): void {
 		// Get the games from the local storage
-		console.log('resetting games');
-		this.localStorageService.set('games', <Game[]>[]);
+		console.log('resetting games', sessionId);
+		let session = this.storageHelper.getSession(sessionId);
+		if (session) {
+			session.games = [];
+			this.storageHelper.update(session);
+			console.log('games reset', session);
+		}
 	}
 
-	addGame(game: Game): void {
+	addGame(sessionId: string, game: Game): void {
 		// Get the games from the local storage
-		// console.log('adding game to local storage', game);
-		let games: Game[] = this.localStorageService.get<Game[]>('games') || [];
+		let session = this.storageHelper.getSession(sessionId);
+		console.log('retrieved session', session);
+		let games = session.games;
+
 		games.push(game);
-		this.localStorageService.set('games', games);
-		console.log('after adding game', this.localStorageService.get<Game[]>('games'));
+		console.log('added game', games);
+		this.storageHelper.update(session);
+		console.log('game added');
 	}
 
-	updateGame(game: Game) {
+	updateGame(sessionId: string, game: Game) {
 		console.log('starting game update', game);
-		let games: Game[] = this.localStorageService.get<Game[]>('games') || [];
+		let session = this.storageHelper.getSession(sessionId);
+		let games = session.games;
+
 		let newGames: Game[] = [];
 		for (let currentGame of games) {
 			if (currentGame.id === game.id) {
@@ -45,7 +51,8 @@ export class GameStorageService {
 				newGames.push(currentGame);
 			}
 		}
-		this.localStorageService.set('games', newGames);
+		session.games = newGames;
+		this.storageHelper.update(session);
 		console.log('updated games', newGames);
 	}
 }

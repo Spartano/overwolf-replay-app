@@ -7,6 +7,7 @@ import { GameParserService } from '../game-parser.service';
 import { GameModeParser } from '../gameparsing/game-mode-parser.service';
 
 declare var OverwolfPlugin: any;
+declare var overwolf: any;
 
 @Injectable()
 export class LogParserService {
@@ -34,7 +35,7 @@ export class LogParserService {
 		this.mindvisionPlugin = new OverwolfPlugin("mindvision", true);
 		this.mindvisionPlugin.initialize((status: boolean) => {
 			if (status === false) {
-				console.error("Plugin mindvision couldn't be loaded");
+				console.warn("Plugin mindvision couldn't be loaded");
 				Raven.captureMessage('mindvision plugin could not be loaded');
 				return;
 			}
@@ -64,7 +65,7 @@ export class LogParserService {
 
 		// New game
 		if (data.indexOf('CREATE_GAME') !== -1) {
-			console.debug('reinit game', data);
+			console.log('reinit game', data);
 			this.game = Game.createEmptyGame();
 			this.game.fullLogs = '';
 			// this.gameStarted = true;
@@ -86,7 +87,7 @@ export class LogParserService {
 
 		// that's how we know a game is finished
 		if (data.indexOf('GOLD_REWARD_STATE') !== -1 && this.game) {
-			console.debug('game ended', data);
+			console.log('game ended', data);
 			// this.gameStarted = false;
 
 			this.game.spectating = this.spectating;

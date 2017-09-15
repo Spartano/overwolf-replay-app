@@ -1,25 +1,20 @@
 import { Injectable } from '@angular/core';
-import { LocalStorageService } from 'angular-2-local-storage';
 
+import { StorageHelperService } from './storage-helper.service';
+
+import { Session } from '../models/storage';
 import { Game } from '../models/game';
-// import { LogListenerService } from './log-listener.service';
+
+declare var overwolf: any;
 
 @Injectable()
 export class GameRetrieveService {
 
-	// games: Game[] = [];
-	// subject:Subject<Game> = new Subject<Game>();
-
-	constructor(private localStorageService: LocalStorageService) {
-		console.log('in GameRetrieveService constructor');
+	constructor(private storageHelper: StorageHelperService) {
 	}
 
-	// getGames():Observable<Game> {
-	// 	return this.subject.asObservable();
-	// }
-
-	getGames(): Game[] {
-		// console.log('retrieving games from localStorage', this.localStorageService.get<Game[]>('games'));
-		return this.localStorageService.get<Game[]>('games') || [];
+	getGames(sessionId: string): Game[] {
+		let session = this.storageHelper.getSession(sessionId);
+		return session.games;
 	}
 }

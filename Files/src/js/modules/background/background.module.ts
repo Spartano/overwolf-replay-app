@@ -14,8 +14,10 @@ import { HeroAvatarComponent } from '../../components/hero-avatar.component';
 
 // import { GameService } from './game.service';
 import { GameStorageService } from '../../services/game-storage.service';
+import { OwCommunicationService	} from '../../services/ow-communcation.service';
 // import { GameRetrieveService } from './service/game-retrieve.service';
 import { LogListenerService } from '../../services/log-listener.service';
+import { StorageHelperService } from '../../services/storage-helper.service';
 import { GameParserService } from '../../services/game-parser.service';
 import { LogParserService } from '../../services/gameparsing/log-parser.service';
 import { GameModeParser } from '../../services/gameparsing/game-mode-parser.service';
@@ -26,14 +28,17 @@ import { ReplayUploader } from '../../services/replay-uploader.service';
 import { FileUploadService } from '../../services/file-upload.service';
 import { UserPreferences } from '../../services/user-preferences.service';
 
+console.log('configuring Raven'),
 Raven
-  .config('https://c08a7bdf3f174ff2b45ad33bcf8c48f6@sentry.io/202626')
-  .install();
+  	.config('https://c08a7bdf3f174ff2b45ad33bcf8c48f6@sentry.io/202626')
+  	.install();
+console.log('Raven configured');
 
  export class RavenErrorHandler implements ErrorHandler {
-  handleError(err:any) : void {
-    Raven.captureException(err);
-  }
+  	handleError(err: any) : void {
+	  	console.log('error captured by Raven', err);
+	    // Raven.captureException(err);
+  	}
 }
 
 @NgModule({
@@ -68,6 +73,8 @@ Raven
 		Events,
 		ReplayUploader,
 		FileUploadService,
+		OwCommunicationService,
+		StorageHelperService,
 		{ provide: ErrorHandler, useClass: RavenErrorHandler },
 	],
 })

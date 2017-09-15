@@ -139,24 +139,24 @@ export class SharingZoneComponent {
 						this.changeDetector.detectChanges();
 						break;
 					case 'EMPTY_SHELL_CREATED':
-						console.debug('empty shell created');
+						console.log('empty shell created');
 						this.changeDetector.detectChanges();
 						break;
 					case 'RETRIEVED_BINARY_FILE':
-						console.debug('retrieved binary file');
+						console.log('retrieved binary file');
 						this.changeDetector.detectChanges();
 						break;
 					case 'SENDING_GAME_REPLAY':
-						console.debug('sending game replay');
+						console.log('sending game replay');
 						this.changeDetector.detectChanges();
 						break;
 					case 'GAME_REPLAY_SENT':
-						console.debug('game replay sent');
+						console.log('game replay sent');
 						this.changeDetector.detectChanges();
 						this.checkProcessingProgress(monitor);
 						break;
 					case 'PROCESSING_DONE':
-						console.debug('processing done', this.buildUrl());
+						console.log('processing done', this.buildUrl());
 						this.changeDetector.detectChanges();
 						this.uploadInProgress = false;
 						this.uploadDoneNotifier.next(true);
@@ -217,7 +217,7 @@ export class SharingZoneComponent {
 	}
 
 	private checkProcessingProgress(monitor: BehaviorSubject<string>) {
-		console.debug('checking processing progress');
+		console.log('checking processing progress');
 		this.fileUpload.getRemoteReview(this.game.reviewId, (result) => {
 			let review = JSON.parse(result._body);
 			console.log('result', review.published);

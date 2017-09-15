@@ -38,8 +38,17 @@ export class ReplayManager {
 				console.log('built byte array', bytes);
 
 				game.replayBytes = bytes;
-				this.gameStorage.addGame(game);
-				this.events.broadcast(Events.REPLAY_SAVED, directory + fileName, game);
+
+				overwolf.games.getRunningGameInfo((res: any) => {
+					console.log("getRunningGameInfo to save game: " + JSON.stringify(res));
+					if (res && res.sessionId) {
+						console.log('adding replay');
+						game.fullLogs = null;
+						this.gameStorage.addGame(res.sessionId, game);
+						this.events.broadcast(Events.REPLAY_SAVED, directory + fileName, game);
+						console.log('replay saved');
+					}
+				});
 			});
 
 		});
@@ -50,7 +59,7 @@ export class ReplayManager {
 
 		this.plugin.initialize((status: boolean) => {
 			if (status === false) {
-				console.error("Plugin couldn't be loaded??");
+				console.warn("Plugin couldn't be loaded??");
 				Raven.captureMessage('simple-io-plugin could not be loaded');
 				return;
 			}
