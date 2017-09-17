@@ -217,7 +217,7 @@ export class SharingZoneComponent {
 	}
 
 	private checkProcessingProgress(monitor: BehaviorSubject<string>) {
-		console.log('checking processing progress');
+		console.log('checking processing progress', this.game);
 		this.fileUpload.getRemoteReview(this.game.reviewId, (result) => {
 			let review = JSON.parse(result._body);
 			console.log('result', review.published);

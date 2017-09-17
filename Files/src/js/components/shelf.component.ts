@@ -75,7 +75,7 @@ export class ShelfComponent {
 
 		// Change logging for debug
 		let oldConsoleLogFunc = console.log;
-		let debugMode = true;
+		let debugMode = false;
 		if (debugMode) {
 			console.log = function() {
 				let argsString = "";

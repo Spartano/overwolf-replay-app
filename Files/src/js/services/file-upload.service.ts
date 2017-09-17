@@ -12,13 +12,9 @@ import { GameStorageService } from './game-storage.service';
 declare var overwolf: any;
 declare var AWS: any;
 
-
 const GET_REVIEW_ENDPOINT = 'http://www.zerotoheroes.com/api/reviews/';
-const REVIEW_INIT_ENDPOINT = 'http://www.zerotoheroes.com/api/hearthstone/upload/createEmptyReview/hearthstone';
+const REVIEW_INIT_ENDPOINT = 'https://husxs4v58a.execute-api.us-west-2.amazonaws.com/prod';
 const BUCKET = 'com.zerotoheroes.batch';
-
-// const REVIEW_INIT_ENDPOINT = 'http://localhost:8080/api/hearthstone/upload/createEmptyReview/hearthstone';
-// const BUCKET = 'com.zerotoheroes.test.batch';
 
 @Injectable()
 export class FileUploadService {
@@ -42,12 +38,13 @@ export class FileUploadService {
 
 			// Build an empty review
 			this.http.post(REVIEW_INIT_ENDPOINT, null).subscribe((res) => {
-				let review = res.json();
-				console.log('Created empty shell review', res, review);
+				let reviewId = res.json();
+				console.log('Created empty shell review', res, reviewId);
 				if (progressMonitor) {
 					progressMonitor.next('EMPTY_SHELL_CREATED');
 				}
 
+				console.log('processing game', game);
 				let bytes = game.replayBytes;
 				console.log('loaded bytes', bytes);
 
@@ -64,6 +61,7 @@ export class FileUploadService {
 				let file = new File([blob], fileKey);
 				console.log('built file', file);
 
+				console.log('Configuring AWS', AWS);
 				// Configure The S3 Object
 				AWS.config.region = 'us-west-2';
 				AWS.config.httpOptions.timeout = 3600 * 1000 * 10;
@@ -80,7 +78,7 @@ export class FileUploadService {
 					ACL: 'public-read-write',
 					Body: blob,
 					Metadata: {
-						'review-id': review.id,
+						'review-id': reviewId,
 						'application-key': 'overwolf',
 						'user-key': userId,
 						'file-type': 'hszip',
@@ -109,15 +107,15 @@ export class FileUploadService {
 						}});
 					}
 					else {
-						console.log('Uploaded game', data2, review.id);
-						game.reviewId = review.id;
+						console.log('Uploaded game', data2, reviewId);
+						game.reviewId = reviewId;
 						overwolf.games.getRunningGameInfo((res: any) => {
 							console.log("getRunningGameInfo to update game: " + JSON.stringify(res));
 							if (res && res.sessionId) {
 								this.gameStorageService.updateGame(res.sessionId, game);
-								if (progressMonitor) {
-									progressMonitor.next('GAME_REPLAY_SENT');
-								}
+							}
+							if (progressMonitor) {
+								progressMonitor.next('GAME_REPLAY_SENT');
 							}
 						});
 					}

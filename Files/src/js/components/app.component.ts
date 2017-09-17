@@ -101,7 +101,7 @@ export class AppComponent {
 							status: result2.status,
 							result: result2
 						}
-						console.warn('Request to display shelf failed', { extra: extra });
+						console.log('Request to display shelf failed', { extra: extra });
 						Raven.captureMessage('Request to display shelf failed', { extra: extra });
 					}
 				});
@@ -112,7 +112,7 @@ export class AppComponent {
 					isEnabled: result.isEnabled,
 					result: result
 				}
-				console.warn('EGS is not enabled', { extra: extra });
+				console.log('EGS is not enabled', { extra: extra });
 				Raven.captureMessage('EGS is not enabled', { extra: extra });
 			}
 		});

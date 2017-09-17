@@ -53,11 +53,9 @@ export class LogListenerService {
 	configureLogListeners(): void {
 		// Registering game listener
 		overwolf.games.onGameInfoUpdated.addListener((res: any) => {
-			console.log("onGameInfoUpdated: " + JSON.stringify(res));
+			// console.log("onGameInfoUpdated: " + JSON.stringify(res));
 			if (this.gameLaunched(res)) {
-				// registerEvents()
 				this.logsLocation = res.gameInfo.executionPath.split('Hearthstone.exe')[0] + 'Logs\\Power.log';
-				console.log('getting logs from', this.logsLocation);
 				this.registerLogMonitor();
 			}
 			else if (this.exitGame(res)) {
@@ -66,12 +64,9 @@ export class LogListenerService {
 		});
 
 		overwolf.games.getRunningGameInfo((res: any) => {
-			console.log("getRunningGameInfo: " + JSON.stringify(res));
 			if (res && res.isRunning && res.id && Math.floor(res.id / 10) === HEARTHSTONE_GAME_ID) {
-				console.log('running!', res);
+				console.log('Game is running!', JSON.stringify(res));
 				this.logsLocation = res.executionPath.split('Hearthstone.exe')[0] + 'Logs\\Power.log';
-				console.log('getting logs from', this.logsLocation);
-				// registerEvents()
 				this.registerLogMonitor();
 			}
 		});
@@ -88,28 +83,29 @@ export class LogListenerService {
 	}
 
 	registerLogMonitor() {
-		console.log('registering hooks?', this.plugin.get(), this.monitoring, this);
-		console.log('listeners', this.plugin.get().onFileListenerChanged);
+		console.log('registering hooks?', this.monitoring);
 		if (this.monitoring) {
-			console.log('log hooks already registered, returning');
+			console.log('\tlog hooks already registered, returning');
 			return;
 		}
-
-		// let logItemIndex = 0;
-		this.listenOnFile(this.logsLocation);
-
 		this.monitoring = true;
+
+		console.log('getting logs from', this.logsLocation);
+		this.listenOnFile(this.logsLocation);
 	}
 
 	listenOnFile(logsLocation: string): void {
-		this.listenOnFileCreation(logsLocation);
+		// Sentry raises a stack trace too big without this
+		setTimeout(() => {
+			this.listenOnFileCreation(logsLocation);
+		}, 1000)
 	}
 
 	listenOnFileCreation(logsLocation: string): void {
 		console.log('starting to listen on file', logsLocation);
-		// let that = this;
 
-		this.plugin.get().fileExists(logsLocation, (status: boolean) => {
+		this.plugin.get().fileExists(logsLocation, (status: boolean, message: string) => {
+			console.log('fileExists?', status, message);
 			if (status === true) {
 				this.listenOnFileUpdate(logsLocation);
 			}
