@@ -40,16 +40,6 @@ export class AppComponent {
 		console.log('init gameservice', overwolf.egs);
 		this.gameStorageService.resetGames(null);
 
-		overwolf.games.getRunningGameInfo((res: any) => {
-			setTimeout(() => {
-				console.log("getRunningGameInfo to retrieve sessionId");
-				if (res && res.sessionId) {
-					this.gameStorageService.resetGames(res.sessionId);
-					console.log('games reset');
-				}
-			}, 1000);
-		});
-
 		this.events.on(Events.REPLAY_CREATED)
 			.subscribe(event => {
 				this.replayManager.saveLocally(event.data[0]);
