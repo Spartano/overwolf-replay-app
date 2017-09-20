@@ -68,10 +68,11 @@ export class LogParserService {
 			console.log('reinit game', data);
 			this.game = Game.createEmptyGame();
 			this.game.fullLogs = '';
-			// this.gameStarted = true;
-			// this.gamegameMode = undefined;
-			// this.gameFormat = undefined;
-			// this.matchInfo = undefined;
+
+			this.parseMatchInfo();
+			this.parseArenaInfo();
+			this.parseGameType();
+			this.parseGameFormat();
 		}
 
 		if (!this.game) {
@@ -79,11 +80,6 @@ export class LogParserService {
 		}
 
 		this.game.fullLogs += data + '\n';
-
-		this.parseMatchInfo();
-		this.parseArenaInfo();
-		this.parseGameType();
-		this.parseGameFormat();
 
 		// that's how we know a game is finished
 		if (data.indexOf('GOLD_REWARD_STATE') !== -1 && this.game) {
