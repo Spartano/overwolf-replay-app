@@ -100,19 +100,16 @@ export class ShelfComponent {
 	}
 
 	ngOnInit(): void {
-		window.addEventListener("message", () => this.receiveMessage, false);
-
-		setTimeout(() => {
-			try {
-				this.loadGamesFromSession(this.localStorageService.get<string>('lastSessionId'));
+		overwolf.extensions.getInfo(
+			'nafihghfcpikebhfhdhljejkcifgbdahdhngepfb',
+			(callbackInfo) => {
+				console.log('extensions callback', callbackInfo);
+				let info = callbackInfo.info;
+				if (info && info.sessionId) {
+					this.loadGamesFromSession(info.sessionId);
+				}
 			}
-			catch (e) {
-				console.warn(e);
-				Raven.captureException(e);
-				// throw e;
-			}
-		}
-		, 50);
+		)
 
 		console.log('subscribing to account claim subjects');
 		this.accountService.accountClaimUrlSubject.subscribe((value) => {
@@ -124,14 +121,6 @@ export class ShelfComponent {
 			this.accountClaimed = value;
 			console.log('accountClaimedStatus', value);
 		});
-	}
-
-	receiveMessage(message) {
-		console.log('received postMessage', message, this.loadGamesFromSession);
-		let sessionId = message.sessionId;
-		if (sessionId) {
-			this.loadGamesFromSession(sessionId);
-		}
 	}
 
 	loadGamesFromSession(sessionId: string) {

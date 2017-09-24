@@ -38,7 +38,6 @@ export class AppComponent {
 
 	init(): void {
 		console.log('init gameservice', overwolf.egs);
-		this.gameStorageService.resetGames(null);
 
 		this.events.on(Events.REPLAY_CREATED)
 			.subscribe(event => {

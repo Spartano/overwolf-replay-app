@@ -11,20 +11,22 @@ export class StorageHelperService {
 	}
 
 	public getSession(sessionId: string): Session {
-		sessionId = sessionId || this.localStorageService.get<string>('lastSessionId');
-		if (!sessionId) return null;
+		console.log('[storage] getting session', sessionId);
+		if (!sessionId) {
+			console.error('[storage] We should never call getSession with a null sessionId', sessionId);
+			return null;
+		}
 
-		console.log('getting session', sessionId);
 		let session: Session = this.localStorageService.get<Session>('session-' + sessionId) || new Session();
+		console.log('[storage] retrieved session', session);
 		session.id = sessionId;
 
 		this.localStorageService.set('session-' + sessionId, session);
-		this.localStorageService.set('lastSessionId', sessionId);
 		return session;
 	}
 
 	public update(session: Session): void {
 		this.localStorageService.set('session-' + session.id, session);
-		console.log('updated session', session);
+		console.log('[storage] updated session', session);
 	}
 }

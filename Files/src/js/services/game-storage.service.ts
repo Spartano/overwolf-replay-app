@@ -14,17 +14,6 @@ export class GameStorageService {
 		private storageHelper: StorageHelperService) {
 	}
 
-	public resetGames(sessionId: string): void {
-		// Get the games from the local storage
-		console.log('resetting games', sessionId);
-		let session = this.storageHelper.getSession(sessionId);
-		if (session) {
-			session.games = [];
-			this.storageHelper.update(session);
-			console.log('games reset', session);
-		}
-	}
-
 	addGame(sessionId: string, game: Game): void {
 		// Get the games from the local storage
 		let session = this.storageHelper.getSession(sessionId);
