@@ -86,6 +86,7 @@ export class FileUploadService {
 						'game-rank': rank != 'legend' ? rank.toString() : '',
 						'game-legend-rank': rank == 'legend' ? rank.toString() : '',
 						'game-format': game.gameFormat,
+						'deckstring': game.deckstring,
 						'game-mode': game.gameMode,
 					},
 				};
