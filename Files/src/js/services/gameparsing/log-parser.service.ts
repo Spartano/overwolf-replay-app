@@ -4,6 +4,7 @@ import * as Raven from 'raven-js';
 
 import { Game } from '../../models/game';
 import { GameParserService } from '../game-parser.service';
+import { DeckParserService } from '../deck/deck-parser.service';
 import { GameModeParser } from '../gameparsing/game-mode-parser.service';
 
 declare var OverwolfPlugin: any;
@@ -29,6 +30,7 @@ export class LogParserService {
 
 	constructor(
 		private gameParserService: GameParserService,
+		private deckParserService: DeckParserService,
 		private gameModeParser: GameModeParser) {
 
 		console.log("loading mindvision");
@@ -68,6 +70,7 @@ export class LogParserService {
 			console.log('reinit game', data);
 			this.game = Game.createEmptyGame();
 			this.game.fullLogs = '';
+			this.game.deckstring = this.deckParserService.activeDeckstring;
 
 			this.parseMatchInfo();
 			this.parseArenaInfo();

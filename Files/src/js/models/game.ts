@@ -17,6 +17,7 @@ export class Game {
 	player: Player = new Player();
 	opponent: Player = new Player();
 
+	deckstring: string;
 	fullLogs: string;
 	replay: string;
 	path: string;

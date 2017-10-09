@@ -15,7 +15,7 @@ export class DeckParserService {
 	plugin: any;
 	mindvisionPlugin: any;
 
-	private activeDeckstring: string;
+	public activeDeckstring: string;
 
 	constructor() {
 		console.log("loading mindvision");
