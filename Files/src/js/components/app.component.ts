@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import * as Raven from 'raven-js';
 
 import { LogListenerService } from '../services/log-listener.service';
+import { DeckLogListenerService } from '../services/deck/deck-log-listener.service';
 import { GameStorageService } from '../services/game-storage.service';
 import { OwCommunicationService } from '../services/ow-communcation.service';
 import { ReplayManager } from '../services/replay-manager.service';
@@ -27,6 +28,7 @@ export class AppComponent {
 
 	constructor(
 		private logListenerService: LogListenerService,
+		private deckLogListenerService: DeckLogListenerService,
 		private gameStorageService: GameStorageService,
 		private owCommunicationService: OwCommunicationService,
 		private events: Events,
@@ -63,7 +65,7 @@ export class AppComponent {
 							cache.push(value);
 						}
 						return value;
-					}) || '').substring(0, 500) + ' | ';
+					}) || '').substring(0, 1000) + ' | ';
 					cache = null; // Enable garbage collection + " | "
 				}
 				oldConsoleLogFunc.apply(console, [argsString]);

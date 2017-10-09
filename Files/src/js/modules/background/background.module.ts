@@ -27,6 +27,8 @@ import { Events } from '../../services/events.service';
 import { ReplayUploader } from '../../services/replay-uploader.service';
 import { FileUploadService } from '../../services/file-upload.service';
 import { UserPreferences } from '../../services/user-preferences.service';
+import { DeckLogListenerService } from '../../services/deck/deck-log-listener.service';
+import { DeckParserService } from '../../services/deck/deck-parser.service';
 
 console.log('configuring Raven'),
 Raven
@@ -74,6 +76,8 @@ console.log('Raven configured');
 		ReplayUploader,
 		FileUploadService,
 		OwCommunicationService,
+		DeckLogListenerService,
+		DeckParserService,
 		StorageHelperService,
 		{ provide: ErrorHandler, useClass: RavenErrorHandler },
 	],

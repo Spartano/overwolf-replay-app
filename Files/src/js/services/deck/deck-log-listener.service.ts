@@ -2,10 +2,7 @@ import { Injectable } from '@angular/core';
 
 import * as Raven from 'raven-js';
 
-import { Game } from '../models/game';
-import { GameParserService } from './game-parser.service';
-import { LogParserService } from './gameparsing/log-parser.service';
-import { GameModeParser } from './gameparsing/game-mode-parser.service';
+import {DeckParserService} from './deck-parser.service'
 
 declare var OverwolfPlugin: any;
 declare var overwolf: any;
@@ -13,28 +10,20 @@ declare var overwolf: any;
 const HEARTHSTONE_GAME_ID = 9898;
 
 @Injectable()
-export class LogListenerService {
+export class DeckLogListenerService {
 	plugin: any;
 	mindvisionPlugin: any;
 
 	monitoring: boolean;
-	fileInitiallyPresent: boolean;
 	logsLocation: string;
 
-	constructor(
-		private gameParserService: GameParserService,
-		private gameModeParser: GameModeParser,
-		private logParserService: LogParserService) {
-		// console.log('in LogListener constructor');
+	constructor(private deckParserService: DeckParserService) {
 		this.init();
 	}
 
 	init(): void {
-		console.log('initializing LogListenerService', this.plugin);
+		console.log('initializing DeckLogListenerService', this.plugin);
 		this.monitoring = false;
-		// this.gameStarted = false;
-		// this.fullLogs = '';
-		this.fileInitiallyPresent = true;
 
 		let plugin = this.plugin = new OverwolfPlugin("simple-io-plugin-zip", true);
 		console.log('plugin', plugin);
@@ -55,29 +44,16 @@ export class LogListenerService {
 		overwolf.games.onGameInfoUpdated.addListener((res: any) => {
 			// console.log("onGameInfoUpdated: " + JSON.stringify(res));
 			if (this.gameLaunched(res)) {
-				this.logsLocation = res.gameInfo.executionPath.split('Hearthstone.exe')[0] + 'Logs\\Power.log';
+				this.logsLocation = res.gameInfo.executionPath.split('Hearthstone.exe')[0] + 'Logs\\FullScreenFX.log';
 				this.registerLogMonitor();
-			}
-			else if (this.exitGame(res)) {
-				this.closeWindow();
 			}
 		});
 
 		overwolf.games.getRunningGameInfo((res: any) => {
 			if (res && res.isRunning && res.id && Math.floor(res.id / 10) === HEARTHSTONE_GAME_ID) {
 				console.log('Game is running!', JSON.stringify(res));
-				this.logsLocation = res.executionPath.split('Hearthstone.exe')[0] + 'Logs\\Power.log';
+				this.logsLocation = res.executionPath.split('Hearthstone.exe')[0] + 'Logs\\FullScreenFX.log';
 				this.registerLogMonitor();
-			}
-		});
-	}
-
-	// This whole game running info mechanism should be externalized to another script
-	closeWindow() {
-		overwolf.windows.getCurrentWindow((result) => {
-			if (result.status === "success") {
-				console.log('closing');
-				overwolf.windows.close(result.window.id);
 			}
 		});
 	}
@@ -95,7 +71,7 @@ export class LogListenerService {
 	}
 
 	listenOnFile(logsLocation: string): void {
-		// Sentry raises a stack trace too big without this
+		// Sentry raises a stack trace too big exception without this
 		setTimeout(() => {
 			this.listenOnFileCreation(logsLocation);
 		}, 1000)
@@ -110,14 +86,13 @@ export class LogListenerService {
 				this.listenOnFileUpdate(logsLocation);
 			}
 			else {
-				this.fileInitiallyPresent = false;
 				setTimeout( () => { this.listenOnFileCreation(logsLocation); }, 1000);
 			}
 		});
 	}
 
 	listenOnFileUpdate(logsLocation: string): void {
-		let fileIdentifier = "hs-logs-file";
+		let fileIdentifier = "hs-fullscreenfx-file";
 		console.log('listening on file update', logsLocation);
 
 		// Register file listener
@@ -127,7 +102,6 @@ export class LogListenerService {
 				if (data === 'truncated') {
 					this.plugin.get().stopFileListen(fileIdentifier);
 					this.plugin.get().onFileListenerChanged.removeListener(handler);
-					this.fileInitiallyPresent = false;
 					console.log('truncated log file - HS probably just overwrote the file. Retrying', status, data);
 					this.listenOnFileUpdate(logsLocation);
 				}
@@ -144,7 +118,11 @@ export class LogListenerService {
 			}
 
 			if (id === fileIdentifier) {
-				this.logParserService.receiveLogLine(data);
+				// We don't really care what the content of the log is. An update to the log file just tells us
+				// that we're going to or leaving from the deck selection screen, which means we can try and
+				// detect the selected deck
+				console.log('Received line in DeckLogListener: ', data)
+				this.deckParserService.detectActiveDeck();
 			}
 			else {
 				// This happens frequently when listening to several files at the same time, don't do anything about it
@@ -152,18 +130,17 @@ export class LogListenerService {
 		};
 		this.plugin.get().onFileListenerChanged.addListener(handler);
 
-		this.plugin.get().listenOnFile(fileIdentifier, logsLocation, this.fileInitiallyPresent, (id: string, status: boolean, initData: any) => {
+		this.plugin.get().listenOnFile(fileIdentifier, logsLocation, true, (id: string, status: boolean, initData: any) => {
 		// this.plugin.get().listenOnFile(fileIdentifier, logsLocation, false, (id: string, status: boolean, initData: any) => {
 			if (id === fileIdentifier) {
 				if (status) {
-					console.log("[" + id + "] now streaming...", this.fileInitiallyPresent);
+					console.log("[" + id + "] now streaming...");
 				}
 				else {
 					console.warn("something bad happened with: " + id);
 					Raven.captureMessage('listenOnFile returned wrong id', { extra: {
 						id: id,
 						fileIdentifier: fileIdentifier,
-						fileInitiallyPresent: this.fileInitiallyPresent,
 						initData: initData,
 						path: logsLocation
 					}});
@@ -186,11 +163,6 @@ export class LogListenerService {
 			console.log('No gameInfoResult.gameInfo, returning');
 			return false;
 		}
-
-		// if (!gameInfoResult.runningChanged && !gameInfoResult.gameChanged) {
-		// 	console.log('Running didnt change, returning');
-		// 	return false;
-		// }
 
 		if (!gameInfoResult.gameInfo.isRunning) {
 			console.log('Game not running, returning');
