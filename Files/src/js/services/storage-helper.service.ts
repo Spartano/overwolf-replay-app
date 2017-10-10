@@ -22,7 +22,13 @@ export class StorageHelperService {
 		session.id = sessionId;
 
 		this.localStorageService.set('session-' + sessionId, session);
+		this.localStorageService.set('lastSessionId', sessionId);
 		return session;
+	}
+
+	public getLatestSessionId(): string {
+		console.log('getting last session Id', this.localStorageService.get('lastSessionId'));
+		return this.localStorageService.get('lastSessionId');
 	}
 
 	public update(session: Session): void {

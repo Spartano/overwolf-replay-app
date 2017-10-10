@@ -14,7 +14,6 @@ import { GameRetrieveService } from '../services/game-retrieve.service';
 import { AccountService } from '../services/account.service';
 import { LogListenerService } from '../services/log-listener.service';
 import { GameStorageService } from '../services/game-storage.service';
-import { UserPreferences } from '../services/user-preferences.service';
 
 declare var overwolf: any;
 import * as $ from 'jquery';
@@ -27,7 +26,7 @@ import * as $ from 'jquery';
 		<div class="shelf-container">
 			<div class="shelf-with-games" *ngIf="!games || games.length > 0">
 				<div class="main-zone">
-					<div class="header">
+					<!--<div class="header">
 						<info-zone [game]="selectedGame" *ngIf="selectedGame"></info-zone>
 						<button *ngIf="!accountClaimed && accountClaimUrl" class="claim-account" (click)="claimAccount()">
 							Claim my account
@@ -38,7 +37,7 @@ import * as $ from 'jquery';
 								</svg>
 							</div>
 						</button>
-					</div>
+					</div>-->
 					<game-replay [game]="selectedGame"></game-replay>
 				</div>
 				<carousel [games]="games" (onGameSelected)=onGameSelected($event)></carousel>
@@ -65,8 +64,7 @@ export class ShelfComponent {
 		private localStorageService: LocalStorageService,
 		private gameStorageService: GameStorageService,
 		private gameService: GameRetrieveService,
-		private accountService: AccountService,
-		private userPreferences: UserPreferences) {
+		private accountService: AccountService) {
 
 		console.log('in AppComponent constructor', gameService);
 		this.shelfLoaded = false;
@@ -105,9 +103,12 @@ export class ShelfComponent {
 			(callbackInfo) => {
 				console.log('extensions callback', callbackInfo);
 				let info = callbackInfo.info;
-				if (info && info.sessionId) {
-					this.loadGamesFromSession(info.sessionId);
-				}
+				// if (info && info.sessionId) {
+				// 	this.loadGamesFromSession(info.sessionId);
+				// }
+				// else {
+					this.loadGamesFromSession(null);
+				// }
 			}
 		)
 

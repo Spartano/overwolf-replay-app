@@ -14,6 +14,10 @@ export class GameRetrieveService {
 	}
 
 	getGames(sessionId: string): Game[] {
+		if (!sessionId) {
+			sessionId = this.storageHelper.getLatestSessionId();
+		}
+		console.log('retrieving games from session', sessionId);
 		let session = this.storageHelper.getSession(sessionId);
 		return session.games;
 	}
