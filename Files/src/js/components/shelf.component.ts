@@ -103,12 +103,12 @@ export class ShelfComponent {
 			(callbackInfo) => {
 				console.log('extensions callback', callbackInfo);
 				let info = callbackInfo.info;
-				// if (info && info.sessionId) {
-				// 	this.loadGamesFromSession(info.sessionId);
-				// }
-				// else {
+				if (info && info.sessionId) {
+					this.loadGamesFromSession(info.sessionId);
+				}
+				else {
 					this.loadGamesFromSession(null);
-				// }
+				}
 			}
 		)
 
