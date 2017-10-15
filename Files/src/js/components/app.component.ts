@@ -28,7 +28,7 @@ export class AppComponent {
 
 	constructor(
 		private logListenerService: LogListenerService,
-		private deckLogListenerService: DeckLogListenerService,
+		// private deckLogListenerService: DeckLogListenerService,
 		private gameStorageService: GameStorageService,
 		private owCommunicationService: OwCommunicationService,
 		private events: Events,
