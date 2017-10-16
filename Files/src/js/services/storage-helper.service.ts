@@ -12,10 +12,10 @@ export class StorageHelperService {
 
 	public getSession(sessionId: string): Session {
 		console.log('[storage] getting session', sessionId);
-		if (!sessionId) {
-			console.error('[storage] We should never call getSession with a null sessionId', sessionId);
-			return null;
-		}
+		// if (!sessionId) {
+		// 	console.log('ERROR: [storage] We should never call getSession with a null sessionId', sessionId);
+		// 	return null;
+		// }
 
 		let session: Session = this.localStorageService.get<Session>('session-' + sessionId) || new Session();
 		console.log('[storage] retrieved session', session);
