@@ -21,6 +21,7 @@ export class DeckParserService {
 	}
 
 	public detectActiveDeck() {
+		console.log('detecting active deck');
 		this.memoryInspectionService.getActiveDeck((activeDeck) => {
 			try {
 				let jsonDeck = JSON.parse(activeDeck);

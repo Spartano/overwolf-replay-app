@@ -14,34 +14,37 @@ export class GameStorageService {
 		private storageHelper: StorageHelperService) {
 	}
 
-	addGame(sessionId: string, game: Game): void {
+	addGame(sessionId: string, game: Game, callback: Function) {
 		// Get the games from the local storage
-		let session = this.storageHelper.getSession(sessionId);
-		console.log('retrieved session', session);
-		let games = session.games;
+		let session = this.storageHelper.getSession(sessionId, (session) => {
+			let games = session.games;
+			console.log('retrieved session', session.id, session.games.length);
 
-		games.push(game);
-		console.log('added game', games);
-		this.storageHelper.update(session);
-		console.log('game added');
+			games.push(game);
+			this.storageHelper.update(session, (updated) => {
+				callback(updated);
+			});
+		});
 	}
 
 	updateGame(sessionId: string, game: Game) {
-		console.log('starting game update', game);
-		let session = this.storageHelper.getSession(sessionId);
-		let games = session.games;
+		console.log('starting game update');
+		this.storageHelper.getSession(sessionId, (session) => {
+			let games = session.games;
 
-		let newGames: Game[] = [];
-		for (let currentGame of games) {
-			if (currentGame.id === game.id) {
-				newGames.push(game);
+			let newGames: Game[] = [];
+			for (let currentGame of games) {
+				if (currentGame.id === game.id) {
+					newGames.push(game);
+				}
+				else {
+					newGames.push(currentGame);
+				}
 			}
-			else {
-				newGames.push(currentGame);
-			}
-		}
-		session.games = newGames;
-		this.storageHelper.update(session);
-		console.log('updated games', newGames);
+			session.games = newGames;
+			this.storageHelper.update(session, (updated) => {
+				console.log('updated games', updated.id, updated.games.length);
+			});
+		});
 	}
 }

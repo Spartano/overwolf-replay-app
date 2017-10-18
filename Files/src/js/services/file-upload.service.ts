@@ -44,7 +44,7 @@ export class FileUploadService {
 					progressMonitor.next('EMPTY_SHELL_CREATED');
 				}
 
-				console.log('processing game', game);
+				console.log('processing game');
 				let bytes = game.replayBytes;
 				console.log('loaded bytes', bytes);
 

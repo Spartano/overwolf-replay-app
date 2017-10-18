@@ -1,3 +1,5 @@
+declare var LZString: any;
+
 export class Game {
 	id: string;
 	reviewId: string;
@@ -13,13 +15,14 @@ export class Game {
 	arenaInfo: any;
 	durationTimeSeconds: number;
 	durationTurns: number;
+	ended: boolean;
 
 	player: Player = new Player();
 	opponent: Player = new Player();
 
 	deckstring: string;
 	fullLogs: string;
-	replay: string;
+	public replay: string;
 	path: string;
 	replayBytes: any[];
 
@@ -51,6 +54,44 @@ export class Game {
 			}
 		}
 	}
+
+	// private setXmlReplay(xml: string) {
+	// 	var compressed = LZString.compress(xml);
+	// 	console.log("Compressed from " + xml.length + " to " + compressed.length);
+	// 	this.replay = compressed;
+	// }
+
+	// private getXmlReplay(): string {
+	// 	return LZString.decompress(this.replay);
+	// }
+
+	// We need this, otherwise functions don't exist if we simply parse json
+	// public static deserialize(gameStr: string): Game {
+	// 	let other = JSON.parse(gameStr);
+	// 	let copy = new Game();
+	// 	copy.id = other.id;
+	// 	copy.reviewId = other.reviewId;
+	// 	copy.title = other.title;
+	// 	copy.spectating = other.spectating;
+	// 	copy.gameMode = other.gameMode;
+	// 	copy.gameFormat = other.gameFormat;
+	// 	copy.rank = other.rank;
+	// 	copy.result = other.result;
+	// 	copy.matchInfo = other.matchInfo;
+	// 	copy.arenaInfo = other.arenaInfo;
+	// 	copy.durationTimeSeconds = other.durationTimeSeconds;
+	// 	copy.durationTurns = other.durationTurns;
+	// 	copy.ended = other.ended;
+	// 	copy.player = other.player;
+	// 	copy.opponent = other.opponent;
+	// 	copy.deckstring = other.deckstring;
+	// 	copy.fullLogs = other.fullLogs;
+	// 	copy.replay = other.replay;
+	// 	copy.path = other.path;
+	// 	copy.replayBytes = other.replayBytes;
+	// 	other = null;
+	// 	return copy;
+	// }
 }
 
 export class Player {
@@ -58,3 +99,4 @@ export class Player {
 	class: string;
 	hero: string;
 }
+

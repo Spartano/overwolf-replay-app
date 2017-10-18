@@ -10,7 +10,9 @@ import { EmptyShelfComponent } from '../components/empty-shelf.component';
 
 import { Game } from '../models/game';
 
+import { GameHelper } from '../services/gameparsing/game-helper.service';
 import { GameRetrieveService } from '../services/game-retrieve.service';
+import { StorageHelperService } from '../services/storage-helper.service';
 import { AccountService } from '../services/account.service';
 import { LogListenerService } from '../services/log-listener.service';
 import { GameStorageService } from '../services/game-storage.service';
@@ -63,7 +65,9 @@ export class ShelfComponent {
 	constructor(
 		private localStorageService: LocalStorageService,
 		private gameStorageService: GameStorageService,
+		private storageHelper: StorageHelperService,
 		private gameService: GameRetrieveService,
+		private gameHelper: GameHelper,
 		private accountService: AccountService) {
 
 		console.log('in AppComponent constructor', gameService);
@@ -125,17 +129,19 @@ export class ShelfComponent {
 	}
 
 	loadGamesFromSession(sessionId: string) {
-		this.games = this.gameService.getGames(sessionId).reverse();
-		console.log('games in shelf', this.games);
-		if (this.games && this.games.length > 0) {
-			this.carouselComponent.onSelect(this.games[0]);
-		}
+		this.gameService.getGames(sessionId, (games) => {
+			this.games = games.reverse();
+			console.log('games in shelf', this.games);
+			if (this.games && this.games.length > 0) {
+				this.carouselComponent.onSelect(this.games[0]);
+			}
+		})
 	}
 
 	onGameSelected(game: Game) {
 		console.log('reloading game', game);
 		this.selectedGame = game;
-		this.gameReplayComponent.reload(game.replay, () => {
+		this.gameReplayComponent.reload(this.gameHelper.getXmlReplay(game), () => {
 			console.log('game reloaded');
 
 			if (!this.shelfLoaded) {

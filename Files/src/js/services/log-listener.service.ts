@@ -12,6 +12,9 @@ declare var overwolf: any;
 
 const HEARTHSTONE_GAME_ID = 9898;
 
+const LOG_FILE = "Power.log";
+const prod = true;
+
 @Injectable()
 export class LogListenerService {
 	plugin: any;
@@ -54,7 +57,7 @@ export class LogListenerService {
 		overwolf.games.onGameInfoUpdated.addListener((res: any) => {
 			// console.log("onGameInfoUpdated: " + JSON.stringify(res));
 			if (this.gameLaunched(res)) {
-				this.logsLocation = res.gameInfo.executionPath.split('Hearthstone.exe')[0] + 'Logs\\Power.log';
+				this.logsLocation = res.gameInfo.executionPath.split('Hearthstone.exe')[0] + 'Logs\\' + LOG_FILE;
 				this.registerLogMonitor();
 			}
 			else if (this.exitGame(res)) {
@@ -65,7 +68,7 @@ export class LogListenerService {
 		overwolf.games.getRunningGameInfo((res: any) => {
 			if (res && res.isRunning && res.id && Math.floor(res.id / 10) === HEARTHSTONE_GAME_ID) {
 				console.log('Game is running!', JSON.stringify(res));
-				this.logsLocation = res.executionPath.split('Hearthstone.exe')[0] + 'Logs\\Power.log';
+				this.logsLocation = res.executionPath.split('Hearthstone.exe')[0] + 'Logs\\' + LOG_FILE;
 				this.registerLogMonitor();
 			}
 		});
@@ -151,8 +154,7 @@ export class LogListenerService {
 		};
 		this.plugin.get().onFileListenerChanged.addListener(handler);
 
-		this.plugin.get().listenOnFile(fileIdentifier, logsLocation, this.fileInitiallyPresent, (id: string, status: boolean, initData: any) => {
-		// this.plugin.get().listenOnFile(fileIdentifier, logsLocation, false, (id: string, status: boolean, initData: any) => {
+		this.plugin.get().listenOnFile(fileIdentifier, logsLocation, prod && this.fileInitiallyPresent, (id: string, status: boolean, initData: any) => {
 			if (id === fileIdentifier) {
 				if (status) {
 					console.log("[" + id + "] now streaming...", this.fileInitiallyPresent);

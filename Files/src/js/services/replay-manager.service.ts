@@ -4,7 +4,9 @@ import { Injectable } from '@angular/core';
 
 import { Game } from '../models/game';
 import { Events } from './events.service';
+import { GameHelper } from './gameparsing/game-helper.service';
 import { GameStorageService } from './game-storage.service';
+import { StorageHelperService } from './storage-helper.service';
 
 declare var OverwolfPlugin: any;
 declare var overwolf: any;
@@ -16,7 +18,12 @@ export class ReplayManager {
 
 	plugin: any;
 
-	constructor(private events: Events, private gameStorage: GameStorageService) {
+	constructor(
+		private events: Events,
+		private gameHelper: GameHelper,
+		private gameStorage: GameStorageService,
+		private storageHelper: StorageHelperService) {
+
 		this.init();
 	}
 
@@ -24,7 +31,7 @@ export class ReplayManager {
 		let directory = this.plugin.get().LOCALAPPDATA + '/Overwolf/ZeroToHeroes/Replays/';
 		let fileName = game.player.name + '(' + game.player.class + ')_vs_' + game.opponent.name + '(' + game.opponent.class + ')_' + new Date().getTime() + '.hszip';
 		console.log('saving locally', directory + fileName);
-		this.plugin.get().writeLocalAppDataZipFile(directory + fileName, "replay.xml", game.replay, (status, message) => {
+		this.plugin.get().writeLocalAppDataZipFile(directory + fileName, "replay.xml", this.gameHelper.getXmlReplay(game), false, (status, message) => {
 			console.log('local zip file saved', status, message);
 			game.path = directory + fileName;
 
@@ -44,9 +51,10 @@ export class ReplayManager {
 					if (res && res.sessionId) {
 						console.log('adding replay');
 						game.fullLogs = null;
-						this.gameStorage.addGame(res.sessionId, game);
-						this.events.broadcast(Events.REPLAY_SAVED, directory + fileName, game);
-						console.log('replay saved');
+						this.gameStorage.addGame(res.sessionId, game, (session) => {
+							console.log('replay saved', session.id, session.games.length);
+							this.events.broadcast(Events.REPLAY_SAVED, directory + fileName, JSON.stringify(game));
+						});
 					}
 				});
 			});

@@ -8,7 +8,7 @@ import { UserPreferences } from './user-preferences.service';
 export class ReplayUploader {
 
 	constructor(
-		private events: Events, 
+		private events: Events,
 		private fileUpload: FileUploadService,
 		private userPreferences: UserPreferences) {
 
@@ -21,7 +21,7 @@ export class ReplayUploader {
 				if (this.userPreferences.isAutoUpload()) {
 					console.log('ReplayUploader: saved game', event.data[0]);
 					let path: string = event.data[0];
-					let game: Game = event.data[1];
+					let game: Game = JSON.parse(event.data[1]);
 					this.fileUpload.uploadFromPath(path, game);
 				}
 				else {

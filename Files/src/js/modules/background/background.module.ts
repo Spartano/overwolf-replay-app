@@ -22,6 +22,7 @@ import { GameParserService } from '../../services/game-parser.service';
 import { LogParserService } from '../../services/gameparsing/log-parser.service';
 import { GameModeParser } from '../../services/gameparsing/game-mode-parser.service';
 import { ReplayManager } from '../../services/replay-manager.service';
+import { GameHelper } from '../../services/gameparsing/game-helper.service';
 import { LogUtils } from '../../services/gameparsing/log-utils.service';
 import { Events } from '../../services/events.service';
 import { ReplayUploader } from '../../services/replay-uploader.service';
@@ -80,6 +81,7 @@ import { MemoryInspectionService } from '../../services/plugins/memory-inspectio
 		DeckLogListenerService,
 		DeckParserService,
 		StorageHelperService,
+		GameHelper,
 		MemoryInspectionService,
 		// { provide: ErrorHandler, useClass: RavenErrorHandler },
 	],

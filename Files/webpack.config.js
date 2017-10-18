@@ -250,6 +250,10 @@ module.exports = {
       {
         "from": path.join(process.cwd(), "plugins"),
         "to": "plugins"
+      },
+      {
+        "from": path.join(process.cwd(), "lib"),
+        "to": "lib"
       }
     ]),
     new ProgressPlugin(),

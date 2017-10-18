@@ -24,6 +24,7 @@ import { FileUploadService } from '../../services/file-upload.service';
 import { GameStorageService } from '../../services/game-storage.service';
 // import { LogUtils } from '../../services/gameparsing/log-utils.service';
 import { Events } from '../../services/events.service';
+import { GameHelper } from '../../services/gameparsing/game-helper.service';
 import { LogParserService } from '../../services/gameparsing/log-parser.service';
 // import { GameModeParser } from '../../services/gameparsing/game-mode-parser.service';
 
@@ -60,6 +61,7 @@ import { LogParserService } from '../../services/gameparsing/log-parser.service'
 		FileUploadService,
 		GameStorageService,
 		Events,
+		GameHelper,
 		StorageHelperService,
 		// GameModeParser,
 		// LogUtils,

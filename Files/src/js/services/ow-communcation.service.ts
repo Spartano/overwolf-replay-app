@@ -24,10 +24,11 @@ export class OwCommunicationService {
 				overwolf.games.getRunningGameInfo((res: any) => {
 					console.log("getRunningGameInfo to send matchcount info: " + JSON.stringify(res));
 					if (res && res.sessionId) {
-						let currentSession = this.storageHelper.getSession(res.sessionId);
-						let info = { matchCount: currentSession.games.length, sessionId: currentSession.id };
-						console.log('setting info', info);
-						overwolf.extensions.setInfo(info);
+						this.storageHelper.getSession(res.sessionId, (currentSession) => {
+							let info = { matchCount: currentSession.games.length, sessionId: currentSession.id };
+							console.log('setting info', info);
+							overwolf.extensions.setInfo(info);
+						});
 					}
 				});
 			});

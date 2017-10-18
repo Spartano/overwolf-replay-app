@@ -43,7 +43,9 @@ export class AppComponent {
 
 		this.events.on(Events.REPLAY_CREATED)
 			.subscribe(event => {
-				this.replayManager.saveLocally(event.data[0]);
+				let game: Game = JSON.parse(event.data[0]);
+				console.log('received game from event', game);
+				this.replayManager.saveLocally(game);
 			});
 
 		this.requestDisplayOnShelf();

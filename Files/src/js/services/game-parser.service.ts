@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 // import * as Raven from 'raven-js';
 import * as $ from 'jquery';
 
+import { GameHelper } from './gameparsing/game-helper.service';
 import { Game, Player } from '../models/game';
-import { Events } from './events.service';
 
 declare var parseCardsText: any;
 
@@ -17,7 +17,7 @@ export class GameParserService {
 	plugin: any;
 	initialized: boolean;
 
-	constructor(private events: Events) {
+	constructor(private gameHelper: GameHelper) {
 		this.init();
 	}
 
@@ -43,38 +43,24 @@ export class GameParserService {
 	}
 
 	// Not externalized, as this will be done inline later on
-	convertLogsToXml(stringLogs: string, game: Game): void {
-
-		// console.log('trying to convert');
+	convertLogsToXml(stringLogs: string, callback: Function): void {
 
 		if (!this.initialized) {
 			// console.log('waiting for game converter plugin initialization');
 			setTimeout(() => {
-				this.convertLogsToXml(stringLogs, game);
+				this.convertLogsToXml(stringLogs, callback);
 			}, 100);
 			return;
 		}
 
-		// console.log('converting');
+		console.log('converting');
 		this.plugin.get().convertLogsToXml(stringLogs, (replayXml: string) => {
-				// console.log('received conversion response');
-				game.replay = replayXml;
-				if (!replayXml) {
-					console.warn('could not convert replay', game, stringLogs);
-					// Raven.captureMessage('Could not convert replay', { extra: {
-					// 	game: game,
-					// 	stringLogs: stringLogs
-					// }});
-				}
-				this.extractMatchup(game);
-				this.extractDuration(game);
-
-				this.events.broadcast(Events.REPLAY_CREATED, game);
+			callback(replayXml);
 		});
 	}
 
 	extractDuration(game: Game) {
-		let replayXml = $.parseXML(game.replay);
+		let replayXml = $.parseXML(this.gameHelper.getXmlReplay(game));
 
 		let timestampedNodes = $(replayXml).find("[ts]");
 		let firstTimestampInSeconds = this.toTimestamp($(timestampedNodes[0]).attr('ts'));
@@ -94,10 +80,10 @@ export class GameParserService {
 	}
 
 	extractMatchup(game: Game): void {
-		let replayXml = $.parseXML(game.replay);
+		let replayXml = $.parseXML(this.gameHelper.getXmlReplay(game));
 		// console.log('replayXML', replayXml);
 		if (!replayXml) {
-			console.warn('invalid game, not adding any meta data', game);
+			console.warn('invalid game, not adding any meta data');
 			// Raven.captureMessage('Could not extract matchup', { extra: {
 			// 	game: game
 			// }});
@@ -118,7 +104,7 @@ export class GameParserService {
 		game.title = game.player.name + ' vs ' + game.opponent.name;
 
 		game.result = this.extractResult(replayXml, mainPlayerEntityId);
-		console.log('parsed game', game);
+		console.log('parsed game');
 	}
 
 	extractPlayers(replayXml: any, mainPlayerId: number): Player[] {
