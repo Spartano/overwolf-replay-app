@@ -15,7 +15,6 @@ const HEARTHSTONE_GAME_ID = 9898;
 @Injectable()
 export class LogListenerService {
 	plugin: any;
-	mindvisionPlugin: any;
 
 	monitoring: boolean;
 	fileInitiallyPresent: boolean;

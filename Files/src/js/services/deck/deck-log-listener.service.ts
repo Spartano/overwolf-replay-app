@@ -12,7 +12,6 @@ const HEARTHSTONE_GAME_ID = 9898;
 @Injectable()
 export class DeckLogListenerService {
 	plugin: any;
-	mindvisionPlugin: any;
 
 	monitoring: boolean;
 	logsLocation: string;

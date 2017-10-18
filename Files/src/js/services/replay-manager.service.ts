@@ -35,7 +35,7 @@ export class ReplayManager {
 				for (let i = 0; i < split.length; i++) {
 					bytes[i] = parseInt(split[i]);
 				}
-				console.log('built byte array', bytes);
+				// console.log('built byte array', bytes);
 
 				game.replayBytes = bytes;
 

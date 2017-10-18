@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 
 import { encode } from 'deckstrings';
 
+import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { Deck, Card } from '../../models/deck';
 
 declare var OverwolfPlugin: any;
@@ -13,29 +14,14 @@ declare var parseCardsText: any;
 @Injectable()
 export class DeckParserService {
 	plugin: any;
-	mindvisionPlugin: any;
 
 	public activeDeckstring: string;
 
-	constructor() {
-		console.log("loading mindvision");
-		this.mindvisionPlugin = new OverwolfPlugin("mindvision", true);
-		this.mindvisionPlugin.initialize((status: boolean) => {
-			if (status === false) {
-				console.warn("Plugin mindvision couldn't be loaded");
-				// Raven.captureMessage('mindvision plugin could not be loaded');
-				return;
-			}
-			console.log("Plugin " + this.mindvisionPlugin.get()._PluginName_ + " was loaded!", this.mindvisionPlugin.get());
-			this.mindvisionPlugin.get().onGlobalEvent.addListener(function(first, second) {
-				console.log('received global event mindvision', first, second);
-			});
-		});
+	constructor(private memoryInspectionService: MemoryInspectionService) {
 	}
 
 	public detectActiveDeck() {
-		this.mindvisionPlugin.get().getActiveDeck((activeDeck) => {
-			// console.log('activeDeck', activeDeck);
+		this.memoryInspectionService.getActiveDeck((activeDeck) => {
 			try {
 				let jsonDeck = JSON.parse(activeDeck);
 				if (jsonDeck.Hero) {

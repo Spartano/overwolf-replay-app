@@ -29,6 +29,7 @@ import { FileUploadService } from '../../services/file-upload.service';
 import { UserPreferences } from '../../services/user-preferences.service';
 import { DeckLogListenerService } from '../../services/deck/deck-log-listener.service';
 import { DeckParserService } from '../../services/deck/deck-parser.service';
+import { MemoryInspectionService } from '../../services/plugins/memory-inspection.service';
 
 // console.log('configuring Raven'),
 // Raven
@@ -79,6 +80,7 @@ import { DeckParserService } from '../../services/deck/deck-parser.service';
 		DeckLogListenerService,
 		DeckParserService,
 		StorageHelperService,
+		MemoryInspectionService,
 		// { provide: ErrorHandler, useClass: RavenErrorHandler },
 	],
 })
