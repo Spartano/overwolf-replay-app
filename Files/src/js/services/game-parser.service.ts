@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import * as Raven from 'raven-js';
+// import * as Raven from 'raven-js';
 import * as $ from 'jquery';
 
 import { Game, Player } from '../models/game';
@@ -30,7 +30,7 @@ export class GameParserService {
 		plugin.initialize((status: boolean) => {
 			if (status === false) {
 				console.warn("Plugin couldn't be loaded??");
-				Raven.captureMessage('overwolf-replay-converter plugin could not be loaded');
+				// Raven.captureMessage('overwolf-replay-converter plugin could not be loaded');
 				return;
 			}
 			this.initialized = true;
@@ -61,10 +61,10 @@ export class GameParserService {
 				game.replay = replayXml;
 				if (!replayXml) {
 					console.warn('could not convert replay', game, stringLogs);
-					Raven.captureMessage('Could not convert replay', { extra: {
-						game: game,
-						stringLogs: stringLogs
-					}});
+					// Raven.captureMessage('Could not convert replay', { extra: {
+					// 	game: game,
+					// 	stringLogs: stringLogs
+					// }});
 				}
 				this.extractMatchup(game);
 				this.extractDuration(game);
@@ -98,9 +98,9 @@ export class GameParserService {
 		// console.log('replayXML', replayXml);
 		if (!replayXml) {
 			console.warn('invalid game, not adding any meta data', game);
-			Raven.captureMessage('Could not extract matchup', { extra: {
-				game: game
-			}});
+			// Raven.captureMessage('Could not extract matchup', { extra: {
+			// 	game: game
+			// }});
 			return;
 		}
 

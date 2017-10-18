@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import * as Raven from 'raven-js';
+// import * as Raven from 'raven-js';
 
 import { LogListenerService } from '../services/log-listener.service';
 import { DeckLogListenerService } from '../services/deck/deck-log-listener.service';
@@ -93,7 +93,7 @@ export class AppComponent {
 							result: result2
 						}
 						console.log('Request to display shelf failed', { extra: extra });
-						Raven.captureMessage('Request to display shelf failed', { extra: extra });
+						// Raven.captureMessage('Request to display shelf failed', { extra: extra });
 					}
 				});
 			}
@@ -104,7 +104,7 @@ export class AppComponent {
 					result: result
 				}
 				console.log('EGS is not enabled', { extra: extra });
-				Raven.captureMessage('EGS is not enabled', { extra: extra });
+				// Raven.captureMessage('EGS is not enabled', { extra: extra });
 			}
 		});
 	}

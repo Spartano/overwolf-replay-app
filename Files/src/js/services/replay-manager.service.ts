@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import * as Raven from 'raven-js';
+// import * as Raven from 'raven-js';
 
 import { Game } from '../models/game';
 import { Events } from './events.service';
@@ -60,7 +60,7 @@ export class ReplayManager {
 		this.plugin.initialize((status: boolean) => {
 			if (status === false) {
 				console.warn("Plugin couldn't be loaded??");
-				Raven.captureMessage('simple-io-plugin could not be loaded');
+				// Raven.captureMessage('simple-io-plugin could not be loaded');
 				return;
 			}
 			console.log("Plugin " + this.plugin.get()._PluginName_ + " was loaded!", this.plugin.get());

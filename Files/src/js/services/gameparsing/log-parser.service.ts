@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import * as Raven from 'raven-js';
+// import * as Raven from 'raven-js';
 
 import { Game } from '../../models/game';
 import { GameParserService } from '../game-parser.service';
@@ -38,7 +38,7 @@ export class LogParserService {
 		this.mindvisionPlugin.initialize((status: boolean) => {
 			if (status === false) {
 				console.warn("Plugin mindvision couldn't be loaded");
-				Raven.captureMessage('mindvision plugin could not be loaded');
+				// Raven.captureMessage('mindvision plugin could not be loaded');
 				return;
 			}
 			console.log("Plugin " + this.mindvisionPlugin.get()._PluginName_ + " was loaded!", this.mindvisionPlugin.get());

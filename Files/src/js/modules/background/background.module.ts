@@ -2,7 +2,7 @@ import { NgModule, ErrorHandler }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule }    from '@angular/http';
 
-import * as Raven from 'raven-js';
+// import * as Raven from 'raven-js';
 
 import { LocalStorageService, LocalStorageModule } from 'angular-2-local-storage';
 
@@ -30,18 +30,18 @@ import { UserPreferences } from '../../services/user-preferences.service';
 import { DeckLogListenerService } from '../../services/deck/deck-log-listener.service';
 import { DeckParserService } from '../../services/deck/deck-parser.service';
 
-console.log('configuring Raven'),
-Raven
-  	.config('https://c08a7bdf3f174ff2b45ad33bcf8c48f6@sentry.io/202626')
-  	.install();
-console.log('Raven configured');
+// console.log('configuring Raven'),
+// Raven
+//   	.config('https://c08a7bdf3f174ff2b45ad33bcf8c48f6@sentry.io/202626')
+//   	.install();
+// console.log('Raven configured');
 
- export class RavenErrorHandler implements ErrorHandler {
-  	handleError(err: any) : void {
-	  	console.log('error captured by Raven', err);
-	    // Raven.captureException(err);
-  	}
-}
+//  export class RavenErrorHandler implements ErrorHandler {
+//   	handleError(err: any) : void {
+// 	  	console.log('error captured by Raven', err);
+// 	    // Raven.captureException(err);
+//   	}
+// }
 
 @NgModule({
 	imports: [
@@ -79,7 +79,7 @@ console.log('Raven configured');
 		DeckLogListenerService,
 		DeckParserService,
 		StorageHelperService,
-		{ provide: ErrorHandler, useClass: RavenErrorHandler },
+		// { provide: ErrorHandler, useClass: RavenErrorHandler },
 	],
 })
 

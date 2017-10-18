@@ -2,7 +2,7 @@ import { Component, NgZone, ViewChild } from '@angular/core';
 import { ViewEncapsulation } from '@angular/core';
 
 import { LocalStorageService } from 'angular-2-local-storage';
-import * as Raven from 'raven-js';
+// import * as Raven from 'raven-js';
 
 import { GameReplayComponent } from '../components/game-replay.component';
 import { CarouselComponent } from '../components/carousel.component';

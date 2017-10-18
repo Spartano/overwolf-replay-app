@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http } from "@angular/http";
 
-import * as Raven from 'raven-js';
+// import * as Raven from 'raven-js';
 
 import 'rxjs/add/operator/share';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -102,10 +102,10 @@ export class FileUploadService {
 						}
 
 						console.warn('An error during upload', err);
-						Raven.captureMessage('Error while sending game replay to AWS', { extra: {
-							error: err,
-							params: params,
-						}});
+						// Raven.captureMessage('Error while sending game replay to AWS', { extra: {
+						// 	error: err,
+						// 	params: params,
+						// }});
 					}
 					else {
 						console.log('Uploaded game', data2, reviewId);

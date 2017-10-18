@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import * as Raven from 'raven-js';
+// import * as Raven from 'raven-js';
 
 import {DeckParserService} from './deck-parser.service'
 
@@ -31,7 +31,7 @@ export class DeckLogListenerService {
 		plugin.initialize((status: boolean) => {
 			if (status === false) {
 				console.warn("Plugin couldn't be loaded??", status);
-				Raven.captureMessage('simple-io-plugin could not be loaded');
+				// Raven.captureMessage('simple-io-plugin could not be loaded');
 				return;
 			}
 			console.log("Plugin " + plugin.get()._PluginName_ + " was loaded!");
@@ -107,12 +107,12 @@ export class DeckLogListenerService {
 				}
 				else {
 					console.warn("received an error on file: " + id + ": " + data);
-					Raven.captureMessage('Error while trying to read log file', { extra: {
-						id: id,
-						data: data,
-						status: status,
-						path: logsLocation
-					}});
+					// Raven.captureMessage('Error while trying to read log file', { extra: {
+					// 	id: id,
+					// 	data: data,
+					// 	status: status,
+					// 	path: logsLocation
+					// }});
 				}
 				return;
 			}
@@ -138,12 +138,12 @@ export class DeckLogListenerService {
 				}
 				else {
 					console.warn("something bad happened with: " + id);
-					Raven.captureMessage('listenOnFile returned wrong id', { extra: {
-						id: id,
-						fileIdentifier: fileIdentifier,
-						initData: initData,
-						path: logsLocation
-					}});
+					// Raven.captureMessage('listenOnFile returned wrong id', { extra: {
+					// 	id: id,
+					// 	fileIdentifier: fileIdentifier,
+					// 	initData: initData,
+					// 	path: logsLocation
+					// }});
 				}
 			}
 		});
