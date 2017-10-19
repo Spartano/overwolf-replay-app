@@ -62,6 +62,7 @@
 
     .replay__controls {
     	background-color: transparent;
+        z-index: 999;
     }
 
     .bottom .mulligan {
@@ -108,7 +109,7 @@
     // Make sure the tooltips don't overflow
 }
 
-    
+
 @media screen and (max-width: 1070px) {
     .hearthstone .manastorm #externalPlayer .card-tooltip {
         width: 25%;
