@@ -25,6 +25,8 @@ declare var overwolf: any;
 export class AppComponent {
 
 	// requestedDisplayOnShelf: boolean;
+	retriesForEgsLeft = 10;
+	retryForEgsDelay = 2000;
 
 	constructor(
 		private logListenerService: LogListenerService,
@@ -75,13 +77,24 @@ export class AppComponent {
 		}
 	}
 
+	retryEgs(errorCallback) {
+		if (this.retriesForEgsLeft < 0) {
+			errorCallback();
+			return;
+		}
+
+		this.retriesForEgsLeft--;
+		console.log('retrying to display EGS', this.retriesForEgsLeft);
+		setTimeout(() => {
+			this.requestDisplayOnShelf();
+		}, this.retryForEgsDelay)
+	}
+
 	requestDisplayOnShelf(): void {
 		console.log('requesting display on shelf', overwolf.egs);
 		// this.showShelfWindow();
 		overwolf.egs.isEnabled((result: any) => {
 			console.log('egs is enabled', result);
-			// result.status == ["success"| "error"]
-			// result.isEnabled == [true | false]
 			if (result.status === 'success' && result.isEnabled) {
 				console.log('requesting to display', result);
 				overwolf.egs.requestToDisplay((result2: any) => {
@@ -90,23 +103,27 @@ export class AppComponent {
 						console.log('request to display is a success, OW should call shelf.html which will trigger status listening process updates on its side');
 					}
 					else {
-						let extra = {
-							status: result2.status,
-							result: result2
-						}
-						console.log('Request to display shelf failed', { extra: extra });
-						// Raven.captureMessage('Request to display shelf failed', { extra: extra });
+						this.retryEgs(() => {
+							let extra = {
+								status: result2.status,
+								result: result2
+							}
+							console.log('Request to display shelf failed', { extra: extra });
+							// Raven.captureMessage('Request to display shelf failed', { extra: extra });
+						});
 					}
 				});
 			}
 			else {
-				let extra = {
-					status: result.status,
-					isEnabled: result.isEnabled,
-					result: result
-				}
-				console.log('EGS is not enabled', { extra: extra });
-				// Raven.captureMessage('EGS is not enabled', { extra: extra });
+				this.retryEgs(() => {
+					let extra = {
+						status: result.status,
+						isEnabled: result.isEnabled,
+						result: result
+					}
+					console.log('EGS is not enabled', { extra: extra });
+					// Raven.captureMessage('EGS is not enabled', { extra: extra });
+				});
 			}
 		});
 	}
