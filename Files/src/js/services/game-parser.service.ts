@@ -199,11 +199,8 @@ export class GameParserService {
 	}
 
 	extractClassFromHero(hero: string) {
-		// console.log('cardId', cardId)
-		// console.log('extractClassFromHero', hero, parseCardsText.getCard(hero));
-
+		console.log('extractClassFromHero', hero, parseCardsText.getCard(hero));
 		let playerClass = parseCardsText.getCard(hero).playerClass.toLowerCase();
-		// console.log('playerClass', playerClass);
 		return playerClass;
 	}
 
