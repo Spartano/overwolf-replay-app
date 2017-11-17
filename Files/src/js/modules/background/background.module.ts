@@ -31,6 +31,7 @@ import { UserPreferences } from '../../services/user-preferences.service';
 import { DeckLogListenerService } from '../../services/deck/deck-log-listener.service';
 import { DeckParserService } from '../../services/deck/deck-parser.service';
 import { MemoryInspectionService } from '../../services/plugins/memory-inspection.service';
+import { DebugService } from '../services/debug.service';
 
 // console.log('configuring Raven'),
 // Raven
@@ -83,6 +84,7 @@ import { MemoryInspectionService } from '../../services/plugins/memory-inspectio
 		StorageHelperService,
 		GameHelper,
 		MemoryInspectionService,
+		DebugService,
 		// { provide: ErrorHandler, useClass: RavenErrorHandler },
 	],
 })

@@ -9,6 +9,7 @@ import { OwCommunicationService } from '../services/ow-communcation.service';
 import { ReplayManager } from '../services/replay-manager.service';
 import { ReplayUploader } from '../services/replay-uploader.service';
 import { Events } from '../services/events.service';
+import { DebugService } from '../services/debug.service';
 
 import { Game } from '../models/game';
 
@@ -29,6 +30,7 @@ export class AppComponent {
 	retryForEgsDelay = 2000;
 
 	constructor(
+		private debugService: DebugService,
 		private logListenerService: LogListenerService,
 		// private deckLogListenerService: DeckLogListenerService,
 		private gameStorageService: GameStorageService,
@@ -51,30 +53,6 @@ export class AppComponent {
 			});
 
 		this.requestDisplayOnShelf();
-
-		let oldConsoleLogFunc = console.log;
-		let debugMode = true;
-		if (debugMode) {
-			console.log = function() {
-				let argsString = "";
-				for (let i = 0; i < arguments.length; i++) {
-					let cache = [];
-					argsString += (JSON.stringify(arguments[i], function(key, value) {
-						if (typeof value === 'object' && value !== null) {
-							if (cache.indexOf(value) !== -1) {
-								// Circular reference found, discard key
-								return;
-							}
-							// Store value in our collection
-							cache.push(value);
-						}
-						return value;
-					}) || '').substring(0, 1000) + ' | ';
-					cache = null; // Enable garbage collection + " | "
-				}
-				oldConsoleLogFunc.apply(console, [argsString]);
-			};
-		}
 	}
 
 	retryEgs(errorCallback) {

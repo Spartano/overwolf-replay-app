@@ -16,6 +16,7 @@ import { StorageHelperService } from '../services/storage-helper.service';
 import { AccountService } from '../services/account.service';
 import { LogListenerService } from '../services/log-listener.service';
 import { GameStorageService } from '../services/game-storage.service';
+import { DebugService } from '../services/debug.service';
 
 declare var overwolf: any;
 import * as $ from 'jquery';
@@ -63,6 +64,7 @@ export class ShelfComponent {
 	@ViewChild(GameReplayComponent) private gameReplayComponent: GameReplayComponent;
 
 	constructor(
+		private debugService: DebugService,
 		private localStorageService: LocalStorageService,
 		private gameStorageService: GameStorageService,
 		private storageHelper: StorageHelperService,
@@ -74,31 +76,6 @@ export class ShelfComponent {
 		this.shelfLoaded = false;
 
 		this.postMessage();
-
-		// Change logging for debug
-		let oldConsoleLogFunc = console.log;
-		let debugMode = true;
-		if (debugMode) {
-			console.log = function() {
-				let argsString = "";
-				for (let i = 0; i < arguments.length; i++) {
-					let cache = [];
-					argsString += (JSON.stringify(arguments[i], function(key, value) {
-						if (typeof value === 'object' && value !== null) {
-							if (cache.indexOf(value) !== -1) {
-								// Circular reference found, discard key
-								return;
-							}
-							// Store value in our collection
-							cache.push(value);
-						}
-						return value;
-					}) || '').substring(0, 500) + ' | ';
-					cache = null; // Enable garbage collection + " | "
-				}
-				oldConsoleLogFunc.apply(console, [argsString]);
-			};
-		}
 	}
 
 	ngOnInit(): void {

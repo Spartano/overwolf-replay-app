@@ -22,6 +22,7 @@ import { AccountService } from '../../services/account.service';
 import { UserPreferences } from '../../services/user-preferences.service';
 import { FileUploadService } from '../../services/file-upload.service';
 import { GameStorageService } from '../../services/game-storage.service';
+import { DebugService } from '../../services/debug.service';
 // import { LogUtils } from '../../services/gameparsing/log-utils.service';
 import { Events } from '../../services/events.service';
 import { GameHelper } from '../../services/gameparsing/game-helper.service';
@@ -63,6 +64,7 @@ import { LogParserService } from '../../services/gameparsing/log-parser.service'
 		Events,
 		GameHelper,
 		StorageHelperService,
+		DebugService,
 		// GameModeParser,
 		// LogUtils,
 	],
