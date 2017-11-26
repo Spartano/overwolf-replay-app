@@ -7,7 +7,7 @@ export class DebugService {
 
 	constructor() {
 		let oldConsoleLogFunc = console.log;
-		let debugMode = false;
+		let debugMode = true;
 		if (debugMode) {
 			console.log = function() {
 				let argsString = "";
