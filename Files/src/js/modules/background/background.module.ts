@@ -7,10 +7,6 @@ import { HttpModule }    from '@angular/http';
 import { LocalStorageService, LocalStorageModule } from 'angular-2-local-storage';
 
 import { AppComponent }  from '../../components/app.component';
-import { GameReplayComponent } from '../../components/game-replay.component';
-import { CarouselComponent } from '../../components/carousel.component';
-import { GameThumbnailComponent } from '../../components/game-thumbnail.component';
-import { HeroAvatarComponent } from '../../components/hero-avatar.component';
 
 // import { GameService } from './game.service';
 import { GameStorageService } from '../../services/game-storage.service';
@@ -31,7 +27,7 @@ import { UserPreferences } from '../../services/user-preferences.service';
 import { DeckLogListenerService } from '../../services/deck/deck-log-listener.service';
 import { DeckParserService } from '../../services/deck/deck-parser.service';
 import { MemoryInspectionService } from '../../services/plugins/memory-inspection.service';
-import { DebugService } from '../services/debug.service';
+import { DebugService } from '../../services/debug.service';
 
 // console.log('configuring Raven'),
 // Raven
@@ -57,10 +53,6 @@ import { DebugService } from '../services/debug.service';
 	],
 	declarations: [
 		AppComponent,
-		CarouselComponent,
-		GameReplayComponent,
-		GameThumbnailComponent,
-		HeroAvatarComponent,
 	],
 	bootstrap: [
 		AppComponent,

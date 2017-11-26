@@ -14,6 +14,14 @@ export class Events {
 	public static REPLAY_SAVED = 'replay-saved';
 	public static REPLAY_CREATED = 'replay-created';
 
+	public static SHOW_LOGIN = 'show-login';
+	public static HIDE_LOGIN = 'hide-login';
+
+	public static UPLOAD_STARTED = 'upload-started';
+	public static UPLOAD_COMPLETE = 'upload-complete';
+
+	public static GLOBAL_ERROR = 'global-error';
+
 	private _eventBus: Subject<BroadcastEvent>;
 
 	constructor() {
@@ -21,6 +29,7 @@ export class Events {
 	}
 
 	broadcast(key: any, ...data: any[]) {
+		console.log('broadcasting', key, data);
 		this._eventBus.next({key, data});
 	}
 

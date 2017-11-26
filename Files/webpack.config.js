@@ -111,8 +111,14 @@ module.exports = {
         "loader": "file-loader?name=[name].[hash:20].[ext]"
       },
       {
-        "test": /\.(jpg|png|webp|gif|otf|ttf|woff|woff2|ani)$/,
+        "test": /\.(jpg|png|webp|gif|ani)$/,
+        // "test": /\.(jpg|png|webp|gif|otf|ttf|woff2|ani)$/,
         "loader": "url-loader?name=[name].[hash:20].[ext]&limit=10000"
+      },
+      {
+        "test": /\.(otf|ttf|woff|woff2)$/,
+        // "test": /\.(jpg|png|webp|gif|otf|ttf|woff2|ani)$/,
+        "loader": "url-loader?name=/Files/assets/fonts/[name].[ext]&limit=10000"
       },
       {
         "exclude": [],

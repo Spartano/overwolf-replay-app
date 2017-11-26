@@ -90,3 +90,12 @@ body {
 		}
 	}
 }
+
+.svg-icon-fill {
+  fill: currentcolor;
+}
+
+.svg-icon-stroke {
+  fill: none;
+  stroke: currentcolor;
+}

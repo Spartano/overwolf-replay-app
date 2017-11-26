@@ -1,0 +1,88 @@
+@import "vars";
+
+.cloud-icon {
+	position: relative;
+	width: 110px;
+	height: 80px;
+
+	svg {
+		position: relative;
+	}
+}
+
+.cloud-sun {
+		--size: 40px;
+		position: absolute;
+		top: -6px;
+		right: -3px;
+
+	svg {
+		position: absolute;
+	}
+}
+
+.modal-window {
+	color: $brown01;
+	width: 360px;
+	min-height: 260px;
+	padding: 20px;
+	display: flex;
+	text-align: center;
+	flex-direction: column;
+	align-items: center;
+
+	footer {
+		align-self: stretch;
+		margin-top: auto;
+		padding-top: 30px;
+
+		.btn {
+			margin: auto;
+		}
+	}
+}
+
+.modal-window {
+	i + h1 {
+		margin-top: 10px;
+	}
+
+	i + section {
+		margin-top: 10px;
+
+		& + section {
+			margin-top: 10px;
+		}
+	}
+
+	h1 + * {
+		margin-top: 10px;
+	}
+
+	.form-section + .form-section {
+		margin-top: 10px;
+	}
+
+	.btn + p {
+		margin-top: 10px;
+	}
+}
+
+// validation
+.input-text:invalid:not(:focus) {
+  outline-color: $red01;
+
+  + .invalid-text {
+		margin-top: 3px;
+  }
+}
+
+.invalid-text {
+	pointer-events: none;
+	// margin-top: -30px;
+	font-size: 13px;
+	padding: 3px;
+	color: $light-brown02;
+	background-color: $red01;
+	transition: .15s;
+}

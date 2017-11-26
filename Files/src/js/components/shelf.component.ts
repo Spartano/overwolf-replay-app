@@ -1,19 +1,15 @@
-import { Component, NgZone, ViewChild } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { ViewEncapsulation } from '@angular/core';
 
 import { LocalStorageService } from 'angular-2-local-storage';
 // import * as Raven from 'raven-js';
 
-import { GameReplayComponent } from '../components/game-replay.component';
-import { CarouselComponent } from '../components/carousel.component';
-import { EmptyShelfComponent } from '../components/empty-shelf.component';
-
 import { Game } from '../models/game';
 
+import { Events } from '../services/events.service';
 import { GameHelper } from '../services/gameparsing/game-helper.service';
 import { GameRetrieveService } from '../services/game-retrieve.service';
 import { StorageHelperService } from '../services/storage-helper.service';
-import { AccountService } from '../services/account.service';
 import { LogListenerService } from '../services/log-listener.service';
 import { GameStorageService } from '../services/game-storage.service';
 import { DebugService } from '../services/debug.service';
@@ -26,83 +22,75 @@ import * as $ from 'jquery';
 	styleUrls: [`../../css/component/shelf.component.scss`, '../../css/global/global.scss'],
 	encapsulation: ViewEncapsulation.None,
 	template: `
-		<div class="shelf-container">
-			<div class="shelf-with-games" *ngIf="!games || games.length > 0">
-				<div class="main-zone">
-					<!--<div class="header">
-						<info-zone [game]="selectedGame" *ngIf="selectedGame"></info-zone>
-						<button *ngIf="!accountClaimed && accountClaimUrl" class="claim-account" (click)="claimAccount()">
-							Claim my account
-							<div class="zth-tooltip bottom">
-								<p>Claim your Zero to Heroes account now to store all your games online and post your games for advice!</p>
-								<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 4">
-									<polygon points="12,0 6,4 0,0 "/>
-								</svg>
-							</div>
-						</button>
-					</div>-->
-					<game-replay [game]="selectedGame"></game-replay>
-				</div>
-				<carousel [games]="games" (onGameSelected)=onGameSelected($event)></carousel>
-			</div>
-			<empty-shelf class="empty-shelf" *ngIf="games && games.length === 0"></empty-shelf>
+		<div class="shelf-container" [ngSwitch]="currentState">
+			<p class="error" *ngIf="globalError">{{globalError}}</p>
+			<loading *ngSwitchCase="'LOADING'" class="loading"></loading>
+			<shelf-with-games *ngSwitchCase="'SHELF_WITH_GAMES'" [games]="games"></shelf-with-games>
+			<empty-shelf *ngSwitchCase="'EMPTY_SHELF'" class="empty-shelf"></empty-shelf>
+			<first-time *ngIf="firstTimeUser" class="first-time" (close)="completeFtue()"></first-time>
+			<login *ngIf="showLogin" class="login" (close)="showLogin = false"></login>
+			<upload-progress class="upload-progress"></upload-progress>
 		</div>
 	`,
 })
 export class ShelfComponent {
-	zone: NgZone;
-	// requestedDisplayOnShelf:boolean;
-	shelfLoaded: boolean;
-	accountClaimed: boolean;
-	accountClaimUrl: string;
-
-	name = 'Hearthstone Replay Viewer';
-	games: Game[] = null;
-	selectedGame: Game;
-
-	@ViewChild(CarouselComponent) private carouselComponent: CarouselComponent;
-	@ViewChild(GameReplayComponent) private gameReplayComponent: GameReplayComponent;
+	private currentState = 'LOADING';
+	private globalError: string;
+	private games: Game[] = null;
+	private firstTimeUser = false;
+	private showLogin = false;
 
 	constructor(
+		private zone: NgZone,
 		private debugService: DebugService,
+		private events: Events,
 		private localStorageService: LocalStorageService,
 		private gameStorageService: GameStorageService,
 		private storageHelper: StorageHelperService,
 		private gameService: GameRetrieveService,
-		private gameHelper: GameHelper,
-		private accountService: AccountService) {
+		private gameHelper: GameHelper) {
 
 		console.log('in AppComponent constructor', gameService);
-		this.shelfLoaded = false;
 
 		this.postMessage();
+
+		this.events.on(Events.SHOW_LOGIN)
+			.subscribe(() => {
+				console.log('showing login');
+				this.showLogin = true;
+			});
+		this.events.on(Events.HIDE_LOGIN)
+			.subscribe(() => {
+				this.showLogin = false;
+			});
+		this.events.on(Events.GLOBAL_ERROR)
+			.subscribe((event) => {
+				switch(event.data[0]) {
+					case 'CANT_CLAIM_ACCOUNT':
+						this.globalError = 'We could not connect to your account, and we will try again next time you open the EGS. In the meantime, you can still upload and share your games, and they will be linked once we can connect you.'
+						break;
+					default:
+						console.log('Unkown global error', event.data[0]);
+				}
+			});
 	}
 
 	ngOnInit(): void {
 		overwolf.extensions.getInfo(
 			'nafihghfcpikebhfhdhljejkcifgbdahdhngepfb',
 			(callbackInfo) => {
-				console.log('extensions callback', callbackInfo);
-				let info = callbackInfo.info;
-				if (info && info.sessionId) {
-					this.loadGamesFromSession(info.sessionId);
-				}
-				else {
-					this.loadGamesFromSession(null);
-				}
+				this.zone.run(() => {
+					console.log('extensions callback', callbackInfo);
+					let info = callbackInfo.info;
+					if (info && info.sessionId) {
+						this.loadGamesFromSession(info.sessionId);
+					}
+					else {
+						this.loadGamesFromSession(null);
+					}
+				})
 			}
 		)
-
-		console.log('subscribing to account claim subjects');
-		this.accountService.accountClaimUrlSubject.subscribe((value) => {
-			this.accountClaimUrl = value.toString();
-			console.log('built claimAccountUrl', this.accountClaimUrl);
-		});
-
-		this.accountService.accountClaimStatusSubject.subscribe((value) => {
-			this.accountClaimed = value;
-			console.log('accountClaimedStatus', value);
-		});
 	}
 
 	loadGamesFromSession(sessionId: string) {
@@ -110,26 +98,24 @@ export class ShelfComponent {
 			this.games = games.reverse();
 			console.log('games in shelf', this.games);
 			if (this.games && this.games.length > 0) {
-				this.carouselComponent.onSelect(this.games[0]);
+				this.currentState = 'SHELF_WITH_GAMES';
+				this.firstTimeUser = this.isFirstTime();
 			}
+			else {
+				this.currentState = 'EMPTY_SHELF';
+			}
+			console.log('current state', this.currentState);
 		})
 	}
 
-	onGameSelected(game: Game) {
-		console.log('reloading game', game);
-		this.selectedGame = game;
-		this.gameReplayComponent.reload(this.gameHelper.getXmlReplay(game), () => {
-			console.log('game reloaded');
+	isFirstTime() {
+		return this.localStorageService.get('ftue-completed') !== 'true';
+	}
 
-			if (!this.shelfLoaded) {
-				console.log('sending shelf ready message');
-				// Start loading the shelf page
-				overwolf.egs.setStatus(overwolf.egs.enums.ShelfStatus.Ready, (result: any) => {
-					console.log('confirmed ready', result);
-					this.shelfLoaded = true;
-				});
-			}
-		});
+	completeFtue() {
+		this.localStorageService.set('ftue-completed', 'true');
+		this.firstTimeUser = false;
+		console.log('FTUE completed');
 	}
 
 	// https://github.com/Microsoft/TypeScript/issues/9548
@@ -146,11 +132,6 @@ export class ShelfComponent {
 			// console.log('scrolling', evt);
 			window.parent.postMessage({deltaY: evt.deltaY}, "*");
 		}, { passive: true });
-	}
-
-	claimAccount() {
-		window.open(this.accountClaimUrl, '_blank');
-		this.accountService.startListeningForClaimChanges();
 	}
 }
 

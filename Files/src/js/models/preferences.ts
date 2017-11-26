@@ -1,4 +1,4 @@
 export class Preferences {
-	autoUpload: boolean;
+	autoUpload = undefined;
 	dontAskAutoUpload: boolean;
 }

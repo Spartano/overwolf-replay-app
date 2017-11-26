@@ -31,7 +31,9 @@
 			"ShelfWindow": {
 				"file": "Files/html/shelf.html",
 				"transparent": true,
-				"show_in_taskbar": false
+				"show_in_taskbar": false,
+				"block_top_window_navigation": true,
+				"popup_blocker": false
 			},
 			"egs_shelf_window": {
 				"min_size": {"width": 694, "height": 420},
@@ -46,9 +48,12 @@
 					"background":"#daac76;#131313;#131313",
 					"ftue_header" : "Relive your matches",
 					"ftue_body" : "Get play by play recaps based on your game log. Reveal hidden opponent cards, fast forward to epic moments, and make the most out of your victories and losses"
-				}
+				},
+				"block_top_window_navigation": true,
+				"popup_blocker": false
 			}
 		},
+		"force_browser": "user",
 		"game_events": ["9898"],
 		"launch_events": [
 			{
@@ -61,7 +66,8 @@
 		],
 		"externally_connectable": {
 			"matches": [
-				"http://www.zerotoheroes.com"
+				"http://www.zerotoheroes.com",
+				"https://www.zerotoheroes.com",
 			]
 		},
 		"extra-objects": {

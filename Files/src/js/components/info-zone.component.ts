@@ -9,7 +9,7 @@ import { Game } from '../models/game';
 	styleUrls: [`../../css/component/info-zone.component.scss`],
 	template: `
 		<div class="info-zone">
-			<game-info [game]="game"></game-info>
+			<!--<game-info [game]="game"></game-info>-->
 			<sharing-zone [game]="game"></sharing-zone>
 		</div>
 	`,
