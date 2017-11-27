@@ -149,7 +149,7 @@ export class ShelfComponent {
 				// Start loading the shelf page
 				overwolf.egs.setStatus(overwolf.egs.enums.ShelfStatus.Ready, (result: any) => {
 					console.log('confirmed ready', result);
-					this.shelfLoaded = false;
+					this.shelfLoaded = true;
 				});
 			}
 		});
