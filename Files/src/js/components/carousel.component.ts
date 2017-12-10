@@ -132,6 +132,9 @@ export class CarouselComponent {
 				let thumbnailElements = $('.carousel li');
 				console.log('thumbnailElements', thumbnailElements, thumbnailElements.length);
 				if (!thumbnailElements || thumbnailElements.length === 0) {
+					this.bouncing = false;
+					this.recomputeVisibleElements(100);
+					console.log('No thumbnail elements detected, retrying soon');
 					return;
 				}
 
