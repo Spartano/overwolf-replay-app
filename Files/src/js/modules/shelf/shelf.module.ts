@@ -9,6 +9,7 @@ import { ShareButtonsModule } from 'ng2-sharebuttons-ow';
 import { ShelfComponent }  from '../../components/shelf.component';
 import { ShelfWithGamesComponent }  from '../../components/shelf-with-games.component';
 import { LoadingComponent } from '../../components/loading.component';
+import { GlobalErrorComponent } from '../../components/global-error.component';
 import { FirstTimeComponent } from '../../components/first-time.component';
 import { EmptyShelfComponent }  from '../../components/empty-shelf.component';
 import { GameReplayComponent } from '../../components/game-replay.component';
@@ -59,6 +60,7 @@ import { LogParserService } from '../../services/gameparsing/log-parser.service'
 		ShelfComponent,
 		ShelfWithGamesComponent,
 		EmptyShelfComponent,
+		GlobalErrorComponent,
 		FirstTimeComponent,
 		LoadingComponent,
 		LoginComponent,
