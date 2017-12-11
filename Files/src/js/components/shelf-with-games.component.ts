@@ -32,6 +32,9 @@ declare var overwolf: any;
 							</svg>
 						</div>
 					</button>
+					<button *ngIf="accountClaimed" class="btn btn-connect" (click)="disconnect()">
+						Disconnect
+					</button>
 				</div>
 				<game-replay [game]="selectedGame"></game-replay>
 			</div>
@@ -110,6 +113,10 @@ export class ShelfWithGamesComponent {
 
 	showLogin() {
 		this.events.broadcast(Events.SHOW_LOGIN);
+	}
+
+	disconnect() {
+		this.accountService.disconnect();
 	}
 
 	// claimAccount() {
