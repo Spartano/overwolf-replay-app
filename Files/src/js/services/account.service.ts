@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { LocalStorageService } from 'angular-2-local-storage';
 
+import { UserPreferences } from './user-preferences.service';
 import { Events } from './events.service';
 
 declare var overwolf: any;
@@ -25,6 +26,7 @@ export class AccountService {
 		private http: Http,
 		private zone: NgZone,
 		private events: Events,
+		private userPreferences: UserPreferences,
 		private localStorageService: LocalStorageService) {
 
 		this.init();
@@ -78,6 +80,9 @@ export class AccountService {
 			let accountUrl = DISCONNECT_ACCOUNT_URL + user.userId;
 			this.http.post(accountUrl, {}, options)
 				.subscribe((data) => { this.accountClaimHandler(data, false) }, (err) => { this.accountDisconnectErrorHandler(err, user.userId) });
+
+			// Setting auto-upload to false
+			this.userPreferences.setAutoUpload(false);
 		});
 	}
 
