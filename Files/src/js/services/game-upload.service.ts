@@ -27,7 +27,7 @@ export class GameUploadService {
 
 	public upload(game: Game) {
 		console.log('about to upload before sharing');
-		if (game.reviewId === 'test') {
+		if (game.reviewId) {
 			console.log('game already uploaded');
 			this.uploadStatus.next(GameUploadService.UPLOAD_COMPLETE);
 		}

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { ShareProvider, ShareButton } from 'ng2-sharebuttons-ow';
@@ -93,21 +93,16 @@ export class SharingZoneComponent {
 
 	private uploadBeforeSharing() {
 		this.upload.upload(this.game);
-		this.pollUploadStatus();
-	}
-
-	// We need to do it that way because Chrome prevents window.open() when it isn't done in
-	// direct response of a user action (it think they are popups)
-	private pollUploadStatus() {
-		if (this.upload.uploadStatus.value === GameUploadService.UPLOAD_COMPLETE) {
-			console.log('Upload complete!')
-			this.uploadDoneNotifier.next(true);
-			// Reset
-			this.uploadDoneNotifier.next(false);
-		}
-		else {
-			setTimeout(() => { this.pollUploadStatus() }, 100);
-		}
+		this.upload.uploadStatus.subscribe(
+			(data) => {
+				if (data === GameUploadService.UPLOAD_COMPLETE) {
+					console.log('Upload complete!')
+					this.uploadDoneNotifier.next(true);
+					// Reset
+					this.uploadDoneNotifier.next(false);
+				}
+			}
+		);
 	}
 
 	private shareZetoh() {
