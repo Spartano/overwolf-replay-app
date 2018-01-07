@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
 	styleUrls: [`../../css/component/empty-shelf.component.scss`],
 	template: `
 		<div>
-			<img src="assets/images/clockwork.png" alt="">
+			<img src="../assets/images/clockwork.png" alt="">
 
 			<h1>No Replay</h1>
 			<p>We found no match to replay in this session.<br>
