@@ -23,7 +23,7 @@ export class MemoryInspectionService {
 				// Raven.captureMessage('mindvision plugin could not be loaded');
 				return;
 			}
-			console.log("Plugin " + this.mindvisionPlugin.get()._PluginName_ + " was loaded!", this.mindvisionPlugin.get());
+			console.log("Plugin " + this.mindvisionPlugin.get()._PluginName_ + " was loaded!");
 			this.mindvisionPlugin.get().onGlobalEvent.addListener(function(first, second) {
 				console.log('received global event mindvision', first, second);
 			});

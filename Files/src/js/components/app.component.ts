@@ -43,7 +43,7 @@ export class AppComponent {
 	}
 
 	init(): void {
-		console.log('init gameservice', overwolf.egs);
+		// console.log('init gameservice', overwolf.egs);
 
 		this.events.on(Events.REPLAY_CREATED)
 			.subscribe(event => {
@@ -62,23 +62,23 @@ export class AppComponent {
 		}
 
 		this.retriesForEgsLeft--;
-		console.log('retrying to display EGS', this.retriesForEgsLeft);
+		// console.log('retrying to display EGS', this.retriesForEgsLeft);
 		setTimeout(() => {
 			this.requestDisplayOnShelf();
 		}, this.retryForEgsDelay)
 	}
 
 	requestDisplayOnShelf(): void {
-		console.log('requesting display on shelf', overwolf.egs);
+		// console.log('requesting display on shelf', overwolf.egs);
 		// this.showShelfWindow();
 		overwolf.egs.isEnabled((result: any) => {
-			console.log('egs is enabled', result);
+			// console.log('egs is enabled', result);
 			if (result.status === 'success' && result.isEnabled) {
-				console.log('requesting to display', result);
+				// console.log('requesting to display', result);
 				overwolf.egs.requestToDisplay((result2: any) => {
-					console.log('requestToDisplay result', result2);
+					// console.log('requestToDisplay result', result2);
 					if (result2.status === 'success') {
-						console.log('request to display is a success, OW should call shelf.html which will trigger status listening process updates on its side');
+						console.log('request to display is a success, OW should call shelf.html which will trigger status listening process updates on its side', this.retriesForEgsLeft);
 					}
 					else {
 						this.retryEgs(() => {

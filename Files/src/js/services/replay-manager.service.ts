@@ -71,7 +71,7 @@ export class ReplayManager {
 				// Raven.captureMessage('simple-io-plugin could not be loaded');
 				return;
 			}
-			console.log("Plugin " + this.plugin.get()._PluginName_ + " was loaded!", this.plugin.get());
+			console.log("Plugin " + this.plugin.get()._PluginName_ + " was loaded!");
 
 			this.plugin.get().onOutputDebugString.addListener(function(first, second, third) {
 				console.log('received global event', first, second, third);

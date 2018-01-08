@@ -32,18 +32,18 @@ export class LogListenerService {
 	}
 
 	init(): void {
-		console.log('initializing LogListenerService', this.plugin);
+		// console.log('initializing LogListenerService', this.plugin);
 		this.monitoring = false;
 		// this.gameStarted = false;
 		// this.fullLogs = '';
 		this.fileInitiallyPresent = true;
 
 		let plugin = this.plugin = new OverwolfPlugin("simple-io-plugin-zip", true);
-		console.log('plugin', plugin);
+		// console.log('plugin', plugin);
 
 		plugin.initialize((status: boolean) => {
 			if (status === false) {
-				console.warn("Plugin couldn't be loaded??", status);
+				console.error("Plugin couldn't be loaded", status, "simple-io-plugin-zip");
 				// Raven.captureMessage('simple-io-plugin could not be loaded');
 				return;
 			}
@@ -67,7 +67,7 @@ export class LogListenerService {
 
 		overwolf.games.getRunningGameInfo((res: any) => {
 			if (res && res.isRunning && res.id && Math.floor(res.id / 10) === HEARTHSTONE_GAME_ID) {
-				console.log('Game is running!', JSON.stringify(res));
+				// console.log('Game is running!', JSON.stringify(res));
 				this.logsLocation = res.executionPath.split('Hearthstone.exe')[0] + 'Logs\\' + LOG_FILE;
 				this.registerLogMonitor();
 			}
@@ -85,11 +85,11 @@ export class LogListenerService {
 	}
 
 	registerLogMonitor() {
-		console.log('registering hooks?', this.monitoring);
 		if (this.monitoring) {
-			console.log('\tlog hooks already registered, returning');
+			// console.log('\tlog hooks already registered, returning');
 			return;
 		}
+		console.log('registering hooks', this.monitoring);
 		this.monitoring = true;
 
 		console.log('getting logs from', this.logsLocation);
@@ -134,7 +134,7 @@ export class LogListenerService {
 					this.listenOnFileUpdate(logsLocation);
 				}
 				else {
-					console.warn("received an error on file: " + id + ": " + data);
+					console.error("received an error on file: " + id + ": " + data);
 					// Raven.captureMessage('Error while trying to read log file', { extra: {
 					// 	id: id,
 					// 	data: data,
@@ -160,7 +160,7 @@ export class LogListenerService {
 					console.log("[" + id + "] now streaming...", this.fileInitiallyPresent);
 				}
 				else {
-					console.warn("something bad happened with: " + id);
+					console.error("something bad happened with: " + id);
 					// Raven.captureMessage('listenOnFile returned wrong id', { extra: {
 					// 	id: id,
 					// 	fileIdentifier: fileIdentifier,
