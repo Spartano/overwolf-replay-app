@@ -55,7 +55,7 @@ export class FileUploadService {
 
 				let fileName = this.extractFileName(filePath);
 				console.log('extracted filename', fileName);
-				let fileKey = fileName + Date.now() + '.hszip';
+				let fileKey = this.slugify(fileName) + '_' + reviewId + '.hszip';
 				console.log('built file key', fileKey);
 
 				let file = new File([blob], fileKey);
@@ -127,5 +127,12 @@ export class FileUploadService {
 
 	private extractFileName(path: string) {
 		return path.replace(/\\/g, '/').replace(/\s/g, '_').replace(/\(/g, '_').replace(/\)/g, '_').split('\/').pop().split('\.')[0];
+	}
+
+	private slugify(str: string): string {
+	  	return str.toString().toLowerCase().trim()
+		    .replace(/[^\w\s-]/g, '') // remove non-word [a-z0-9_], non-whitespace, non-hyphen characters
+		    .replace(/[\s_-]+/g, '_') // swap any length of whitespace, underscore, hyphen characters with a single _
+		    .replace(/^-+|-+$/g, ''); // remove leading, trailing -
 	}
 }
