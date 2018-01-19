@@ -20,6 +20,7 @@ import { GameInfoComponent } from '../../components/game-info.component';
 import { GameThumbnailComponent } from '../../components/game-thumbnail.component';
 import { HeroAvatarComponent } from '../../components/hero-avatar.component';
 import { UploadProgressComponent } from '../../components/upload-progress.component';
+import { UploadSocialComponent } from '../../components/upload-social.component';
 import { LoginComponent } from '../../components/login.component';
 
 import { GameRetrieveService } from '../../services/game-retrieve.service';
@@ -65,6 +66,7 @@ import { LogParserService } from '../../services/gameparsing/log-parser.service'
 		LoadingComponent,
 		LoginComponent,
 		UploadProgressComponent,
+		UploadSocialComponent,
 	],
 	bootstrap: [
 		ShelfComponent,

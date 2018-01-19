@@ -59,7 +59,7 @@ import { UserPreferences } from '../services/user-preferences.service';
 						</form>
 					</footer>
 
-					<button class="window-control window-control-close">
+					<button class="window-control window-control-close" (click)="closeWindow()">
 						<svg class="svg-icon-fill">
 							<use xlink:href="/Files/assets/svg/sprite.svg#window-control_close" />
 						</svg>

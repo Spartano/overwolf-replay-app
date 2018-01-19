@@ -39,6 +39,7 @@ declare var overwolf: any;
 				<game-replay [game]="selectedGame"></game-replay>
 			</div>
 			<carousel [games]="_games" (onGameSelected)=onGameSelected($event)></carousel>
+			<upload-social class="upload-social" [game]="selectedGame"></upload-social>
 		</div>
 	`,
 })

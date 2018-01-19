@@ -1,10 +1,11 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, Output, ViewChild } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { ShareProvider, ShareButton } from 'ng2-sharebuttons-ow';
 
 import { Game } from '../models/game';
 import { GameUploadService } from '../services/game-upload.service';
+import { Events } from '../services/events.service';
 
 @Component({
 	selector: 'sharing-zone',
@@ -14,7 +15,6 @@ import { GameUploadService } from '../services/game-upload.service';
 	],
 	template: `
 		<div class="sharing-zone">
-			<!--<h2>Share your replay</h2>-->
 			<div class="share-buttons sb-buttons sb-style sb-style-colors tooltip-container">
 				<div class="sb-button zerotoheroes">
 					<button title="Share on Zero to Heroes">
@@ -88,21 +88,33 @@ export class SharingZoneComponent {
 
 	private handlingZetoh = false;
 
-	constructor(private upload: GameUploadService) {
+	constructor(private upload: GameUploadService, private events: Events) {
 	}
 
 	private uploadBeforeSharing() {
-		this.upload.upload(this.game);
-		this.upload.uploadStatus.subscribe(
-			(data) => {
-				if (data === GameUploadService.UPLOAD_COMPLETE) {
-					console.log('Upload complete!')
-					this.uploadDoneNotifier.next(true);
-					// Reset
-					this.uploadDoneNotifier.next(false);
+		if (this.game.reviewId) {
+			this.upload.uploadStatus.subscribe(
+				(data) => {
+					if (data === GameUploadService.UPLOAD_COMPLETE) {
+						console.log('Upload complete!')
+						this.uploadDoneNotifier.next(true);
+						// Reset
+						this.uploadDoneNotifier.next(false);
+					}
 				}
-			}
-		);
+			);
+		}
+		else {
+			this.upload.uploadStatus.subscribe(
+				(data) => {
+					if (data === GameUploadService.UPLOAD_COMPLETE) {
+						console.log('Upload complete, showing sharing popup!')
+						this.events.broadcast(Events.START_SHARING_AFTER_UPLOAD);
+					}
+				}
+			);
+		}
+		this.upload.upload(this.game);
 	}
 
 	private shareZetoh() {

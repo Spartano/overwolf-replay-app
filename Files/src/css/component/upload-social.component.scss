@@ -1,0 +1,59 @@
+@import "../global/vars";
+@import "../global/fonts";
+
+input {
+	background: transparent;
+	border: none;
+	font-family: inherit;
+	font-size: inherit;
+	color: inherit;
+	cursor: inherit;
+}
+
+label {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-weight: normal;
+
+	p {
+	  margin: 0;
+	}
+}
+
+b {
+	order: -1;
+	flex-shrink: 0;
+	display: flex;
+	width: 20px;
+	height: 20px;
+	margin: 0;
+	padding: 0;
+	margin-right: 10px;
+	position: relative;
+	border: 1px solid $brown01;
+	box-sizing: border-box;
+	font-weight: normal;
+
+	&:before {
+		content: "";
+		position: absolute;
+		opacity: 0;
+		transition: $fast-hover;
+	}
+}
+
+input[type="checkbox"] + label b {
+
+	&:before {
+		top: -1px;
+		bottom: -1px;
+		left: -1px;
+		right: -1px;
+		background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 20 20"><polyline points="6 11 9 14 15 6" fill="none" stroke="#{$brown01}" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/></svg>');
+	}
+}
+
+:checked + label b:before {
+	opacity: 1;
+}

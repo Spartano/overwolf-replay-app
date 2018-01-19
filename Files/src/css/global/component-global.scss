@@ -81,3 +81,8 @@ button, i {
     opacity: .6;
   }
 }
+
+// animation
+@-webkit-keyframes rotate {
+  to { transform: rotate(1turn); }
+}

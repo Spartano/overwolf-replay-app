@@ -99,3 +99,8 @@ body {
   fill: none;
   stroke: currentcolor;
 }
+
+// animation
+@-webkit-keyframes rotate {
+  to { transform: rotate(1turn); }
+}

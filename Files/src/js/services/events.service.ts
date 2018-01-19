@@ -20,6 +20,8 @@ export class Events {
 	public static UPLOAD_STARTED = 'upload-started';
 	public static UPLOAD_COMPLETE = 'upload-complete';
 
+	public static START_SHARING_AFTER_UPLOAD = "start-sharing-after-upload";
+
 	public static GLOBAL_ERROR = 'global-error';
 
 	private _eventBus: Subject<BroadcastEvent>;
