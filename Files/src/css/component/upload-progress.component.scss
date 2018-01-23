@@ -68,7 +68,6 @@
 	    display: flex;
 	    width: 20px;
 	    height: 20px;
-	    margin: 0;
 	    padding: 0;
 	    margin-right: 10px;
 	    position: relative;
@@ -98,42 +97,4 @@
 	:checked + label b:before {
 	    opacity: 1;
 	}
-
-
-	// .zth-progress {
-	// 	position: relative;
-	//     overflow: hidden;
-	//     border-radius: 4px;
-	//     box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
-	//     padding: 5px;
-	//     padding-botom: 2px;
-
-
-	//     .background {
-	//     	background-color: $light-brown02;
-	//     	position: absolute;
-	//     	top: 0;
-	//     	bottom: 0;
-	//     	left: 0;
-	//     	right: 0;
-	//     	z-index: -1;
-	//     }
-
-	//     .done {
-	//     	background: $brown01;
-	//     	position: absolute;
-	//     	top: 0;
-	//     	bottom: 0;
-	//     	left: 0;
-	//     	right: 0;
-	//     	z-index: -1;
-	//     	border-radius: 4px;
-	//     }
-
-	// 	.progress-text {
-	// 		font-family: 'KlavikaWebBasicMedium', sans-serif;
-	// 		font-size: 11px;
-	// 		color: rgba($brown01, .8);
-	// 	}
-	// }
 }
