@@ -19,7 +19,7 @@ export class GameUploadService {
 	public static readonly SENDING_GAME_REPLAY = 'SENDING_GAME_REPLAY';
 	public static readonly GAME_REPLAY_SENT = 'GAME_REPLAY_SENT';
 
-	uploadStatus: BehaviorSubject<string> = new BehaviorSubject<string>('');
+	uploadStatus: BehaviorSubject<string> = new BehaviorSubject<string>('initialStatus');
 
 	constructor(private fileUpload: FileUploadService) {
 

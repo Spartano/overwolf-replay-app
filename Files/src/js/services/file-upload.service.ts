@@ -46,12 +46,12 @@ export class FileUploadService {
 
 				console.log('processing game');
 				let bytes = game.replayBytes;
-				console.log('loaded bytes', bytes);
+				// console.log('loaded bytes', bytes);
 
 				// http://stackoverflow.com/questions/35038884/download-file-from-bytes-in-javascript
 				let byteArray = new Uint8Array(bytes);
 				let blob = new Blob([byteArray], { type: 'application/zip' });
-				console.log('built blob', blob);
+				// console.log('built blob', blob);
 
 				let fileName = this.extractFileName(filePath);
 				console.log('extracted filename', fileName);
@@ -67,7 +67,7 @@ export class FileUploadService {
 				AWS.config.httpOptions.timeout = 3600 * 1000 * 10;
 
 				let rank = game.rank;
-				if ('Arena' === game.gameMode) {
+				if ('Arena' === game.gameMode && game.arenaInfo) {
 					rank = game.arenaInfo.Wins;
 				}
 				console.debug('setting rank', rank);

@@ -127,7 +127,7 @@ export class UploadProgressComponent {
 						break;
 					default:
 						this.uploadInProgress = false;
-						console.log('Unkown status', data);
+						console.log('Unknown status', data);
 				}
 			}
 		);
@@ -167,7 +167,7 @@ export class UploadProgressComponent {
 			case 'PROCESSING_DONE':
 				return 'Processing done, ready to share!';
 			default:
-				return 'Unkown status: ' + this.uploadStatus;
+				return 'Unknown status: ' + this.uploadStatus;
 		}
 	}
 

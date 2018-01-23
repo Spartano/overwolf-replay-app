@@ -52,14 +52,14 @@ export class GameInfoComponent {
 			}
 			return 'Casual Standard';
 		}
-		if (this.game.gameMode === 'Arena') {
+		if (this.game.gameMode === 'Arena' && this.game.arenaInfo) {
 			return 'Arena ' + this.game.arenaInfo.Wins + ' - ' + this.game.arenaInfo.Losses;
 		}
 		return this.game.gameMode;
 	}
 
 	private rankImage(): string {
-		if (this.game.gameMode === 'Arena') {
+		if (this.game.gameMode === 'Arena' && this.game.arenaInfo) {
 			return 'arena' + this.game.arenaInfo.Wins + 'wins';
 		}
 		if (this.game.gameMode === 'Ranked') {
