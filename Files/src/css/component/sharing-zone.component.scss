@@ -80,7 +80,7 @@ $zerotoheroes: rgb(125, 16, 12); //#860412;
 
 	.zerotoheroes button {
 		@include btnBgColor($zerotoheroes);
-		height: 28px;
+		// height: 28px;
 		padding: 0;
 
 		a {
@@ -100,7 +100,7 @@ $zerotoheroes: rgb(125, 16, 12); //#860412;
 	flex-wrap: wrap;
 
 	.sb-button {
-		min-width: 50px;
+		// min-width: 50px;
 		padding: 5px;
 		display: flex;
 		flex-direction: column;
@@ -113,11 +113,21 @@ $zerotoheroes: rgb(125, 16, 12); //#860412;
     	justify-content: center;
 
 		background-color: transparent;
-		border-radius: .2em;
-		padding: .5em .9em;
-		font-size: 1em;
+		border-radius: 0;
+		padding: 0;
 		color: white;
 		position: relative;
+		height: 32px;
+		width: 32px;
+
+		svg {
+    		fill: currentcolor;
+		    width: 100%;
+		    height: 100%;
+		    flex: 0 0 auto;
+		    pointer-events: none;
+		    user-select: none;
+		}
 	}
 
 	.sb-show-count {
@@ -156,7 +166,7 @@ button, a:hover {
 	flex-direction: row;
 	height: 100%;
 	align-items: center;
-	// padding-left: 20px;
+    justify-content: center;
 
 	h2 {
 		font-size: 18px;

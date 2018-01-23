@@ -17,10 +17,10 @@ import { Events } from '../services/events.service';
 		<div class="sharing-zone">
 			<div class="share-buttons sb-buttons sb-style sb-style-colors tooltip-container">
 				<div class="sb-button zerotoheroes">
-					<button title="Share on Zero to Heroes">
-						<a class="zerotoheroes" (click)="shareZetoh()">
-							<img src="../assets/images/zero-to-heroes-logo.svg">
-						</a>
+					<button title="Share on Zero to Heroes" (click)="shareZetoh()">
+						<svg class="svg-icon-fill">
+							<use xlink:href="/Files/assets/svg/sprite.svg#social-icon_zero-to-heroes"></use>
+						</svg>
 						<div class="zth-tooltip bottom">
 							<p>Watch or discuss this game online on Zero to Heroes</p>
 							<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 4">
@@ -34,7 +34,9 @@ import { Events } from '../services/events.service';
 							[sbUrl]="buildUrl()"
 							[sbPreHook]="uploadDoneNotifier"
 							(click)="uploadBeforeSharing()">
-						<i class="fa fa-facebook"></i>
+						<svg class="svg-icon-fill">
+							<use xlink:href="/Files/assets/svg/sprite.svg#social-icon_facebook"></use>
+						</svg>
 						<div class="zth-tooltip bottom">
 							<p>Share on Facebook</p>
 							<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 4">
@@ -50,7 +52,9 @@ import { Events } from '../services/events.service';
 							[sbTags]="'hearthstone'"
 							[sbPreHook]="uploadDoneNotifier"
 							(click)="uploadBeforeSharing()">
-						<i class="fa fa-twitter"></i>
+						<svg class="svg-icon-fill">
+							<use xlink:href="/Files/assets/svg/sprite.svg#social-icon_twitter"></use>
+						</svg>
 						<div class="zth-tooltip bottom">
 							<p>Share on Twitter</p>
 							<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 4">
@@ -66,7 +70,9 @@ import { Events } from '../services/events.service';
 							[sbVia]="'hearthstone'"
 							[sbPreHook]="uploadDoneNotifier"
 							(click)="uploadBeforeSharing()">
-						<i class="fa fa-reddit"></i>
+						<svg class="svg-icon-fill">
+							<use xlink:href="/Files/assets/svg/sprite.svg#social-icon_reddit"></use>
+						</svg>
 						<div class="zth-tooltip bottom">
 							<p>Share on Reddit</p>
 							<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 4">
