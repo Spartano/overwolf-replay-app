@@ -35,7 +35,7 @@ import { Events } from '../services/events.service';
 					</i>
 
 					<h1>Share Your Replays!</h1>
-					<p>Your matches will be uploaded to Zero to Heroes website for you to share at any moment. Connect your account to see all your replays at one place. <a class="text-link" href="#">Learn more</a></p>
+					<p>Your matches will be uploaded to Zero to Heroes website for you to share at any moment. Connect your account to see all your replays at one place. <a class="text-link" href="http://support.overwolf.com/knowledge-base/manastorm-how-does-it-work/" target="_blank">Learn more</a></p>
 
 					<footer>
 						<button class="btn" (click)="showLogin()">Continue</button>
