@@ -71,6 +71,7 @@ button, i {
   transition: $fast-hover;
   cursor: pointer;
   -webkit-user-select: none;
+  border-radius: 0;
 
   &:hover, &.selected {
     background-color: $brown02;
