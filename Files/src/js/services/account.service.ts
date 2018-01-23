@@ -10,8 +10,8 @@ import { Events } from './events.service';
 
 declare var overwolf: any;
 
-const CLAIM_ACCOUNT_URL = "http://www.zerotoheroes.com/api/claimAccount/overwolf/";
-const DISCONNECT_ACCOUNT_URL = "http://www.zerotoheroes.com/api/disconnectAccount/overwolf/";
+const CLAIM_ACCOUNT_URL = "https://www.zerotoheroes.com/api/claimAccount/overwolf/";
+const DISCONNECT_ACCOUNT_URL = "https://www.zerotoheroes.com/api/disconnectAccount/overwolf/";
 // const CHECK_ACCOUNT_CLAIM_ENDPOINT = BASE_URL + '/api/claimAccount/overwolf/';
 
 @Injectable()

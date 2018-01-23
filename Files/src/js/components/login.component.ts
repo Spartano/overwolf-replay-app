@@ -9,9 +9,9 @@ import { AccountService } from '../services/account.service';
 
 declare var overwolf: any;
 
-const SIGN_IN_URL = "http://www.zerotoheroes.com/api/login";
-const SIGN_UP_URL = "http://www.zerotoheroes.com/api/users";
-const FORGOTTEN_PASSWORD_URL = "http://www.zerotoheroes.com/api/users/password";
+const SIGN_IN_URL = "https://www.zerotoheroes.com/api/login";
+const SIGN_UP_URL = "https://www.zerotoheroes.com/api/users";
+const FORGOTTEN_PASSWORD_URL = "https://www.zerotoheroes.com/api/users/password";
 
 @Component({
 	selector: 'login',

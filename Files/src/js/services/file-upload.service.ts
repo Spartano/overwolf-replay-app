@@ -12,7 +12,7 @@ import { GameStorageService } from './game-storage.service';
 declare var overwolf: any;
 declare var AWS: any;
 
-const GET_REVIEW_ENDPOINT = 'http://www.zerotoheroes.com/api/reviews/';
+const GET_REVIEW_ENDPOINT = 'https://www.zerotoheroes.com/api/reviews/';
 const REVIEW_INIT_ENDPOINT = 'https://husxs4v58a.execute-api.us-west-2.amazonaws.com/prod';
 const BUCKET = 'com.zerotoheroes.batch';
 
