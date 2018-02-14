@@ -67,7 +67,7 @@
 		"externally_connectable": {
 			"matches": [
 				"http://www.zerotoheroes.com",
-				"https://www.zerotoheroes.com",
+				"https://www.zerotoheroes.com"
 			]
 		},
 		"extra-objects": {
