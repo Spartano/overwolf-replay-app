@@ -82,6 +82,11 @@ button, i {
   }
 }
 
+button:focus, button:hover, button:active, .btn:focus, .btn:hover, .btn:active {
+  text-decoration: none;
+  outline: none;
+}
+
 
 a {
   color: $red01;

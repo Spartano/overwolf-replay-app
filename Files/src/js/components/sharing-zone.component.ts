@@ -11,6 +11,7 @@ import { Events } from '../services/events.service';
 	selector: 'sharing-zone',
 	styleUrls: [
 		`../../css/global/_vars.scss`,
+		`../../css/global/component-global.scss`,
 		`../../css/component/sharing-zone.component.scss`,
 	],
 	template: `
