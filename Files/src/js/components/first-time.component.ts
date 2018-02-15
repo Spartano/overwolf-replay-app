@@ -41,11 +41,11 @@ import { Events } from '../services/events.service';
 						<button class="btn" (click)="showLogin()">Continue</button>
 					</footer>
 
-					<!--<button class="window-control window-control-close" (click)="showLogin()">
+					<button class="window-control window-control-close" (click)="closeWindow()">
 						<svg class="svg-icon-fill">
 							<use xlink:href="/Files/assets/svg/sprite.svg#window-control_close" />
 						</svg>
-					</button>-->
+					</button>
 				</div>
 			</div>
 		</div>
