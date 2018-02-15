@@ -159,7 +159,7 @@ const FORGOTTEN_PASSWORD_URL = "https://www.zerotoheroes.com/api/users/password"
 
 						<form #forgottenPasswordForm="ngForm">
 							<section class="form-section">
-								<label for="login_field"><span>Enter the Username or Email you registered with</span></label>
+								<label for="login_field"><span>Enter your Username or Email</span></label>
 								<input class="input-text" id="login_field" name="identifier" tabindex="1" type="text" [(ngModel)]="identifier">
 							</section>
 
@@ -212,6 +212,7 @@ export class LoginComponent {
 
 	private forgotPassword() {
 		this.errorMessage = null;
+		this.password = null;
 		this.infoMessage = 'Working on it';
 		let credentials = {
 			username: this.identifier,
