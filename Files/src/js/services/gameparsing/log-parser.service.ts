@@ -102,6 +102,7 @@ export class LogParserService {
 	private parseArenaInfo() {
 		if (this.game && this.game.gameMode === 'Arena' && !this.game.arenaInfo) {
 			this.memoryInspectionService.getArenaInfo((arenaInfo) => {
+				console.log('setting arena info', arenaInfo);
 				this.game.arenaInfo = arenaInfo;
 			});
 		}
