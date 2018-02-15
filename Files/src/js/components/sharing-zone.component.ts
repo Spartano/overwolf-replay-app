@@ -94,32 +94,43 @@ export class SharingZoneComponent {
 	uploadDoneNotifier: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
 	private handlingZetoh = false;
+	private subscribedUploadDone = false;
+	private subscribedUploadStatus = false;
 
 	constructor(private upload: GameUploadService, private events: Events) {
 	}
 
 	private uploadBeforeSharing() {
+		console.log('in uploadBeforeSharing');
 		if (this.game.reviewId) {
-			this.upload.uploadStatus.subscribe(
-				(data) => {
-					if (data === GameUploadService.UPLOAD_COMPLETE) {
-						console.log('Upload complete!')
-						this.uploadDoneNotifier.next(true);
-						// Reset
-						this.uploadDoneNotifier.next(false);
+			console.log('game has review ID');
+			if (!this.subscribedUploadStatus) {
+				this.subscribedUploadStatus = true;
+				this.upload.uploadStatus.subscribe(
+					(data) => {
+						if (data === GameUploadService.UPLOAD_COMPLETE) {
+							console.log('Upload complete!')
+							this.uploadDoneNotifier.next(true);
+							// Reset
+							this.uploadDoneNotifier.next(false);
+						}
 					}
-				}
-			);
+				);
+			}
 		}
 		else {
-			this.upload.uploadStatus.subscribe(
-				(data) => {
-					if (data === GameUploadService.UPLOAD_COMPLETE) {
-						console.log('Upload complete, showing sharing popup!')
-						this.events.broadcast(Events.START_SHARING_AFTER_UPLOAD);
+			console.log('game doesnt have review id');
+			if (!this.subscribedUploadStatus) {
+				this.subscribedUploadStatus = true;
+				this.upload.uploadStatus.subscribe(
+					(data) => {
+						if (data === GameUploadService.UPLOAD_COMPLETE) {
+							console.log('Upload complete, showing sharing popup!')
+							this.events.broadcast(Events.START_SHARING_AFTER_UPLOAD);
+						}
 					}
-				}
-			);
+				);
+			}
 		}
 		this.upload.upload(this.game);
 	}
@@ -130,15 +141,20 @@ export class SharingZoneComponent {
 			return;
 		}
 		this.handlingZetoh = true;
-		this.uploadDoneNotifier.subscribe((status) => {
-			console.log('upload done', status, this.handlingZetoh);
-			if (this.handlingZetoh && status) {
-				this.handlingZetoh = false;
-				let url = this.buildUrl();
-				console.log('opening in new window', url);
-				window.open(url, '_blank');
-			}
-		})
+		console.log('handling zetoh');
+		if (!this.subscribedUploadDone) {
+			this.subscribedUploadDone = true;
+			this.uploadDoneNotifier.subscribe((status) => {
+				if (this.handlingZetoh && status) {
+					console.log('upload done', status, this.handlingZetoh);
+					this.handlingZetoh = false;
+					let url = this.buildUrl();
+					console.log('opening in new window', url);
+					window.open(url, '_blank');
+					// this.uploadDoneNotifier.unsubscribe();
+				}
+			})
+		}
 		this.uploadBeforeSharing();
 	}
 
