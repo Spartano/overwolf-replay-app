@@ -83,6 +83,19 @@ button, i {
   }
 }
 
+
+a {
+  color: $red01;
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover {
+    color: $red02;
+    text-decoration: none;
+  }
+}
+
+
 // animation
 @-webkit-keyframes rotate {
   to { transform: rotate(1turn); }
