@@ -23,7 +23,7 @@ import { Events } from '../services/events.service';
 							<use xlink:href="/Files/assets/svg/sprite.svg#social-icon_zero-to-heroes"></use>
 						</svg>
 						<div class="zth-tooltip bottom">
-							<p>Watch or discuss this game online on Zero to Heroes</p>
+							<p>Watch this game on Zero to Heroes</p>
 							<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 4">
 								<polygon points="12,0 6,-4 0,0 "/>
 							</svg>
