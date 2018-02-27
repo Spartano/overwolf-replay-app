@@ -34,6 +34,7 @@ import { GameUploadService } from '../../services/game-upload.service';
 import { DebugService } from '../../services/debug.service';
 // import { LogUtils } from '../../services/gameparsing/log-utils.service';
 import { Events } from '../../services/events.service';
+import { SharingService } from '../../services/sharing.service';
 import { GameHelper } from '../../services/gameparsing/game-helper.service';
 import { LogParserService } from '../../services/gameparsing/log-parser.service';
 // import { GameModeParser } from '../../services/gameparsing/game-mode-parser.service';
@@ -84,6 +85,7 @@ import { LogParserService } from '../../services/gameparsing/log-parser.service'
 		StorageHelperService,
 		GameUploadService,
 		DebugService,
+		SharingService,
 		// GameModeParser,
 		// LogUtils,
 	],

@@ -5,6 +5,7 @@ import { ShareProvider, ShareButton } from 'ng2-sharebuttons-ow';
 
 import { Game } from '../models/game';
 import { GameUploadService } from '../services/game-upload.service';
+import { SharingService } from '../services/sharing.service';
 import { Events } from '../services/events.service';
 
 @Component({
@@ -89,83 +90,32 @@ import { Events } from '../services/events.service';
 
 export class SharingZoneComponent {
 
-	@Input() game: Game;
+	@Input() _game: Game;
 
-	uploadDoneNotifier: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+	uploadDoneNotifier: BehaviorSubject<boolean>;
 
-	private handlingZetoh = false;
-	private subscribedUploadDone = false;
-	private subscribedUploadStatus = false;
+	constructor(private upload: GameUploadService, private share: SharingService, private events: Events) {
+		this.uploadDoneNotifier = this.share.uploadDoneNotifier;
+	}
 
-	constructor(private upload: GameUploadService, private events: Events) {
+	@Input('game') set game(game: Game) {
+		this._game = game;
+		this.share.init(game);
 	}
 
 	private uploadBeforeSharing() {
-		console.log('in uploadBeforeSharing');
-		if (this.game.reviewId) {
-			console.log('game has review ID');
-			if (!this.subscribedUploadStatus) {
-				this.subscribedUploadStatus = true;
-				this.upload.uploadStatus.subscribe(
-					(data) => {
-						if (data === GameUploadService.UPLOAD_COMPLETE) {
-							console.log('Upload complete!')
-							this.uploadDoneNotifier.next(true);
-							// Reset
-							this.uploadDoneNotifier.next(false);
-						}
-					}
-				);
-			}
-		}
-		else {
-			console.log('game doesnt have review id');
-			if (!this.subscribedUploadStatus) {
-				this.subscribedUploadStatus = true;
-				this.upload.uploadStatus.subscribe(
-					(data) => {
-						if (data === GameUploadService.UPLOAD_COMPLETE) {
-							console.log('Upload complete, showing sharing popup!')
-							this.events.broadcast(Events.START_SHARING_AFTER_UPLOAD);
-							this.upload.uploadStatus.unsubscribe();
-							this.subscribedUploadStatus = false;
-							this.handlingZetoh = false;
-						}
-					}
-				);
-			}
-		}
-		this.upload.upload(this.game);
+		this.share.uploadBeforeSharing();
 	}
 
 	private shareZetoh() {
-		console.log('sharing on Zetoh', this.handlingZetoh);
-		if (this.handlingZetoh) {
-			return;
-		}
-		this.handlingZetoh = true;
-		console.log('handling zetoh');
-		if (!this.subscribedUploadDone) {
-			this.subscribedUploadDone = true;
-			this.uploadDoneNotifier.subscribe((status) => {
-				if (this.handlingZetoh && status) {
-					console.log('upload done', status, this.handlingZetoh);
-					this.handlingZetoh = false;
-					let url = this.buildUrl();
-					console.log('opening in new window', url);
-					window.open(url, '_blank');
-					// this.uploadDoneNotifier.unsubscribe();
-				}
-			})
-		}
-		this.uploadBeforeSharing();
+		this.share.shareZetoh();
 	}
 
 	private buildUrl(): string {
-		return 'https://www.zerotoheroes.com/r/hearthstone/' + this.game.reviewId;
+		return 'https://www.zerotoheroes.com/r/hearthstone/' + this._game.reviewId;
 	}
 
 	private buildTitle(): string {
-		return 'Need help! ' + this.game.player.class + ' vs ' + this.game.opponent.class;
+		return 'Need help! ' + this._game.player.class + ' vs ' + this._game.opponent.class;
 	}
 }
