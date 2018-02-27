@@ -127,6 +127,9 @@ export class SharingZoneComponent {
 						if (data === GameUploadService.UPLOAD_COMPLETE) {
 							console.log('Upload complete, showing sharing popup!')
 							this.events.broadcast(Events.START_SHARING_AFTER_UPLOAD);
+							this.upload.uploadStatus.unsubscribe();
+							this.subscribedUploadStatus = false;
+							this.handlingZetoh = false;
 						}
 					}
 				);
@@ -136,7 +139,7 @@ export class SharingZoneComponent {
 	}
 
 	private shareZetoh() {
-		console.log('sharing on Zetoh');
+		console.log('sharing on Zetoh', this.handlingZetoh);
 		if (this.handlingZetoh) {
 			return;
 		}
