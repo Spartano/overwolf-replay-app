@@ -11,7 +11,7 @@ import { Game } from '../models/game';
 @Injectable()
 export class SharingService {
 
-	public uploadDoneNotifier: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
+	public uploadDoneNotifier: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
 	private game: Game;
 
@@ -30,7 +30,7 @@ export class SharingService {
 		}
 
 		console.log('init sharing service', game);
-		this.uploadDoneNotifier = new BehaviorSubject<boolean>(false)
+		// this.uploadDoneNotifier = new BehaviorSubject<boolean>(false)
 
 		this.handlingZetoh = false;
 		this.subscribedUploadDone = false;
@@ -52,8 +52,10 @@ export class SharingService {
 					if (data === GameUploadService.UPLOAD_COMPLETE) {
 						console.log('Upload complete!', this.game.reviewId, this.reviewId);
 						if (this.reviewId) {
+							// console.log('notifying subscriptions', this.uploadDoneNotifier);
 							this.uploadDoneNotifier.next(true);
 							// Reset
+							// console.log('resetting subscriptions', this.uploadDoneNotifier);
 							this.uploadDoneNotifier.next(false);
 						}
 						else if (!this.reviewId) {
