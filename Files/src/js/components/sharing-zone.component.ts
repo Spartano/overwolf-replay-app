@@ -8,6 +8,8 @@ import { GameUploadService } from '../services/game-upload.service';
 import { SharingService } from '../services/sharing.service';
 import { Events } from '../services/events.service';
 
+declare var ga: any;
+
 @Component({
 	selector: 'sharing-zone',
 	styleUrls: [
@@ -35,7 +37,7 @@ import { Events } from '../services/events.service';
 					<button [shareButton]="'facebook'"
 							[sbUrl]="buildUrl()"
 							[sbPreHook]="uploadDoneNotifier"
-							(click)="uploadBeforeSharing()">
+							(click)="uploadBeforeSharing('facebook')">
 						<svg class="svg-icon-fill">
 							<use xlink:href="/Files/assets/svg/sprite.svg#social-icon_facebook"></use>
 						</svg>
@@ -53,7 +55,7 @@ import { Events } from '../services/events.service';
 							[sbTitle]="buildTitle()"
 							[sbTags]="'hearthstone'"
 							[sbPreHook]="uploadDoneNotifier"
-							(click)="uploadBeforeSharing()">
+							(click)="uploadBeforeSharing('twitter')">
 						<svg class="svg-icon-fill">
 							<use xlink:href="/Files/assets/svg/sprite.svg#social-icon_twitter"></use>
 						</svg>
@@ -71,7 +73,7 @@ import { Events } from '../services/events.service';
 							[sbTitle]="buildTitle()"
 							[sbVia]="'hearthstone'"
 							[sbPreHook]="uploadDoneNotifier"
-							(click)="uploadBeforeSharing()">
+							(click)="uploadBeforeSharing('reddit')">
 						<svg class="svg-icon-fill">
 							<use xlink:href="/Files/assets/svg/sprite.svg#social-icon_reddit"></use>
 						</svg>
@@ -103,11 +105,13 @@ export class SharingZoneComponent {
 		this.share.init(game);
 	}
 
-	private uploadBeforeSharing() {
+	private uploadBeforeSharing(social: string) {
+		ga('send', 'event', 'share', social);
 		this.share.uploadBeforeSharing();
 	}
 
 	private shareZetoh() {
+		ga('send', 'event', 'share', 'zetoh');
 		this.share.shareZetoh();
 	}
 
