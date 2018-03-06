@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 // import * as Raven from 'raven-js';
+import * as _ from "lodash";
 
 import { encode } from 'deckstrings';
 
@@ -21,19 +22,15 @@ export class DeckParserService {
 	}
 
 	public detectActiveDeck() {
-		console.log('detecting active deck');
 		this.memoryInspectionService.getActiveDeck((activeDeck) => {
 			try {
 				let jsonDeck = JSON.parse(activeDeck);
 				if (jsonDeck.Hero) {
 					let deck: Deck = <Deck>jsonDeck;
-					console.log('deck', deck);
 					let name = deck.Name;
 					let hero = deck.Hero;
 					let isWild = deck.IsWild;
 					let cards = deck.Cards;
-
-					console.log('parsing with', parseCardsText);
 
 					let hearthDbDeck = {
 						cards: [],
@@ -45,6 +42,8 @@ export class DeckParserService {
 						let dbfId = parseCardsText.getCard(card.Id).dbfId;
 						hearthDbDeck.cards.push([dbfId, card.Count]);
 					}
+
+					hearthDbDeck.cards = _.sortBy(hearthDbDeck.cards, [o => o[0]]);
 
 					console.log('hearthDbDeck', hearthDbDeck);
 

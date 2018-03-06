@@ -50,10 +50,10 @@ export class LogParserService {
 			this.game = Game.createEmptyGame();
 			this.game.fullLogs = '';
 
-			this.parseMatchInfo();
-			this.parseArenaInfo();
 			this.parseGameType();
 			this.parseGameFormat();
+			this.parseMatchInfo();
+			this.parseArenaInfo();
 		}
 
 		if (!this.game) {
@@ -66,11 +66,10 @@ export class LogParserService {
 		if (data.indexOf('GOLD_REWARD_STATE') !== -1 && this.game && !this.game.ended) {
 			console.log('game ended', data);
 			this.game.ended = true;
-			this.game.deckstring = this.deckParserService.activeDeckstring;
 			this.game.spectating = this.spectating;
+			this.game.deckstring = this.deckParserService.activeDeckstring;
 			this.game.extractMatchInfoData();
 			this.gameParserService.convertLogsToXml(this.game.fullLogs, (replayXml) => {
-				console.log('received conversion response');
 				if (this.game) {
 					if (!replayXml) {
 						console.warn('could not convert replay');
