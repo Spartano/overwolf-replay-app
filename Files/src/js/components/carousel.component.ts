@@ -3,6 +3,8 @@ import { Game } from '../models/game';
 
 import * as $ from 'jquery';
 
+declare var ga: any;
+
 @Component({
 	selector: 'carousel',
 	styleUrls: [`../../css/component/carousel.component.scss`],
@@ -66,6 +68,7 @@ export class CarouselComponent {
 
 	onSelect(game: Game): void {
 		console.log('loading game', game);
+		ga('send', 'event', 'select-game', game.player.class + '-' + game.opponent.class);
 		this.recomputeVisibleElements(50);
 		this.selectedGame = game;
 		this.onGameSelected.emit(game);
