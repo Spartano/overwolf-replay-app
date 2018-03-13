@@ -31,10 +31,10 @@ export class FileUploadService {
 	}
 
 	public uploadFromPath(filePath: string, game: Game, progressMonitor?: BehaviorSubject<string>) {
-		console.log('Requesting reading file from disk', filePath, Date.now());
+		console.log('Requesting reading file from disk', filePath);
 
 		overwolf.profile.getCurrentUser((user) => {
-			console.log('current user', user);
+			// console.log('current user', user);
 			let userId = user.userId || user.machineId || user.username || 'unauthenticated_user';
 
 			// Build an empty review
@@ -45,7 +45,7 @@ export class FileUploadService {
 					progressMonitor.next('EMPTY_SHELL_CREATED');
 				}
 
-				console.log('processing game');
+				// console.log('processing game');
 				let bytes = game.replayBytes;
 				// console.log('loaded bytes', bytes);
 
@@ -55,14 +55,14 @@ export class FileUploadService {
 				// console.log('built blob', blob);
 
 				let fileName = this.extractFileName(filePath);
-				console.log('extracted filename', fileName);
+				// console.log('extracted filename', fileName);
 				let fileKey = this.slugify(fileName) + '_' + reviewId + '.hszip';
 				console.log('built file key', fileKey);
 
 				let file = new File([blob], fileKey);
-				console.log('built file', file);
+				// console.log('built file', file);
 
-				console.log('Configuring AWS', AWS);
+				// console.log('Configuring AWS', AWS);
 				// Configure The S3 Object
 				AWS.config.region = 'us-west-2';
 				AWS.config.httpOptions.timeout = 3600 * 1000 * 10;
@@ -84,14 +84,14 @@ export class FileUploadService {
 						'user-key': userId,
 						'file-type': 'hszip',
 						'review-text': 'Created by [Overwolf](http://www.overwolf.com)',
-						'game-rank': rank != 'legend' ? rank.toString() : '',
+						'game-rank': (rank != null && rank != 'legend') ? rank.toString() : '',
 						'game-legend-rank': rank == 'legend' ? rank.toString() : '',
 						'game-format': game.gameFormat,
 						'deckstring': game.deckstring,
 						'game-mode': game.gameMode,
 					},
 				};
-				console.log('uploading with params', AWS, s3, params);
+				console.log('uploading with params', params);
 				if (progressMonitor) {
 					progressMonitor.next('SENDING_GAME_REPLAY');
 				}
@@ -112,7 +112,7 @@ export class FileUploadService {
 						console.log('Uploaded game', data2, reviewId);
 						game.reviewId = reviewId;
 						overwolf.games.getRunningGameInfo((res: any) => {
-							console.log("getRunningGameInfo to update game: " + JSON.stringify(res));
+							// console.log("getRunningGameInfo to update game: " + JSON.stringify(res));
 							if (res && res.sessionId) {
 								this.gameStorageService.updateGame(res.sessionId, game);
 							}
