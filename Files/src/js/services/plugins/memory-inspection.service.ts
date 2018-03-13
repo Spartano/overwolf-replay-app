@@ -47,7 +47,8 @@ export class MemoryInspectionService {
 	public getArenaInfo(callback) {
 		this.mindvisionPlugin.get().getArenaInfo((arenaInfo) => {
 			console.log('received arenaInfo callback', arenaInfo);
-			callback(arenaInfo);
+			let jsonArenaInfo = arenaInfo ? JSON.parse(arenaInfo) : arenaInfo;
+			callback(jsonArenaInfo);
 		});
 	}
 
