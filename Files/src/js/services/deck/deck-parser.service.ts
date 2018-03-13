@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 
 // import * as Raven from 'raven-js';
 import * as _ from "lodash";
-
 import { encode } from 'deckstrings';
 
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
