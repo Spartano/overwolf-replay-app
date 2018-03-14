@@ -14,9 +14,9 @@ import { Game } from '../models/game';
 			</div>
 			<div class="game-info">
 				<span class="title">
-					<span class="hero-name">{{game.player.name}}</span>
+					<span class="hero-name">{{getName(game.player.name)}}</span>
 					<span class="separator">Vs.</span>
-					<span class="hero-name">{{game.opponent.name}}</span>
+					<span class="hero-name">{{getName(game.opponent.name)}}</span>
 				</span>
 				<span class="result">{{getGameResultString(game)}}</span>
 			</div>
@@ -49,5 +49,12 @@ export class GameThumbnailComponent {
 		}
 
 		return resultString;
+	}
+
+	getName(originalName: string) {
+		if (originalName.indexOf('#') === -1) {
+			return originalName;
+		}
+		return originalName.substring(0, originalName.lastIndexOf('#'));
 	}
 }
