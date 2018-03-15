@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 
 // import * as Raven from 'raven-js';
 
-import {DeckParserService} from './deck-parser.service'
+import { DeckParserService } from './deck-parser.service'
+import { SimpleIOService } from '../plugins/simple-io.service'
 
 declare var OverwolfPlugin: any;
 declare var overwolf: any;
@@ -11,31 +12,12 @@ const HEARTHSTONE_GAME_ID = 9898;
 
 @Injectable()
 export class DeckLogListenerService {
-	plugin: any;
 
 	monitoring: boolean;
 	logsLocation: string;
 
-	constructor(private deckParserService: DeckParserService) {
-		this.init();
-	}
-
-	init(): void {
-		console.log('initializing DeckLogListenerService', this.plugin);
-		this.monitoring = false;
-
-		let plugin = this.plugin = new OverwolfPlugin("simple-io-plugin-zip", true);
-		console.log('plugin', plugin);
-
-		plugin.initialize((status: boolean) => {
-			if (status === false) {
-				console.warn("Plugin couldn't be loaded??", status);
-				// Raven.captureMessage('simple-io-plugin could not be loaded');
-				return;
-			}
-			console.log("Plugin " + plugin.get()._PluginName_ + " was loaded!");
-			this.configureLogListeners();
-		});
+	constructor(private deckParserService: DeckParserService, private plugin: SimpleIOService) {
+		this.configureLogListeners();
 	}
 
 	configureLogListeners(): void {

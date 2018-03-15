@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 
 import { Game } from '../models/game';
 import { GameParserService } from './game-parser.service';
+import { SimpleIOService } from './plugins/simple-io.service';
 import { LogParserService } from './gameparsing/log-parser.service';
 import { GameModeParser } from './gameparsing/game-mode-parser.service';
 
@@ -17,8 +18,6 @@ const prod = true;
 
 @Injectable()
 export class LogListenerService {
-	plugin: any;
-
 	monitoring: boolean;
 	fileInitiallyPresent: boolean;
 	logsLocation: string;
@@ -26,30 +25,12 @@ export class LogListenerService {
 	constructor(
 		private gameParserService: GameParserService,
 		private gameModeParser: GameModeParser,
-		private logParserService: LogParserService) {
-		// console.log('in LogListener constructor');
-		this.init();
-	}
+		private logParserService: LogParserService,
+		private plugin: SimpleIOService) {
 
-	init(): void {
-		// console.log('initializing LogListenerService', this.plugin);
 		this.monitoring = false;
-		// this.gameStarted = false;
-		// this.fullLogs = '';
 		this.fileInitiallyPresent = true;
-
-		let plugin = this.plugin = new OverwolfPlugin("simple-io-plugin-zip", true);
-		// console.log('plugin', plugin);
-
-		plugin.initialize((status: boolean) => {
-			if (status === false) {
-				console.error("Plugin couldn't be loaded", status, "simple-io-plugin-zip");
-				// Raven.captureMessage('simple-io-plugin could not be loaded');
-				return;
-			}
-			console.log("Plugin " + plugin.get()._PluginName_ + " was loaded!");
-			this.configureLogListeners();
-		});
+		this.configureLogListeners();
 	}
 
 	configureLogListeners(): void {

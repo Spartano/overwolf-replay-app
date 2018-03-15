@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 
 import { Game } from '../models/game';
 import { Events } from './events.service';
+import { SimpleIOService } from './plugins/simple-io.service';
 import { GameHelper } from './gameparsing/game-helper.service';
 import { GameStorageService } from './game-storage.service';
 import { StorageHelperService } from './storage-helper.service';
@@ -16,15 +17,13 @@ declare var saveAs: any;
 @Injectable()
 export class ReplayManager {
 
-	plugin: any;
-
 	constructor(
 		private events: Events,
 		private gameHelper: GameHelper,
 		private gameStorage: GameStorageService,
+		private plugin: SimpleIOService,
 		private storageHelper: StorageHelperService) {
 
-		this.init();
 	}
 
 	public saveLocally(game: Game) {
@@ -59,23 +58,6 @@ export class ReplayManager {
 				});
 			});
 
-		});
-	}
-
-	private init() {
-		this.plugin = new OverwolfPlugin("simple-io-plugin-zip", true);
-
-		this.plugin.initialize((status: boolean) => {
-			if (status === false) {
-				console.warn("Plugin couldn't be loaded??");
-				// Raven.captureMessage('simple-io-plugin could not be loaded');
-				return;
-			}
-			console.log("Plugin " + this.plugin.get()._PluginName_ + " was loaded!");
-
-			this.plugin.get().onOutputDebugString.addListener(function(first, second, third) {
-				console.log('received global event', first, second, third);
-			});
 		});
 	}
 }
