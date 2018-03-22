@@ -40,11 +40,11 @@ export class DeckLogListenerService {
 	}
 
 	registerLogMonitor() {
-		console.log('registering hooks?', this.monitoring);
 		if (this.monitoring) {
-			console.log('\tlog hooks already registered, returning');
+			// console.log('\tlog hooks already registered, returning');
 			return;
 		}
+		console.log('registering hooks');
 		this.monitoring = true;
 
 		console.log('getting logs from', this.logsLocation);
@@ -81,10 +81,10 @@ export class DeckLogListenerService {
 
 			if (!status) {
 				if (data === 'truncated') {
-					this.plugin.get().stopFileListen(fileIdentifier);
-					this.plugin.get().onFileListenerChanged.removeListener(handler);
-					console.log('truncated log file - HS probably just overwrote the file. Retrying', status, data);
-					this.listenOnFileUpdate(logsLocation);
+					// this.plugin.get().stopFileListen(fileIdentifier);
+					// this.plugin.get().onFileListenerChanged.removeListener(handler);
+					console.log('truncated FullScreenFX.log file - HS probably just overwrote the file. Going on');
+					// this.listenOnFileUpdate(logsLocation);
 				}
 				else {
 					console.warn("received an error on file: " + id + ": " + data);
@@ -102,7 +102,7 @@ export class DeckLogListenerService {
 				// We don't really care what the content of the log is. An update to the log file just tells us
 				// that we're going to or leaving from the deck selection screen, which means we can try and
 				// detect the selected deck
-				console.log('Received line in DeckLogListener: ', data)
+				// console.log('Received line in DeckLogListener: ', data)
 				this.deckParserService.detectActiveDeck();
 			}
 			else {
@@ -156,7 +156,6 @@ export class DeckLogListenerService {
 			return false;
 		}
 
-		console.log("HS Launched");
 		return true;
 	}
 
@@ -175,7 +174,6 @@ export class DeckLogListenerService {
 			return false;
 		}
 
-		console.log("HS running");
 		return true;
 	}
 }

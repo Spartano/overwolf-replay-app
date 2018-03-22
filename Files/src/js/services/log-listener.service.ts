@@ -19,8 +19,9 @@ const prod = true;
 @Injectable()
 export class LogListenerService {
 	monitoring: boolean;
-	fileInitiallyPresent: boolean;
+	// fileInitiallyPresent: boolean;
 	logsLocation: string;
+	startTime: number;
 
 	constructor(
 		private gameParserService: GameParserService,
@@ -29,7 +30,8 @@ export class LogListenerService {
 		private plugin: SimpleIOService) {
 
 		this.monitoring = false;
-		this.fileInitiallyPresent = true;
+		// this.fileInitiallyPresent = true;
+		this.startTime = Date.now();
 		this.configureLogListeners();
 	}
 
@@ -70,7 +72,7 @@ export class LogListenerService {
 			// console.log('\tlog hooks already registered, returning');
 			return;
 		}
-		console.log('registering hooks', this.monitoring);
+		console.log('registering hooks');
 		this.monitoring = true;
 
 		console.log('getting logs from', this.logsLocation);
@@ -93,7 +95,7 @@ export class LogListenerService {
 				this.listenOnFileUpdate(logsLocation);
 			}
 			else {
-				this.fileInitiallyPresent = false;
+				// this.fileInitiallyPresent = false;
 				setTimeout( () => { this.listenOnFileCreation(logsLocation); }, 1000);
 			}
 		});
@@ -108,20 +110,14 @@ export class LogListenerService {
 
 			if (!status) {
 				if (data === 'truncated') {
-					this.plugin.get().stopFileListen(fileIdentifier);
-					this.plugin.get().onFileListenerChanged.removeListener(handler);
-					this.fileInitiallyPresent = false;
-					console.log('truncated log file - HS probably just overwrote the file. Retrying', status, data);
-					this.listenOnFileUpdate(logsLocation);
+					// this.plugin.get().stopFileListen(fileIdentifier);
+					// this.plugin.get().onFileListenerChanged.removeListener(handler);
+					// this.fileInitiallyPresent = false;
+					console.info('truncated Power.log file - HS probably just overwrote the file. Going forward');
+					// this.listenOnFileUpdate(logsLocation);
 				}
 				else {
 					console.error("received an error on file: " + id + ": " + data);
-					// Raven.captureMessage('Error while trying to read log file', { extra: {
-					// 	id: id,
-					// 	data: data,
-					// 	status: status,
-					// 	path: logsLocation
-					// }});
 				}
 				return;
 			}
@@ -135,20 +131,13 @@ export class LogListenerService {
 		};
 		this.plugin.get().onFileListenerChanged.addListener(handler);
 
-		this.plugin.get().listenOnFile(fileIdentifier, logsLocation, prod && this.fileInitiallyPresent, (id: string, status: boolean, initData: any) => {
+		this.plugin.get().listenOnFile(fileIdentifier, logsLocation, true, (id: string, status: boolean, initData: any) => {
 			if (id === fileIdentifier) {
 				if (status) {
-					console.log("[" + id + "] now streaming...", this.fileInitiallyPresent);
+					console.log("[" + id + "] now streaming...");
 				}
 				else {
 					console.error("something bad happened with: " + id);
-					// Raven.captureMessage('listenOnFile returned wrong id', { extra: {
-					// 	id: id,
-					// 	fileIdentifier: fileIdentifier,
-					// 	fileInitiallyPresent: this.fileInitiallyPresent,
-					// 	initData: initData,
-					// 	path: logsLocation
-					// }});
 				}
 			}
 		});

@@ -44,6 +44,8 @@ export class LogParserService {
 			this.spectating = false;
 		}
 
+		// console.log('received line', data);
+
 		// New game
 		if (data.indexOf('CREATE_GAME') !== -1) {
 			console.log('reinit game', data);
@@ -64,6 +66,7 @@ export class LogParserService {
 
 		// that's how we know a game is finished
 		if (data.indexOf('GOLD_REWARD_STATE') !== -1 && this.game && !this.game.ended) {
+
 			console.log('game ended', data);
 			this.game.ended = true;
 			this.game.spectating = this.spectating;
@@ -73,10 +76,6 @@ export class LogParserService {
 				if (this.game) {
 					if (!replayXml) {
 						console.warn('could not convert replay');
-						// Raven.captureMessage('Could not convert replay', { extra: {
-						// 	game: game,
-						// 	stringLogs: stringLogs
-						// }});
 					}
 					this.gameHelper.setXmlReplay(this.game, replayXml);
 					this.gameParserService.extractMatchup(this.game);

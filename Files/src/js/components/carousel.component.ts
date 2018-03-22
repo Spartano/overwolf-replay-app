@@ -74,20 +74,6 @@ export class CarouselComponent {
 		this.onGameSelected.emit(game);
 	}
 
-	// showPrevious(): void {
-	// 	if (this.startIndex === 0) return;
-	// 	if (this.startIndex - this.displayedGames < 0) return;
-	// 	this.startIndex = this.startIndex - this.displayedGames;
-	// 	this.endIndex = this.startIndex + this.displayedGames;
-	// }
-
-	// showNext(): void {
-	// 	if (this.startIndex + this.displayedGames >= this.games.length) return;
-
-	// 	this.startIndex = this.startIndex + this.displayedGames;
-	// 	this.endIndex = Math.min(this.games.length, this.startIndex + this.displayedGames);
-	// }
-
 
 
 	showPrevious(): void {
@@ -108,6 +94,7 @@ export class CarouselComponent {
 
 	@HostListener('window:resize', ['$event'])
 	onResize(event) {
+		// this.recomputeNumberOfDisplayedElements();
 		this.recomputeVisibleElements(50);
 	}
 
