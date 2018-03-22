@@ -38,64 +38,51 @@ declare var ga: any;
 })
 
 export class CarouselComponent {
+
 	@Input() games: Game[];
 	@Output() onGameSelected = new EventEmitter<Game>();
 
 	selectedGame: Game;
-	showTopArrow: boolean;
-	showBottomArrow: boolean;
-	numberOfDisplayedGames: number;
-	firstDisplayedGameIndex: number;
-	translateAmount: number;
+	showTopArrow = false;
+	showBottomArrow = false;
+	numberOfDisplayedGames = 0;
+	firstDisplayedGameIndex = 0;
+	translateAmount = 0;
 	bouncing: boolean;
 
-	// displayedGames: number;
-	// startIndex: number;
-	// endIndex: number;
-
-	ngOnInit(): void {
-		// this.displayedGames = 4;
-		// this.startIndex = 0;
-		// this.endIndex = this.startIndex + this.displayedGames;
-	}
-
-	newGame(game: Game): void {
-		// if (!this.selectedGame) {
-		// this.onSelect(game);
-		// }
-		this.recomputeVisibleElements(50);
+	constructor() {
+		this.computeNumberOfVisibleElements(50, () => this.recomputeVisibleElements());
 	}
 
 	onSelect(game: Game): void {
 		console.log('loading game', game);
 		ga('send', 'event', 'select-game', game.player.class + '-' + game.opponent.class);
-		this.recomputeVisibleElements(50);
+		// this.recomputeVisibleElements(50);
 		this.selectedGame = game;
 		this.onGameSelected.emit(game);
 	}
 
-
-
-	showPrevious(): void {
-		console.log('showPrevious?', this.showTopArrow, this.firstDisplayedGameIndex, this.numberOfDisplayedGames, (this.firstDisplayedGameIndex - this.numberOfDisplayedGames) * 100);
-		if (this.showTopArrow) {
-			this.translateAmount = Math.max(0, this.firstDisplayedGameIndex - this.numberOfDisplayedGames) * 100;
-			this.recomputeVisibleElements(700);
+	showNext(): void {
+		if (this.showBottomArrow) {
+			this.firstDisplayedGameIndex = Math.min(
+				this.firstDisplayedGameIndex + this.numberOfDisplayedGames,
+				this.games.length - this.numberOfDisplayedGames);
+			this.translateAmount = 100 * this.firstDisplayedGameIndex;
+			this.recomputeVisibleElements(500);
 		}
 	}
 
-	showNext(): void {
-		if (this.showBottomArrow) {
-			console.log('moving down', this.games.length - 1, this.firstDisplayedGameIndex, this.numberOfDisplayedGames);
-			this.translateAmount = Math.min(this.games.length - this.numberOfDisplayedGames, this.firstDisplayedGameIndex + this.numberOfDisplayedGames) * 100;
-			this.recomputeVisibleElements(700);
+	showPrevious(): void {
+		if (this.showTopArrow) {
+			this.firstDisplayedGameIndex = Math.max(0, this.firstDisplayedGameIndex - this.numberOfDisplayedGames);
+			this.translateAmount = 100 * this.firstDisplayedGameIndex;
+			this.recomputeVisibleElements(500);
 		}
 	}
 
 	@HostListener('window:resize', ['$event'])
 	onResize(event) {
-		// this.recomputeNumberOfDisplayedElements();
-		this.recomputeVisibleElements(50);
+		this.computeNumberOfVisibleElements(50, () => this.recomputeVisibleElements());
 	}
 
 	isElementInViewport (el: any): boolean {
@@ -104,56 +91,68 @@ export class CarouselComponent {
 		return (
 			rect.top >= 0 &&
 			rect.left >= 0 &&
-			rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && /*or $(window).height() */
-			rect.right <= (window.innerWidth || document.documentElement.clientWidth) /*or $(window).width() */
+			rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+			rect.right <= (window.innerWidth || document.documentElement.clientWidth)
 		);
 	}
 
-	recomputeVisibleElements(delay: number): void {
-		if (!this.bouncing) {
-			this.bouncing = true;
-			setTimeout(() =>  {
-				console.log('recomputing visible elements');
-				this.showTopArrow = false;
-				this.showBottomArrow = false;
-				this.numberOfDisplayedGames = 0;
-				this.firstDisplayedGameIndex = -1;
+	computeNumberOfVisibleElements(delay: number, callback): void {
+		setTimeout(() =>  {
+			console.log('computing number of visible elements');
+			this.numberOfDisplayedGames = 0;
 
-				let thumbnailElements = $('.carousel li');
-				console.log('thumbnailElements', thumbnailElements, thumbnailElements.length);
-				if (!thumbnailElements || thumbnailElements.length === 0) {
-					this.bouncing = false;
-					this.recomputeVisibleElements(100);
-					console.log('No thumbnail elements detected, retrying soon');
-					return;
+			let thumbnailElements = $('.carousel li');
+			console.log('thumbnailElements', thumbnailElements.length);
+			if (!thumbnailElements || thumbnailElements.length === 0) {
+				this.computeNumberOfVisibleElements(100, callback);
+				console.log('No thumbnail elements detected, retrying soon to compute number of visible elements');
+				return;
+			}
+
+			let index = 0;
+			for (let i = 0; i < thumbnailElements.length; i++) {
+				let el = thumbnailElements[i];
+				if (this.isElementInViewport(el)) {
+					this.numberOfDisplayedGames++;
 				}
+				index++;
+			}
+			console.log('computed displayed games', this.numberOfDisplayedGames);
 
-				let index = 0;
-				for (let i = 0; i < thumbnailElements.length; i++) {
-					let el = thumbnailElements[i];
-					// console.log('element', el, $(el));
-					// Hide elements that are outside of the visible viewport
-					$(el).css('opacity', '1');
-					console.log('considering', el, this.isElementInViewport(el), el.getBoundingClientRect());
-					if (this.isElementInViewport(el)) {
-						this.numberOfDisplayedGames++;
-						if (this.firstDisplayedGameIndex === -1) {
-							this.firstDisplayedGameIndex = index;
-						}
-					}
-					else {
+			callback();
+		}, delay);
+	}
+
+	recomputeVisibleElements(hideDelay?: number): void {
+		console.log('recomputing visible elements');
+
+		this.showTopArrow = false;
+		this.showBottomArrow = false;
+
+		let thumbnailElements = $('.carousel li');
+
+		let index = 0;
+		for (let i = 0; i < thumbnailElements.length; i++) {
+			let el = thumbnailElements[i];
+			// Hide elements that are outside of the visible viewport
+			if (i >= this.firstDisplayedGameIndex && i < this.firstDisplayedGameIndex + this.numberOfDisplayedGames) {
+				$(el).css('opacity', '1');
+				// console.log('showing game', i, this.firstDisplayedGameIndex, this.firstDisplayedGameIndex + this.numberOfDisplayedGames);
+			}
+			else {
+				if (hideDelay) {
+					setTimeout(() => {
 						$(el).css('opacity', '0');
-					}
-					index++;
-					console.log('increased index', index);
+						// console.log('hiding game', i, this.firstDisplayedGameIndex, this.firstDisplayedGameIndex + this.numberOfDisplayedGames);
+					}, hideDelay);
 				}
-				this.showTopArrow = this.firstDisplayedGameIndex > 0;
-				this.showBottomArrow = (this.firstDisplayedGameIndex + this.numberOfDisplayedGames) < thumbnailElements.length;
-				console.log('showing arrows', this.showTopArrow, this.showBottomArrow);
-
-				console.log('number of displayed games', this.numberOfDisplayedGames, this.firstDisplayedGameIndex);
-				this.bouncing = false;
-			}, delay );
+				else {
+					$(el).css('opacity', '0');
+				}
+			}
 		}
+		this.showTopArrow = this.firstDisplayedGameIndex > 0;
+		this.showBottomArrow = (this.firstDisplayedGameIndex + this.numberOfDisplayedGames) < thumbnailElements.length;
+		console.log('showing arrows', this.showTopArrow, this.showBottomArrow);
 	}
 }
