@@ -119,7 +119,7 @@ export class AccountService {
 		this.zone.run(() => {
 			if (err.status == 409) {
 				console.log('account already claimed', err);
-				this.setAccountClaimed(false);
+				this.setAccountClaimed(true);
 				return;
 			}
 			this.events.broadcast(Events.GLOBAL_ERROR, 'CANT_CLAIM_ACCOUNT');
