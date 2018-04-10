@@ -86,9 +86,9 @@ export class FileUploadService {
 						'review-text': 'Created by [Overwolf](http://www.overwolf.com)',
 						'game-rank': (rank != null && rank != 'legend') ? rank.toString() : '',
 						'game-legend-rank': rank == 'legend' ? rank.toString() : '',
-						'game-format': game.gameFormat,
-						'deckstring': game.deckstring,
 						'game-mode': game.gameMode,
+						'game-format': game.gameMode != 'Arena' ? game.gameFormat : '',
+						'deckstring': game.deckstring,
 					},
 				};
 				console.log('uploading with params', params);
