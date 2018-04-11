@@ -62,7 +62,19 @@ export class MemoryInspectionService {
 	public getGameMode(callback) {
 		this.mindvisionPlugin.get().getGameMode((gameMode) => {
 			console.log('received gameMode callback', gameMode);
-			callback(gameMode);
+			this.mindvisionPlugin.get().getMatchInfo((matchInfo) => {
+				if (matchInfo
+						&& matchInfo.OpposingPlayer
+						&& matchInfo.OpposingPlayer.CardId
+						&& matchInfo.OpposingPlayer.CardId.startsWith('LOOTA_BOSS')) {
+					console.log('overriding with dungeon-run');
+					callback('dungeon-run');
+				}
+				else {
+					console.log('setting match info to ', gameMode);
+					callback(gameMode);
+				}
+			});
 		});
 	}
 }
