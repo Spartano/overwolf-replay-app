@@ -7,7 +7,7 @@ import { Component, Input } from '@angular/core';
 		<div class="hero-avatar">
 			<img class="win-img" src="../assets/images/victory.png" *ngIf="won">
 			<div class="avatar">
-				<img class="portrait" src="https://s3.amazonaws.com/com.zerotoheroes/plugins/hearthstone/cardart/256x/{{hero}}.jpg">
+				<img class="portrait" src="http://static.zerotoheroes.com/hearthstone/cardart/256x/{{hero}}.jpg">
 				<img class="frame" src="../assets/images/hero_frame.png">
 			</div>
 		</div>
