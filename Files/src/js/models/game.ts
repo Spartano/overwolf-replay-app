@@ -10,6 +10,7 @@ export class Game {
 	gameMode: string;
 	gameFormat: string;
 	rank: string;
+	opponentRank: string;
 	result: string;
 	matchInfo: any;
 	arenaInfo: any;
@@ -43,6 +44,13 @@ export class Game {
 				else {
 					this.rank = this.matchInfo.LocalPlayer.WildRank;
 				}
+
+				if (this.matchInfo.OpposingPlayer.WildLegendRank > 0) {
+					this.opponentRank = 'legend';
+				}
+				else {
+					this.opponentRank = this.matchInfo.OpposingPlayer.WildRank;
+				}
 			}
 			else if ('Standard' === this.gameFormat) {
 				if (this.matchInfo.LocalPlayer.StandardLegendRank > 0) {
@@ -50,6 +58,13 @@ export class Game {
 				}
 				else {
 					this.rank = this.matchInfo.LocalPlayer.StandardRank;
+				}
+
+				if (this.matchInfo.OpposingPlayer.StandardLegendRank > 0) {
+					this.opponentRank = 'legend';
+				}
+				else {
+					this.opponentRank = this.matchInfo.OpposingPlayer.StandardRank;
 				}
 			}
 		}

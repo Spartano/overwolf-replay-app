@@ -68,8 +68,13 @@ export class FileUploadService {
 				AWS.config.httpOptions.timeout = 3600 * 1000 * 10;
 
 				let rank = game.rank;
-				if ('Arena' === game.gameMode && game.arenaInfo) {
-					rank = game.arenaInfo.Wins;
+				if ('Arena' === game.gameMode) {
+					if (game.arenaInfo) {
+						rank = game.arenaInfo.Wins;
+					}
+					else {
+						rank = null;
+					}
 				}
 				console.log('setting rank', rank);
 				let s3 = new AWS.S3();
@@ -86,6 +91,8 @@ export class FileUploadService {
 						'review-text': 'Created by [Overwolf](http://www.overwolf.com)',
 						'game-rank': (rank != null && rank != 'legend') ? rank.toString() : '',
 						'game-legend-rank': rank == 'legend' ? rank.toString() : '',
+						'opponent-game-rank': (game.opponentRank != null && game.opponentRank != 'legend') ? game.opponentRank.toString() : '',
+						'opponent-game-legend-rank': game.opponentRank == 'legend' ? game.opponentRank.toString() : '',
 						'game-mode': game.gameMode,
 						'game-format': game.gameMode != 'Arena' ? game.gameFormat : '',
 						'deckstring': game.deckstring,
