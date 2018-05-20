@@ -13,6 +13,7 @@ import { GameStorageService } from '../../services/game-storage.service';
 import { OwCommunicationService	} from '../../services/ow-communcation.service';
 // import { GameRetrieveService } from './service/game-retrieve.service';
 import { LogListenerService } from '../../services/log-listener.service';
+import { PublicEventsService } from '../../services/public-events.service';
 import { StorageHelperService } from '../../services/storage-helper.service';
 import { GameParserService } from '../../services/game-parser.service';
 import { LogParserService } from '../../services/gameparsing/log-parser.service';
@@ -59,10 +60,11 @@ import { SimpleIOService } from '../../services/plugins/simple-io.service';
 		AppComponent,
 	],
 	providers: [
-		GameStorageService,
-		UserPreferences,
-		LogListenerService,
 		GameParserService,
+		GameStorageService,
+		LogListenerService,
+		PublicEventsService,
+		UserPreferences,
 		LogParserService,
 		LocalStorageService,
 		GameModeParser,

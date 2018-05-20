@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 export class DebugService {
 
 	constructor() {
-		let debugMode = true;
+		let debugMode = false;
 		console.log = this.override(console.log, debugMode);
 		console.warn = this.override(console.warn, debugMode);
 		console.error = this.override(console.error, debugMode);
