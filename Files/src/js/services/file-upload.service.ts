@@ -7,6 +7,8 @@ import 'rxjs/add/operator/share';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { Game } from '../models/game';
+
+import { PublicEventsService } from '../services/public-events.service';
 import { GameStorageService } from './game-storage.service';
 
 declare var overwolf: any;
@@ -20,7 +22,10 @@ const BUCKET = 'com.zerotoheroes.batch';
 @Injectable()
 export class FileUploadService {
 
-	constructor(private http: Http, private gameStorageService: GameStorageService) {
+	constructor(
+		private http: Http,
+		private publicEventsService: PublicEventsService,
+		private gameStorageService: GameStorageService) {
 	}
 
 	public getRemoteReview(reviewId: string, callback: Function) {
@@ -118,6 +123,7 @@ export class FileUploadService {
 					else {
 						console.log('Uploaded game', data2, reviewId);
 						game.reviewId = reviewId;
+						this.publicEventsService.broadcast(PublicEventsService.REPLAY_UPLOADED, game);
 						overwolf.games.getRunningGameInfo((res: any) => {
 							// console.log("getRunningGameInfo to update game: " + JSON.stringify(res));
 							if (res && res.sessionId) {
