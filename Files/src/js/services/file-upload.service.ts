@@ -8,7 +8,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { Game } from '../models/game';
 
-import { PublicEventsService } from '../services/public-events.service';
+import { PublicEventsService } from './public-events.service';
 import { GameStorageService } from './game-storage.service';
 
 declare var overwolf: any;
