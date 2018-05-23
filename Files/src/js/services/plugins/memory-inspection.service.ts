@@ -16,65 +16,70 @@ export class MemoryInspectionService {
 
 	constructor() {
 		console.log("loading mindvision");
-		this.mindvisionPlugin = new OverwolfPlugin("mindvision", true);
-		this.mindvisionPlugin.initialize((status: boolean) => {
-			if (status === false) {
-				console.warn("Plugin mindvision couldn't be loaded");
-				// Raven.captureMessage('mindvision plugin could not be loaded');
-				return;
-			}
-			console.log("Plugin " + this.mindvisionPlugin.get()._PluginName_ + " was loaded!");
-			this.mindvisionPlugin.get().onGlobalEvent.addListener(function(first, second) {
-				console.log('received global event mindvision', first, second);
-			});
-		});
+		// this.mindvisionPlugin = new OverwolfPlugin("mindvision", true);
+		// this.mindvisionPlugin.initialize((status: boolean) => {
+		// 	if (status === false) {
+		// 		console.warn("Plugin mindvision couldn't be loaded");
+		// 		// Raven.captureMessage('mindvision plugin could not be loaded');
+		// 		return;
+		// 	}
+		// 	console.log("Plugin " + this.mindvisionPlugin.get()._PluginName_ + " was loaded!");
+		// 	this.mindvisionPlugin.get().onGlobalEvent.addListener(function(first, second) {
+		// 		console.log('received global event mindvision', first, second);
+		// 	});
+		// });
 	}
 
 	public getActiveDeck(callback) {
-		this.mindvisionPlugin.get().getActiveDeck((activeDeck) => {
-			console.log('activeDeck', activeDeck);
-			callback(activeDeck);
-		});
+		console.log('Getting active deck from memory - no-op');
+		// this.mindvisionPlugin.get().getActiveDeck((activeDeck) => {
+		// 	console.log('activeDeck', activeDeck);
+		// 	callback(activeDeck);
+		// });
 	}
 
 	public getMatchInfo(callback) {
-		this.mindvisionPlugin.get().getMatchInfo((matchInfo) => {
-			console.log('received matchinfo callback', matchInfo);
-			callback(matchInfo);
-		});
+		console.log('Getting match info from memory - no-op');
+		// this.mindvisionPlugin.get().getMatchInfo((matchInfo) => {
+		// 	console.log('received matchinfo callback', matchInfo);
+		// 	callback(matchInfo);
+		// });
 	}
 
 	public getArenaInfo(callback) {
-		this.mindvisionPlugin.get().getArenaInfo((arenaInfo) => {
-			console.log('received arenaInfo callback', arenaInfo);
-			let jsonArenaInfo = arenaInfo ? JSON.parse(arenaInfo) : arenaInfo;
-			callback(jsonArenaInfo);
-		});
+		console.log('Getting arena info from memory - no-op');
+		// this.mindvisionPlugin.get().getArenaInfo((arenaInfo) => {
+		// 	console.log('received arenaInfo callback', arenaInfo);
+		// 	let jsonArenaInfo = arenaInfo ? JSON.parse(arenaInfo) : arenaInfo;
+		// 	callback(jsonArenaInfo);
+		// });
 	}
 
 	public getGameFormat(callback) {
-		this.mindvisionPlugin.get().getGameFormat((gameFormat) => {
-			console.log('received gameFormat callback', gameFormat);
-			callback(gameFormat);
-		});
+		console.log('Getting game format from memory - no-op');
+		// this.mindvisionPlugin.get().getGameFormat((gameFormat) => {
+		// 	console.log('received gameFormat callback', gameFormat);
+		// 	callback(gameFormat);
+		// });
 	}
 
 	public getGameMode(callback) {
-		this.mindvisionPlugin.get().getGameMode((gameMode) => {
-			console.log('received gameMode callback', gameMode);
-			this.mindvisionPlugin.get().getMatchInfo((matchInfo) => {
-				if (matchInfo
-						&& matchInfo.OpposingPlayer
-						&& matchInfo.OpposingPlayer.CardId
-						&& matchInfo.OpposingPlayer.CardId.startsWith('LOOTA_BOSS')) {
-					console.log('overriding with dungeon-run');
-					callback('dungeon-run');
-				}
-				else {
-					console.log('setting match info to ', gameMode);
-					callback(gameMode);
-				}
-			});
-		});
+		console.log('Getting game mode from memory - no-op');
+		// this.mindvisionPlugin.get().getGameMode((gameMode) => {
+		// 	console.log('received gameMode callback', gameMode);
+		// 	this.mindvisionPlugin.get().getMatchInfo((matchInfo) => {
+		// 		if (matchInfo
+		// 				&& matchInfo.OpposingPlayer
+		// 				&& matchInfo.OpposingPlayer.CardId
+		// 				&& matchInfo.OpposingPlayer.CardId.startsWith('LOOTA_BOSS')) {
+		// 			console.log('overriding with dungeon-run');
+		// 			callback('dungeon-run');
+		// 		}
+		// 		else {
+		// 			console.log('setting match info to ', gameMode);
+		// 			callback(gameMode);
+		// 		}
+		// 	});
+		// });
 	}
 }

@@ -78,10 +78,6 @@
 			"overwolf-replay-converter": {
 				"file": "Files/plugins/HearthstoneReplays.dll",
 				"class": "HearthstoneReplays.ReplayConverterPlugin"
-			},
-			"mindvision": {
-				"file": "Files/plugins/MindVision.dll",
-				"class": "MindVision.MindVisionPlugin"
 			}
 		}
 	}
