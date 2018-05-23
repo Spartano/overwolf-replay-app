@@ -26,6 +26,7 @@ import { LoginComponent } from '../../components/login.component';
 import { GameRetrieveService } from '../../services/game-retrieve.service';
 import { StorageHelperService } from '../../services/storage-helper.service';
 import { GameParserService } from '../../services/game-parser.service';
+import { PublicEventsService } from '../../services/public-events.service';
 import { AccountService } from '../../services/account.service';
 import { UserPreferences } from '../../services/user-preferences.service';
 import { FileUploadService } from '../../services/file-upload.service';
@@ -81,6 +82,7 @@ import { LogParserService } from '../../services/gameparsing/log-parser.service'
 		FileUploadService,
 		GameStorageService,
 		Events,
+		PublicEventsService,
 		GameHelper,
 		StorageHelperService,
 		GameUploadService,

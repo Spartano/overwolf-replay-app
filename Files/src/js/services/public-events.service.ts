@@ -74,11 +74,10 @@ export class PublicEventsService {
 			return;
 		}
 		if (this.listeners.indexOf(request.callbackUrl) != -1) {
-			console.log('Listener already registered', request, this.listeners);
-			// return;
+			console.log('Listener already registered', request.callbackUrl, this.listeners);
+			return;
 		}
-		else {
-			this.listeners.push(request.callbackUrl);
-		}
+		console.log('Registering listener', request.callbackUrl);
+		this.listeners.push(request.callbackUrl);
 	}
 }
