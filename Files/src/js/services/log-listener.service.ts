@@ -19,7 +19,7 @@ const prod = true;
 @Injectable()
 export class LogListenerService {
 	monitoring: boolean;
-	// fileInitiallyPresent: boolean;
+	fileInitiallyPresent = true;
 	logsLocation: string;
 	startTime: number;
 
@@ -82,20 +82,19 @@ export class LogListenerService {
 	listenOnFile(logsLocation: string): void {
 		// Sentry raises a stack trace too big without this
 		setTimeout(() => {
+			console.log('starting to listen on file', logsLocation);
 			this.listenOnFileCreation(logsLocation);
 		}, 1000)
 	}
 
 	listenOnFileCreation(logsLocation: string): void {
-		console.log('starting to listen on file', logsLocation);
-
 		this.plugin.get().fileExists(logsLocation, (status: boolean, message: string) => {
-			console.log('fileExists?', status, message);
 			if (status === true) {
+				console.log('fileExists?', status, message);
 				this.listenOnFileUpdate(logsLocation);
 			}
 			else {
-				// this.fileInitiallyPresent = false;
+				this.fileInitiallyPresent = false;
 				setTimeout( () => { this.listenOnFileCreation(logsLocation); }, 1000);
 			}
 		});
@@ -107,7 +106,6 @@ export class LogListenerService {
 
 		// Register file listener
 		let handler = (id: any, status: any, data: string) => {
-
 			if (!status) {
 				if (data === 'truncated') {
 					// this.plugin.get().stopFileListen(fileIdentifier);
@@ -123,6 +121,7 @@ export class LogListenerService {
 			}
 
 			if (id === fileIdentifier) {
+				console.log('received log line', data);
 				this.logParserService.receiveLogLine(data);
 			}
 			else {
@@ -131,7 +130,7 @@ export class LogListenerService {
 		};
 		this.plugin.get().onFileListenerChanged.addListener(handler);
 
-		this.plugin.get().listenOnFile(fileIdentifier, logsLocation, true, (id: string, status: boolean, initData: any) => {
+		this.plugin.get().listenOnFile(fileIdentifier, logsLocation, this.fileInitiallyPresent, (id: string, status: boolean, initData: any) => {
 			if (id === fileIdentifier) {
 				if (status) {
 					console.log("[" + id + "] now streaming...");
