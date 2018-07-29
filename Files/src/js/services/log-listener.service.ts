@@ -3,9 +3,8 @@ import { Injectable } from '@angular/core';
 // import * as Raven from 'raven-js';
 
 import { Game } from '../models/game';
-import { GameParserService } from './game-parser.service';
 import { SimpleIOService } from './plugins/simple-io.service';
-import { LogParserService } from './gameparsing/log-parser.service';
+import { GameEvents } from './game-events.service';
 import { GameModeParser } from './gameparsing/game-mode-parser.service';
 
 declare var OverwolfPlugin: any;
@@ -24,9 +23,8 @@ export class LogListenerService {
 	startTime: number;
 
 	constructor(
-		private gameParserService: GameParserService,
 		private gameModeParser: GameModeParser,
-		private logParserService: LogParserService,
+		private gameEvents: GameEvents,
 		private plugin: SimpleIOService) {
 
 		this.monitoring = false;
@@ -121,8 +119,8 @@ export class LogListenerService {
 			}
 
 			if (id === fileIdentifier) {
-				console.log('received log line', data);
-				this.logParserService.receiveLogLine(data);
+				// console.log('received log line', data);
+				this.gameEvents.receiveLogLine(data);
 			}
 			else {
 				// This happens frequently when listening to several files at the same time, don't do anything about it

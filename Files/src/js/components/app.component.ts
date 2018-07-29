@@ -5,6 +5,7 @@ import { Component } from '@angular/core';
 import { LogListenerService } from '../services/log-listener.service';
 import { DeckLogListenerService } from '../services/deck/deck-log-listener.service';
 import { GameStorageService } from '../services/game-storage.service';
+import { GameMonitorService } from '../services/gameparsing/game-monitor.service';
 import { OwCommunicationService } from '../services/ow-communcation.service';
 import { ReplayManager } from '../services/replay-manager.service';
 import { ReplayUploader } from '../services/replay-uploader.service';
@@ -32,6 +33,7 @@ export class AppComponent {
 	constructor(
 		private debugService: DebugService,
 		private logListenerService: LogListenerService,
+		private gameMonitorService: GameMonitorService,
 		private deckLogListenerService: DeckLogListenerService,
 		private gameStorageService: GameStorageService,
 		private owCommunicationService: OwCommunicationService,

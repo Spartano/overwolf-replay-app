@@ -49,7 +49,6 @@ export class ReplayManager {
 					console.log("getRunningGameInfo to save game: " + JSON.stringify(res));
 					if (res && res.sessionId) {
 						console.log('adding replay');
-						game.fullLogs = null;
 						this.gameStorage.addGame(res.sessionId, game, (session) => {
 							console.log('replay saved', session.id, session.games.length);
 							this.events.broadcast(Events.REPLAY_SAVED, directory + fileName, JSON.stringify(game));
