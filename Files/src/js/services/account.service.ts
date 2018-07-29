@@ -82,7 +82,7 @@ export class AccountService {
 				.subscribe((data) => { this.accountClaimHandler(data, false) }, (err) => { this.accountDisconnectErrorHandler(err, user.userId) });
 
 			// Setting auto-upload to false
-			this.userPreferences.setAutoUpload(false);
+			this.userPreferences.setAutoUpload(true);
 		});
 	}
 

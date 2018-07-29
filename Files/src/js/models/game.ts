@@ -22,7 +22,7 @@ export class Game {
 	opponent: Player = new Player();
 
 	deckstring: string;
-	fullLogs: string;
+	// fullLogs: string;
 	public replay: string;
 	path: string;
 	replayBytes: any[];
