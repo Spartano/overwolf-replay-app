@@ -81,7 +81,7 @@ export class FileUploadService {
 						rank = null;
 					}
 				}
-				console.log('setting rank', rank);
+				// console.log('setting rank', rank);
 				let s3 = new AWS.S3();
 				let params = {
 					Bucket: BUCKET,

@@ -46,9 +46,9 @@ export class ReplayManager {
 				game.replayBytes = bytes;
 
 				overwolf.games.getRunningGameInfo((res: any) => {
-					console.log("getRunningGameInfo to save game: " + JSON.stringify(res));
+					// console.log("getRunningGameInfo to save game: " + JSON.stringify(res));
 					if (res && res.sessionId) {
-						console.log('adding replay');
+						console.log('adding replay to storage');
 						this.gameStorage.addGame(res.sessionId, game, (session) => {
 							console.log('replay saved', session.id, session.games.length);
 							this.events.broadcast(Events.REPLAY_SAVED, directory + fileName, JSON.stringify(game));

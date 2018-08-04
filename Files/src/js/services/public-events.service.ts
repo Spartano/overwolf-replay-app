@@ -33,7 +33,7 @@ export class PublicEventsService {
 	}
 
 	public broadcast(event: string, object: any) {
-		console.log('broadcasting', event, object, this.listeners);
+		// console.log('broadcasting', event, object, this.listeners);
 		let eventToBroadcast = JSON.stringify({
 			event: event,
 			object: object

@@ -78,27 +78,26 @@ export class GameEvents {
 	}
 
 	public dispatchGameEvent(gameEvent) {
-		console.log(gameEvent.Type + ' event', gameEvent);
 		switch (gameEvent.Type) {
 			case 'NEW_GAME':
+				console.log(gameEvent.Type + ' event', gameEvent);
 				this.allEvents.next(new GameEvent(GameEvent.GAME_START));
 				this.onGameStart.next(new GameEvent(GameEvent.GAME_START));
 				break;
-			// case 'MATCH_METADATA':
-			// 	console.log('received opponent', gameEvent.Value);
-			// 	this.allEvents.next(new GameEvent(GameEvent.MATCH_METADATA, gameEvent.Value));
-			// 	break;
 			case 'LOCAL_PLAYER':
+				console.log(gameEvent.Type + ' event', gameEvent);
 				this.allEvents.next(new GameEvent(GameEvent.LOCAL_PLAYER, gameEvent.Value));
 				break;
 			case 'OPPONENT_PLAYER':
+				console.log(gameEvent.Type + ' event', gameEvent);
 				this.allEvents.next(new GameEvent(GameEvent.OPPONENT, gameEvent.Value));
 				break;
 			case 'GAME_END':
+				console.log(gameEvent.Type + ' event', gameEvent);
 				this.allEvents.next(new GameEvent(GameEvent.GAME_END, gameEvent.Value.Game, gameEvent.Value.ReplayXml));
 				break;
 			default:
-				console.log('unsupported game event', gameEvent);
+				// console.log('unsupported game event', gameEvent);
 		}
 	}
 

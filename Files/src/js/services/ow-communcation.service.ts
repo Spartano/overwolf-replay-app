@@ -30,7 +30,7 @@ export class OwCommunicationService {
 
 	private sendMatchCountInfo() {
 		overwolf.games.getRunningGameInfo((res: any) => {
-			console.log("getRunningGameInfo to send matchcount info: " + JSON.stringify(res));
+			// console.log("getRunningGameInfo to send matchcount info: " + JSON.stringify(res));
 			if (res && res.sessionId) {
 				this.storageHelper.getSession(res.sessionId, (currentSession) => {
 					let info = { matchCount: currentSession.games.length, sessionId: currentSession.id };

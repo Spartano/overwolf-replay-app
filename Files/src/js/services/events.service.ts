@@ -31,7 +31,7 @@ export class Events {
 	}
 
 	broadcast(key: any, ...data: any[]) {
-		console.log('broadcasting', key, data);
+		// console.log('broadcasting', key, data);
 		this._eventBus.next({key, data});
 	}
 

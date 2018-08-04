@@ -27,7 +27,7 @@ export class GameMonitorService {
 	private handleEvent(gameEvent: GameEvent) {
 		switch (gameEvent.type) {
 			case 'GAME_END':
-				console.log('handling game end event', gameEvent);
+				// console.log('handling game end event', gameEvent);
 				const gameResult = gameEvent.data[0];
 				const replayXml = gameEvent.data[1];
 				if (!replayXml) {
@@ -39,7 +39,7 @@ export class GameMonitorService {
 				this.gameHelper.setXmlReplay(game, replayXml);
 				this.gameParserService.extractMatchup(game);
 				this.gameParserService.extractDuration(game);
-				console.log('broadcasting end of game', game);
+				console.log('broadcasting end of game', game.player, game.opponent, game.gameFormat, game.gameMode);
 				this.events.broadcast(Events.REPLAY_CREATED, JSON.stringify(game));
 				break;
 			default:

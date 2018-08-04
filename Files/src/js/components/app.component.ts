@@ -50,7 +50,7 @@ export class AppComponent {
 		this.events.on(Events.REPLAY_CREATED)
 			.subscribe(event => {
 				let game: Game = JSON.parse(event.data[0]);
-				console.log('received game from event', game);
+				// console.log('received game from event', game);
 				this.replayManager.saveLocally(game);
 			});
 

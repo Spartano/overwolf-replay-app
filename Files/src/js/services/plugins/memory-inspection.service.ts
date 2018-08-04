@@ -31,7 +31,7 @@ export class MemoryInspectionService {
 	}
 
 	public getActiveDeck(callback) {
-		console.log('Getting active deck from memory - no-op');
+		// console.log('Getting active deck from memory - no-op');
 		// this.mindvisionPlugin.get().getActiveDeck((activeDeck) => {
 		// 	console.log('activeDeck', activeDeck);
 		// 	callback(activeDeck);

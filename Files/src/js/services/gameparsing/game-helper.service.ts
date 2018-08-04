@@ -9,7 +9,7 @@ export class GameHelper {
 
 	public setXmlReplay(game: Game, xml: string) {
 		var compressed = LZString.compress(xml);
-		console.log("Compressed from " + xml.length + " to " + compressed.length);
+		// console.log("Compressed from " + xml.length + " to " + compressed.length);
 		game.replay = compressed;
 	}
 
