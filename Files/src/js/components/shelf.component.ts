@@ -2,7 +2,7 @@ import { Component, NgZone } from '@angular/core';
 import { ViewEncapsulation } from '@angular/core';
 
 import { LocalStorageService } from 'angular-2-local-storage';
-// import * as Raven from 'raven-js';
+import $ from 'jquery';
 
 import { Game } from '../models/game';
 
@@ -15,7 +15,6 @@ import { GameStorageService } from '../services/game-storage.service';
 import { DebugService } from '../services/debug.service';
 
 declare var overwolf: any;
-import * as $ from 'jquery';
 
 @Component({
 	selector: 'zh-shelf',
@@ -34,11 +33,12 @@ import * as $ from 'jquery';
 	`,
 })
 export class ShelfComponent {
-	private currentState = 'LOADING';
-	private globalError: string;
+	currentState = 'LOADING';
+	globalError: string;
+	firstTimeUser = false;
+	showLogin = false;
+	
 	private games: Game[] = null;
-	private firstTimeUser = false;
-	private showLogin = false;
 
 	constructor(
 		private zone: NgZone,

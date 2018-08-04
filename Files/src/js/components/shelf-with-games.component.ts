@@ -49,11 +49,10 @@ export class ShelfWithGamesComponent {
 	@ViewChild(CarouselComponent) private carouselComponent: CarouselComponent;
 	@ViewChild(GameReplayComponent) private gameReplayComponent: GameReplayComponent;
 
-	private shelfLoaded: boolean;
-	private selectedGame: Game;
+	selectedGame: Game;
+	accountClaimed = true;
 
-	private accountClaimed = true;
-	// private accountClaimUrl: string;
+	private shelfLoaded: boolean;
 
 	constructor(
 		private gameHelper: GameHelper,

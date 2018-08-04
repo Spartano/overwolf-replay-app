@@ -183,10 +183,10 @@ const FORGOTTEN_PASSWORD_URL = "https://www.zerotoheroes.com/api/users/password"
 })
 export class LoginComponent {
 
-
 	@Output() close = new EventEmitter();
 
-	private state = 'SIGN_IN';
+	state = 'SIGN_IN';
+
 	private sentInstructions: boolean;
 	private errorMessage: string;
 	private infoMessage: string;
@@ -207,7 +207,10 @@ export class LoginComponent {
 		private accountService: AccountService,
 		private localStorageService: LocalStorageService,
 		private events: Events) {
+	}
 
+	closeWindow() {
+		this.close.emit(null);
 	}
 
 	private forgotPassword() {
@@ -373,9 +376,5 @@ export class LoginComponent {
 		this.state = newState;
 		this.infoMessage = null;
 		this.errorMessage = null;
-	}
-
-	private closeWindow() {
-		this.close.emit(null);
 	}
 }

@@ -70,7 +70,8 @@ export class UploadSocialComponent {
 	// @Output() close = new EventEmitter();
 	@Input() game;
 
-	private sharingInProgress = false;
+	sharingInProgress = false;
+	
 	private autoUpload = true;
 
 	constructor(

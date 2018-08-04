@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, HostListener } from '@angular/core';
 import { Game } from '../models/game';
 
-import * as $ from 'jquery';
+import $ from 'jquery';
 
 declare var ga: any;
 

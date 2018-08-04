@@ -74,7 +74,8 @@ export class UploadProgressComponent {
 
 	@Output() close = new EventEmitter();
 
-	private uploadInProgress = false;
+	uploadInProgress = false;
+	
 	private uploadStatus: string;
 	private autoUpload = true;
 	private game: Game;

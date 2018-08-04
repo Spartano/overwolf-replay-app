@@ -22,15 +22,7 @@ export class GameInfoComponent {
 
 	@Input() game: Game;
 
-	private durationTime(): string {
-		if (this.game.durationTimeSeconds > 60) {
-			// TODO: integer division
-			return Math.round(this.game.durationTimeSeconds / 60) + ' minutes';
-		}
-		return 'a few seconds';
-	}
-
-	private gameMode(): string {
+	gameMode(): string {
 		if (this.game.gameMode === 'TavernBrawl') {
 			return 'Tavern Brawl';
 		}
@@ -58,7 +50,7 @@ export class GameInfoComponent {
 		return this.game.gameMode;
 	}
 
-	private rankImage(): string {
+	rankImage(): string {
 		if (this.game.gameMode === 'Arena' && this.game.arenaInfo) {
 			return 'arena' + this.game.arenaInfo.Wins + 'wins';
 		}

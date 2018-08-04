@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 
-// import * as Raven from 'raven-js';
-import * as $ from 'jquery';
+import $ from 'jquery';
 
 import { GameHelper } from './gameparsing/game-helper.service';
 import { Game, Player } from '../models/game';

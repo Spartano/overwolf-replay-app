@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Http } from "@angular/http";
-
-// import * as Raven from 'raven-js';
-
 import 'rxjs/add/operator/share';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
+import AWS from 'aws-sdk';
 
 import { Game } from '../models/game';
 
@@ -12,7 +11,6 @@ import { PublicEventsService } from './public-events.service';
 import { GameStorageService } from './game-storage.service';
 
 declare var overwolf: any;
-declare var AWS: any;
 
 // const GET_REVIEW_ENDPOINT = 'https://www.zerotoheroes.com/api/reviews/';
 const GET_REVIEW_ENDPOINT = 'https://nx16sjfatc.execute-api.us-west-2.amazonaws.com/prod/get-review/';

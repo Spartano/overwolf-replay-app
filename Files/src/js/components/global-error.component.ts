@@ -44,7 +44,7 @@ export class GlobalErrorComponent {
 
 	}
 
-	private closeWindow() {
+	closeWindow() {
 		this.close.emit(null);
 	}
 

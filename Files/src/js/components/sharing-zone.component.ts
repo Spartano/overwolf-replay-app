@@ -105,21 +105,21 @@ export class SharingZoneComponent {
 		this.share.init(game);
 	}
 
-	private uploadBeforeSharing(social: string) {
+	uploadBeforeSharing(social: string) {
 		ga('send', 'event', 'share', social);
 		this.share.uploadBeforeSharing();
 	}
 
-	private shareZetoh() {
+	shareZetoh() {
 		ga('send', 'event', 'share', 'zetoh');
 		this.share.shareZetoh();
 	}
 
-	private buildUrl(): string {
+	buildUrl(): string {
 		return 'https://www.zerotoheroes.com/r/hearthstone/' + this._game.reviewId;
 	}
 
-	private buildTitle(): string {
+	buildTitle(): string {
 		return 'Need help! ' + this._game.player.class + ' vs ' + this._game.opponent.class;
 	}
 }

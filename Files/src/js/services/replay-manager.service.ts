@@ -11,7 +11,6 @@ import { StorageHelperService } from './storage-helper.service';
 
 declare var OverwolfPlugin: any;
 declare var overwolf: any;
-declare var JSZip: any;
 declare var saveAs: any;
 
 @Injectable()

@@ -4,6 +4,7 @@ import { HttpModule }    from '@angular/http';
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 
 import { LocalStorageService, LocalStorageModule } from 'angular-2-local-storage';
+import { LZStringModule, LZStringService } from 'ng-lz-string';
 import { ShareButtonsModule } from 'ng2-sharebuttons-ow';
 
 import { ShelfComponent }  from '../../components/shelf.component';
@@ -50,6 +51,7 @@ import { GameHelper } from '../../services/gameparsing/game-helper.service';
 		ShareButtonsModule.forRoot(),
 		FormsModule,
 		ReactiveFormsModule,
+		LZStringModule,
 	],
 	declarations: [
 		CarouselComponent,
@@ -87,6 +89,7 @@ import { GameHelper } from '../../services/gameparsing/game-helper.service';
 		GameUploadService,
 		DebugService,
 		SharingService,
+		LZStringService,
 		// GameModeParser,
 		// LogUtils,
 	],

@@ -60,12 +60,12 @@ export class FirstTimeComponent {
 
 	}
 
-	private showLogin() {
+	showLogin() {
 		this.events.broadcast(Events.SHOW_LOGIN);
 		this.closeWindow();
 	}
 
-	private closeWindow() {
+	closeWindow() {
 		this.close.emit(null);
 	}
 

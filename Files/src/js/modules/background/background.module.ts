@@ -5,6 +5,7 @@ import { HttpModule }    from '@angular/http';
 // import * as Raven from 'raven-js';
 
 import { LocalStorageService, LocalStorageModule } from 'angular-2-local-storage';
+import { LZStringModule, LZStringService } from 'ng-lz-string';
 
 import { AppComponent }  from '../../components/app.component';
 
@@ -53,6 +54,7 @@ import { SimpleIOService } from '../../services/plugins/simple-io.service';
 			prefix: 'replay-viewer',
 			storageType: 'localStorage',
 		}),
+		LZStringModule,
 	],
 	declarations: [
 		AppComponent,
@@ -83,6 +85,7 @@ import { SimpleIOService } from '../../services/plugins/simple-io.service';
 		DebugService,
 		GameEvents,
 		GameMonitorService,
+		LZStringService,
 		// { provide: ErrorHandler, useClass: RavenErrorHandler },
 	],
 })
