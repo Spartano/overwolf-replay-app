@@ -88,10 +88,10 @@ export class LogListenerService {
 	listenOnFileCreation(logsLocation: string): void {
 		this.plugin.get().fileExists(logsLocation, (status: boolean, message: string) => {
 			if (status === true) {
+				console.log('Power.log file exists', status, message);
 				this.listenOnFileUpdate(logsLocation);
 			}
 			else {
-				console.log('Power.log file doesnt exist', status, message);
 				this.fileInitiallyPresent = false;
 				setTimeout( () => { this.listenOnFileCreation(logsLocation); }, 1000);
 			}
