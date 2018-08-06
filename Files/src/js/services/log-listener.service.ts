@@ -88,10 +88,10 @@ export class LogListenerService {
 	listenOnFileCreation(logsLocation: string): void {
 		this.plugin.get().fileExists(logsLocation, (status: boolean, message: string) => {
 			if (status === true) {
-				console.log('fileExists?', status, message);
 				this.listenOnFileUpdate(logsLocation);
 			}
 			else {
+				console.log('Power.log file doesnt exist', status, message);
 				this.fileInitiallyPresent = false;
 				setTimeout( () => { this.listenOnFileCreation(logsLocation); }, 1000);
 			}
@@ -106,11 +106,7 @@ export class LogListenerService {
 		let handler = (id: any, status: any, data: string) => {
 			if (!status) {
 				if (data === 'truncated') {
-					// this.plugin.get().stopFileListen(fileIdentifier);
-					// this.plugin.get().onFileListenerChanged.removeListener(handler);
-					// this.fileInitiallyPresent = false;
 					console.info('truncated Power.log file - HS probably just overwrote the file. Going forward');
-					// this.listenOnFileUpdate(logsLocation);
 				}
 				else {
 					console.error("received an error on file: " + id + ": " + data);
@@ -119,7 +115,6 @@ export class LogListenerService {
 			}
 
 			if (id === fileIdentifier) {
-				// console.log('received log line', data);
 				this.gameEvents.receiveLogLine(data);
 			}
 			else {

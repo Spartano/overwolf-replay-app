@@ -34,7 +34,7 @@ export class AppComponent {
 		private debugService: DebugService,
 		private logListenerService: LogListenerService,
 		private gameMonitorService: GameMonitorService,
-		private deckLogListenerService: DeckLogListenerService,
+		// private deckLogListenerService: DeckLogListenerService,
 		private gameStorageService: GameStorageService,
 		private owCommunicationService: OwCommunicationService,
 		private events: Events,

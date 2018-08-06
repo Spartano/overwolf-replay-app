@@ -62,11 +62,11 @@ export class DeckLogListenerService {
 		console.log('starting to listen on file', logsLocation);
 
 		this.plugin.get().fileExists(logsLocation, (status: boolean, message: string) => {
-			console.log('fileExists?', status, message);
 			if (status === true) {
 				this.listenOnFileUpdate(logsLocation);
 			}
 			else {
+				console.log('FullScreenFX file doesnt exist', status, message);
 				setTimeout( () => { this.listenOnFileCreation(logsLocation); }, 1000);
 			}
 		});
@@ -81,19 +81,10 @@ export class DeckLogListenerService {
 
 			if (!status) {
 				if (data === 'truncated') {
-					// this.plugin.get().stopFileListen(fileIdentifier);
-					// this.plugin.get().onFileListenerChanged.removeListener(handler);
 					console.log('truncated FullScreenFX.log file - HS probably just overwrote the file. Going on');
-					// this.listenOnFileUpdate(logsLocation);
 				}
 				else {
 					console.warn("received an error on file: " + id + ": " + data);
-					// Raven.captureMessage('Error while trying to read log file', { extra: {
-					// 	id: id,
-					// 	data: data,
-					// 	status: status,
-					// 	path: logsLocation
-					// }});
 				}
 				return;
 			}
