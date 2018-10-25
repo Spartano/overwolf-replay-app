@@ -30,10 +30,12 @@ export class StorageHelperService {
 			(session) => {
 				this.localStorageService.set('lastSessionId', sessionId);
 			    if (!session) {
-			    	console.log('[storage] creating a new session')
+					console.log('[storage] creating a new session', sessionId);
+					this.db.getAll('sessions', null).then((sessions) => console.log('[storage] all sessions', sessions));
 			    	session = new Session();
 			    	session.id = sessionId;
 			    	this.db.add('sessions', session).then(() => {
+						console.log('[storage] session added to storage', session);
 					    callback(session);
 					}, (error) => {
 					    console.log(error);
