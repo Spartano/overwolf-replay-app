@@ -1,58 +1,38 @@
 import { Injectable } from '@angular/core';
 
-// import * as Raven from 'raven-js';
-import * as _ from "lodash";
-import { encode } from 'deckstrings';
-
-import { MemoryInspectionService } from '../plugins/memory-inspection.service';
-import { Deck, Card } from '../../models/deck';
-
-declare var OverwolfPlugin: any;
-declare var overwolf: any;
-declare var parseCardsText: any;
+import { decode } from 'deckstrings';
 
 @Injectable()
 export class DeckParserService {
-	plugin: any;
 
-	public activeDeckstring: string;
+	private readonly deckNameRegex = new RegExp('I \\d*:\\d*:\\d*.\\d* ### (.*)');
+	private readonly deckstringRegex = new RegExp('I \\d*:\\d*:\\d*.\\d* ([a-zA-Z0-9\\/\\+=]+)$');
 
-	constructor(private memoryInspectionService: MemoryInspectionService) {
+	public currentDeck: any = {};
+
+	public parseActiveDeck(data: string) {
+		// console.log('[decks] received log line', data);
+		let match = this.deckNameRegex.exec(data);
+		if (match) {
+			this.currentDeck = {
+				name: match[1]
+			};
+			console.log('[decks] deck init', this.currentDeck);
+			return;
+		}
+		match = this.deckstringRegex.exec(data);
+		if (match) {
+			this.currentDeck.deckstring = match[1];
+			console.log('[decks] deck updated', this.currentDeck);
+			// const deck = decode(this.currentDeck.deckstring);
+			// console.log('[decks] deck decoded', deck);
+			return;
+		}
 	}
 
-	public detectActiveDeck() {
-		this.memoryInspectionService.getActiveDeck((activeDeck) => {
-			try {
-				let jsonDeck = JSON.parse(activeDeck);
-				if (jsonDeck.Hero) {
-					let deck: Deck = <Deck>jsonDeck;
-					let name = deck.Name;
-					let hero = deck.Hero;
-					let isWild = deck.IsWild;
-					let cards = deck.Cards;
-
-					let hearthDbDeck = {
-						cards: [],
-						heroes: [parseCardsText.getCard(hero).dbfId],
-						format: isWild ? 1 : 2,
-					}
-
-					for (let card of cards) {
-						let dbfId = parseCardsText.getCard(card.Id).dbfId;
-						hearthDbDeck.cards.push([dbfId, card.Count]);
-					}
-
-					hearthDbDeck.cards = _.sortBy(hearthDbDeck.cards, [o => o[0]]);
-
-					console.log('hearthDbDeck', hearthDbDeck);
-
-					this.activeDeckstring = encode(hearthDbDeck);
-					console.log('deckstring', this.activeDeckstring);
-				}
-			}
-			catch (e) {
-				console.log('Could not parse deck', e, activeDeck);
-			}
-		});
+	// By doing this we make sure we don't get a leftover deckstring caused by 
+	// a game mode that doesn't interact with the Decks.log
+	public reset() {
+		this.currentDeck = {};
 	}
 }

@@ -1,35 +1,46 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Output } from '@angular/core';
 
-// import * as Raven from 'raven-js';
+import { Subject } from 'rxjs/Subject';
 
-import { Game } from '../models/game';
 import { SimpleIOService } from './plugins/simple-io.service';
-import { GameEvents } from './game-events.service';
-import { GameModeParser } from './gameparsing/game-mode-parser.service';
+import { Events } from './events.service';
 
 declare var OverwolfPlugin: any;
 declare var overwolf: any;
 
 const HEARTHSTONE_GAME_ID = 9898;
 
-const LOG_FILE = "Power.log";
-const prod = true;
-
 @Injectable()
 export class LogListenerService {
+
+	public subject = new Subject();
+
+	logFile: string;
+	callback: Function;
+
 	monitoring: boolean;
-	fileInitiallyPresent = true;
+	fileInitiallyPresent: boolean;
 	logsLocation: string;
-	startTime: number;
 
-	constructor(
-		private gameModeParser: GameModeParser,
-		private gameEvents: GameEvents,
-		private plugin: SimpleIOService) {
+	constructor(private plugin: SimpleIOService) {
 
+	}
+
+	public configure(logFile: string, callback: Function): LogListenerService {
+		this.logFile = logFile;
+		this.callback = callback;
+		console.log('[log-listener] [' + this.logFile + '] initializing', this.logFile);
 		this.monitoring = false;
-		// this.fileInitiallyPresent = true;
-		this.startTime = Date.now();
+		this.fileInitiallyPresent = true;
+		return this;
+	}
+
+	public subscribe(observer: any): LogListenerService {
+		this.subject.subscribe(observer);
+		return this;
+	}
+
+	public start() {
 		this.configureLogListeners();
 	}
 
@@ -38,57 +49,42 @@ export class LogListenerService {
 		overwolf.games.onGameInfoUpdated.addListener((res: any) => {
 			// console.log("onGameInfoUpdated: " + JSON.stringify(res));
 			if (this.gameLaunched(res)) {
-				this.logsLocation = res.gameInfo.executionPath.split('Hearthstone.exe')[0] + 'Logs\\' + LOG_FILE;
+				this.logsLocation = res.gameInfo.executionPath.split('Hearthstone.exe')[0] + 'Logs\\' + this.logFile;
 				this.registerLogMonitor();
-			}
-			else if (this.exitGame(res)) {
-				this.closeWindow();
 			}
 		});
 
 		overwolf.games.getRunningGameInfo((res: any) => {
 			if (res && res.isRunning && res.id && Math.floor(res.id / 10) === HEARTHSTONE_GAME_ID) {
-				// console.log('Game is running!', JSON.stringify(res));
-				this.logsLocation = res.executionPath.split('Hearthstone.exe')[0] + 'Logs\\' + LOG_FILE;
+				console.log('[log-listener] [' + this.logFile + '] Game is running!');
+				this.logsLocation = res.executionPath.split('Hearthstone.exe')[0] + 'Logs\\' + this.logFile;
 				this.registerLogMonitor();
-			}
-		});
-	}
-
-	// This whole game running info mechanism should be externalized to another script
-	closeWindow() {
-		overwolf.windows.getCurrentWindow((result) => {
-			if (result.status === "success") {
-				console.log('closing');
-				overwolf.windows.close(result.window.id);
 			}
 		});
 	}
 
 	registerLogMonitor() {
 		if (this.monitoring) {
-			// console.log('\tlog hooks already registered, returning');
+			// console.log('[log-listener] [' + this.logFile + '] \tlog hooks already registered, returning');
 			return;
 		}
-		console.log('registering hooks');
+		console.log('[log-listener] [' + this.logFile + '] registering hooks?');
 		this.monitoring = true;
 
-		console.log('getting logs from', this.logsLocation);
+		console.log('[log-listener] [' + this.logFile + '] getting logs from', this.logsLocation);
 		this.listenOnFile(this.logsLocation);
 	}
 
 	listenOnFile(logsLocation: string): void {
-		// Sentry raises a stack trace too big without this
-		setTimeout(() => {
-			console.log('starting to listen on file', logsLocation);
-			this.listenOnFileCreation(logsLocation);
-		}, 1000)
+		this.listenOnFileCreation(logsLocation);
 	}
 
 	listenOnFileCreation(logsLocation: string): void {
+		console.log('[log-listener] [' + this.logFile + '] starting to listen on file', logsLocation);
+
 		this.plugin.get().fileExists(logsLocation, (status: boolean, message: string) => {
 			if (status === true) {
-				console.log('Power.log file exists', status, message);
+				console.log('fileExists?', status, message);
 				this.listenOnFileUpdate(logsLocation);
 			}
 			else {
@@ -99,23 +95,23 @@ export class LogListenerService {
 	}
 
 	listenOnFileUpdate(logsLocation: string): void {
-		let fileIdentifier = "hs-logs-file";
-		console.log('listening on file update', logsLocation);
+		let fileIdentifier = this.logFile;
+		console.log('[log-listener] [' + this.logFile + '] listening on file update', logsLocation);
 
 		// Register file listener
 		let handler = (id: any, status: any, data: string) => {
 			if (!status) {
 				if (data === 'truncated') {
-					console.info('truncated Power.log file - HS probably just overwrote the file. Going forward');
+					console.log('[log-listener] [' + this.logFile + '] truncated log file - HS probably just overwrote the file. Going on');
 				}
-				else {
-					console.error("received an error on file: " + id + ": " + data);
+				else if (id === fileIdentifier) {
+					console.warn('[log-listener] [' + this.logFile + '] received an error on file: ', id, data);
 				}
 				return;
 			}
 
 			if (id === fileIdentifier) {
-				this.gameEvents.receiveLogLine(data);
+				this.callback(data);
 			}
 			else {
 				// This happens frequently when listening to several files at the same time, don't do anything about it
@@ -126,10 +122,10 @@ export class LogListenerService {
 		this.plugin.get().listenOnFile(fileIdentifier, logsLocation, this.fileInitiallyPresent, (id: string, status: boolean, initData: any) => {
 			if (id === fileIdentifier) {
 				if (status) {
-					console.log("[" + id + "] now streaming...");
+					console.log("[" + id + "] now streaming...", this.fileInitiallyPresent, initData);
 				}
 				else {
-					console.error("something bad happened with: " + id);
+					console.warn("something bad happened with: " + id);
 				}
 			}
 		});
@@ -141,32 +137,27 @@ export class LogListenerService {
 
 	gameLaunched(gameInfoResult: any): boolean {
 		if (!gameInfoResult) {
-			console.log('No gameInfoResult, returning');
+			console.log('[log-listener] [' + this.logFile + '] No gameInfoResult, returning');
 			return false;
 		}
 
 		if (!gameInfoResult.gameInfo) {
-			console.log('No gameInfoResult.gameInfo, returning');
+			console.log('[log-listener] [' + this.logFile + '] No gameInfoResult.gameInfo, returning');
 			return false;
 		}
 
-		// if (!gameInfoResult.runningChanged && !gameInfoResult.gameChanged) {
-		// 	console.log('Running didnt change, returning');
-		// 	return false;
-		// }
-
 		if (!gameInfoResult.gameInfo.isRunning) {
-			console.log('Game not running, returning');
+			console.log('[log-listener] [' + this.logFile + '] Game not running, returning');
 			return false;
 		}
 
 		// NOTE: we divide by 10 to get the game class id without it's sequence number
 		if (Math.floor(gameInfoResult.gameInfo.id / 10) !== HEARTHSTONE_GAME_ID) {
-			console.log('Not HS, returning');
+			console.log('[log-listener] [' + this.logFile + '] Not HS, returning');
 			return false;
 		}
 
-		console.log("HS Launched");
+		// console.log('[log-listener] [' + this.logFile + '] HS Launched');
 		return true;
 	}
 
@@ -185,7 +176,7 @@ export class LogListenerService {
 			return false;
 		}
 
-		console.log("HS running");
+		console.log('[log-listener] [' + this.logFile + '] HS running');
 		return true;
 	}
 }

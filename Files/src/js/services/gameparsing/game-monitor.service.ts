@@ -7,14 +7,25 @@ import { GameHelper } from './game-helper.service';
 import { GameParserService } from '../game-parser.service';
 import { GameEvents } from '../game-events.service';
 import { Events } from '../events.service';
+import { DeckParserService } from '../deck/deck-parser.service';
 
 @Injectable()
 export class GameMonitorService {
+
+	private readonly supportedModesDeckRetrieve = [
+		'practice',
+		'friendly',
+		'ranked',
+		'casual',
+		'arena',
+		'tavernbrawl',
+	]
 
 	constructor(
 		private gameHelper: GameHelper,
 		private gameParserService: GameParserService,
 		private gameEvents: GameEvents,
+		private deckService: DeckParserService,
 		private events: Events) {
 
 		this.gameEvents.allEvents.subscribe(
@@ -36,9 +47,13 @@ export class GameMonitorService {
 				const game: Game = Game.createEmptyGame();
 				game.gameFormat = this.toFormatType(gameResult.FormatType);
 				game.gameMode = this.toGameType(gameResult.GameType);
+				if (this.supportedModesDeckRetrieve.indexOf(game.gameMode) !== -1) {
+					game.deckstring = this.deckService.currentDeck.deckstring;
+				}
 				this.gameHelper.setXmlReplay(game, replayXml);
 				this.gameParserService.extractMatchup(game);
 				this.gameParserService.extractDuration(game);
+				this.deckService.reset();
 				console.log('broadcasting end of game', game.player, game.opponent, game.gameFormat, game.gameMode);
 				this.events.broadcast(Events.REPLAY_CREATED, JSON.stringify(game));
 				break;
