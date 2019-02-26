@@ -80,11 +80,11 @@ export class LogListenerService {
 	}
 
 	listenOnFileCreation(logsLocation: string): void {
-		console.log('[log-listener] [' + this.logFile + '] starting to listen on file', logsLocation);
+		// console.log('[log-listener] [' + this.logFile + '] starting to listen on file', logsLocation);
 
 		this.plugin.get().fileExists(logsLocation, (status: boolean, message: string) => {
 			if (status === true) {
-				console.log('fileExists?', status, message);
+				// console.log('fileExists?', status, message);
 				this.listenOnFileUpdate(logsLocation);
 			}
 			else {
