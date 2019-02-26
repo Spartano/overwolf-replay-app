@@ -43,7 +43,12 @@ export class AppComponent {
 	}
 
 	init(): void {
-		// console.log('init gameservice', overwolf.egs);
+		overwolf.games.onGameInfoUpdated.addListener((res: any) => {
+			// console.log('updated game', res);
+			if (this.exitGame(res)) {
+				this.closeApp();
+			}
+		});
 
 		this.events.on(Events.REPLAY_CREATED)
 			.subscribe(event => {
@@ -125,6 +130,22 @@ export class AppComponent {
 				overwolf.windows.restore(result.window.id, function(result2: any) {
 					console.log(result2);
 				});
+			}
+		});
+	}
+
+	private exitGame(gameInfoResult: any): boolean {
+		return (!gameInfoResult || !gameInfoResult.gameInfo || !gameInfoResult.gameInfo.isRunning);
+	}
+
+	private closeApp() {
+		overwolf.windows.getCurrentWindow((result) => {
+			if (result.status === "success") {
+				console.log('closing');
+				// Keep some time to finish parsing / uploading the replays in case the player rage quits
+				setTimeout(() => {
+					overwolf.windows.close(result.window.id);
+				}, 5000)
 			}
 		});
 	}
