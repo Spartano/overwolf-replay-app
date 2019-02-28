@@ -3,8 +3,8 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { Game } from '../models/game';
 import { GameEvent } from '../models/game-event';
 import { Events } from './events.service';
-import { LogListenerService } from './log-listener.service';
 import { MemoryInspectionService } from './plugins/memory-inspection.service';
+import { captureEvent } from '@sentry/core';
 
 declare var OverwolfPlugin: any;
 declare var overwolf: any;
@@ -35,21 +35,25 @@ export class GameEvents {
 	init(): void {
 		console.log('init game events monitor');
 		let gameEventsPlugin = this.gameEventsPlugin = new OverwolfPlugin("overwolf-replay-converter", true);
-		// console.log('plugin', plugin);
-		// let that = this;
-
 		gameEventsPlugin.initialize((status: boolean) => {
 			if (status === false) {
-				console.warn("[game-events] Plugin couldn't be loaded??");
-				// Raven.captureMessage('overwolf-replay-converter plugin could not be loaded');
+				console.error("[game-events] Plugin couldn't be loaded??");
 				return;
 			}
 			console.log("[game-events] Plugin " + gameEventsPlugin.get()._PluginName_ + " was loaded!");
-			gameEventsPlugin.get().onGlobalEvent.addListener((first, second) => {
+			gameEventsPlugin.get().onGlobalEvent.addListener((first: string, second: string) => {
 				console.log('[game-events] received global event', first, second);
+				if (first.toLowerCase().indexOf("exception") !== -1) {
+					captureEvent({
+						message: 'Exception while running plugin: ' + first,
+						extra: {
+							first: first,
+							second: second,
+						}
+					})
+				}
 			});
 			gameEventsPlugin.get().onGameEvent.addListener((gameEvent) => {
-				// console.log('[game-events] received game event', gameEvent);
 				this.dispatchGameEvent(JSON.parse(gameEvent));
 			});
 			gameEventsPlugin.get().initRealtimeLogConversion();

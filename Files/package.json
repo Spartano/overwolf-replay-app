@@ -20,6 +20,7 @@
     "@angular/platform-browser-dynamic": "6.0.0",
     "@angular/platform-server": "6.0.0",
     "@angular/router": "6.0.0",
+    "@sentry/browser": "4.4.1",
     "angular-2-local-storage": "1.0.0",
     "angular2-indexeddb": "1.2.2",
     "aws-sdk": "2.286.2",

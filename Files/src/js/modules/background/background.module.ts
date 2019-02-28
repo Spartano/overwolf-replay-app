@@ -1,18 +1,16 @@
-import { NgModule, ErrorHandler }      from '@angular/core';
+import { NgModule, Injectable, ErrorHandler }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule }    from '@angular/http';
 
-// import * as Raven from 'raven-js';
+import { init, captureException } from "@sentry/browser";
 
 import { LocalStorageService, LocalStorageModule } from 'angular-2-local-storage';
 import { LZStringModule, LZStringService } from 'ng-lz-string';
 
 import { AppComponent }  from '../../components/app.component';
 
-// import { GameService } from './game.service';
 import { GameStorageService } from '../../services/game-storage.service';
 import { OwCommunicationService	} from '../../services/ow-communcation.service';
-// import { GameRetrieveService } from './service/game-retrieve.service';
 import { LogListenerService } from '../../services/log-listener.service';
 import { PublicEventsService } from '../../services/public-events.service';
 import { StorageHelperService } from '../../services/storage-helper.service';
@@ -32,18 +30,19 @@ import { MemoryInspectionService } from '../../services/plugins/memory-inspectio
 import { SimpleIOService } from '../../services/plugins/simple-io.service';
 import { LogRegisterService } from '../../services/log-register.service';
 
-// console.log('configuring Raven'),
-// Raven
-//   	.config('https://c08a7bdf3f174ff2b45ad33bcf8c48f6@sentry.io/202626')
-//   	.install();
-// console.log('Raven configured');
+init({
+	dsn: "https://04ea3bd09a4643afa04bce95efcd80b1@sentry.io/1405254",
+	enabled: process.env.NODE_ENV === 'production'
+});
 
-//  export class RavenErrorHandler implements ErrorHandler {
-//   	handleError(err: any) : void {
-// 	  	console.log('error captured by Raven', err);
-// 	    // Raven.captureException(err);
-//   	}
-// }
+@Injectable()
+export class SentryErrorHandler implements ErrorHandler {
+  	constructor() {}
+  	handleError(error) {
+    	captureException(error.originalError || error);
+    	throw error;
+  	}
+}
 
 @NgModule({
 	imports: [
@@ -62,6 +61,8 @@ import { LogRegisterService } from '../../services/log-register.service';
 		AppComponent,
 	],
 	providers: [
+		{ provide: ErrorHandler, useClass: SentryErrorHandler },
+
 		GameParserService,
 		GameStorageService,
 		LogListenerService,
@@ -84,7 +85,6 @@ import { LogRegisterService } from '../../services/log-register.service';
 		GameEvents,
 		GameMonitorService,
 		LZStringService,
-		// { provide: ErrorHandler, useClass: RavenErrorHandler },
 	],
 })
 
