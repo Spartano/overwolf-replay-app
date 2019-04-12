@@ -29,6 +29,8 @@ import { DebugService } from '../../services/debug.service';
 import { MemoryInspectionService } from '../../services/plugins/memory-inspection.service';
 import { SimpleIOService } from '../../services/plugins/simple-io.service';
 import { LogRegisterService } from '../../services/log-register.service';
+import { S3FileUploadService } from '../../services/s3-file-upload.service';
+import { GameEventsPluginService } from '../../services/plugins/game-events-plugin.service';
 
 init({
 	dsn: "https://04ea3bd09a4643afa04bce95efcd80b1@sentry.io/1405254",
@@ -84,7 +86,9 @@ export class SentryErrorHandler implements ErrorHandler {
 		DebugService,
 		GameEvents,
 		GameMonitorService,
-		LZStringService,
+        LZStringService,
+        S3FileUploadService,
+        GameEventsPluginService,
 	],
 })
 

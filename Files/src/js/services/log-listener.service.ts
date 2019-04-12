@@ -79,10 +79,10 @@ export class LogListenerService {
 		this.listenOnFileCreation(logsLocation);
 	}
 
-	listenOnFileCreation(logsLocation: string): void {
+	async listenOnFileCreation(logsLocation: string) {
 		// console.log('[log-listener] [' + this.logFile + '] starting to listen on file', logsLocation);
-
-		this.plugin.get().fileExists(logsLocation, (status: boolean, message: string) => {
+        const plugin = await this.plugin.get();
+		plugin.fileExists(logsLocation, (status: boolean, message: string) => {
 			if (status === true) {
 				// console.log('fileExists?', status, message);
 				this.listenOnFileUpdate(logsLocation);
@@ -94,7 +94,7 @@ export class LogListenerService {
 		});
 	}
 
-	listenOnFileUpdate(logsLocation: string): void {
+	async listenOnFileUpdate(logsLocation: string) {
 		let fileIdentifier = this.logFile;
 		console.log('[log-listener] [' + this.logFile + '] listening on file update', logsLocation);
 
@@ -116,10 +116,11 @@ export class LogListenerService {
 			else {
 				// This happens frequently when listening to several files at the same time, don't do anything about it
 			}
-		};
-		this.plugin.get().onFileListenerChanged.addListener(handler);
+        };
+        const plugin = await this.plugin.get();
+		plugin.onFileListenerChanged.addListener(handler);
 
-		this.plugin.get().listenOnFile(fileIdentifier, logsLocation, this.fileInitiallyPresent, (id: string, status: boolean, initData: any) => {
+		plugin.listenOnFile(fileIdentifier, logsLocation, this.fileInitiallyPresent, (id: string, status: boolean, initData: any) => {
 			if (id === fileIdentifier) {
 				if (status) {
 					console.log("[" + id + "] now streaming...", this.fileInitiallyPresent, initData);
