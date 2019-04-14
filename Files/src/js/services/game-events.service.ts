@@ -102,7 +102,11 @@ export class GameEvents {
 		}
 		if (data.indexOf('End Spectator Mode') !== -1) {
 			this.spectating = false;
-		}
+        }
+        
+        if (this.spectating) {
+            return;
+        }
 
 		this.logLines.push(data);
 	}
