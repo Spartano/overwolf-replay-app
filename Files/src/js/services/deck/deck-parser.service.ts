@@ -21,38 +21,38 @@ export class DeckParserService {
 	}
 
 	public detectActiveDeck() {
-		this.memoryInspectionService.getActiveDeck((activeDeck) => {
-			try {
-				let jsonDeck = JSON.parse(activeDeck);
-				if (jsonDeck.Hero) {
-					let deck: Deck = <Deck>jsonDeck;
-					let name = deck.Name;
-					let hero = deck.Hero;
-					let isWild = deck.IsWild;
-					let cards = deck.Cards;
+		// this.memoryInspectionService.getActiveDeck((activeDeck) => {
+		// 	try {
+		// 		let jsonDeck = JSON.parse(activeDeck);
+		// 		if (jsonDeck.Hero) {
+		// 			let deck: Deck = <Deck>jsonDeck;
+		// 			let name = deck.Name;
+		// 			let hero = deck.Hero;
+		// 			let isWild = deck.IsWild;
+		// 			let cards = deck.Cards;
 
-					let hearthDbDeck = {
-						cards: [],
-						heroes: [parseCardsText.getCard(hero).dbfId],
-						format: isWild ? 1 : 2,
-					}
+		// 			let hearthDbDeck = {
+		// 				cards: [],
+		// 				heroes: [parseCardsText.getCard(hero).dbfId],
+		// 				format: isWild ? 1 : 2,
+		// 			}
 
-					for (let card of cards) {
-						let dbfId = parseCardsText.getCard(card.Id).dbfId;
-						hearthDbDeck.cards.push([dbfId, card.Count]);
-					}
+		// 			for (let card of cards) {
+		// 				let dbfId = parseCardsText.getCard(card.Id).dbfId;
+		// 				hearthDbDeck.cards.push([dbfId, card.Count]);
+		// 			}
 
-					hearthDbDeck.cards = _.sortBy(hearthDbDeck.cards, [o => o[0]]);
+		// 			hearthDbDeck.cards = _.sortBy(hearthDbDeck.cards, [o => o[0]]);
 
-					console.log('hearthDbDeck', hearthDbDeck);
+		// 			console.log('hearthDbDeck', hearthDbDeck);
 
-					this.activeDeckstring = encode(hearthDbDeck);
-					console.log('deckstring', this.activeDeckstring);
-				}
-			}
-			catch (e) {
-				console.log('Could not parse deck', e, activeDeck);
-			}
-		});
+		// 			this.activeDeckstring = encode(hearthDbDeck);
+		// 			console.log('deckstring', this.activeDeckstring);
+		// 		}
+		// 	}
+		// 	catch (e) {
+		// 		console.log('Could not parse deck', e, activeDeck);
+		// 	}
+		// });
 	}
 }
