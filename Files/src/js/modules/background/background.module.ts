@@ -32,6 +32,7 @@ import { DeckParserService } from '../../services/deck/deck-parser.service';
 import { DebugService } from '../../services/debug.service';
 import { MemoryInspectionService } from '../../services/plugins/memory-inspection.service';
 import { SimpleIOService } from '../../services/plugins/simple-io.service';
+import { DevService } from '../../services/dev.service';
 
 // console.log('configuring Raven'),
 // Raven
@@ -82,7 +83,8 @@ import { SimpleIOService } from '../../services/plugins/simple-io.service';
 		GameHelper,
 		MemoryInspectionService,
 		SimpleIOService,
-		DebugService,
+        DebugService,
+        DevService,
 		GameEvents,
 		GameMonitorService,
 		LZStringService,

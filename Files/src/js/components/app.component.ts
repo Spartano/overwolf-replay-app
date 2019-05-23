@@ -13,6 +13,7 @@ import { Events } from '../services/events.service';
 import { DebugService } from '../services/debug.service';
 
 import { Game } from '../models/game';
+import { DevService } from '../services/dev.service';
 
 declare var overwolf: any;
 
@@ -31,7 +32,8 @@ export class AppComponent {
 	retryForEgsDelay = 2000;
 
 	constructor(
-		private debugService: DebugService,
+        private debugService: DebugService,
+        private dev: DevService,
 		private logListenerService: LogListenerService,
 		private gameMonitorService: GameMonitorService,
 		// private deckLogListenerService: DeckLogListenerService,

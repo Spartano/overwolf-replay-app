@@ -28,4 +28,14 @@ export class SimpleIOService {
 	public get() {
 		return this.simpleIOPlugin.get();
 	}
+
+	public async getFileContents(filePath: string): Promise<string> {
+		const plugin = this.get();
+		return new Promise<string>((resolve) => {
+			plugin.getTextFile(filePath, false, (result, contents) => {
+				console.log('read file contents completed', filePath, result);
+				resolve(contents);
+			})
+		})
+	}
 }
