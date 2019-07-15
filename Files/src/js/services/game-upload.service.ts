@@ -2,12 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { Game } from '../models/game';
-import { Preferences } from '../models/preferences';
-import { Events } from '../services/events.service';
 import { FileUploadService } from '../services/file-upload.service';
-import { UserPreferences } from '../services/user-preferences.service';
-
-declare var overwolf: any;
 
 @Injectable()
 export class GameUploadService {

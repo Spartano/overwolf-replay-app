@@ -1,89 +1,78 @@
-import { Injectable, NgZone } from '@angular/core';
-import { Http, Response, Headers, RequestOptions, RequestOptionsArgs } from "@angular/http";
+import { Injectable } from '@angular/core';
+import { Http, Response, Headers, RequestOptions } from "@angular/http";
 import { Subject } from 'rxjs/Subject';
-import { Observable } from 'rxjs/Observable';
 
 import { LocalStorageService } from 'angular-2-local-storage';
 
 import { UserPreferences } from './user-preferences.service';
 import { Events } from './events.service';
-
-declare var overwolf: any;
+import { OverwolfService } from './overwolf.service';
 
 const CLAIM_ACCOUNT_URL = "https://www.zerotoheroes.com/api/claimAccount/overwolf/";
 const DISCONNECT_ACCOUNT_URL = "https://www.zerotoheroes.com/api/disconnectAccount/overwolf/";
-// const CHECK_ACCOUNT_CLAIM_ENDPOINT = BASE_URL + '/api/claimAccount/overwolf/';
 
 @Injectable()
 export class AccountService {
 
-	// accountClaimUrlSubject: Subject<String> = new Subject<String>();
 	accountClaimStatusSubject: Subject<boolean> = new Subject<boolean>();
 
 	private userId: string;
 
 	constructor(
-		private http: Http,
-		private zone: NgZone,
-		private events: Events,
-		private userPreferences: UserPreferences,
-		private localStorageService: LocalStorageService) {
-
+            private http: Http,
+            private events: Events,
+            private ow: OverwolfService,
+            private userPreferences: UserPreferences,
+            private localStorageService: LocalStorageService) {
 		this.init();
 	}
 
-	private init() {
-		overwolf.profile.getCurrentUser((user) => {
-			console.log('current user', user);
-			this.userId = user.userId || user.machineId || user.username;
-			if (this.userId) {
-				// this.accountClaimUrlSubject.next(CLAIM_ACCOUNT_URL + this.userId);
-				this.checkAccountClaimedStatus();
-			}
-		});
+	private async init() {
+        const user = await this.ow.getCurrentUser();
+        console.log('current user', user);
+        this.userId = user.userId || user.machineId || user.username;
+        if (this.userId) {
+            // this.accountClaimUrlSubject.next(CLAIM_ACCOUNT_URL + this.userId);
+            this.checkAccountClaimedStatus();
+        }
 	}
 
-	public claimAccounts(authToken: string) {
+	public async claimAccounts(authToken: string) {
 		console.log('claiming accounts');
-		overwolf.profile.getCurrentUser((user) => {
-			console.log('claiming machineId account');
+        const user = await this.ow.getCurrentUser();
+        console.log('claiming machineId account');
 
-			let headers = new Headers();
-			headers.append('x-auth-token', authToken);
-			let options = new RequestOptions({ headers: headers });
+        let headers = new Headers();
+        headers.append('x-auth-token', authToken);
+        let options = new RequestOptions({ headers: headers });
 
-			let machineIdUrl = CLAIM_ACCOUNT_URL + user.machineId;
-			this.http.post(machineIdUrl, {}, options)
-				.subscribe((data) => { this.accountClaimHandler(data, true) }, (err) => { this.accountClaimErrorHandler(err) });
+        let machineIdUrl = CLAIM_ACCOUNT_URL + user.machineId;
+        this.http.post(machineIdUrl, {}, options)
+            .subscribe((data) => { this.accountClaimHandler(data, true) }, (err) => { this.accountClaimErrorHandler(err) });
 
-			let accountUrl = CLAIM_ACCOUNT_URL + user.userId;
-			this.http.post(accountUrl, {}, options)
-				.subscribe((data) => { this.accountClaimHandler(data, true) }, (err) => { this.accountClaimErrorHandler(err) });
-		});
+        let accountUrl = CLAIM_ACCOUNT_URL + user.userId;
+        this.http.post(accountUrl, {}, options)
+            .subscribe((data) => { this.accountClaimHandler(data, true) }, (err) => { this.accountClaimErrorHandler(err) });
 	}
 
-	public disconnect() {
+	public async disconnect() {
 		let authToken: string = this.localStorageService.get('auth-token');
-
 		console.log('disconnecting accounts');
-		overwolf.profile.getCurrentUser((user) => {
-			console.log('disconnecting machineId account');
+        const user = await this.ow.getCurrentUser();
+        let headers = new Headers();
+        headers.append('x-auth-token', authToken);
+        let options = new RequestOptions({ headers: headers });
 
-			let headers = new Headers();
-			headers.append('x-auth-token', authToken);
-			let options = new RequestOptions({ headers: headers });
+        let machineIdUrl = DISCONNECT_ACCOUNT_URL + user.machineId;
+        this.http.post(machineIdUrl, {}, options)
+            .subscribe((data) => { this.accountClaimHandler(data, false) }, (err) => { this.accountDisconnectErrorHandler(err, user.machineId) });
 
-			let machineIdUrl = DISCONNECT_ACCOUNT_URL + user.machineId;
-			this.http.post(machineIdUrl, {}, options)
-				.subscribe((data) => { this.accountClaimHandler(data, false) }, (err) => { this.accountDisconnectErrorHandler(err, user.machineId) });
+        let accountUrl = DISCONNECT_ACCOUNT_URL + user.userId;
+        this.http.post(accountUrl, {}, options)
+            .subscribe((data) => { this.accountClaimHandler(data, false) }, (err) => { this.accountDisconnectErrorHandler(err, user.userId) });
 
-			let accountUrl = DISCONNECT_ACCOUNT_URL + user.userId;
-			this.http.post(accountUrl, {}, options)
-				.subscribe((data) => { this.accountClaimHandler(data, false) }, (err) => { this.accountDisconnectErrorHandler(err, user.userId) });
-
-			// Setting auto-upload to false
-			this.userPreferences.setAutoUpload(true);
-		});
+        // Setting auto-upload to false
+        this.userPreferences.setAutoUpload(true);
 	}
 
 	private checkAccountClaimedStatus() {
@@ -109,46 +98,27 @@ export class AccountService {
 	}
 
 	private accountClaimHandler(data, isClaimed: boolean) {
-		this.zone.run(() => {
-			console.log('claim?', data, isClaimed);
-			this.setAccountClaimed(isClaimed);
-		})
+        console.log('claim?', data, isClaimed);
+        this.setAccountClaimed(isClaimed);
 	}
 
 	private accountClaimErrorHandler(err) {
-		this.zone.run(() => {
-			if (err.status == 409) {
-				console.log('account already claimed', err);
-				this.setAccountClaimed(true);
-				return;
-			}
-			this.events.broadcast(Events.GLOBAL_ERROR, 'CANT_CLAIM_ACCOUNT');
-			console.error('Could not claim account', err);
-		});
+        if (err.status == 409) {
+            console.log('account already claimed', err);
+            this.setAccountClaimed(true);
+            return;
+        }
+        this.events.broadcast(Events.GLOBAL_ERROR, 'CANT_CLAIM_ACCOUNT');
+        console.error('Could not claim account', err);
 	}
 
 	private accountDisconnectErrorHandler(err, id: string) {
-		this.zone.run(() => {
-			// if (err.status == 409) {
-			// 	console.log('account already claimed', err);
-			// 	this.setAccountClaimed(false);
-			// 	return;
-			// }
-			this.events.broadcast(Events.GLOBAL_ERROR, 'CANT_DISCONNECT_ACCOUNT', id);
-			console.error('Could not disconnect account', err);
-		});
+        this.events.broadcast(Events.GLOBAL_ERROR, 'CANT_DISCONNECT_ACCOUNT', id);
+        console.error('Could not disconnect account', err);
 	}
 
 	private setAccountClaimed(isClaimed: boolean) {
 		this.accountClaimStatusSubject.next(isClaimed);
 		this.localStorageService.set('account-claimed', isClaimed);
 	}
-
-	// public claimAccountUrl(): Observable<String> {
-	// 	return this.accountClaimUrlSubject.asObservable();
-	// }
-
-	// public startListeningForClaimChanges() {
-	// 	this.checkAccountClaimedStatus(true);
-	// }
 }

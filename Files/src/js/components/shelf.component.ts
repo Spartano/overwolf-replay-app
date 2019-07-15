@@ -1,4 +1,4 @@
-import { Component, NgZone } from '@angular/core';
+import { Component, NgZone, ChangeDetectorRef, ViewRef } from '@angular/core';
 import { ViewEncapsulation } from '@angular/core';
 
 import { LocalStorageService } from 'angular-2-local-storage';
@@ -10,11 +10,9 @@ import { Events } from '../services/events.service';
 import { GameHelper } from '../services/gameparsing/game-helper.service';
 import { GameRetrieveService } from '../services/game-retrieve.service';
 import { StorageHelperService } from '../services/storage-helper.service';
-import { LogListenerService } from '../services/log-listener.service';
 import { GameStorageService } from '../services/game-storage.service';
 import { DebugService } from '../services/debug.service';
-
-declare var overwolf: any;
+import { OverwolfService } from '../services/overwolf.service';
 
 @Component({
 	selector: 'zh-shelf',
@@ -46,8 +44,10 @@ export class ShelfComponent {
 		private events: Events,
 		private localStorageService: LocalStorageService,
 		private gameStorageService: GameStorageService,
-		private storageHelper: StorageHelperService,
-		private gameService: GameRetrieveService,
+        private storageHelper: StorageHelperService,
+        private ow: OverwolfService,
+        private gameService: GameRetrieveService,
+        private cdr: ChangeDetectorRef, 
 		private gameHelper: GameHelper) {
 
 		console.log('in AppComponent constructor', gameService);
@@ -78,37 +78,33 @@ export class ShelfComponent {
 			});
 	}
 
-	ngOnInit(): void {
-		overwolf.extensions.getInfo(
-			'nafihghfcpikebhfhdhljejkcifgbdahdhngepfb',
-			(callbackInfo) => {
-				this.zone.run(() => {
-					console.log('extensions callback', callbackInfo);
-					let info = callbackInfo.info;
-					if (info && info.sessionId) {
-						this.loadGamesFromSession(info.sessionId);
-					}
-					else {
-						this.loadGamesFromSession(null);
-					}
-				})
-			}
-		)
+	async ngOnInit() {
+        const callbackInfo = await this.ow.getExtensionInfo('nafihghfcpikebhfhdhljejkcifgbdahdhngepfb');
+        console.log('extensions callback', callbackInfo);
+        let info = callbackInfo.info;
+        if (info && info.sessionId) {
+            await this.loadGamesFromSession(info.sessionId);
+        }
+        else {
+            await this.loadGamesFromSession(null);
+        }
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
-	loadGamesFromSession(sessionId: string) {
-		this.gameService.getGames(sessionId, (games) => {
-			this.games = games.reverse();
-			console.log('games in shelf', this.games);
-			if (this.games && this.games.length > 0) {
-				this.currentState = 'SHELF_WITH_GAMES';
-				this.firstTimeUser = this.isFirstTime();
-			}
-			else {
-				this.currentState = 'EMPTY_SHELF';
-			}
-			console.log('current state', this.currentState);
-		})
+	async loadGamesFromSession(sessionId: string) {
+        const games = await this.gameService.getGames(sessionId);
+        this.games = games.reverse();
+        console.log('games in shelf', this.games);
+        if (this.games && this.games.length > 0) {
+            this.currentState = 'SHELF_WITH_GAMES';
+            this.firstTimeUser = this.isFirstTime();
+        }
+        else {
+            this.currentState = 'EMPTY_SHELF';
+        }
+        console.log('current state', this.currentState);
 	}
 
 	isFirstTime() {

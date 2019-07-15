@@ -8,7 +8,6 @@ import { Game, Player } from '../models/game';
 declare var parseCardsText: any;
 
 declare var OverwolfPlugin: any;
-declare var overwolf: any;
 
 @Injectable()
 export class GameParserService {

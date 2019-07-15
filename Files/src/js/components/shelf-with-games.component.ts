@@ -1,5 +1,4 @@
 import { Component, ViewChild, Input } from '@angular/core';
-// import * as Raven from 'raven-js';
 
 import { GameReplayComponent } from '../components/game-replay.component';
 import { CarouselComponent } from '../components/carousel.component';
@@ -9,8 +8,7 @@ import { Game } from '../models/game';
 import { Events } from '../services/events.service';
 import { GameHelper } from '../services/gameparsing/game-helper.service';
 import { AccountService } from '../services/account.service';
-
-declare var overwolf: any;
+import { OverwolfService } from '../services/overwolf.service';
 
 @Component({
 	selector: 'shelf-with-games',
@@ -55,20 +53,14 @@ export class ShelfWithGamesComponent {
 	private shelfLoaded: boolean;
 
 	constructor(
-		private gameHelper: GameHelper,
-		private accountService: AccountService,
-		private events: Events) {
-
+            private gameHelper: GameHelper,
+            private accountService: AccountService,
+            private ow: OverwolfService,
+            private events: Events) {
 		this.shelfLoaded = false;
 	}
 
 	ngOnInit(): void {
-		// console.log('subscribing to account claim subjects');
-		// this.accountService.accountClaimUrlSubject.subscribe((value) => {
-		// 	this.accountClaimUrl = value.toString();
-		// 	console.log('built claimAccountUrl', this.accountClaimUrl);
-		// });
-
 		this.accountService.accountClaimStatusSubject.subscribe((value) => {
 			this.accountClaimed = value;
 			console.log('accountClaimedStatus', value);
@@ -83,7 +75,7 @@ export class ShelfWithGamesComponent {
 	}
 
 	onGameSelected(game: Game) {
-		console.log('reloading game', game, overwolf, overwolf.egs);
+		console.log('reloading game', game);
 		this.selectedGame = game;
 		this.gameReplayComponent.reload(this.gameHelper.getXmlReplay(game), () => {
 			console.log('game reloaded');
@@ -94,21 +86,9 @@ export class ShelfWithGamesComponent {
 		});
 	}
 
-	loadShelf() {
-		if (!overwolf || !overwolf.egs || !overwolf.egs.setStatus) {
-			setTimeout(() => {
-				console.log('egs.setStatus not ready yet, waiting');
-				this.loadShelf();
-			}, 100);
-			return;
-		}
-
-		console.log('sending shelf ready message');
-		// Start loading the shelf page
-		overwolf.egs.setStatus(overwolf.egs.enums.ShelfStatus.Ready, (result: any) => {
-			console.log('confirmed ready', result);
-			this.shelfLoaded = true;
-		});
+	async loadShelf() {
+        await this.ow.setShelfStatusReady();
+        this.shelfLoaded = true;
 	}
 
 	showLogin() {
@@ -118,9 +98,4 @@ export class ShelfWithGamesComponent {
 	disconnect() {
 		this.accountService.disconnect();
 	}
-
-	// claimAccount() {
-	// 	window.open(this.accountClaimUrl, '_blank');
-	// 	this.accountService.startListeningForClaimChanges();
-	// }
 }

@@ -1,28 +1,22 @@
 import { Injectable } from '@angular/core';
 
-// import * as Raven from 'raven-js';
-
 import { Game } from '../models/game';
 import { Events } from './events.service';
 import { SimpleIOService } from './plugins/simple-io.service';
 import { GameHelper } from './gameparsing/game-helper.service';
 import { GameStorageService } from './game-storage.service';
-import { StorageHelperService } from './storage-helper.service';
-
-declare var OverwolfPlugin: any;
-declare var overwolf: any;
-declare var saveAs: any;
+import { OverwolfService } from './overwolf.service';
 
 @Injectable()
 export class ReplayManager {
 
 	constructor(
-		private events: Events,
-		private gameHelper: GameHelper,
-		private gameStorage: GameStorageService,
-		private plugin: SimpleIOService,
-		private storageHelper: StorageHelperService) {
-
+            private events: Events,
+            private gameHelper: GameHelper,
+            private gameStorage: GameStorageService,
+            private ow: OverwolfService,
+            private plugin: SimpleIOService) {
+        console.log('starting replay-manager service');
 	}
 
 	public async saveLocally(game: Game) {
@@ -36,7 +30,7 @@ export class ReplayManager {
 			console.log('local zip file saved', status, message);
 			game.path = directory + fileName;
 
-			plugin.getBinaryFile(game.path, -1, (status, data) => {
+			plugin.getBinaryFile(game.path, -1, async (status, data) => {
 				console.log('reading binary file before storing it in localstorage', game.path, status);
 				let split = data.split(',');
 				let bytes = [];
@@ -46,19 +40,16 @@ export class ReplayManager {
 				// console.log('built byte array', bytes);
 
 				game.replayBytes = bytes;
-
-				overwolf.games.getRunningGameInfo((res: any) => {
-					// console.log("getRunningGameInfo to save game: " + JSON.stringify(res));
-					if (res && res.sessionId) {
-						console.log('adding replay to storage');
-						this.gameStorage.addGame(res.sessionId, game, (session) => {
-							console.log('replay saved', session.id, session.games.length);
-							this.events.broadcast(Events.REPLAY_SAVED, directory + fileName, JSON.stringify(game));
-						});
-					}
-				});
+                const res = await this.ow.getRunningGameInfo();
+                // console.log("getRunningGameInfo to save game: " + JSON.stringify(res));
+                if (res && res.sessionId) {
+                    console.log('adding replay to storage');
+                    this.gameStorage.addGame(res.sessionId, game, (session) => {
+                        console.log('replay saved', session.id, session.games.length);
+                        this.events.broadcast(Events.REPLAY_SAVED, directory + fileName, JSON.stringify(game));
+                    });
+                }
 			});
-
 		});
 	}
 }

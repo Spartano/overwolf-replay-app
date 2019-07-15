@@ -1,13 +1,10 @@
 import { Component, Output, EventEmitter } from '@angular/core';
-import { Http, Headers, RequestOptions, RequestOptionsArgs } from "@angular/http";
-import { Observable, ObservableInput } from 'rxjs/Observable';
+import { Http } from "@angular/http";
 
 import { LocalStorageService } from 'angular-2-local-storage';
 
 import { Events } from '../services/events.service';
 import { AccountService } from '../services/account.service';
-
-declare var overwolf: any;
 
 const SIGN_IN_URL = "https://www.zerotoheroes.com/api/login";
 const SIGN_UP_URL = "https://www.zerotoheroes.com/api/users";

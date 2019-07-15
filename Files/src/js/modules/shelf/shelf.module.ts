@@ -3,6 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule }    from '@angular/http';
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 
+import { init, captureException } from "@sentry/browser";
+
 import { LocalStorageService, LocalStorageModule } from 'angular-2-local-storage';
 import { LZStringModule, LZStringService } from 'ng-lz-string';
 import { ShareButtonsModule } from 'ng2-sharebuttons-ow';
@@ -27,18 +29,24 @@ import { LoginComponent } from '../../components/login.component';
 import { GameRetrieveService } from '../../services/game-retrieve.service';
 import { StorageHelperService } from '../../services/storage-helper.service';
 import { GameParserService } from '../../services/game-parser.service';
-import { PublicEventsService } from '../../services/public-events.service';
 import { AccountService } from '../../services/account.service';
 import { UserPreferences } from '../../services/user-preferences.service';
 import { FileUploadService } from '../../services/file-upload.service';
 import { GameStorageService } from '../../services/game-storage.service';
 import { GameUploadService } from '../../services/game-upload.service';
 import { DebugService } from '../../services/debug.service';
-// import { LogUtils } from '../../services/gameparsing/log-utils.service';
 import { Events } from '../../services/events.service';
 import { SharingService } from '../../services/sharing.service';
 import { GameHelper } from '../../services/gameparsing/game-helper.service';
-// import { GameModeParser } from '../../services/gameparsing/game-mode-parser.service';
+import { OverwolfService } from '../../services/overwolf.service';
+
+console.log('version is ' + process.env.APP_VERSION);
+
+init({
+	dsn: "https://04ea3bd09a4643afa04bce95efcd80b1@sentry.io/1405254",
+	enabled: process.env.NODE_ENV === 'production',
+	release: process.env.APP_VERSION
+});
 
 @NgModule({
 	imports:      [
@@ -83,15 +91,13 @@ import { GameHelper } from '../../services/gameparsing/game-helper.service';
 		FileUploadService,
 		GameStorageService,
 		Events,
-		PublicEventsService,
 		GameHelper,
 		StorageHelperService,
 		GameUploadService,
 		DebugService,
 		SharingService,
 		LZStringService,
-		// GameModeParser,
-		// LogUtils,
+		OverwolfService,
 	],
 })
 
