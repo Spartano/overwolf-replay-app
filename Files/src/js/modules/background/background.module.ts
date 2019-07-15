@@ -2,7 +2,7 @@ import { NgModule, Injectable, ErrorHandler }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 
-import { init, captureException } from "@sentry/browser";
+import { init, captureException, BrowserOptions } from "@sentry/browser";
 
 import { LocalStorageService, LocalStorageModule } from 'angular-2-local-storage';
 import { LZStringModule, LZStringService } from 'ng-lz-string';
@@ -35,10 +35,10 @@ console.log('version is ' + process.env.APP_VERSION);
 console.log('env is', process.env.NODE_ENV);
 
 init({
-	dsn: "https://04ea3bd09a4643afa04bce95efcd80b1@sentry.io/1405254",
+	dsn: 'https://04ea3bd09a4643afa04bce95efcd80b1@sentry.io/1405254',
 	enabled: process.env.NODE_ENV === 'production',
 	release: process.env.APP_VERSION
-});
+} as BrowserOptions);
 
 @Injectable()
 export class SentryErrorHandler implements ErrorHandler {
@@ -53,7 +53,7 @@ export class SentryErrorHandler implements ErrorHandler {
 	imports: [
 		BrowserModule,
 		HttpClientModule,
-		LocalStorageModule.withConfig({
+		LocalStorageModule.forRoot({
 			prefix: 'replay-viewer',
 			storageType: 'localStorage',
 		}),

@@ -1,4 +1,4 @@
-import { Component, NgZone, ChangeDetectorRef, ViewRef } from '@angular/core';
+import { Component, ChangeDetectorRef, ViewRef } from '@angular/core';
 import { ViewEncapsulation } from '@angular/core';
 
 import { LocalStorageService } from 'angular-2-local-storage';
@@ -39,7 +39,6 @@ export class ShelfComponent {
 	private games: Game[] = null;
 
 	constructor(
-		private zone: NgZone,
 		private debugService: DebugService,
 		private events: Events,
 		private localStorageService: LocalStorageService,
