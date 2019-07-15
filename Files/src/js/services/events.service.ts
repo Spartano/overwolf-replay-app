@@ -11,6 +11,10 @@ interface BroadcastEvent {
 // https://blog.lacolaco.net/post/event-broadcasting-in-angular-2/
 export class Events {
 
+	public static readonly NO_LOG_FILE = 'no-log-file';
+	public static readonly START_LOG_FILE_DETECTION = 'start-log-file-detection';
+	public static readonly STREAMING_LOG_FILE = 'streaming-log-file';
+
 	public static REPLAY_SAVED = 'replay-saved';
 	public static REPLAY_CREATED = 'replay-created';
 
@@ -27,6 +31,7 @@ export class Events {
 	private _eventBus: Subject<BroadcastEvent>;
 
 	constructor() {
+        console.log('starting events service');
 		this._eventBus = new Subject<BroadcastEvent>();
 	}
 

@@ -8,10 +8,10 @@ import { UserPreferences } from './user-preferences.service';
 export class ReplayUploader {
 
 	constructor(
-		private events: Events,
-		private fileUpload: FileUploadService,
-		private userPreferences: UserPreferences) {
-
+            private events: Events,
+            private fileUpload: FileUploadService,
+            private userPreferences: UserPreferences) {
+        console.log('starting replay uploader service');
 		this.init();
 	}
 

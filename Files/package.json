@@ -2,9 +2,9 @@
   "name": "Manastorm",
   "version": "1.9.0",
   "scripts": {
-    "dev": "rimraf dist && webpack --watch --config webpack.config.js --env.development --progress --profile --bail --colors",
-    "build": "rimraf dist && webpack --config webpack.config.js --env.production --progress --profile --bail --colors",
-    "serve": "webpack-dev-server --config webpack.config.js --env.development --content-base ./dist"
+    "dev": "rimraf dist && webpack --watch --config webpack.config.js --env.appversion=%npm_package_version% --env.development --progress --profile --bail --colors",
+    "build": "rimraf dist && webpack --config webpack.config.js --env.production --env.appversion=%npm_package_version% --progress --profile --bail --colors",
+    "serve": "webpack-dev-server --config webpack.config.js --env.development --env.appversion=%npm_package_version% --content-base ./dist"
   },
   "license": "MIT",
   "dependencies": {

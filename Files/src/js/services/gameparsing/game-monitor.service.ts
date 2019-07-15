@@ -22,12 +22,12 @@ export class GameMonitorService {
 	]
 
 	constructor(
-		private gameHelper: GameHelper,
-		private gameParserService: GameParserService,
-		private gameEvents: GameEvents,
-		private deckService: DeckParserService,
-		private events: Events) {
-
+            private gameHelper: GameHelper,
+            private gameParserService: GameParserService,
+            private gameEvents: GameEvents,
+            private deckService: DeckParserService,
+            private events: Events) {
+        console.log('starting debug service');
 		this.gameEvents.allEvents.subscribe(
 			(gameEvent: GameEvent) => {
 				this.handleEvent(gameEvent);

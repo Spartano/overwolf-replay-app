@@ -12,7 +12,6 @@ import { AppComponent }  from '../../components/app.component';
 import { GameStorageService } from '../../services/game-storage.service';
 import { OwCommunicationService	} from '../../services/ow-communcation.service';
 import { LogListenerService } from '../../services/log-listener.service';
-import { PublicEventsService } from '../../services/public-events.service';
 import { StorageHelperService } from '../../services/storage-helper.service';
 import { GameParserService } from '../../services/game-parser.service';
 import { ReplayManager } from '../../services/replay-manager.service';
@@ -26,15 +25,19 @@ import { GameMonitorService } from '../../services/gameparsing/game-monitor.serv
 import { UserPreferences } from '../../services/user-preferences.service';
 import { DeckParserService } from '../../services/deck/deck-parser.service';
 import { DebugService } from '../../services/debug.service';
-import { MemoryInspectionService } from '../../services/plugins/memory-inspection.service';
 import { SimpleIOService } from '../../services/plugins/simple-io.service';
 import { LogRegisterService } from '../../services/log-register.service';
 import { S3FileUploadService } from '../../services/s3-file-upload.service';
 import { GameEventsPluginService } from '../../services/plugins/game-events-plugin.service';
+import { OverwolfService } from '../../services/overwolf.service';
+
+console.log('version is ' + process.env.APP_VERSION);
+console.log('env is', process.env.NODE_ENV);
 
 init({
 	dsn: "https://04ea3bd09a4643afa04bce95efcd80b1@sentry.io/1405254",
-	enabled: process.env.NODE_ENV === 'production'
+	enabled: process.env.NODE_ENV === 'production',
+	release: process.env.APP_VERSION
 });
 
 @Injectable()
@@ -68,7 +71,6 @@ export class SentryErrorHandler implements ErrorHandler {
 		GameParserService,
 		GameStorageService,
 		LogListenerService,
-		PublicEventsService,
 		UserPreferences,
 		LocalStorageService,
 		ReplayManager,
@@ -76,12 +78,10 @@ export class SentryErrorHandler implements ErrorHandler {
 		Events,
 		ReplayUploader,
 		FileUploadService,
-		OwCommunicationService,
 		LogRegisterService,
 		DeckParserService,
 		StorageHelperService,
 		GameHelper,
-		MemoryInspectionService,
 		SimpleIOService,
 		DebugService,
 		GameEvents,
@@ -89,6 +89,9 @@ export class SentryErrorHandler implements ErrorHandler {
         LZStringService,
         S3FileUploadService,
         GameEventsPluginService,
+        
+        OwCommunicationService,
+        OverwolfService,
 	],
 })
 

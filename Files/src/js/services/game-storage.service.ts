@@ -2,17 +2,15 @@ import { Injectable } from '@angular/core';
 
 import { StorageHelperService } from '../services/storage-helper.service';
 
-import { Session } from '../models/storage';
 import { Game } from '../models/game';
-import { Events } from './events.service';
 
 @Injectable()
 export class GameStorageService {
 
-	constructor(
-		private events: Events,
-		private storageHelper: StorageHelperService) {
-	}
+	constructor(private storageHelper: StorageHelperService) {
+        console.log('starting debug service');
+    }
+    
 
 	addGame(sessionId: string, game: Game, callback: Function) {
 		// Get the games from the local storage

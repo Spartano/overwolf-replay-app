@@ -22,6 +22,7 @@ export class SimpleIOService {
 				console.log('received global event simple-io-plugin-zip', first, second);
 			});
 			this.initialized = true;
+            console.log('simple-io plugin init done');
 		});
 	}
 
