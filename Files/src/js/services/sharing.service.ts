@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-
-import { LocalStorageService } from 'angular-2-local-storage';
+import { BehaviorSubject } from 'rxjs';
 
 import { GameUploadService } from '../services/game-upload.service';
 import { Events } from '../services/events.service';

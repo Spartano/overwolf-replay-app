@@ -1,10 +1,7 @@
 import { Component, Output, EventEmitter } from '@angular/core';
-import { Http } from "@angular/http";
-
 import { LocalStorageService } from 'angular-2-local-storage';
-
-import { Events } from '../services/events.service';
 import { AccountService } from '../services/account.service';
+import { HttpClient } from '@angular/common/http';
 
 const SIGN_IN_URL = "https://www.zerotoheroes.com/api/login";
 const SIGN_UP_URL = "https://www.zerotoheroes.com/api/users";
@@ -184,26 +181,25 @@ export class LoginComponent {
 
 	state = 'SIGN_IN';
 
-	private sentInstructions: boolean;
-	private errorMessage: string;
-	private infoMessage: string;
+	sentInstructions: boolean;
+	errorMessage: string;
+	infoMessage: string;
 
-	private identifier: string;
-	private password: string;
+	identifier: string;
+	password: string;
 
-	private username: string;
-	private email: string;
-	private passwordInput: string;
-	private confirmPasswordInput: string;
+	username: string;
+	email: string;
+	passwordInput: string;
+	confirmPasswordInput: string;
 
-	private passwordsMatch = true;
-	private validEmail = true;
+	passwordsMatch = true;
+	validEmail = true;
 
 	constructor(
-		private http: Http,
+		private http: HttpClient,
 		private accountService: AccountService,
-		private localStorageService: LocalStorageService,
-		private events: Events) {
+		private localStorageService: LocalStorageService) {
 	}
 
 	closeWindow() {
@@ -217,9 +213,9 @@ export class LoginComponent {
 		let credentials = {
 			username: this.identifier,
 		}
-		this.http.post(FORGOTTEN_PASSWORD_URL, credentials)
+		this.http.post(FORGOTTEN_PASSWORD_URL, credentials, { observe: 'response' })
 			.subscribe(
-				(data) => {
+				(data: any) => {
 					this.infoMessage = null;
 					if (data.status === 200) {
 						this.infoMessage = `Instructions on how to reset your password have been sent to your email address (promise, it's super easy)`;
@@ -256,10 +252,11 @@ export class LoginComponent {
 			username: pIdentifier || this.identifier,
 			password: pPassword || this.password
 		}
-		console.log('logging in with', credentials);
-		this.http.post(SIGN_IN_URL, credentials)
+		console.log('logging in with', credentials.username);
+		this.http.post(SIGN_IN_URL, credentials, { observe: 'response' })
 			.subscribe(
-				(data) => {
+				(data: any) => {
+                    console.log('got login result', data);
 					this.infoMessage = null;
 					if (data.status === 200) {
 						console.log('successful account creation', data);
@@ -330,9 +327,9 @@ export class LoginComponent {
 			registerLocation: 'overwolf-egs',
 		}
 		console.log('creating account with', credentials);
-		this.http.post(SIGN_UP_URL, credentials)
+		this.http.post(SIGN_UP_URL, credentials, { observe: 'response' })
 			.subscribe(
-				(data) => {
+				(data: any) => {
 					this.infoMessage = null;
 					if (data.status === 200) {
 						this.errorMessage = undefined;

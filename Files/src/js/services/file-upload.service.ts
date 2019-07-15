@@ -1,14 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Http } from "@angular/http";
-import 'rxjs/add/operator/share';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-
+import { BehaviorSubject } from 'rxjs';
 import AWS from 'aws-sdk';
-
 import { Game } from '../models/game';
-
 import { GameStorageService } from './game-storage.service';
 import { OverwolfService } from './overwolf.service';
+import { HttpClient } from '@angular/common/http';
 
 const GET_REVIEW_ENDPOINT = 'https://nx16sjfatc.execute-api.us-west-2.amazonaws.com/prod/get-review/';
 const REVIEW_INIT_ENDPOINT = 'https://husxs4v58a.execute-api.us-west-2.amazonaws.com/prod';
@@ -18,11 +14,12 @@ const BUCKET = 'com.zerotoheroes.batch';
 export class FileUploadService {
 
 	constructor(
-            private http: Http, 
+            private http: HttpClient, 
             private ow: OverwolfService,
             private gameStorageService: GameStorageService) { }
 
 	public getRemoteReview(reviewId: string, callback: Function) {
+        console.log('getting remove review', reviewId);
 		this.http.get(GET_REVIEW_ENDPOINT + reviewId).subscribe((res) => {
 			console.log('retrieved review', res);
 			callback(res);
@@ -36,7 +33,7 @@ export class FileUploadService {
 
         // Build an empty review
         this.http.post(REVIEW_INIT_ENDPOINT, null).subscribe((res) => {
-            let reviewId = res.json();
+            let reviewId: string = res as string;
             console.log('Created empty shell review', res, reviewId);
             if (progressMonitor) {
                 progressMonitor.next('EMPTY_SHELL_CREATED');

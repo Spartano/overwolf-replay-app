@@ -1,6 +1,6 @@
-import { NgModule }      from '@angular/core';
+import { NgModule, Injectable, ErrorHandler }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpModule }    from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 
 import { init, captureException } from "@sentry/browser";
@@ -39,6 +39,7 @@ import { Events } from '../../services/events.service';
 import { SharingService } from '../../services/sharing.service';
 import { GameHelper } from '../../services/gameparsing/game-helper.service';
 import { OverwolfService } from '../../services/overwolf.service';
+import { HttpModule } from '@angular/http';
 
 console.log('version is ' + process.env.APP_VERSION);
 
@@ -48,10 +49,20 @@ init({
 	release: process.env.APP_VERSION
 });
 
+@Injectable()
+export class SentryErrorHandler implements ErrorHandler {
+  	constructor() {}
+  	handleError(error) {
+    	captureException(error.originalError || error);
+    	throw error;
+  	}
+}
+
 @NgModule({
 	imports:      [
 		BrowserModule,
-		HttpModule,
+        HttpClientModule,
+        HttpModule, // For ShareButtons, need to use https://www.npmjs.com/package/ngx-social-button instead
 		LocalStorageModule.withConfig({
 			prefix: 'replay-viewer',
 			storageType: 'localStorage',

@@ -1,6 +1,6 @@
 import { NgModule, Injectable, ErrorHandler }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpModule }    from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 
 import { init, captureException } from "@sentry/browser";
 
@@ -52,7 +52,7 @@ export class SentryErrorHandler implements ErrorHandler {
 @NgModule({
 	imports: [
 		BrowserModule,
-		HttpModule,
+		HttpClientModule,
 		LocalStorageModule.withConfig({
 			prefix: 'replay-viewer',
 			storageType: 'localStorage',

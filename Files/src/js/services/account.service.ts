@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Http, Response, Headers, RequestOptions } from "@angular/http";
-import { Subject } from 'rxjs/Subject';
+import { Response, Headers, RequestOptions } from "@angular/http";
+import { Subject } from 'rxjs';
 
 import { LocalStorageService } from 'angular-2-local-storage';
 
 import { UserPreferences } from './user-preferences.service';
 import { Events } from './events.service';
 import { OverwolfService } from './overwolf.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 const CLAIM_ACCOUNT_URL = "https://www.zerotoheroes.com/api/claimAccount/overwolf/";
 const DISCONNECT_ACCOUNT_URL = "https://www.zerotoheroes.com/api/disconnectAccount/overwolf/";
@@ -19,7 +20,7 @@ export class AccountService {
 	private userId: string;
 
 	constructor(
-            private http: Http,
+            private http: HttpClient,
             private events: Events,
             private ow: OverwolfService,
             private userPreferences: UserPreferences,
@@ -42,16 +43,14 @@ export class AccountService {
         const user = await this.ow.getCurrentUser();
         console.log('claiming machineId account');
 
-        let headers = new Headers();
-        headers.append('x-auth-token', authToken);
-        let options = new RequestOptions({ headers: headers });
+        let httpHeaders = new HttpHeaders().set('x-auth-token', authToken);
 
         let machineIdUrl = CLAIM_ACCOUNT_URL + user.machineId;
-        this.http.post(machineIdUrl, {}, options)
+        this.http.post(machineIdUrl, {}, { headers: httpHeaders })
             .subscribe((data) => { this.accountClaimHandler(data, true) }, (err) => { this.accountClaimErrorHandler(err) });
 
         let accountUrl = CLAIM_ACCOUNT_URL + user.userId;
-        this.http.post(accountUrl, {}, options)
+        this.http.post(accountUrl, {}, { headers: httpHeaders })
             .subscribe((data) => { this.accountClaimHandler(data, true) }, (err) => { this.accountClaimErrorHandler(err) });
 	}
 
@@ -59,16 +58,14 @@ export class AccountService {
 		let authToken: string = this.localStorageService.get('auth-token');
 		console.log('disconnecting accounts');
         const user = await this.ow.getCurrentUser();
-        let headers = new Headers();
-        headers.append('x-auth-token', authToken);
-        let options = new RequestOptions({ headers: headers });
+        let httpHeaders = new HttpHeaders().set('x-auth-token', authToken);
 
         let machineIdUrl = DISCONNECT_ACCOUNT_URL + user.machineId;
-        this.http.post(machineIdUrl, {}, options)
+        this.http.post(machineIdUrl, {}, { headers: httpHeaders })
             .subscribe((data) => { this.accountClaimHandler(data, false) }, (err) => { this.accountDisconnectErrorHandler(err, user.machineId) });
 
         let accountUrl = DISCONNECT_ACCOUNT_URL + user.userId;
-        this.http.post(accountUrl, {}, options)
+        this.http.post(accountUrl, {}, { headers: httpHeaders })
             .subscribe((data) => { this.accountClaimHandler(data, false) }, (err) => { this.accountDisconnectErrorHandler(err, user.userId) });
 
         // Setting auto-upload to false

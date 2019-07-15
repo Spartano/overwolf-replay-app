@@ -1,5 +1,5 @@
 import { Component, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject } from 'rxjs';
 
 import { Game } from '../models/game';
 import { Preferences } from '../models/preferences';

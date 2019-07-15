@@ -20,6 +20,7 @@ export class ReplayManager {
 	}
 
 	public async saveLocally(game: Game) {
+        console.log('ready to save game locally');
         const plugin = await this.plugin.get();
 		let directory = plugin.LOCALAPPDATA + '/Overwolf/ZeroToHeroes/Replays/';
         const playerName = game.player.name.replace('"', "");

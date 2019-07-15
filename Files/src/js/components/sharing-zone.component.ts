@@ -1,5 +1,5 @@
 import { Component, Input, Output, ViewChild } from '@angular/core';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject } from 'rxjs';
 
 import { ShareProvider, ShareButton } from 'ng2-sharebuttons-ow';
 
