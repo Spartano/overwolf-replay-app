@@ -18,15 +18,10 @@ export class ReplayUploader {
 	private init() {
 		this.events.on(Events.REPLAY_SAVED)
 			.subscribe(event => {
-				if (this.userPreferences.isAutoUpload()) {
-					console.log('ReplayUploader: saved game', event.data[0]);
-					let path: string = event.data[0];
-					let game: Game = JSON.parse(event.data[1]);
-					this.fileUpload.uploadFromPath(path, game);
-				}
-				else {
-					console.log('Preferences set to not auto-upload, so not uploading');
-				}
+                console.log('ReplayUploader: saved game', event.data[0]);
+                let path: string = event.data[0];
+                let game: Game = JSON.parse(event.data[1]);
+                this.fileUpload.uploadFromPath(path, game);
 			});
 	}
 }

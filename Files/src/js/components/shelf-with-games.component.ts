@@ -77,13 +77,10 @@ export class ShelfWithGamesComponent {
 	onGameSelected(game: Game) {
 		console.log('reloading game', game);
 		this.selectedGame = game;
-		this.gameReplayComponent.reload(this.gameHelper.getXmlReplay(game), () => {
-			console.log('game reloaded');
-
-			if (!this.shelfLoaded) {
-				this.loadShelf();
-			}
-		});
+		this.gameReplayComponent.reload(this.gameHelper.getXmlReplay(game));
+        if (!this.shelfLoaded) {
+            this.loadShelf();
+        }
 	}
 
 	async loadShelf() {

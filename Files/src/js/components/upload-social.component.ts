@@ -1,8 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-
-import { Game } from '../models/game';
-import { Preferences } from '../models/preferences';
+import { Component, Input } from '@angular/core';
 import { Events } from '../services/events.service';
 import { UserPreferences } from '../services/user-preferences.service';
 
@@ -22,7 +18,6 @@ import { UserPreferences } from '../services/user-preferences.service';
 		<div class="upload-social-container" *ngIf="sharingInProgress && game">
 			<div class="modal modal-uploading active">
 				<div class="modal-window modal-window-uploading">
-
 					<i class="cloud-icon">
 						<i class="cloud-sun">
 							<svg class="cloud-sun-bg">
@@ -38,22 +33,8 @@ import { UserPreferences } from '../services/user-preferences.service';
 							<use xlink:href="/Files/assets/svg/sprite.svg#cloud" />
 						</svg>
 					</i>
-
 					<h1>Ready to share!</h1>
 					<sharing-zone [game]="game"></sharing-zone>
-
-					<footer>
-						<form class="form-classic">
-							<fieldset>
-								<input type="checkbox" name="auto-upload" id="auto-upload" [(ngModel)]="autoUpload" (change)="updatePreference()" hidden checked/>
-								<label class="" for="auto-upload">
-									<p class="settings-p">Automaticaly upload my replays to my account</p>
-									<b></b>
-								</label>
-							</fieldset>
-						</form>
-					</footer>
-
 					<button class="window-control window-control-close" (click)="close()">
 						<svg class="svg-icon-fill">
 							<use xlink:href="/Files/assets/svg/sprite.svg#window-control_close" />
@@ -67,12 +48,9 @@ import { UserPreferences } from '../services/user-preferences.service';
 
 export class UploadSocialComponent {
 
-	// @Output() close = new EventEmitter();
 	@Input() game;
 
 	sharingInProgress = false;
-	
-	private autoUpload = true;
 
 	constructor(
 		private events: Events,
@@ -83,17 +61,9 @@ export class UploadSocialComponent {
 				this.sharingInProgress = true;
 			}
 		)
-
-		this.autoUpload = this.userPreferences.isAutoUpload() === undefined ? true : this.userPreferences.isAutoUpload();
-		this.userPreferences.setAutoUpload(this.autoUpload);
 	}
 
-	private updatePreference() {
-		console.log('preference is now', this.autoUpload);
-		this.userPreferences.setAutoUpload(this.autoUpload);
-	}
-
-	private close() {
+	close() {
 		this.sharingInProgress = false;
 	}
 

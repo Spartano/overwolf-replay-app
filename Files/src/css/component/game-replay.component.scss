@@ -6,112 +6,12 @@
     background-color: transparent !important;
 }
 
-.main-container {
-    /* match size of .container, without influencing it */
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-}
-
-#dummy {
-	display: none;
+.hearthstone {
+    width: 100%;
 }
 
 .external-player {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-}
-
-
-.hearthstone .manastorm #externalPlayer {
-    .game {
-    	overflow: visible;
-    	height: 86%;
-
-        .game-area {
-            background-color: transparent;
-        }
-    }
-
-    .top {
-        .hand {
-            height: 42%;
-            height: 34%;
-        }
-        .hero {
-            height: 40%;
-            height: 36%;
-        }
-    }
-
-    .replay .game-log {
-        margin-top: 8px;
-        background-color: transparent;
-
-        p {
-            background-color: rgba(0,0,0,.1);
-            font-weight: bold;
-            color: #000;
-        }
-    }
-
-    .replay__controls {
-    	background-color: transparent;
-        z-index: 999;
-    }
-
-    .bottom .mulligan {
-        top: 15%;
-    }
-
-    .game .card-tooltip {
-        width: 40%;
-        max-width: 300px;
-    }
-
-    // Hack until https://github.com/wwayne/react-tooltip/issues/241 is fixed
-    .top .card-tooltip {
-        margin-top: 10px;
-    }
-    .top .hand .card-tooltip {
-        margin-top: 65px;
-    }
-    .bottom .hand .card-tooltip {
-        margin-bottom: 65px;
-    }
-
-    .replay__controls {
-
-        min-width: 400px;
-        margin-left: 50%;
-        transform: translateX(-50%);
-
-        .btn {
-            // padding: 6px 12px;
-            padding: 4px 8px;
-            display: flex;
-        }
-        .glyphicon:before, .btn span {
-            font-size: 0.8em;
-        }
-
-        .playback-speed .dropup {
-            z-index: 9999;
-        }
-
-    }
-
-    // Make sure the tooltips don't overflow
-}
-
-
-@media screen and (max-width: 1070px) {
-    .hearthstone .manastorm #externalPlayer .card-tooltip {
-        width: 25%;
-    }
+    position: relative;
+    width: 80%;
+    margin: auto;
 }

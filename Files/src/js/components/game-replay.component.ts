@@ -1,62 +1,57 @@
 import { Component, Input, ViewEncapsulation, ElementRef, HostListener } from '@angular/core';
 import { Game } from '../models/game';
 
-declare var manastorm: any;
-
 // https://murhafsousli.github.io/ng2-sharebuttons/
 @Component({
 	selector: 'game-replay',
 	styleUrls: [`../../css/component/game-replay.component.scss`],
 	encapsulation: ViewEncapsulation.None,
 	template: `
-		<div class="hearthstone" id="container" [class.hidden]="!game" [style.width]="width + 'px'">
-			<div class="manastorm main-container">
-				<div class="external-player-container">
-					<div id="dummy"></div>
-					<div id="externalPlayer" class="external-player">
-						Waiting waiting
-					</div>
-				</div>
-			</div>
+		<div class="hearthstone" id="container" [class.hidden]="!game">
+            <div id="externalPlayer" class="external-player">
+                Waiting waiting
+            </div>
 		</div>
 	`,
 })
 export class GameReplayComponent {
 	@Input() game: Game;
+    
+    private initDone: boolean = false;
 
-	width: number;
-	// 80%
-	aspectRatio: number = 0.85;
+    constructor(private elementRef: ElementRef) {}
+    
+    async ngOnInit() {
+        console.log('initializing coliseum');
+        const coliseum = (window as any).coliseum;
+        await coliseum.init();
+        console.log('coliseum init done');
+        this.initDone = true;
+    }
 
-	constructor(private elementRef: ElementRef) {}
-
-	ngOnInit(): void {
-		// console.log('Initializing manastorm');
-		let manastormOptions = {
-			// hideButtomLog: true,
-			hideSideLog: true,
-			showGameBorder: true,
-			useCompressedImages: true,
-			noGolden: true,
-		};
-		manastorm.initPlayer(manastormOptions);
+	async reload(replay: string) {
+        await this.waitForViewerInit();
+        console.log('loading replay', replay);
+        const coliseum = (window as any).coliseum;
+        coliseum.zone.run(() => {
+            coliseum.component.loadReplay(replay);
+        })
 	}
-
-	reload(replay: string, callback: Function): void {
-		manastorm.reload(replay, () => {
-			setTimeout(() =>  {
-				// console.log('player height is ', this.elementRef.nativeElement.clientHeight, this.elementRef);
-				this.width = this.elementRef.nativeElement.clientHeight * this.aspectRatio;
-				callback();
-			});
-		});
-	}
-
-	@HostListener('window:resize', ['$event'])
-	onResize(event) {
-		setTimeout(() =>  {
-			console.log('player height is ', this.elementRef.nativeElement.clientHeight, this.elementRef);
-			this.width = this.elementRef.nativeElement.clientHeight * this.aspectRatio;
+    
+    private waitForViewerInit(): Promise<void> {
+		return new Promise<void>((resolve) => {
+			const viewerWait = () => {
+				// console.log('Promise waiting for db');
+				if (this.initDone) {
+					// console.log('wait for db init complete');
+					resolve();
+				} 
+				else {
+					// console.log('waiting for db init');
+					setTimeout(() => viewerWait(), 50);
+				}
+			}
+			viewerWait();
 		});
 	}
 }

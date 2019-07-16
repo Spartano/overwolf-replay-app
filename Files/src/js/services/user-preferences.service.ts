@@ -15,7 +15,7 @@ export class UserPreferences {
 	}
 
 	isAutoUpload(): boolean {
-		 return this.getPreferences().autoUpload;
+		 return true; // this.getPreferences().autoUpload;
 	}
 
 	setAutoUpload(value: boolean): void {
@@ -26,7 +26,7 @@ export class UserPreferences {
 	}
 
 	isDontAskAutoUpload(): boolean {
-		 return this.getPreferences().dontAskAutoUpload;
+		 return true; // this.getPreferences().dontAskAutoUpload;
 	}
 
 	setDontAskAutoUpload(value: boolean): void {

@@ -68,7 +68,6 @@ export class AccountService {
         this.http.post(accountUrl, {}, { headers: httpHeaders })
             .subscribe((data) => { this.accountClaimHandler(data, false) }, (err) => { this.accountDisconnectErrorHandler(err, user.userId) });
 
-        // Setting auto-upload to false
         this.userPreferences.setAutoUpload(true);
 	}
 

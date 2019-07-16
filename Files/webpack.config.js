@@ -113,7 +113,7 @@ module.exports = function(env, argv) {
                 { from: path.join(process.cwd(), "src/html/shelf.html"), to: "html" },
                 { from: path.join(process.cwd(), "/../*") },
                 { from: path.join(process.cwd(), "src/assets"), to: "assets" },
-                { from: path.join(process.cwd(), "manastorm"), to: "manastorm" },
+                { from: path.join(process.cwd(), "dependencies"), to: "dependencies" },
                 { from: path.join(process.cwd(), "plugins"), to: "plugins" },
             ]),
         ]

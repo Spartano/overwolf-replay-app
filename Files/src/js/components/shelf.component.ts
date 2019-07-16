@@ -2,7 +2,6 @@ import { Component, ChangeDetectorRef, ViewRef } from '@angular/core';
 import { ViewEncapsulation } from '@angular/core';
 
 import { LocalStorageService } from 'angular-2-local-storage';
-import $ from 'jquery';
 
 import { Game } from '../models/game';
 
@@ -19,18 +18,23 @@ import { OverwolfService } from '../services/overwolf.service';
 	styleUrls: [`../../css/component/shelf.component.scss`, '../../css/global/global.scss'],
 	encapsulation: ViewEncapsulation.None,
 	template: `
-		<div class="shelf-container" [ngSwitch]="currentState">
-			<global-error class="global-error" *ngIf="globalError" [error]="globalError" (close)="hideError()"></global-error>
-			<loading *ngSwitchCase="'LOADING'" class="loading"></loading>
-			<shelf-with-games *ngSwitchCase="'SHELF_WITH_GAMES'" [games]="games"></shelf-with-games>
-			<empty-shelf *ngSwitchCase="'EMPTY_SHELF'" class="empty-shelf"></empty-shelf>
-			<first-time *ngIf="firstTimeUser" class="first-time" (close)="completeFtue()"></first-time>
-			<login *ngIf="showLogin" class="login" (close)="showLogin = false"></login>
-			<upload-progress class="upload-progress"></upload-progress>
+		<div class="shelf-container">
+            <!-- main content -->
+            <ng-container [ngSwitch]="currentState">
+                <loading *ngSwitchCase="'LOADING'" class="loading"></loading>
+                <shelf-with-games *ngSwitchCase="'SHELF_WITH_GAMES'" [games]="games"></shelf-with-games>
+                <empty-shelf *ngSwitchCase="'EMPTY_SHELF'" class="empty-shelf"></empty-shelf>
+            </ng-container>
+            
+            <!-- popups -->
+            <first-time *ngIf="firstTimeUser" class="first-time" (close)="completeFtue()"></first-time>
+            <login *ngIf="showLogin" class="login" (close)="showLogin = false"></login>
+            <global-error class="global-error" *ngIf="globalError" [error]="globalError" (close)="hideError()"></global-error>
 		</div>
 	`,
 })
 export class ShelfComponent {
+
 	currentState = 'LOADING';
 	globalError: string;
 	firstTimeUser = false;
@@ -51,7 +55,7 @@ export class ShelfComponent {
 
 		console.log('in AppComponent constructor', gameService);
 
-		this.postMessage();
+		// this.postMessage();
 
 		this.events.on(Events.SHOW_LOGIN)
 			.subscribe(() => {
@@ -121,20 +125,20 @@ export class ShelfComponent {
 	}
 
 	// https://github.com/Microsoft/TypeScript/issues/9548
-	postMessage() {
-		let el = $('.shelf-container')[0];
-		console.log('content element', el);
-		if (!el) {
-			console.warn('could not find shelf container element, retrying', document);
-			setTimeout( () => this.postMessage(), 50);
-			return;
-		}
+	// postMessage() {
+	// 	let el = $('.shelf-container')[0];
+	// 	console.log('content element', el);
+	// 	if (!el) {
+	// 		console.warn('could not find shelf container element, retrying', document);
+	// 		setTimeout( () => this.postMessage(), 50);
+	// 		return;
+	// 	}
 
-		(el.addEventListener as WhatWGAddEventListener)('wheel', (evt: any) => {
-			// console.log('scrolling', evt);
-			window.parent.postMessage({deltaY: evt.deltaY}, "*");
-		}, { passive: true });
-	}
+	// 	(el.addEventListener as WhatWGAddEventListener)('wheel', (evt: any) => {
+	// 		// console.log('scrolling', evt);
+	// 		window.parent.postMessage({deltaY: evt.deltaY}, "*");
+	// 	}, { passive: true });
+	// }
 }
 
 interface WhatWGEventListenerArgs {
