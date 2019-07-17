@@ -4,8 +4,7 @@
   "scripts": {
     "dev": "rimraf dist && webpack --watch --config webpack.config.js --env.appversion=%npm_package_version% --env.development --progress --profile --bail --colors",
     "build": "rimraf dist && webpack --config webpack.config.js --env.production --env.appversion=%npm_package_version% --progress --profile --bail --colors",
-    "serve": "webpack-dev-server --config webpack.config.js --env.development --env.appversion=%npm_package_version% --content-base ./dist",
-    "postinstall": "rm node_modules/angular2-indexeddb/*.ts"
+    "serve": "webpack-dev-server --config webpack.config.js --env.development --env.appversion=%npm_package_version% --content-base ./dist"
   },
   "license": "MIT",
   "dependencies": {
@@ -30,7 +29,7 @@
     "jquery": "3.3.1",
     "lodash": "4.17.14",
     "ng-lz-string": "1.5.3",
-    "ng2-sharebuttons-ow": "2.1.3",
+    "ngx-logger": "3.3.11",
     "rxjs": "6.4.0",
     "zone.js": "0.9.1"
   },
