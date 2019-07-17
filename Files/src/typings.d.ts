@@ -1,4 +1,5 @@
-declare module "*.json" {
-   const valuee: any;
-   export default valuee;
-}
+declare module '*.json' {
+    const valuee: any;
+    export default valuee;
+ }
+ 
