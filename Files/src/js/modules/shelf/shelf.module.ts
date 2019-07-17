@@ -9,21 +9,7 @@ import { LocalStorageService, LocalStorageModule } from 'angular-2-local-storage
 import { LZStringModule, LZStringService } from 'ng-lz-string';
 import { ShareButtonsModule } from 'ng2-sharebuttons-ow';
 
-import { ShelfComponent }  from '../../components/shelf.component';
-import { ShelfWithGamesComponent }  from '../../components/shelf-with-games.component';
-import { LoadingComponent } from '../../components/loading.component';
-import { GlobalErrorComponent } from '../../components/global-error.component';
-import { FirstTimeComponent } from '../../components/first-time.component';
-import { EmptyShelfComponent }  from '../../components/empty-shelf.component';
-import { GameReplayComponent } from '../../components/game-replay.component';
-import { CarouselComponent } from '../../components/carousel.component';
-import { SharingZoneComponent } from '../../components/sharing-zone.component';
-import { InfoZoneComponent } from '../../components/info-zone.component';
-import { GameInfoComponent } from '../../components/game-info.component';
-import { GameThumbnailComponent } from '../../components/game-thumbnail.component';
-import { HeroAvatarComponent } from '../../components/hero-avatar.component';
-import { UploadSocialComponent } from '../../components/upload-social.component';
-import { LoginComponent } from '../../components/login.component';
+import { ShelfComponent }  from '../../components/shelf/shelf.component';
 
 import { GameRetrieveService } from '../../services/game-retrieve.service';
 import { StorageHelperService } from '../../services/storage-helper.service';
@@ -38,7 +24,10 @@ import { Events } from '../../services/events.service';
 import { SharingService } from '../../services/sharing.service';
 import { GameHelper } from '../../services/gameparsing/game-helper.service';
 import { OverwolfService } from '../../services/overwolf.service';
-import { HttpModule } from '@angular/http';
+import { GameReplayComponent } from '../../components/shelf/game-replay.component';
+import { ShelfApiService } from '../../services/shelf/shelf-api.service';
+import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
+import { ShelfHeaderComponent } from '../../components/shelf/shelf-header.component';
 
 console.log('version is ' + process.env.APP_VERSION);
 
@@ -61,7 +50,7 @@ export class SentryErrorHandler implements ErrorHandler {
 	imports:      [
 		BrowserModule,
         HttpClientModule,
-        HttpModule, // For ShareButtons, need to use https://www.npmjs.com/package/ngx-social-button instead
+        // For ShareButtons, need to use https://www.npmjs.com/package/ngx-social-button instead
 		LocalStorageModule.forRoot({
 			prefix: 'replay-viewer',
 			storageType: 'localStorage',
@@ -70,23 +59,12 @@ export class SentryErrorHandler implements ErrorHandler {
 		FormsModule,
 		ReactiveFormsModule,
 		LZStringModule,
+		LoggerModule.forRoot({ level: NgxLoggerLevel.DEBUG }),
 	],
 	declarations: [
-		CarouselComponent,
-		GameReplayComponent,
-		SharingZoneComponent,
-		InfoZoneComponent,
-		GameInfoComponent,
-		GameThumbnailComponent,
-		HeroAvatarComponent,
-		ShelfComponent,
-		ShelfWithGamesComponent,
-		EmptyShelfComponent,
-		GlobalErrorComponent,
-		FirstTimeComponent,
-		LoadingComponent,
-		LoginComponent,
-		UploadSocialComponent,
+        ShelfComponent,
+        GameReplayComponent,
+        ShelfHeaderComponent,
 	],
 	bootstrap: [
 		ShelfComponent,
@@ -106,7 +84,9 @@ export class SentryErrorHandler implements ErrorHandler {
 		DebugService,
 		SharingService,
 		LZStringService,
-		OverwolfService,
+        OverwolfService,
+        
+        ShelfApiService,
 	],
 })
 

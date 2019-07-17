@@ -1,0 +1,21 @@
+@import "manastorm-vars";
+
+body {
+    font-size: 14px;
+    font-family: "nice ampersand", "KlavikaWebBasicRegular";
+    display: flex;
+    flex-direction: column;
+}
+
+.manastorm-shelf {
+    padding: 0 10px;
+    padding-bottom: 20px;
+    color: var(--foreground-main);
+    background-color: var(--background-main);
+    display: flex;
+    flex-direction: column;
+    
+    > *:not(.manastorm-player) {
+        flex-shrink: 0;
+    }
+}

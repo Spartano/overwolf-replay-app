@@ -1,0 +1,40 @@
+@import "manastorm-vars";
+
+// light theme
+.light-theme {
+  --main-color: white;
+  --background-main: #{$light-background-main};
+  --background-secondary: #{$light-background-secondary};
+  --background-third: #{$light-background-third};
+  --background-forth: #{$light-background-forth};
+
+  --foreground-main: #{$light-foreground-main};
+  --foreground-secondary: #{$light-foreground-secondary};
+  --foreground-third: #{$light-foreground-third};
+  --foreground-forth: #{$light-foreground-forth};
+}
+
+// dark theme
+.dark-theme {
+  --main-color: black;
+  --background-main: #{$dark-background-main};
+  --background-secondary: #{$dark-background-secondary};
+  --background-third: #{$dark-background-third};
+  --background-forth: #{$dark-background-forth};
+
+  --foreground-main: #{$dark-foreground-main};
+  --foreground-secondary: #{$dark-foreground-secondary};
+  --foreground-third: #{$dark-foreground-third};
+  --foreground-forth: #{$dark-foreground-forth};
+}
+
+// transparent theme
+.transparent-theme {
+  --main-color: transparent;
+  --background-main: transparent;
+  --background-main-hover: #{$dark-background-secondary};
+  --background-third: #{$dark-background-third};
+  --background-forth: #{$dark-background-forth};
+
+  --text-main: #{rgba(white, .6)};
+}

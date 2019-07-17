@@ -30,6 +30,8 @@ import { LogRegisterService } from '../../services/log-register.service';
 import { S3FileUploadService } from '../../services/s3-file-upload.service';
 import { GameEventsPluginService } from '../../services/plugins/game-events-plugin.service';
 import { OverwolfService } from '../../services/overwolf.service';
+import { NgxLoggerLevel, LoggerModule } from 'ngx-logger';
+import { AllCardsService } from '../../services/all-cards.service';
 
 console.log('version is ' + process.env.APP_VERSION);
 console.log('env is', process.env.NODE_ENV);
@@ -58,6 +60,7 @@ export class SentryErrorHandler implements ErrorHandler {
 			storageType: 'localStorage',
 		}),
 		LZStringModule,
+		LoggerModule.forRoot({ level: NgxLoggerLevel.DEBUG }),
 	],
 	declarations: [
 		AppComponent,
@@ -90,6 +93,7 @@ export class SentryErrorHandler implements ErrorHandler {
         S3FileUploadService,
         GameEventsPluginService,
         
+        AllCardsService,
         OwCommunicationService,
         OverwolfService,
 	],

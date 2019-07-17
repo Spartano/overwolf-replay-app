@@ -4,8 +4,7 @@ import $ from 'jquery';
 
 import { GameHelper } from './gameparsing/game-helper.service';
 import { Game, Player } from '../models/game';
-
-declare var parseCardsText: any;
+import { AllCardsService } from './all-cards.service';
 
 declare var OverwolfPlugin: any;
 
@@ -15,7 +14,7 @@ export class GameParserService {
 	plugin: any;
 	initialized: boolean;
 
-	constructor(private gameHelper: GameHelper) {
+	constructor(private gameHelper: GameHelper, private cards: AllCardsService) {
 		this.init();
 	}
 
@@ -197,7 +196,8 @@ export class GameParserService {
 	}
 
 	extractClassFromHero(hero: string) {
-		let playerClass = parseCardsText.getCard(hero).playerClass.toLowerCase();
+        const heroCard = this.cards.getCard(hero);
+        const playerClass = heroCard && heroCard.playerClass && heroCard.playerClass.toLowerCase();
 		console.log('extractClassFromHero', hero, playerClass);
 		return playerClass;
 	}

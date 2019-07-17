@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { NGXLogger } from 'ngx-logger';
 
 declare var overwolf: any;
 
@@ -7,7 +8,7 @@ const HEARTHSTONE_GAME_ID = 9898;
 @Injectable()
 export class OverwolfService {
 
-    constructor() {
+    constructor(private logger: NGXLogger) {
         console.log('init ow service');
     }
 	
@@ -375,6 +376,7 @@ export class OverwolfService {
     public async getExtensionInfo(extensionId: string): Promise<any> {
 		return new Promise<any>((resolve) => {
             overwolf.extensions.getInfo('nafihghfcpikebhfhdhljejkcifgbdahdhngepfb', (callbackInfo) => {
+                this.logger.debug('[overwolf-service] Got extension info', callbackInfo);
                 resolve(callbackInfo);
             });
         });
