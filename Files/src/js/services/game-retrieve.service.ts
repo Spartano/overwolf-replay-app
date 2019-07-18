@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { StorageHelperService } from './storage-helper.service';
+import { Game } from '../models/game';
 
 @Injectable()
 export class GameRetrieveService {
@@ -8,8 +9,8 @@ export class GameRetrieveService {
 	constructor(private storageHelper: StorageHelperService) {
 	}
 
-	async getGames(sessionId: string) {
-		return new Promise<any>((resolve) => {
+	async getGames(sessionId: string): Promise<Game[]> {
+		return new Promise<Game[]>((resolve) => {
             if (!sessionId) {
                 sessionId = this.storageHelper.getLatestSessionId();
             }
