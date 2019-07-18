@@ -16,38 +16,52 @@ declare var ga: any;
         <section class="manastorm-header-share-section">
             <p class="manastorm-header-subtitle">Share</p>
             <button 
-                    class="gs-icon share-icon zero-to-heroes" 
+                    class="gs-icon btn-gs-icon share-icon zero-to-heroes hint-tooltip-container" 
                     title="View your replay online"
                     (click)="viewOnline()">
                 <svg>
                     <use xlink:href="/Files/assets/svg/share-icons.svg#share-on-zero-to-heroes" />
                 </svg>
+                <div class="hint-tooltip hint-tooltip-bottom dark-theme">
+                    <span>View it online</span>
+                </div>
             </button>
+            <div class="gs-icon-divider"></div>
             <button 
-                    class="gs-icon share-icon twitter"
-                    shareButton="twitter"
-                    [url]="url">
-                <svg>
-                    <use xlink:href="/Files/assets/svg/share-icons.svg#share-on-twitter" />
-                </svg>
-            </button>
-            <button 
-                    class="gs-icon share-icon reddit"
-                    shareButton="reddit"
-                    [url]="url">
-                <svg>
-                    <use xlink:href="/Files/assets/svg/share-icons.svg#share-on-reddit" />
-                </svg>
-            </button>
-            <button 
-                    class="gs-icon share-icon facebook"
+                    class="gs-icon btn-gs-icon share-icon facebook"
                     shareButton="facebook"
                     [url]="url">
                 <svg>
                     <use xlink:href="/Files/assets/svg/share-icons.svg#share-on-facebook" />
                 </svg>
+                <div class="hint-tooltip hint-tooltip-bottom dark-theme">
+                    <span>Share on Facebook</span>
+                </div>
             </button>
-            <button class="gs-icon menu">
+            <button 
+                    class="gs-icon btn-gs-icon share-icon twitter hint-tooltip-container"
+                    shareButton="twitter"
+                    [url]="url">
+                <svg>
+                    <use xlink:href="/Files/assets/svg/share-icons.svg#share-on-twitter" />
+                </svg>
+                <div class="hint-tooltip hint-tooltip-bottom dark-theme">
+                    <span>Share on Twitter</span>
+                </div>
+            </button>
+            <button 
+                    class="gs-icon btn-gs-icon share-icon reddit hint-tooltip-container"
+                    shareButton="reddit"
+                    [url]="url">
+                <svg>
+                    <use xlink:href="/Files/assets/svg/share-icons.svg#share-on-reddit hint-tooltip-container" />
+                </svg>
+                <div class="hint-tooltip hint-tooltip-bottom dark-theme">
+                    <span>Share on Reddit</span>
+                </div>
+            </button>
+            <div class="gs-icon-divider"></div>
+            <button class="gs-icon btn-gs-icon menu">
                 <svg>
                     <use xlink:href="/Files/assets/svg/ui-icons.svg#hamburger-menu" />
                 </svg>
@@ -59,6 +73,7 @@ declare var ga: any;
 export class SocialShareComponent {
 
     url: string;
+    viewUrl: string;
 
     private _game: Game;
 
@@ -68,16 +83,13 @@ export class SocialShareComponent {
 		this.logger.debug('[header] setting game', value);
         this._game = value;
         if (value) {
-            this.url = this.buildUrl(value);
+            this.discussUrl = `https://www.zerotoheroes.com/r/hearthstone/${value.reviewId}`;
+            this.url = `http://replays.firestoneapp.com/?reviewId=${value.reviewId}`;
         }
     }
 
     viewOnline() {
         ga('send', 'event', 'share', 'zetoh');
-        window.open(this.url, '_blank');
-    }
-
-    private buildUrl(game: Game) {
-        return `https://www.zerotoheroes.com/r/hearthstone/${game.reviewId}`;
+        window.open(this.viewUrl, '_blank');
     }
 }

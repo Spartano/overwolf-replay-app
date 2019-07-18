@@ -1,5 +1,6 @@
 @import 'component/shelf/manastorm-vars';
 
+
 // reset
 * {
     margin: 0;
@@ -12,6 +13,10 @@ body {
   margin: 0;
   height: 100vh;
   overflow: hidden;
+}
+
+strong {
+  font-family: "KlavikaWebBasicBold";
 }
 
 img {
@@ -52,12 +57,13 @@ button {
 
 // icons
 .gs-icon {
+  --size: 30px;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: var(--size, 30px);
-  height: var(--size, 30px);
+  width: var(--size);
+  height: var(--size);
   flex-shrink: 0;
 
   svg {
@@ -66,21 +72,25 @@ button {
   }
 }
 
-.icon-40 {
-  --size: 40px;
+.btn-gs-icon {
+  color: var(--foreground-third);
+
+  &:hover,
+  &.toggled {
+    color: var(--foreground-secondary);
+    background-color: var(--background-secondary);
+  }
 }
 
-.icon-40-padding {
-  margin: 5px;
+.gs-icon-divider {
+  width: 1px;
+  height: 20px;
+  background-color: var(--background-secondary);
+  margin: 0 var(--divider-gap, 10px);
+}
 
-  &:before {
-    content: "";
-    position: absolute;
-    top: -5px;
-    left: -5px;
-    bottom: -5px;
-    right: -5px;
-  }
+.icon-40 {
+  --size: 40px;
 }
 
 .btn-round {
@@ -119,3 +129,20 @@ button {
 .reddit { --social-color: #{$reddit}; }
 .gfycat { --social-color: #{$gfycat}; }
 .zero-to-heroes { --social-color: #{$zero-to-heroes}; }
+
+kbd {
+  font-family: inherit;
+  padding: 3px 0;
+  display: inline-flex;
+  align-items: center;
+
+  &:before {
+    content: "[";
+    padding-right: 3px;
+  }
+
+  &:after {
+    content: "]";
+    padding-left: 3px;
+  }
+}
