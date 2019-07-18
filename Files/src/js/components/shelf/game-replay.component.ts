@@ -31,7 +31,7 @@ export class GameReplayComponent {
         this.logger.debug('[game-replay] setting game', value);
         if (value) {
             const replay = this.gameHelper.getXmlReplay(value);
-            this.reload(replay);
+            this.reload(replay, value.reviewId);
         }
     }
     
@@ -43,13 +43,15 @@ export class GameReplayComponent {
         this.initDone = true;
     }
 
-	async reload(replay: string) {
+	async reload(replay: string, reviewId: string) {
         this.logger.debug('requested replay load');
         await this.waitForViewerInit();
         this.logger.debug('loading replay');
         const coliseum = (window as any).coliseum;
         coliseum.zone.run(() => {
-            coliseum.component.loadReplay(replay);
+            coliseum.component.loadReplay(replay, {
+				reviewId: reviewId
+			});
         })
 	}
     
