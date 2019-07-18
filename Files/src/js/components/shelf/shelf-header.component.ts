@@ -13,29 +13,7 @@ import { Game } from '../../models/game';
 	template: `
         <header class="manastorm-header">
             <h1 class="manastorm-header-title">{{title}}</h1>
-            <section class="manastorm-header-share-section">
-                <p class="manastorm-header-subtitle">Share</p>
-                <button class="gs-icon share-icon zero-to-heroes">
-                    <svg>
-                        <use xlink:href="/Files/assets/svg/share-icons.svg#share-on-zero-to-heroes" />
-                    </svg>
-                </button>
-                <button class="gs-icon share-icon twitter">
-                    <svg>
-                        <use xlink:href="/Files/assets/svg/share-icons.svg#share-on-twitter" />
-                    </svg>
-                </button>
-                <button class="gs-icon share-icon reddit">
-                    <svg>
-                        <use xlink:href="/Files/assets/svg/share-icons.svg#share-on-reddit" />
-                    </svg>
-                </button>
-                <button class="gs-icon menu">
-                    <svg>
-                        <use xlink:href="/Files/assets/svg/ui-icons.svg#hamburger-menu" />
-                    </svg>
-                </button>
-            </section>
+            <social-share [game]="_game"></social-share>
         </header>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -43,8 +21,7 @@ import { Game } from '../../models/game';
 export class ShelfHeaderComponent {
 
     title: string;
-	
-    private _game: Game;
+	_game: Game;
 
     constructor(private logger: NGXLogger) { }
 

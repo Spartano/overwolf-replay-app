@@ -14,7 +14,7 @@ import { NGXLogger } from 'ngx-logger';
     ],
 	template: `
         <div class="manastorm-shelf light-theme">
-            <shelf-header [game]="selectedGame"></shelf-header>
+            <shelf-header [game]="selectedGame" *ngIf="selectedGame"></shelf-header>
             <game-replay [game]="selectedGame"></game-replay>
 		</div>
     `,

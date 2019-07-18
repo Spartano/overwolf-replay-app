@@ -109,7 +109,7 @@ export class GameParserService {
 		let players = replayXml.getElementsByTagName('Player');
 		for (let player of players) {
 			let gamePlayer: Player = new Player();
-			gamePlayer.name = player.getAttribute('name');
+			gamePlayer.name = this.extractName(player.getAttribute('name'));
 			gamePlayer.hero = this.extractClassCard(replayXml, player);
 			gamePlayer.class = this.extractClassFromHero(gamePlayer.hero);
 			// console.log('is main player', gamePlayer.name, mainPlayerId, parseInt(player.getAttribute('playerID')), gamePlayer);
@@ -123,7 +123,14 @@ export class GameParserService {
 			}
 		}
 		return gamePlayers;
-	}
+    }
+    
+    private extractName(nameOrBTag: string): string {
+        if (!nameOrBTag) {
+            return null;
+        }
+        return nameOrBTag.indexOf('#') !== -1 ? nameOrBTag.split('#')[0] : nameOrBTag;
+    }
 
 	getMainPlayerId(replayXml: any): number {
 		let showEntities = replayXml.getElementsByTagName('ShowEntity');

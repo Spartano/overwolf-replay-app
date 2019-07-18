@@ -30,6 +30,7 @@
     "lodash": "4.17.14",
     "ng-lz-string": "1.5.3",
     "ngx-logger": "3.3.11",
+    "@ngx-share/core": "7.1.2",
     "rxjs": "6.4.0",
     "zone.js": "0.9.1"
   },

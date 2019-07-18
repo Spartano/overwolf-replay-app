@@ -17,6 +17,7 @@ export class ShelfApiService {
 
     private async init() {
         // TODO: plug the GS listener here instead
+        console.log('[shelf-api] Getting extension info');
         const callbackInfo = await this.ow.getExtensionInfo('nafihghfcpikebhfhdhljejkcifgbdahdhngepfb');
         const info = callbackInfo.info;
         this.loadGameFromSession((info && info.sessionId) || null);

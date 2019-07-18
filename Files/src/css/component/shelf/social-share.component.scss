@@ -1,0 +1,28 @@
+@import "manastorm-vars";
+
+:host() {
+    display: flex;
+    align-items: center;
+}
+
+.manastorm-header-share-section {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    
+    .share-icon {
+        color: var(--social-color);
+    }
+    
+    .gs-icon {
+        --size: 40px;
+        padding: 5px;
+        --foreground: var(--background-main);
+    }
+    
+    .gs-icon:hover {
+        --foreground: white;
+        background-color: $gray222;
+    }
+}
+

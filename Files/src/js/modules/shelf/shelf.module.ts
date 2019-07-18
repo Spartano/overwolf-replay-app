@@ -4,10 +4,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 
 import { init, captureException, BrowserOptions } from "@sentry/browser";
+import { ShareModule } from '@ngx-share/core';
 
 import { LocalStorageService, LocalStorageModule } from 'angular-2-local-storage';
 import { LZStringModule, LZStringService } from 'ng-lz-string';
-import { ShareButtonsModule } from 'ng2-sharebuttons-ow';
 
 import { ShelfComponent }  from '../../components/shelf/shelf.component';
 
@@ -28,6 +28,7 @@ import { GameReplayComponent } from '../../components/shelf/game-replay.componen
 import { ShelfApiService } from '../../services/shelf/shelf-api.service';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { ShelfHeaderComponent } from '../../components/shelf/shelf-header.component';
+import { SocialShareComponent } from '../../components/shelf/social-share.component';
 
 console.log('version is ' + process.env.APP_VERSION);
 
@@ -55,16 +56,17 @@ export class SentryErrorHandler implements ErrorHandler {
 			prefix: 'replay-viewer',
 			storageType: 'localStorage',
 		}),
-		ShareButtonsModule.forRoot(),
 		FormsModule,
 		ReactiveFormsModule,
 		LZStringModule,
-		LoggerModule.forRoot({ level: NgxLoggerLevel.DEBUG }),
+        LoggerModule.forRoot({ level: NgxLoggerLevel.DEBUG }),
+        ShareModule,
 	],
 	declarations: [
         ShelfComponent,
         GameReplayComponent,
         ShelfHeaderComponent,
+        SocialShareComponent,
 	],
 	bootstrap: [
 		ShelfComponent,
