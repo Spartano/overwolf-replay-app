@@ -1,15 +1,15 @@
-import { NgModule, Injectable, ErrorHandler }      from '@angular/core';
+import { NgModule, Injectable, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { init, captureException, BrowserOptions } from "@sentry/browser";
+import { init, captureException, BrowserOptions } from '@sentry/browser';
 import { ShareModule } from '@ngx-share/core';
 
 import { LocalStorageService, LocalStorageModule } from 'angular-2-local-storage';
 import { LZStringModule, LZStringService } from 'ng-lz-string';
 
-import { ShelfComponent }  from '../../components/shelf/shelf.component';
+import { ShelfComponent } from '../../components/shelf/shelf.component';
 
 import { GameRetrieveService } from '../../services/game-retrieve.service';
 import { StorageHelperService } from '../../services/storage-helper.service';
@@ -42,16 +42,16 @@ init({
 export class SentryErrorHandler implements ErrorHandler {
   	constructor() {}
   	handleError(error) {
-    	captureException(error.originalError || error);
-    	throw error;
+		captureException(error.originalError || error);
+		throw error;
   	}
 }
 
 @NgModule({
 	imports:      [
 		BrowserModule,
-        HttpClientModule,
-        // For ShareButtons, need to use https://www.npmjs.com/package/ngx-social-button instead
+		HttpClientModule,
+		// For ShareButtons, need to use https://www.npmjs.com/package/ngx-social-button instead
 		LocalStorageModule.forRoot({
 			prefix: 'replay-viewer',
 			storageType: 'localStorage',
@@ -59,14 +59,14 @@ export class SentryErrorHandler implements ErrorHandler {
 		FormsModule,
 		ReactiveFormsModule,
 		LZStringModule,
-        LoggerModule.forRoot({ level: NgxLoggerLevel.DEBUG }),
-        ShareModule,
+		LoggerModule.forRoot({ level: NgxLoggerLevel.DEBUG }),
+		ShareModule,
 	],
 	declarations: [
-        ShelfComponent,
-        GameReplayComponent,
-        ShelfHeaderComponent,
-        SocialShareComponent,
+		ShelfComponent,
+		GameReplayComponent,
+		ShelfHeaderComponent,
+		SocialShareComponent,
 	],
 	bootstrap: [
 		ShelfComponent,
@@ -86,9 +86,9 @@ export class SentryErrorHandler implements ErrorHandler {
 		DebugService,
 		SharingService,
 		LZStringService,
-        OverwolfService,
-        
-        ShelfApiService,
+		OverwolfService,
+
+		ShelfApiService,
 	],
 })
 

@@ -19,7 +19,7 @@ export class UserPreferences {
 	}
 
 	setAutoUpload(value: boolean): void {
-		let preferences: Preferences = this.getPreferences();
+		const preferences: Preferences = this.getPreferences();
 		preferences.autoUpload = value;
 		this.storePreferences(preferences);
 		console.log('updated preferences', preferences);
@@ -30,7 +30,7 @@ export class UserPreferences {
 	}
 
 	setDontAskAutoUpload(value: boolean): void {
-		let preferences: Preferences = this.getPreferences();
+		const preferences: Preferences = this.getPreferences();
 		preferences.dontAskAutoUpload = value;
 		this.storePreferences(preferences);
 		console.log('updated preferences', preferences);
@@ -39,8 +39,7 @@ export class UserPreferences {
 	private getPreferences(): Preferences {
 		try {
 			return JSON.parse(this.localStorageService.get<string>('preferences'));
-		}
-		catch (e) {
+		} catch (e) {
 			console.error('exception when retrieving preferences', e);
 			return new Preferences();
 		}

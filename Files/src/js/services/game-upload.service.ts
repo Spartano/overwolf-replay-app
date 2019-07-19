@@ -25,9 +25,8 @@ export class GameUploadService {
 		if (game.reviewId) {
 			console.log('game already uploaded');
 			this.uploadStatus.next(GameUploadService.UPLOAD_COMPLETE);
-		}
-		else {
-			let monitor = new BehaviorSubject<string>('');
+		} else {
+			const monitor = new BehaviorSubject<string>('');
 
 			monitor.subscribe((status) => {
 				// this.uploadStatus = status;
@@ -76,17 +75,16 @@ export class GameUploadService {
 	private checkProcessingProgress(game: Game, monitor: BehaviorSubject<string>) {
 		console.log('checking processing progress', game);
 		this.fileUpload.getRemoteReview(game.reviewId, (result) => {
-			let review = JSON.parse(result._body);
+			const review = JSON.parse(result._body);
 			console.log('result', review.published);
 			if (review.published === true) {
 				monitor.next('PROCESSING_DONE');
-			}
-			else {
+			} else {
 				setTimeout(() => {
 					this.checkProcessingProgress(game, monitor);
 				},
 				1000);
 			}
-		})
+		});
 	}
 }

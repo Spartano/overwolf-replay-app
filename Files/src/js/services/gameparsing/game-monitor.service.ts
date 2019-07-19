@@ -19,15 +19,15 @@ export class GameMonitorService {
 		'casual',
 		'arena',
 		'tavernbrawl',
-	]
+	];
 
 	constructor(
-            private gameHelper: GameHelper,
-            private gameParserService: GameParserService,
-            private gameEvents: GameEvents,
-            private deckService: DeckParserService,
-            private events: Events) {
-        console.log('starting debug service');
+			private gameHelper: GameHelper,
+			private gameParserService: GameParserService,
+			private gameEvents: GameEvents,
+			private deckService: DeckParserService,
+			private events: Events) {
+		console.log('starting debug service');
 		this.gameEvents.allEvents.subscribe(
 			(gameEvent: GameEvent) => {
 				this.handleEvent(gameEvent);

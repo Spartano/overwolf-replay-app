@@ -23,7 +23,7 @@ export class SharingService {
 	}
 
 	public init(game: Game) {
-		if (game == this.game) {
+		if (game === this.game) {
 			return;
 		}
 
@@ -55,9 +55,8 @@ export class SharingService {
 							// Reset
 							// console.log('resetting subscriptions', this.uploadDoneNotifier);
 							this.uploadDoneNotifier.next(false);
-						}
-						else if (!this.reviewId) {
-							console.log('Upload complete, showing sharing popup!')
+						} else if (!this.reviewId) {
+							console.log('Upload complete, showing sharing popup!');
 							this.events.broadcast(Events.START_SHARING_AFTER_UPLOAD);
 						}
 						this.handlingZetoh = false;
@@ -82,12 +81,12 @@ export class SharingService {
 				if (this.handlingZetoh && status) {
 					console.log('upload done', status, this.handlingZetoh);
 					this.handlingZetoh = false;
-					let url = this.buildUrl();
+					const url = this.buildUrl();
 					console.log('opening in new window', url);
 					window.open(url, '_blank');
 					// this.uploadDoneNotifier.unsubscribe();
 				}
-			})
+			});
 		}
 		this.uploadBeforeSharing();
 	}

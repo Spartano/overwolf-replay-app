@@ -29,25 +29,24 @@ export class StorageHelperService {
 		this.db.getByKey('sessions', sessionId).then(
 			(session) => {
 				this.localStorageService.set('lastSessionId', sessionId);
-			    if (!session) {
+				if (!session) {
 					console.log('[storage] creating a new session', sessionId);
 					this.db.getAll('sessions', null).then((sessions) => console.log('[storage] all sessions', sessions));
-			    	session = new Session();
-			    	session.id = sessionId;
-			    	this.db.add('sessions', session).then(() => {
+					session = new Session();
+					session.id = sessionId;
+					this.db.add('sessions', session).then(() => {
 						console.log('[storage] session added to storage', session);
-					    callback(session);
+						callback(session);
 					}, (error) => {
-					    console.log(error);
+						console.log(error);
 					});
-			    }
-			    else {
-			    	console.log('[storage] retrieved from indexeddb', session.id, session.games.length);
-			    	callback(session);
-			    }
+				} else {
+					console.log('[storage] retrieved from indexeddb', session.id, session.games.length);
+					callback(session);
+				}
 			},
 			(error) => {
-			    console.log(error);
+				console.log(error);
 			}
 		);
 	}
@@ -63,10 +62,10 @@ export class StorageHelperService {
 		this.db.update('sessions', session).then(
 			() => {
 				console.log('[storage] updated in indexeddb', session.id, session.games.length);
-			    callback(session);
+				callback(session);
 			},
 			(error) => {
-			    console.log(error);
+				console.log(error);
 			}
 		);
 	}
@@ -76,13 +75,13 @@ export class StorageHelperService {
 
 		this.db = new AngularIndexedDB('manastorm-db', 1);
 		this.db.openDatabase(1, (evt) => {
-		    let objectStore = evt.currentTarget.result.createObjectStore('sessions', { keyPath: "id" });
-		    this.dbInit = true;
-		    console.log('[storage] objectstore created', objectStore);
+			const objectStore = evt.currentTarget.result.createObjectStore('sessions', { keyPath: 'id' });
+			this.dbInit = true;
+			console.log('[storage] objectstore created', objectStore);
 		}).then(
 			() => {
 				console.log('[storage] openDatabase successful', this.db);
-		    	this.dbInit = true;
+				this.dbInit = true;
 			},
 			(error) => {
 				console.log('[storage] error in openDatabase', error);

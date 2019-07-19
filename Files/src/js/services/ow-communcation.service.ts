@@ -8,7 +8,7 @@ import { OverwolfService } from './overwolf.service';
 export class OwCommunicationService {
 
 	constructor(private events: Events, private storageHelper: StorageHelperService, private ow: OverwolfService) {
-        console.log('starting ow communication service');
+		console.log('starting ow communication service');
 		this.init();
 	}
 
@@ -17,14 +17,14 @@ export class OwCommunicationService {
 	}
 
 	private async sendMatchCountInfo() {
-        const res = await this.ow.getRunningGameInfo();
-        // console.log("getRunningGameInfo to send matchcount info: " + JSON.stringify(res));
-        if (res && res.sessionId) {
-            this.storageHelper.getSession(res.sessionId, (currentSession) => {
-                let info = { matchCount: currentSession.games.length + 1, sessionId: currentSession.id };
-                console.log('setting info', info);
-                this.ow.setExtensionInfo(info);
-            });
-        }
+		const res = await this.ow.getRunningGameInfo();
+		// console.log("getRunningGameInfo to send matchcount info: " + JSON.stringify(res));
+		if (res && res.sessionId) {
+			this.storageHelper.getSession(res.sessionId, (currentSession) => {
+				const info = { matchCount: currentSession.games.length + 1, sessionId: currentSession.id };
+				console.log('setting info', info);
+				this.ow.setExtensionInfo(info);
+			});
+		}
 	}
 }

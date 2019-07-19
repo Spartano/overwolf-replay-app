@@ -22,14 +22,14 @@ export class Events {
 	public static UPLOAD_STARTED = 'upload-started';
 	public static UPLOAD_COMPLETE = 'upload-complete';
 
-	public static START_SHARING_AFTER_UPLOAD = "start-sharing-after-upload";
+	public static START_SHARING_AFTER_UPLOAD = 'start-sharing-after-upload';
 
 	public static GLOBAL_ERROR = 'global-error';
 
 	private _eventBus: Subject<BroadcastEvent>;
 
 	constructor() {
-        console.log('starting events service');
+		console.log('starting events service');
 		this._eventBus = new Subject<BroadcastEvent>();
 	}
 
@@ -41,6 +41,6 @@ export class Events {
 	on(key: any): Observable<BroadcastEvent> {
 		return this._eventBus.asObservable().pipe(
 			filter(event => event.key === key),
-			map(event => event),);
+			map(event => event), );
 	}
 }

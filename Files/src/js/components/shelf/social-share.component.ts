@@ -7,16 +7,16 @@ declare var ga: any;
 @Component({
 	selector: 'social-share',
 	styleUrls: [
-        `../../../css/component/shelf/manastorm-themes.scss`,
-        `../../../css/component/shelf/manastorm-fonts.scss`,
-        `../../../css/global.scss`,
-        `../../../css/component/shelf/social-share.component.scss`,
-    ],
+		`../../../css/component/shelf/manastorm-themes.scss`,
+		`../../../css/component/shelf/manastorm-fonts.scss`,
+		`../../../css/global.scss`,
+		`../../../css/component/shelf/social-share.component.scss`,
+	],
 	template: `
         <section class="manastorm-header-share-section">
             <p class="manastorm-header-subtitle">Share</p>
-            <button 
-                    class="gs-icon btn-gs-icon share-icon zero-to-heroes hint-tooltip-container" 
+            <button
+                    class="gs-icon btn-gs-icon share-icon zero-to-heroes hint-tooltip-container"
                     title="View your replay online"
                     (click)="viewOnline()">
                 <svg>
@@ -27,7 +27,7 @@ declare var ga: any;
                 </div>
             </button>
             <div class="gs-icon-divider"></div>
-            <button 
+            <button
                     class="gs-icon btn-gs-icon share-icon facebook"
                     shareButton="facebook"
                     [url]="url">
@@ -38,7 +38,7 @@ declare var ga: any;
                     <span>Share on Facebook</span>
                 </div>
             </button>
-            <button 
+            <button
                     class="gs-icon btn-gs-icon share-icon twitter hint-tooltip-container"
                     shareButton="twitter"
                     [url]="url">
@@ -49,7 +49,7 @@ declare var ga: any;
                     <span>Share on Twitter</span>
                 </div>
             </button>
-            <button 
+            <button
                     class="gs-icon btn-gs-icon share-icon reddit hint-tooltip-container"
                     shareButton="reddit"
                     [url]="url">
@@ -68,26 +68,26 @@ declare var ga: any;
             </button>
         </section>
     `,
-    changeDetection: ChangeDetectionStrategy.OnPush
+	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SocialShareComponent {
 
-    url: string;
+	url: string;
 
-    private _game: Game;
+	private _game: Game;
 
-    constructor(private logger: NGXLogger) { }
+	constructor(private logger: NGXLogger) { }
 
 	@Input('game') set game(value: Game) {
 		this.logger.debug('[header] setting game', value);
-        this._game = value;
-        if (value) {
-            this.url = `http://replays.firestoneapp.com/?reviewId=${value.reviewId}`;
-        }
-    }
+		this._game = value;
+		if (value) {
+			this.url = `http://replays.firestoneapp.com/?reviewId=${value.reviewId}`;
+		}
+	}
 
-    viewOnline() {
-        ga('send', 'event', 'share', 'zetoh');
-        window.open(this.url, '_blank');
-    }
+	viewOnline() {
+		ga('send', 'event', 'share', 'zetoh');
+		window.open(this.url, '_blank');
+	}
 }

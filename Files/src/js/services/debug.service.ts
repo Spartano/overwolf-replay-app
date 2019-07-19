@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 export class DebugService {
 
 	constructor() {
-		let debugMode = process.env.NODE_ENV === 'production';
+		const debugMode = process.env.NODE_ENV === 'production';
 		console.log = this.override(console.log, debugMode);
 		console.warn = this.override(console.warn, debugMode);
 		console.error = this.overrideError(console.error, debugMode);
@@ -13,7 +13,7 @@ export class DebugService {
 	private override(oldConsoleLogFunc: any, debugMode: boolean) {
 		if (debugMode) {
 			return function() {
-				let argsString = "";
+				let argsString = '';
 				for (let i = 0; i < arguments.length; i++) {
 					let cache = [];
 					argsString += (JSON.stringify(arguments[i], function(key, value) {
@@ -38,7 +38,7 @@ export class DebugService {
 	private overrideError(oldConsoleLogFunc: any, debugMode: boolean) {
 		if (debugMode) {
 			return function() {
-				let argsString = "";
+				let argsString = '';
 				for (let i = 0; i < arguments.length; i++) {
 					let cache = [];
 					argsString += (JSON.stringify(arguments[i], function(key, value) {

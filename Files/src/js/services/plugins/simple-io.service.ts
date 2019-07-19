@@ -6,23 +6,23 @@ declare var OverwolfPlugin: any;
 export class SimpleIOService {
 
 	simpleIOPlugin: any;
-	initialized: boolean = false;
+	initialized = false;
 
 	constructor() {
 		this.initialized = false;
-		console.log("loading simple-io-plugin-zip");
-		this.simpleIOPlugin = new OverwolfPlugin("simple-io-plugin-zip", true);
+		console.log('loading simple-io-plugin-zip');
+		this.simpleIOPlugin = new OverwolfPlugin('simple-io-plugin-zip', true);
 		this.simpleIOPlugin.initialize((status: boolean) => {
 			if (status === false) {
-				console.warn("Plugin simple-io-plugin-zip couldn't be loaded");
+				console.warn('Plugin simple-io-plugin-zip couldn\'t be loaded');
 				return;
 			}
-			console.log("Plugin " + this.simpleIOPlugin.get()._PluginName_ + " was loaded!");
+			console.log('Plugin ' + this.simpleIOPlugin.get()._PluginName_ + ' was loaded!');
 			this.simpleIOPlugin.get().onGlobalEvent.addListener(function(first, second) {
 				console.log('received global event simple-io-plugin-zip', first, second);
 			});
 			this.initialized = true;
-            console.log('simple-io plugin init done');
+			console.log('simple-io plugin init done');
 		});
 	}
 
@@ -55,8 +55,8 @@ export class SimpleIOService {
 			plugin.getTextFile(filePath, false, (result, contents) => {
 				console.log('read file contents completed', filePath, result);
 				resolve(contents);
-			})
-		})
+			});
+		});
 	}
 
 	public async zipAppLogFolder(appName: string): Promise<string> {
@@ -66,8 +66,8 @@ export class SimpleIOService {
 			plugin.zipAppLogFolder(appName, (result, contents) => {
 				console.log('zipped directory done, reading binary result', appName, result);
 				resolve(contents);
-			})
-		})
+			});
+		});
 	}
 
 	public async get() {
@@ -82,12 +82,11 @@ export class SimpleIOService {
 				if (this.initialized) {
 					// console.log('wait for db init complete');
 					resolve();
-				} 
-				else {
+				} else {
 					// console.log('waiting for db init');
 					setTimeout(() => dbWait(), 50);
 				}
-			}
+			};
 			dbWait();
 		});
 	}

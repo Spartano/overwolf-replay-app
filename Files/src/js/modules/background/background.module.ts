@@ -1,13 +1,13 @@
-import { NgModule, Injectable, ErrorHandler }      from '@angular/core';
+import { NgModule, Injectable, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 
-import { init, captureException, BrowserOptions } from "@sentry/browser";
+import { init, captureException, BrowserOptions } from '@sentry/browser';
 
 import { LocalStorageService, LocalStorageModule } from 'angular-2-local-storage';
 import { LZStringModule, LZStringService } from 'ng-lz-string';
 
-import { AppComponent }  from '../../components/app.component';
+import { AppComponent } from '../../components/app.component';
 
 import { GameStorageService } from '../../services/game-storage.service';
 import { OwCommunicationService	} from '../../services/ow-communcation.service';
@@ -46,8 +46,8 @@ init({
 export class SentryErrorHandler implements ErrorHandler {
   	constructor() {}
   	handleError(error) {
-    	captureException(error.originalError || error);
-    	throw error;
+		captureException(error.originalError || error);
+		throw error;
   	}
 }
 
@@ -89,13 +89,13 @@ export class SentryErrorHandler implements ErrorHandler {
 		DebugService,
 		GameEvents,
 		GameMonitorService,
-        LZStringService,
-        S3FileUploadService,
-        GameEventsPluginService,
-        
-        AllCardsService,
-        OwCommunicationService,
-        OverwolfService,
+		LZStringService,
+		S3FileUploadService,
+		GameEventsPluginService,
+
+		AllCardsService,
+		OwCommunicationService,
+		OverwolfService,
 	],
 })
 

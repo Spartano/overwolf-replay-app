@@ -17,25 +17,25 @@ export class LogRegisterService {
 	retriesLeft = 20;
 
 	constructor(
-            private decksService: DeckParserService,
-            private ow: OverwolfService,
-            private gameEvents: GameEvents,
-            private plugin: SimpleIOService) {
-        console.log('starting debug service');
+			private decksService: DeckParserService,
+			private ow: OverwolfService,
+			private gameEvents: GameEvents,
+			private plugin: SimpleIOService) {
+		console.log('starting debug service');
 		this.init();
 	}
 
 	init(): void {
 		console.log('[log-register] initiating log registerservice');
 		new LogListenerService(this.plugin, this.ow)
-			.configure("Power.log", (data) => this.gameEvents.receiveLogLine(data))
+			.configure('Power.log', (data) => this.gameEvents.receiveLogLine(data))
 			.subscribe((status) => {
 				console.log('[log-register] status for power.log', status);
 				// this.events.broadcast(status, "Power.log");
 			})
 			.start();
 		new LogListenerService(this.plugin, this.ow)
-			.configure("Decks.log", (data) => this.decksService.parseActiveDeck(data))
+			.configure('Decks.log', (data) => this.decksService.parseActiveDeck(data))
 			.subscribe((status) => {
 				console.log('[log-register] status for decks', status);
 			})

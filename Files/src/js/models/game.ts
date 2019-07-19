@@ -29,7 +29,7 @@ export class Game {
 	private _url: string;
 
 	static createEmptyGame(): Game {
-		let game = new Game();
+		const game = new Game();
 		game.id = '' + Date.now();
 		return game;
 	}
@@ -39,30 +39,25 @@ export class Game {
 			if ('Wild' === this.gameFormat) {
 				if (this.matchInfo.LocalPlayer.WildLegendRank > 0) {
 					this.rank = 'legend';
-				}
-				else {
+				} else {
 					this.rank = this.matchInfo.LocalPlayer.WildRank;
 				}
 
 				if (this.matchInfo.OpposingPlayer.WildLegendRank > 0) {
 					this.opponentRank = 'legend';
-				}
-				else {
+				} else {
 					this.opponentRank = this.matchInfo.OpposingPlayer.WildRank;
 				}
-			}
-			else if ('Standard' === this.gameFormat) {
+			} else if ('Standard' === this.gameFormat) {
 				if (this.matchInfo.LocalPlayer.StandardLegendRank > 0) {
 					this.rank = 'legend';
-				}
-				else {
+				} else {
 					this.rank = this.matchInfo.LocalPlayer.StandardRank;
 				}
 
 				if (this.matchInfo.OpposingPlayer.StandardLegendRank > 0) {
 					this.opponentRank = 'legend';
-				}
-				else {
+				} else {
 					this.opponentRank = this.matchInfo.OpposingPlayer.StandardRank;
 				}
 			}

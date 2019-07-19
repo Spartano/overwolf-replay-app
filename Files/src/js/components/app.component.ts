@@ -26,22 +26,22 @@ export class AppComponent {
 	retryForEgsDelay = 2000;
 
 	constructor(
-            private debugService: DebugService,
-            private logListenerService: LogListenerService,
-            private gameMonitorService: GameMonitorService,
-            private logRegister: LogRegisterService,
-            private gameStorageService: GameStorageService,
-            private ow: OverwolfService,
-            private owCommunicationService: OwCommunicationService,
-            private events: Events,
-            private replayManager: ReplayManager,
-            private replayUploader: ReplayUploader) {
-        console.log('init started');
+			private debugService: DebugService,
+			private logListenerService: LogListenerService,
+			private gameMonitorService: GameMonitorService,
+			private logRegister: LogRegisterService,
+			private gameStorageService: GameStorageService,
+			private ow: OverwolfService,
+			private owCommunicationService: OwCommunicationService,
+			private events: Events,
+			private replayManager: ReplayManager,
+			private replayUploader: ReplayUploader) {
+		console.log('init started');
 		this.init();
 	}
 
 	init(): void {
-        this.ow.addGameInfoUpdatedListener((res: any) => {
+		this.ow.addGameInfoUpdatedListener((res: any) => {
 			if (this.exitGame(res)) {
 				this.closeApp();
 			}
@@ -49,7 +49,7 @@ export class AppComponent {
 		this.events.on(Events.REPLAY_CREATED)
 			.subscribe(event => {
 				console.log('received game from event', event);
-				let game: Game = JSON.parse(event.data[0]);
+				const game: Game = JSON.parse(event.data[0]);
 				this.replayManager.saveLocally(game);
 			});
 		this.requestDisplayOnShelf();
@@ -65,34 +65,33 @@ export class AppComponent {
 		// console.log('retrying to display EGS', this.retriesForEgsLeft);
 		setTimeout(async () => {
 			await this.requestDisplayOnShelf();
-		}, this.retryForEgsDelay)
+		}, this.retryForEgsDelay);
 	}
 
 	async requestDisplayOnShelf() {
-        const egsEnabledResult = await this.ow.isGSEnabled();
-        if (egsEnabledResult.status === 'success' && egsEnabledResult.isEnabled) {
-            const displayRequestResult = await this.ow.requestGSDisplay();
-            if (displayRequestResult.status === 'success') {
-                console.log('request to display is a success, OW should call shelf.html which will trigger status listening process updates on its side', this.retriesForEgsLeft);
-            }
-            else {
-                let extra = {
-                    status: displayRequestResult.status,
-                    result: displayRequestResult
-                }
-                console.log('Request to display shelf failed', { extra: extra });
-                this.retryEgs(() => console.log('Request to display shelf failed', { extra: extra }));
-            }
-        }
-        else {
-            let extra = {
-                status: egsEnabledResult.status,
-                isEnabled: egsEnabledResult.isEnabled,
-                result: egsEnabledResult
-            }
-            console.log('EGS is not enabled', { extra: extra });
-            this.retryEgs(() => console.log('EGS is not enabled', { extra: extra }));
-        }
+		const egsEnabledResult = await this.ow.isGSEnabled();
+		if (egsEnabledResult.status === 'success' && egsEnabledResult.isEnabled) {
+			const displayRequestResult = await this.ow.requestGSDisplay();
+			if (displayRequestResult.status === 'success') {
+				console.log('request to display is a success, OW should call shelf.html '
+						+ 'which will trigger status listening process updates on its side', this.retriesForEgsLeft);
+			} else {
+				const extra = {
+					status: displayRequestResult.status,
+					result: displayRequestResult
+				};
+				console.log('Request to display shelf failed', { extra: extra });
+				this.retryEgs(() => console.log('Request to display shelf failed', { extra: extra }));
+			}
+		} else {
+			const extra = {
+				status: egsEnabledResult.status,
+				isEnabled: egsEnabledResult.isEnabled,
+				result: egsEnabledResult
+			};
+			console.log('EGS is not enabled', { extra: extra });
+			this.retryEgs(() => console.log('EGS is not enabled', { extra: extra }));
+		}
 	}
 
 	private exitGame(gameInfoResult: any): boolean {
@@ -100,9 +99,9 @@ export class AppComponent {
 	}
 
 	private async closeApp() {
-        const window = await this.ow.getCurrentWindow();
-        console.log('closing');
-        // Keep some time to finish parsing / uploading the replays in case the player rage quits
-        setTimeout(() => this.ow.closeWindow(window.id), 5000);
+		const window = await this.ow.getCurrentWindow();
+		console.log('closing');
+		// Keep some time to finish parsing / uploading the replays in case the player rage quits
+		setTimeout(() => this.ow.closeWindow(window.id), 5000);
 	}
 }

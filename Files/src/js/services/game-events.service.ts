@@ -9,7 +9,7 @@ import { OverwolfService } from './overwolf.service';
 
 @Injectable()
 export class GameEvents {
-	
+
 	public allEvents = new EventEmitter<GameEvent>();
 	public newLogLineEvents = new EventEmitter<GameEvent>();
 	public onGameStart = new EventEmitter<GameEvent>();
@@ -19,8 +19,8 @@ export class GameEvents {
 
 	constructor(
 		private gameEventsPlugin: GameEventsPluginService,
-        private io: SimpleIOService,
-        private ow: OverwolfService,
+		private io: SimpleIOService,
+		private ow: OverwolfService,
 		private s3: S3FileUploadService) {
 		this.init();
 	}
@@ -33,7 +33,7 @@ export class GameEvents {
 		const plugin = await this.gameEventsPlugin.get();
 		plugin.onGlobalEvent.addListener((first: string, second: string) => {
 			console.log('[game-events] received global event', first, second);
-			if (first.toLowerCase().indexOf("exception") !== -1 || first.toLowerCase().indexOf("error") !== -1) {
+			if (first.toLowerCase().indexOf('exception') !== -1 || first.toLowerCase().indexOf('error') !== -1) {
 				this.uploadLogsAndSendException(first, second);
 			}
 		});
@@ -66,8 +66,7 @@ export class GameEvents {
 				plugin.realtimeLogProcessing(toProcess, () => {
 					this.processingLines = false;
 				});
-			}
-			else {
+			} else {
 				this.processingLines = false;
 			}
 		},
@@ -75,26 +74,26 @@ export class GameEvents {
 	}
 
 	public dispatchGameEvent(gameEvent) {
-        switch (gameEvent.Type) {
-            case 'NEW_GAME':
-                console.log(gameEvent.Type + ' event', gameEvent);
+		switch (gameEvent.Type) {
+			case 'NEW_GAME':
+				console.log(gameEvent.Type + ' event', gameEvent);
 				this.allEvents.next(new GameEvent(GameEvent.GAME_START));
 				this.onGameStart.next(new GameEvent(GameEvent.GAME_START));
 				break;
 			case 'MATCH_METADATA':
-                console.log(gameEvent.Type + ' event', gameEvent);
+				console.log(gameEvent.Type + ' event', gameEvent);
 				this.allEvents.next(new GameEvent(GameEvent.MATCH_METADATA, gameEvent.Value));
 				break;
 			case 'LOCAL_PLAYER':
-                console.log(gameEvent.Type + ' event', gameEvent);
+				console.log(gameEvent.Type + ' event', gameEvent);
 				this.allEvents.next(new GameEvent(GameEvent.LOCAL_PLAYER, gameEvent.Value));
 				break;
 			case 'OPPONENT_PLAYER':
-                console.log(gameEvent.Type + ' event', gameEvent);
+				console.log(gameEvent.Type + ' event', gameEvent);
 				this.allEvents.next(new GameEvent(GameEvent.OPPONENT, gameEvent.Value));
 				break;
 			case 'GAME_END':
-                console.log(gameEvent.Type + ' event', gameEvent);
+				console.log(gameEvent.Type + ' event', gameEvent);
 				this.allEvents.next(new GameEvent(GameEvent.GAME_END, gameEvent.Value.Game, gameEvent.Value.ReplayXml));
 				break;
 			default:
@@ -126,34 +125,33 @@ export class GameEvents {
 
 	private async uploadLogsAndSendException(first, second) {
 		try {
-            // Get the HS Power.log file
-            const res = await this.ow.getRunningGameInfo();
-            const logsLocation = res.executionPath.split('Hearthstone.exe')[0] + 'Logs\\Power.log';
-            const logLines = await this.io.getFileContents(logsLocation);
-            const s3LogFileKey = await this.s3.postLogs(logLines);
-            console.log('uploaded logs to S3', s3LogFileKey, 'from location', logsLocation);
-            const fullLogsFromPlugin = second.indexOf('/#/') !== -1 ? second.split('/#/')[0] : second;
-            const pluginLogsFileKey = await this.s3.postLogs(fullLogsFromPlugin);
-            console.log('uploaded fullLogsFromPlugin to S3', pluginLogsFileKey);
-            const lastLogsReceivedInPlugin = second.indexOf('/#/') !== -1 ? second.split('/#/')[1] : second;
-            const firestoneLogs = await this.io.zipAppLogFolder('Firestone');
-            const firstoneLogsKey = await this.s3.postBinaryFile(firestoneLogs);
-            console.log('posted Firestone logs', firstoneLogsKey);
-            captureEvent({
-                message: 'Exception while running plugin: ' + first,
-                extra: {
-                    first: first,
-                    firstProcessedLine: fullLogsFromPlugin.indexOf('\n') !== -1 ? fullLogsFromPlugin.split('\n')[0] : fullLogsFromPlugin,
-                    lastLogsReceivedInPlugin: lastLogsReceivedInPlugin,
-                    logFileKey: s3LogFileKey,
-                    pluginLogsFileKey: pluginLogsFileKey,
-                    firestoneLogs: firstoneLogsKey,
-                    typeScriptLogLines: this.logLines,
-                }
-            });
-            console.log('uploaded event to sentry');
-		}
-		catch (e) {
+			// Get the HS Power.log file
+			const res = await this.ow.getRunningGameInfo();
+			const logsLocation = res.executionPath.split('Hearthstone.exe')[0] + 'Logs\\Power.log';
+			const logLines = await this.io.getFileContents(logsLocation);
+			const s3LogFileKey = await this.s3.postLogs(logLines);
+			console.log('uploaded logs to S3', s3LogFileKey, 'from location', logsLocation);
+			const fullLogsFromPlugin = second.indexOf('/#/') !== -1 ? second.split('/#/')[0] : second;
+			const pluginLogsFileKey = await this.s3.postLogs(fullLogsFromPlugin);
+			console.log('uploaded fullLogsFromPlugin to S3', pluginLogsFileKey);
+			const lastLogsReceivedInPlugin = second.indexOf('/#/') !== -1 ? second.split('/#/')[1] : second;
+			const firestoneLogs = await this.io.zipAppLogFolder('Firestone');
+			const firstoneLogsKey = await this.s3.postBinaryFile(firestoneLogs);
+			console.log('posted Firestone logs', firstoneLogsKey);
+			captureEvent({
+				message: 'Exception while running plugin: ' + first,
+				extra: {
+					first: first,
+					firstProcessedLine: fullLogsFromPlugin.indexOf('\n') !== -1 ? fullLogsFromPlugin.split('\n')[0] : fullLogsFromPlugin,
+					lastLogsReceivedInPlugin: lastLogsReceivedInPlugin,
+					logFileKey: s3LogFileKey,
+					pluginLogsFileKey: pluginLogsFileKey,
+					firestoneLogs: firstoneLogsKey,
+					typeScriptLogLines: this.logLines,
+				}
+			});
+			console.log('uploaded event to sentry');
+		} catch (e) {
 			console.error('Exception while uploading logs for troubleshooting', e);
 		}
 	}

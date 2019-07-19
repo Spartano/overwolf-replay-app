@@ -45,6 +45,7 @@
     "@types/lodash": "4.14.129",
     "@types/node": "11.13.5",
     "@types/webpack": "4.4.27",
+	"codelyzer": "5.1.0",
     "copy-webpack-plugin": "4.5.2",
     "css-loader": "2.1.1",
     "file-loader": "3.0.1",

@@ -11,13 +11,13 @@ export class GameRetrieveService {
 
 	async getGames(sessionId: string): Promise<Game[]> {
 		return new Promise<Game[]>((resolve) => {
-            if (!sessionId) {
-                sessionId = this.storageHelper.getLatestSessionId();
-            }
-            console.log('retrieving games from session', sessionId);
-            this.storageHelper.getSession(sessionId, (session) => {
-                resolve(session.games);
-            });
-        });
+			if (!sessionId) {
+				sessionId = this.storageHelper.getLatestSessionId();
+			}
+			console.log('retrieving games from session', sessionId);
+			this.storageHelper.getSession(sessionId, (session) => {
+				resolve(session.games);
+			});
+		});
 	}
 }
