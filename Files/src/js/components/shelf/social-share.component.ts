@@ -73,7 +73,6 @@ declare var ga: any;
 export class SocialShareComponent {
 
     url: string;
-    viewUrl: string;
 
     private _game: Game;
 
@@ -83,13 +82,12 @@ export class SocialShareComponent {
 		this.logger.debug('[header] setting game', value);
         this._game = value;
         if (value) {
-            this.discussUrl = `https://www.zerotoheroes.com/r/hearthstone/${value.reviewId}`;
             this.url = `http://replays.firestoneapp.com/?reviewId=${value.reviewId}`;
         }
     }
 
     viewOnline() {
         ga('send', 'event', 'share', 'zetoh');
-        window.open(this.viewUrl, '_blank');
+        window.open(this.url, '_blank');
     }
 }
