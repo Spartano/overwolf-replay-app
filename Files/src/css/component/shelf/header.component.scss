@@ -21,6 +21,17 @@
 .manastorm-header-subtitle {
     text-align: right;
     font-size: 14px;
-    margin-right: 10px;
+    margin-right: 5px;
     cursor: default;
+}
+
+.gs-icon {
+	--size: 40px;
+	padding: 5px;
+	--foreground: var(--background-main);
+}
+
+.gs-icon:hover {
+	--foreground: white;
+	background-color: $gray222;
 }

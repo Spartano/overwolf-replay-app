@@ -14,6 +14,12 @@ import { Game } from '../../models/game';
         <header class="manastorm-header">
             <h1 class="manastorm-header-title">{{title}}</h1>
             <social-share [game]="_game"></social-share>
+            <div class="gs-icon-divider"></div>
+            <button class="gs-icon btn-gs-icon menu">
+                <svg>
+                    <use xlink:href="/Files/assets/svg/ui-icons.svg#hamburger-menu" />
+                </svg>
+            </button>
         </header>
     `,
 	changeDetection: ChangeDetectionStrategy.OnPush
