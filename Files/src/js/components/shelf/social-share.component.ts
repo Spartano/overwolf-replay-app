@@ -9,6 +9,7 @@ declare var ga: any;
 	styleUrls: [
 		`../../../css/component/shelf/manastorm-themes.scss`,
 		`../../../css/component/shelf/manastorm-fonts.scss`,
+		`../../../css/component/shelf/tooltips.scss`,
 		`../../../css/global.scss`,
 		`../../../css/component/shelf/social-share.component.scss`,
 	],
@@ -16,19 +17,7 @@ declare var ga: any;
         <section class="manastorm-header-share-section">
             <p class="manastorm-header-subtitle">Share</p>
             <button
-                    class="gs-icon btn-gs-icon share-icon zero-to-heroes hint-tooltip-container"
-                    title="View your replay online"
-                    (click)="viewOnline()">
-                <svg>
-                    <use xlink:href="/Files/assets/svg/share-icons.svg#share-on-zero-to-heroes" />
-                </svg>
-                <div class="hint-tooltip hint-tooltip-bottom dark-theme">
-                    <span>View it online</span>
-                </div>
-            </button>
-            <div class="gs-icon-divider"></div>
-            <button
-                    class="gs-icon btn-gs-icon share-icon facebook"
+                    class="gs-icon btn-gs-icon share-icon facebook hint-tooltip-container"
                     shareButton="facebook"
                     [url]="url">
                 <svg>
@@ -54,17 +43,11 @@ declare var ga: any;
                     shareButton="reddit"
                     [url]="url">
                 <svg>
-                    <use xlink:href="/Files/assets/svg/share-icons.svg#share-on-reddit hint-tooltip-container" />
+                    <use xlink:href="/Files/assets/svg/share-icons.svg#share-on-reddit" />
                 </svg>
                 <div class="hint-tooltip hint-tooltip-bottom dark-theme">
                     <span>Share on Reddit</span>
                 </div>
-            </button>
-            <div class="gs-icon-divider"></div>
-            <button class="gs-icon btn-gs-icon menu">
-                <svg>
-                    <use xlink:href="/Files/assets/svg/ui-icons.svg#hamburger-menu" />
-                </svg>
             </button>
         </section>
     `,
@@ -84,10 +67,5 @@ export class SocialShareComponent {
 		if (value) {
 			this.url = `http://replays.firestoneapp.com/?reviewId=${value.reviewId}`;
 		}
-	}
-
-	viewOnline() {
-		ga('send', 'event', 'share', 'zetoh');
-		window.open(this.url, '_blank');
 	}
 }
