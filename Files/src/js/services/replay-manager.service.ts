@@ -43,6 +43,7 @@ export class ReplayManager {
 
 				game.replayBytes = bytes;
 				const res = await this.ow.getRunningGameInfo();
+				// const sessionId = await this.ow.getCurrentSessionId();
 				// console.log("getRunningGameInfo to save game: " + JSON.stringify(res));
 				if (res && res.sessionId) {
 					console.log('adding replay to storage');
@@ -51,6 +52,8 @@ export class ReplayManager {
 						this.events.broadcast(Events.REPLAY_SAVED, directory + fileName, JSON.stringify(game));
 					});
 				}
+				const res2 = await this.ow.getSessionInfo();
+				console.warn('retrieved session info', res2);
 			});
 		});
 	}

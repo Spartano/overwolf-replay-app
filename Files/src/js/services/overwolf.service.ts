@@ -69,6 +69,10 @@ export class OverwolfService {
 		overwolf.games.inputTracking.onKeyUp.addListener(callback);
 	}
 
+	public addSessionInfoChangedLisetner(callback) {
+		overwolf.egs.onSessionInfoChanged.addListener(callback);
+	}
+
 	public openUrlInOverwolfBrowser(url) {
 		overwolf.utils.openUrlInOverwolfBrowser(url);
 	}
@@ -159,6 +163,14 @@ export class OverwolfService {
 	public async getRunningGameInfo() {
 		return new Promise<any>((resolve) => {
 			overwolf.games.getRunningGameInfo((res: any) => {
+				resolve(res);
+			});
+		});
+	}
+
+	public async getSessionInfo() {
+		return new Promise<any>((resolve) => {
+			overwolf.egs.getSessionInfo((res: any) => {
 				resolve(res);
 			});
 		});

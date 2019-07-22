@@ -1,0 +1,50 @@
+.modal-wrapper {
+	position: absolute;
+	top: 35px;
+	// top: 130px;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	pointer-events: none;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	//   overflow: hidden;
+}
+
+.modal-inner {
+	position: relative;
+	background-color: var(--background-main);
+	pointer-events: auto;
+	
+	&:after {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		background: linear-gradient(to bottom, rgba(black, .2) 0, transparent 10px);
+		pointer-events: none;
+	}
+}
+
+.modal-wrapper {
+	transition: .25s;
+	transition-delay: .15s;
+}
+
+.modal-inner {
+	transform: translateY(-100%);
+	transition: .25s;
+	transition-delay: 0s;
+}
+
+.modal-wrapper.active {
+	transition-delay: 0s;
+	
+	.modal-inner {
+		transform: none;
+		transition-delay: .15s;
+	}
+}

@@ -14,9 +14,11 @@ export class OwCommunicationService {
 
 	private init() {
 		this.events.on(Events.REPLAY_CREATED).subscribe(event => this.sendMatchCountInfo());
+		this.ow.addSessionInfoChangedLisetner((data) => console.warn('session info changed', data));
 	}
 
 	private async sendMatchCountInfo() {
+		// const sessionId = await this.ow.getCurrentSessionId();
 		const res = await this.ow.getRunningGameInfo();
 		// console.log("getRunningGameInfo to send matchcount info: " + JSON.stringify(res));
 		if (res && res.sessionId) {

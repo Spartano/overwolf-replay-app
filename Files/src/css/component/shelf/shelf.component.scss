@@ -14,8 +14,14 @@ body {
     background-color: var(--background-main);
     display: flex;
     flex-direction: column;
+    position: relative;
     
     > *:not(.manastorm-player) {
         flex-shrink: 0;
     }
+}
+
+shelf-header {
+    z-index: 1;
+    position: relative;
 }
