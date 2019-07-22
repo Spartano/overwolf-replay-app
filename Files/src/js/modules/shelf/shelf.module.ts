@@ -30,6 +30,8 @@ import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { ShelfHeaderComponent } from '../../components/shelf/shelf-header.component';
 import { SocialShareComponent } from '../../components/shelf/social-share.component';
 import { SettingsMenuComponent } from '../../components/shelf/settings-menu.component';
+import { ShelfStoreService } from '../../services/shelf/store/shelf-store.service';
+import { ShelfApiListenerService } from '../../services/shelf/shelf-api-listener.service';
 
 console.log('version is ' + process.env.APP_VERSION);
 
@@ -91,6 +93,8 @@ export class SentryErrorHandler implements ErrorHandler {
 		OverwolfService,
 
 		ShelfApiService,
+		ShelfStoreService,
+		ShelfApiListenerService,
 	],
 })
 
