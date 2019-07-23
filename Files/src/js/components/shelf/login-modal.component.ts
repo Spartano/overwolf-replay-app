@@ -6,6 +6,7 @@ import { CreateAccountEvent } from '../../services/shelf/store/events/create-acc
 import { LoginModalInfo } from '../../models/shelf/login-modal-info';
 import { LoginField } from '../../models/shelf/login-field.type';
 import { LoginEvent } from '../../services/shelf/store/events/login-event';
+import { ResetPasswordEvent } from '../../services/shelf/store/events/reset-password-event';
 
 @Component({
 	selector: 'login-modal',
@@ -126,16 +127,20 @@ import { LoginEvent } from '../../services/shelf/store/events/login-event';
 									</legend>
 									<section class="log-in-form-section input-hint-tooltip-container">
 										<label class="log-in-form-label" for="username">Username or Email</label>
-										<input class="input-text" type="email" id="username" name="username" placeholder="">
+										<input class="input-text" tabindex="0"
+												id="loginId" name="loginId" placeholder=""
+												[ngClass]="{ 'invalid': errorField === 'loginId' }"
+												(blur)="resetErrorMessage('loginId')"
+												[(ngModel)]="loginId">
 										<div class="hint-tooltip hint-tooltip-bottom hint-tooltip-aligned-right dark-theme">
-											<span>Sorry, we couldn't find this account</span>
+											<span [innerHTML]="loginIdErrorMessage"></span>
 										</div>
 									</section>
-									<button class="btn btn-red">Submit</button>
+									<button class="btn btn-red" (click)="forgotPassword()">Submit</button>
 
 									<!-- display after submit -->
-									<p class="log-in-form-text-box hide">An email with instractions was sent to this
-											address. <button class="text-link">Send again</button></p>
+									<p class="log-in-form-text-box" *ngIf="passwordResetSent">An email with instractions was sent to this
+											address. <button class="text-link" (click)="forgotPassword()">Send again</button></p>
 								</fieldset>
 							</form>
 							<footer class="log-in-item-footer">
@@ -167,6 +172,7 @@ export class LoginModalComponent {
 	username: string;
 	passwordInput: string;
 	loginId: string;
+	passwordResetSent: boolean;
 
 	errorField: string;
 	emailErrorMessage = LoginModalComponent.EMAIL_DEFAULT_MESSAGE;
@@ -182,6 +188,7 @@ export class LoginModalComponent {
 		this.usernameErrorMessage = LoginModalComponent.USERNAME_DEFAULT_MESSAGE;
 		this.passwordErrorMessage = LoginModalComponent.PASSWORD_DEFAULT_MESSAGE;
 		this.loginIdErrorMessage = undefined;
+
 		this.errorField = value.errorField;
 		if (value.errorField) {
 			switch (value.errorField) {
@@ -199,6 +206,8 @@ export class LoginModalComponent {
 					break;
 			}
 		}
+
+		this.passwordResetSent = value.passwordResetSent;
 	}
 
 	resetErrorMessage(field: LoginField) {
@@ -239,6 +248,14 @@ export class LoginModalComponent {
 			password: this.passwordInput,
 		};
 		this.store.publishEvent(new LoginEvent(credentials));
+	}
+
+	forgotPassword() {
+		const credentials = {
+			loginId: this.loginId,
+		};
+		this.store.publishEvent(new ResetPasswordEvent(credentials));
+
 	}
 
 	@HostListener('wheel', ['$event'])

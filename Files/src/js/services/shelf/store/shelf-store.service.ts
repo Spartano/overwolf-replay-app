@@ -20,6 +20,8 @@ import { LoginEvent } from './events/login-event';
 import { LoginProcessor } from './processors/login-processor';
 import { LogoutEvent } from './events/logout-event';
 import { LogoutProcessor } from './processors/logout-processor';
+import { ResetPasswordEvent } from './events/reset-password-event';
+import { ResetPasswordProcessor } from './processors/reset-password-processor';
 
 @Injectable()
 export class ShelfStoreService {
@@ -81,6 +83,7 @@ export class ShelfStoreService {
 			CreateAccountEvent.eventName(), new CreateAccountProcessor(this.accountService, this.logger),
 			LoginEvent.eventName(), new LoginProcessor(this.accountService, this.logger),
 			LogoutEvent.eventName(), new LogoutProcessor(this.accountService, this.logger),
+			ResetPasswordEvent.eventName(), new ResetPasswordProcessor(this.accountService, this.logger),
 		);
 	}
 }

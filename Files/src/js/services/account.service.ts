@@ -151,6 +151,33 @@ export class AccountService {
 		}
 	}
 
+	public async resetPassword(username: string): Promise<{ error?: string, errorField?: LoginField }> {
+		const credentials = {
+			username: username
+		};
+		try {
+			const result = await this.http.post(FORGOTTEN_PASSWORD_URL, credentials, {observe: 'response'}).toPromise();
+			this.logger.debug('Reset password result', result);
+			return {};
+		} catch (e) {
+			this.logger.warn('Could not reste password', e);
+			let errorMessage = '';
+			let errorField: LoginField;
+			switch (e.status) {
+				case 404:
+				case 406:
+					errorMessage = 'We could\'t find any account with this identified';
+					errorField = 'loginId';
+					break;
+				default:
+					errorMessage = `An unknown error has happened. Please try again in a few minutes, \
+							or contact the support with: Code ${e.status}`;
+					this.logger.error('Unknown error while resetting password', e);
+			}
+			return { error: errorMessage, errorField: errorField };
+		}
+	}
+
 	public getLoggedInUser(): { loggedIn: boolean, username?: string } {
 		const authToken: string = this.localStorageService.get('auth-token');
 		const username: string = this.localStorageService.get('username');
