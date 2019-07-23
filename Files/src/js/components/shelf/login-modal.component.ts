@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input, HostListener } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, HostListener, ElementRef, AfterViewInit } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { ShelfStoreService } from '../../services/shelf/store/shelf-store.service';
 import { LoginModalToggleEvent } from '../../services/shelf/store/events/login-modal-toggle-event';
@@ -74,7 +74,9 @@ import { ResetPasswordEvent } from '../../services/shelf/store/events/reset-pass
 								</fieldset>
 							</form>
 							<footer class="log-in-item-footer">
-								<p class="log-in-item-footer-text">Already have an account? <a class="text-link" href="#log-in">Log in</a></p>
+								<p class="log-in-item-p log-in-item-footer-text">
+									Already have an account? <a class="text-link" href="#log-in">Log in</a>
+								</p>
 							</footer>
 						</li>
 
@@ -114,7 +116,9 @@ import { ResetPasswordEvent } from '../../services/shelf/store/events/reset-pass
 								</fieldset>
 							</form>
 							<footer class="log-in-item-footer">
-								<p class="log-in-item-footer-text">Don't have an account? <a class="text-link" href="#sign-up">Sign up</a></p>
+								<p class="log-in-item-p log-in-item-footer-text">
+									Don't have an account? <a class="text-link" href="#sign-up">Sign up</a>
+								</p>
 							</footer>
 						</li>
 
@@ -144,8 +148,17 @@ import { ResetPasswordEvent } from '../../services/shelf/store/events/reset-pass
 								</fieldset>
 							</form>
 							<footer class="log-in-item-footer">
-								<p class="log-in-item-footer-text">Don't have an account? <a class="text-link" href="#sign-up">Sign up</a></p>
+								<p class="log-in-item-p log-in-item-footer-text">
+									Don't have an account? <a class="text-link" href="#sign-up">Sign up</a>
+								</p>
 							</footer>
+						</li>
+
+						<!-- server error -->
+						<li id="server-error" class="log-in-item log-in-item-error">
+							<h1 class="log-in-item-h1">Something went wrong</h1>
+							<p class="log-in-item-p">An unknown error has happened. Please try again in a
+							few minutes, or contact the support with: Code {{errorCode}}</p>
 						</li>
 					</ul>
 				</main>
@@ -162,7 +175,7 @@ import { ResetPasswordEvent } from '../../services/shelf/store/events/reset-pass
     `,
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LoginModalComponent {
+export class LoginModalComponent implements AfterViewInit {
 
 	private static readonly EMAIL_DEFAULT_MESSAGE = 'This doesn\'t look<br>like a valid email';
 	private static readonly USERNAME_DEFAULT_MESSAGE = 'Username must be<br>at least 3 characters long';
@@ -178,9 +191,16 @@ export class LoginModalComponent {
 	emailErrorMessage = LoginModalComponent.EMAIL_DEFAULT_MESSAGE;
 	usernameErrorMessage = LoginModalComponent.USERNAME_DEFAULT_MESSAGE;
 	passwordErrorMessage = LoginModalComponent.PASSWORD_DEFAULT_MESSAGE;
-	loginIdErrorMessage = undefined;
+	loginIdErrorMessage: string = undefined;
+	errorCode: string = undefined;
 
-	constructor(private logger: NGXLogger, private store: ShelfStoreService) { }
+	private errorDiv;
+
+	constructor(private logger: NGXLogger, private store: ShelfStoreService, private el: ElementRef) { }
+
+	ngAfterViewInit() {
+		this.errorDiv = this.el.nativeElement.querySelector('#server-error');
+	}
 
 	@Input('info') set info(value: LoginModalInfo) {
 		this.logger.debug('[login-modal] setting info', value);
@@ -188,23 +208,28 @@ export class LoginModalComponent {
 		this.usernameErrorMessage = LoginModalComponent.USERNAME_DEFAULT_MESSAGE;
 		this.passwordErrorMessage = LoginModalComponent.PASSWORD_DEFAULT_MESSAGE;
 		this.loginIdErrorMessage = undefined;
+		this.errorCode = undefined;
 
 		this.errorField = value.errorField;
-		if (value.errorField) {
-			switch (value.errorField) {
-				case 'username':
-					this.usernameErrorMessage = value.errorMessage;
-					break;
-				case 'password':
-					this.passwordErrorMessage = value.errorMessage;
-					break;
-				case 'email':
-					this.emailErrorMessage = value.errorMessage;
-					break;
-				case 'loginId':
-					this.loginIdErrorMessage = value.errorMessage;
-					break;
-			}
+		switch (value.errorField) {
+			case 'username':
+				this.usernameErrorMessage = value.errorMessage;
+				break;
+			case 'password':
+				this.passwordErrorMessage = value.errorMessage;
+				break;
+			case 'email':
+				this.emailErrorMessage = value.errorMessage;
+				break;
+			case 'loginId':
+				this.loginIdErrorMessage = value.errorMessage;
+				break;
+			default:
+				if (value.errorMessage) {
+					this.logger.debug('No error field, showing generic error message', this.errorDiv);
+					this.errorCode = value.errorMessage;
+					this.errorDiv.scrollIntoView({behavior: 'smooth'});
+				}
 		}
 
 		this.passwordResetSent = value.passwordResetSent;

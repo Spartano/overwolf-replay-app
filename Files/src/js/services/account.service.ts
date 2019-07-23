@@ -74,6 +74,7 @@ export class AccountService {
 		this.http.post(accountUrl, {}, { headers: httpHeaders })
 			.subscribe((data) => { this.accountClaimHandler(data, false); }, (err) => { this.accountDisconnectErrorHandler(err, user.userId); });
 
+		this.localStorageService.remove('username', 'auth-token');
 		this.userPreferences.setAutoUpload(true);
 	}
 
@@ -111,8 +112,7 @@ export class AccountService {
 					}
 					break;
 				default:
-					errorMessage = `An unknown error has happened. Please try again in a few minutes, \
-							or contact the support with: Code ${e.status}`;
+					errorMessage = `createaccount_${e.status}_${e.error.message}`;
 					this.logger.error('Unknown error while creating account', e);
 			}
 			return { error: errorMessage, errorField: errorField };
@@ -143,8 +143,7 @@ export class AccountService {
 					errorField = 'loginId';
 					break;
 				default:
-					errorMessage = `An unknown error has happened. Please try again in a few minutes, \
-							or contact the support with: Code ${e.status}`;
+					errorMessage = `login_${e.status}_${e.error.message}`;
 					this.logger.error('Unknown error while logging in', e);
 			}
 			return { error: errorMessage, errorField: errorField };
@@ -170,8 +169,7 @@ export class AccountService {
 					errorField = 'loginId';
 					break;
 				default:
-					errorMessage = `An unknown error has happened. Please try again in a few minutes, \
-							or contact the support with: Code ${e.status}`;
+					errorMessage = e.status;
 					this.logger.error('Unknown error while resetting password', e);
 			}
 			return { error: errorMessage, errorField: errorField };
