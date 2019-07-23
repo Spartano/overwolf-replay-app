@@ -4,6 +4,8 @@ import { User } from '../../models/shelf/user';
 import { SettingsMenu } from '../../models/shelf/settings-menu';
 import { ShelfStoreService } from '../../services/shelf/store/shelf-store.service';
 import { SettingsMenuToggleEvent } from '../../services/shelf/store/events/settings-menu-toggle-event';
+import { LoginModalToggleEvent } from '../../services/shelf/store/events/login-modal-toggle-event';
+import { LogoutEvent } from '../../services/shelf/store/events/logout-event';
 
 @Component({
 	selector: 'settings-menu',
@@ -32,7 +34,7 @@ import { SettingsMenuToggleEvent } from '../../services/shelf/store/events/setti
 					</header>
 					<ul class="settings-menu-list">
 						<li *ngIf="loggedIn">
-							<a target="_blank" href="#">My profile</a>
+							<a target="_blank" href="{{profileUrl}}">My profile</a>
 						</li>
 						<li>
 							<a target="_blank" href="https://discord.gg/suKNN92">Help</a>
@@ -40,7 +42,7 @@ import { SettingsMenuToggleEvent } from '../../services/shelf/store/events/setti
 						<li>
 							<a target="_blank" href="https://discord.gg/suKNN92">Report a bug</a>
 						</li>
-						<li class="divided" *ngIf="loggedIn">
+						<li class="divided" *ngIf="loggedIn" (click)="logout()">
 							<a class="log-in-button">Log out</a>
 						</li>
 						<li class="divided" *ngIf="!loggedIn" (click)="login()">
@@ -57,6 +59,7 @@ export class SettingsMenuComponent {
 
 	loggedIn: boolean;
 	username: string;
+	profileUrl: string;
 	toggled: boolean;
 
 	constructor(private logger: NGXLogger, private store: ShelfStoreService) { }
@@ -65,6 +68,7 @@ export class SettingsMenuComponent {
 		this.logger.debug('[settings-menu] setting user', value);
 		this.loggedIn = value.loggedIn;
 		this.username = value.username;
+		this.profileUrl = value.username ? `http://www.zerotoheroes.com/u/${value.username}/hearthstone/profile` : undefined;
 	}
 
 	@Input('menu') set menu(value: SettingsMenu) {
@@ -77,6 +81,10 @@ export class SettingsMenuComponent {
 	}
 
 	login() {
-		this.logger.debug('[settings-menu] showing login window');
+		this.store.publishEvent(new LoginModalToggleEvent(true));
+	}
+
+	logout() {
+		this.store.publishEvent(new LogoutEvent());
 	}
 }

@@ -32,6 +32,7 @@ import { SocialShareComponent } from '../../components/shelf/social-share.compon
 import { SettingsMenuComponent } from '../../components/shelf/settings-menu.component';
 import { ShelfStoreService } from '../../services/shelf/store/shelf-store.service';
 import { ShelfApiListenerService } from '../../services/shelf/shelf-api-listener.service';
+import { LoginModalComponent } from '../../components/shelf/login-modal.component';
 
 console.log('version is ' + process.env.APP_VERSION);
 
@@ -71,6 +72,7 @@ export class SentryErrorHandler implements ErrorHandler {
 		ShelfHeaderComponent,
 		SocialShareComponent,
 		SettingsMenuComponent,
+		LoginModalComponent,
 	],
 	bootstrap: [
 		ShelfComponent,

@@ -11,6 +11,15 @@ import { GameSelectedEvent } from './events/game-selected-event';
 import { GameSelectedProcessor } from './processors/game-selected-processor';
 import { SettingsMenuToggleEvent } from './events/settings-menu-toggle-event';
 import { SettingsMenuToggleProcessor } from './processors/settings-menu-toggle-processor';
+import { LoginModalToggleEvent } from './events/login-modal-toggle-event';
+import { LoginModalToggleProcessor } from './processors/login-modal-toggle-processor';
+import { CreateAccountEvent } from './events/create-account-event';
+import { CreateAccountProcessor } from './processors/create-account-processor';
+import { AccountService } from '../../account.service';
+import { LoginEvent } from './events/login-event';
+import { LoginProcessor } from './processors/login-processor';
+import { LogoutEvent } from './events/logout-event';
+import { LogoutProcessor } from './processors/logout-processor';
 
 @Injectable()
 export class ShelfStoreService {
@@ -23,7 +32,9 @@ export class ShelfStoreService {
 	private eventQueue: ShelfStoreEvent[] = [];
 	private isProcessing = false;
 
-	constructor(private logger: NGXLogger) {
+	constructor(
+			private logger: NGXLogger,
+			private accountService: AccountService) {
 		this.processors = this.buildProcessors();
 		this.stateUpdater.subscribe((event: ShelfStoreEvent) => {
 			this.eventQueue.push(event);
@@ -63,9 +74,13 @@ export class ShelfStoreService {
 
 	private buildProcessors(): Map<String, Processor> {
 		return Map.of(
-			PopulateStoreEvent.eventName(), new PopulateStoreProcessor(),
+			PopulateStoreEvent.eventName(), new PopulateStoreProcessor(this.accountService),
 			GameSelectedEvent.eventName(), new GameSelectedProcessor(),
 			SettingsMenuToggleEvent.eventName(), new SettingsMenuToggleProcessor(),
+			LoginModalToggleEvent.eventName(), new LoginModalToggleProcessor(),
+			CreateAccountEvent.eventName(), new CreateAccountProcessor(this.accountService, this.logger),
+			LoginEvent.eventName(), new LoginProcessor(this.accountService, this.logger),
+			LogoutEvent.eventName(), new LogoutProcessor(this.accountService, this.logger),
 		);
 	}
 }

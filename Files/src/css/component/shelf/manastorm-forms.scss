@@ -1,0 +1,103 @@
+@import "manastorm-vars";
+
+form {
+	margin-block-end: 1em;
+}
+
+.log-in-form {
+	display: flex;
+	flex-direction: column;
+}
+
+.log-in-form-fieldset {
+	display: contents;
+}
+
+.log-in-item-h1 {
+	font-size: 18px;
+}
+
+.log-in-form-fieldset {
+	> * + * {
+		margin-top: 10px;
+	}
+	
+	> .log-in-form-legend + .log-in-form-section {
+		margin-top: 20px;
+	}
+	
+	.btn {
+		margin-top: 30px;
+	}
+	
+	.log-in-form-text-box {
+		margin-top: 20px;
+	}
+}
+
+.log-in-form-section {
+	display: flex;
+	flex-direction: column;
+}
+
+.log-in-form-label {
+	display: flex;
+	font-size: 12px;
+	text-transform: uppercase;
+	color: var(--foreground-third);
+	height: 20px;
+	align-items: center;
+	
+	.text-link {
+		text-transform: capitalize;
+		margin-left: auto;
+	}
+}
+
+.input-text {
+	font-size: 14px;
+	height: 30px;
+	padding: 0 8px;
+	color: var(--foreground-third);
+	outline: solid 1px var(--background-third);
+	outline-offset: -1px;
+	background-color: var(--main-color);
+	transition: .15s;
+	
+	&:hover,
+	&:focus {
+		
+		&, &:not(:valid) {
+			color: var(--foreground-secondary);
+			outline-color: currentcolor;
+		}
+	}
+}
+
+.input-text:not(:valid), .input-text.invalid {
+	outline-color: $red01;
+}
+
+.log-in-form-text-box {
+	text-align: center;
+	color: var(--foreground-third);
+	padding: 0 20px;
+}
+
+// tooltip visibility
+.input-hint-tooltip-container {
+	position: relative;
+	
+	.hint-tooltip {
+		--hhtt-arrow-indent: 12px;
+		opacity: 0;
+		z-index: 1;
+		transition: .15s;
+	}
+}
+
+.input-text:not(:valid):not(:focus), .input-text.invalid:not(:focus) {
+	+ .hint-tooltip {
+		opacity: 1;
+	}
+}

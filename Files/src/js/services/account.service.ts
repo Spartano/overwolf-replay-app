@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Response, Headers, RequestOptions } from '@angular/http';
 import { Subject } from 'rxjs';
 
 import { LocalStorageService } from 'angular-2-local-storage';
@@ -8,6 +7,12 @@ import { UserPreferences } from './user-preferences.service';
 import { Events } from './events.service';
 import { OverwolfService } from './overwolf.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { NGXLogger } from 'ngx-logger';
+import { LoginField } from '../models/shelf/login-field.type';
+
+const SIGN_IN_URL = 'https://www.zerotoheroes.com/api/login';
+const SIGN_UP_URL = 'https://www.zerotoheroes.com/api/users';
+const FORGOTTEN_PASSWORD_URL = 'https://www.zerotoheroes.com/api/users/password';
 
 const CLAIM_ACCOUNT_URL = 'https://www.zerotoheroes.com/api/claimAccount/overwolf/';
 const DISCONNECT_ACCOUNT_URL = 'https://www.zerotoheroes.com/api/disconnectAccount/overwolf/';
@@ -23,6 +28,7 @@ export class AccountService {
 			private http: HttpClient,
 			private events: Events,
 			private ow: OverwolfService,
+			private logger: NGXLogger,
 			private userPreferences: UserPreferences,
 			private localStorageService: LocalStorageService) {
 		this.init();
@@ -30,7 +36,7 @@ export class AccountService {
 
 	private async init() {
 		const user = await this.ow.getCurrentUser();
-		console.log('current user', user);
+		this.logger.debug('current user', user);
 		this.userId = user.userId || user.machineId || user.username;
 		if (this.userId) {
 			// this.accountClaimUrlSubject.next(CLAIM_ACCOUNT_URL + this.userId);
@@ -39,9 +45,9 @@ export class AccountService {
 	}
 
 	public async claimAccounts(authToken: string) {
-		console.log('claiming accounts');
+		this.logger.debug('claiming accounts');
 		const user = await this.ow.getCurrentUser();
-		console.log('claiming machineId account');
+		this.logger.debug('claiming machineId account');
 
 		const httpHeaders = new HttpHeaders().set('x-auth-token', authToken);
 
@@ -56,7 +62,7 @@ export class AccountService {
 
 	public async disconnect() {
 		const authToken: string = this.localStorageService.get('auth-token');
-		console.log('disconnecting accounts');
+		this.logger.debug('disconnecting accounts');
 		const user = await this.ow.getCurrentUser();
 		const httpHeaders = new HttpHeaders().set('x-auth-token', authToken);
 
@@ -71,6 +77,89 @@ export class AccountService {
 		this.userPreferences.setAutoUpload(true);
 	}
 
+	public async createAccount(credentials: { username: string, password: string, email: string }):
+			Promise<{ username?: string, error?: string, errorField?: LoginField }> {
+		const accountInfo = {
+			...credentials,
+			registerLocation: 'overwolf-egs'
+		};
+		try {
+			const result = await this.http.post(SIGN_UP_URL, accountInfo).toPromise();
+			this.logger.debug('Create account result', result);
+			const loginInfo = await this.login(credentials.username, credentials.password);
+			return { username: loginInfo.username };
+		} catch (e) {
+			this.logger.warn('Could not create account', e);
+			let errorMessage = '';
+			let errorField: LoginField;
+			switch (e.status) {
+				case 422:
+					const reason: string = e.error.reason;
+					switch (reason) {
+						case 'USERNAME':
+							errorMessage = 'This username is already in use.';
+							errorField = 'username';
+							break;
+						case 'EMAIL':
+							errorMessage = 'This email address is already in use.';
+							errorField = 'email';
+							break;
+						case 'PASSWORD':
+							errorMessage = 'Please provide a password to secure your account.';
+							errorField = 'password';
+							break;
+					}
+					break;
+				default:
+					errorMessage = `An unknown error has happened. Please try again in a few minutes, \
+							or contact the support with: Code ${e.status}`;
+					this.logger.error('Unknown error while creating account', e);
+			}
+			return { error: errorMessage, errorField: errorField };
+		}
+	}
+
+	public async login(username: string, password: string):
+			Promise<{ username?: string, error?: string, errorField?: LoginField }> {
+		const credentials = {
+			username: username,
+			password: password
+		};
+		try {
+			const result = await this.http.post(SIGN_IN_URL, credentials, {observe: 'response'}).toPromise();
+			this.logger.debug('Login result', result);
+			const authToken = result.headers.get('x-auth-token');
+			this.localStorageService.set('auth-token', authToken);
+			this.localStorageService.set('username', username);
+			await this.claimAccounts(authToken);
+			return { username: username };
+		} catch (e) {
+			this.logger.warn('Could not sign in', e);
+			let errorMessage = '';
+			let errorField: LoginField;
+			switch (e.status) {
+				case 401:
+					errorMessage = 'Invalid login/password combination';
+					errorField = 'loginId';
+					break;
+				default:
+					errorMessage = `An unknown error has happened. Please try again in a few minutes, \
+							or contact the support with: Code ${e.status}`;
+					this.logger.error('Unknown error while logging in', e);
+			}
+			return { error: errorMessage, errorField: errorField };
+		}
+	}
+
+	public getLoggedInUser(): { loggedIn: boolean, username?: string } {
+		const authToken: string = this.localStorageService.get('auth-token');
+		const username: string = this.localStorageService.get('username');
+		if (authToken && username) {
+			return { loggedIn: true, username: username};
+		}
+		return { loggedIn: false };
+	}
+
 	private checkAccountClaimedStatus() {
 		const claimed = this.localStorageService.get<boolean>('account-claimed');
 		if (claimed) {
@@ -79,28 +168,28 @@ export class AccountService {
 		}
 
 		const url = CLAIM_ACCOUNT_URL + this.userId;
-		console.log('checking account claimed status', url);
+		this.logger.debug('checking account claimed status', url);
 		this.http.get(url)
 			.subscribe(
 				(response) => {
-					console.log('account claimed', this.userId, response);
+					this.logger.debug('account claimed', this.userId, response);
 					this.setAccountClaimed(true);
 				},
 				(err) => {
-					console.log('account not claimed', this.userId, err);
+					this.logger.debug('account not claimed', this.userId, err);
 					this.accountClaimStatusSubject.next(false);
 				}
 			);
 	}
 
 	private accountClaimHandler(data, isClaimed: boolean) {
-		console.log('claim?', data, isClaimed);
+		this.logger.debug('claim?', data, isClaimed);
 		this.setAccountClaimed(isClaimed);
 	}
 
 	private accountClaimErrorHandler(err) {
 		if (err.status === 409) {
-			console.log('account already claimed', err);
+			this.logger.debug('account already claimed', err);
 			this.setAccountClaimed(true);
 			return;
 		}

@@ -1,13 +1,10 @@
 @import "manastorm-vars";
 
-body {
+.manastorm-shelf {
     font-size: 14px;
     font-family: "nice ampersand", "KlavikaWebBasicRegular";
     display: flex;
     flex-direction: column;
-}
-
-.manastorm-shelf {
     padding: 0 10px;
     padding-bottom: 20px;
     color: var(--foreground-main);

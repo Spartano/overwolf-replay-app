@@ -22,6 +22,7 @@ import { ShelfApiListenerService } from '../../services/shelf/shelf-api-listener
 					[user]="state.user"
 					[menu]="state.settingsMenu">
 			</shelf-header>
+			<login-modal *ngIf="state.loginModalInfo.toggled" [info]="state.loginModalInfo"></login-modal>
             <game-replay [game]="state.currentGame"></game-replay>
 		</div>
     `,

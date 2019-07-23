@@ -1,0 +1,37 @@
+@import "manastorm-vars";
+
+.gs-window-controls-group {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+.gs-window-control {
+	color: var(--wc-color, $dark-foreground-third);
+	background-color: transparent;
+	
+	&:hover,
+	&:active {
+		color: var(--wc-color-hover, $dark-foreground-main);
+		background-color: var(--wc-bg-color-hover, $dark-background-secondary);
+	}
+}
+
+// light theme
+.light-theme {
+	--wc-color: #{$light-foreground-third};
+	--wc-color-hover: #{$light-foreground-secondary};
+	--wc-bg-color-hover: #{$light-background-secondary};
+}
+
+// dark theme
+.dark-theme {
+	--wc-color: #{$dark-foreground-third};
+	--wc-color-hover: #{$dark-foreground-main};
+	--wc-bg-color-hover: #{$dark-background-secondary};
+}
+
+.gs-window-control-close {
+	--wc-color-hover: #{$gray222};
+	--wc-bg-color-hover: #{$red01};
+}
