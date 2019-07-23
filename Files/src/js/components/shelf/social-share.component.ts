@@ -17,7 +17,7 @@ declare var ga: any;
         <section class="manastorm-header-share-section">
             <p class="manastorm-header-subtitle">Share</p>
             <button
-                    class="gs-icon btn-gs-icon share-icon facebook hint-tooltip-container"
+                    class="gs-icon btn-gs-icon share-icon hint-tooltip-container"
                     shareButton="facebook"
                     [url]="url">
                 <svg>
@@ -28,7 +28,7 @@ declare var ga: any;
                 </div>
             </button>
             <button
-                    class="gs-icon btn-gs-icon share-icon twitter hint-tooltip-container"
+                    class="gs-icon btn-gs-icon share-icon hint-tooltip-container"
                     shareButton="twitter"
                     [url]="url">
                 <svg>
@@ -39,7 +39,7 @@ declare var ga: any;
                 </div>
             </button>
             <button
-                    class="gs-icon btn-gs-icon share-icon reddit hint-tooltip-container"
+                    class="gs-icon btn-gs-icon share-icon hint-tooltip-container"
                     shareButton="reddit"
                     [url]="url">
                 <svg>
