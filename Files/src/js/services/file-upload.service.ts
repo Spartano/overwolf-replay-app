@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import AWS from 'aws-sdk';
 import { Game } from '../models/game';
-import { GameStorageService } from './game-storage.service';
 import { OverwolfService } from './overwolf.service';
 import { HttpClient } from '@angular/common/http';
+import { GameDbService } from './game-db.service';
 
 const GET_REVIEW_ENDPOINT = 'https://nx16sjfatc.execute-api.us-west-2.amazonaws.com/prod/get-review/';
 const REVIEW_INIT_ENDPOINT = 'https://husxs4v58a.execute-api.us-west-2.amazonaws.com/prod';
@@ -16,7 +16,7 @@ export class FileUploadService {
 	constructor(
 			private http: HttpClient,
 			private ow: OverwolfService,
-			private gameStorageService: GameStorageService) { }
+			private gameDb: GameDbService) { }
 
 	public getRemoteReview(reviewId: string, callback: Function) {
 		console.log('getting remove review', reviewId);
@@ -110,11 +110,7 @@ export class FileUploadService {
 				} else {
 					console.log('Uploaded game', data2, reviewId);
 					game.reviewId = reviewId;
-					const gameInfo = await this.ow.getRunningGameInfo();
-					// console.log("getRunningGameInfo to update game: " + JSON.stringify(res));
-					if (gameInfo && gameInfo.sessionId) {
-						this.gameStorageService.updateGame(gameInfo.sessionId, game);
-					}
+					this.gameDb.save(game);
 					if (progressMonitor) {
 						progressMonitor.next('GAME_REPLAY_SENT');
 					}

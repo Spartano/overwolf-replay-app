@@ -1,37 +1,23 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Game } from '../../models/game';
 import { OverwolfService } from '../overwolf.service';
 import { BehaviorSubject } from 'rxjs';
-import { GameRetrieveService } from '../game-retrieve.service';
 import { NGXLogger } from 'ngx-logger';
+import { GameDbService } from '../game-db.service';
 
 @Injectable()
 export class ShelfApiService {
 
-	// public currentGame: EventEmitter<Game> = new EventEmitter<Game>();
 	public currentGame = new BehaviorSubject<Game>(null);
 
-	constructor(private ow: OverwolfService, private gameService: GameRetrieveService, private logger: NGXLogger) {
+	constructor(private ow: OverwolfService, private gameDb: GameDbService, private logger: NGXLogger) {
 		setTimeout(() => this.init(), 50);
 	}
 
 	private async init() {
 		// TODO: plug the GS listener here instead
 		this.logger.debug('[shelf-api] Getting extension info');
-		const callbackInfo = await this.ow.getExtensionInfo('nafihghfcpikebhfhdhljejkcifgbdahdhngepfb');
-		const info = callbackInfo.info;
-		this.loadGameFromSession((info && info.sessionId) || null);
+		const anyGame: Game = await this.gameDb.getOneGame();
+		this.currentGame.next(anyGame);
 	}
-
-	private async loadGameFromSession(sessionId: string) {
-		this.logger.debug('Loading games from session', sessionId);
-		const games = await this.gameService.getGames(sessionId);
-		this.logger.debug('Loaded games', games);
-		if (games) {
-			this.currentGame.next(games.reverse()[0]);
-		} else {
-			this.logger.warn('Could not find any game in session', sessionId);
-		}
-	}
-
 }

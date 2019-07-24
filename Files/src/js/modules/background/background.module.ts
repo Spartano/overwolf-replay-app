@@ -9,10 +9,8 @@ import { LZStringModule, LZStringService } from 'ng-lz-string';
 
 import { AppComponent } from '../../components/app.component';
 
-import { GameStorageService } from '../../services/game-storage.service';
 import { OwCommunicationService	} from '../../services/ow-communcation.service';
 import { LogListenerService } from '../../services/log-listener.service';
-import { StorageHelperService } from '../../services/storage-helper.service';
 import { GameParserService } from '../../services/game-parser.service';
 import { ReplayManager } from '../../services/replay-manager.service';
 import { GameHelper } from '../../services/gameparsing/game-helper.service';
@@ -32,6 +30,8 @@ import { GameEventsPluginService } from '../../services/plugins/game-events-plug
 import { OverwolfService } from '../../services/overwolf.service';
 import { NgxLoggerLevel, LoggerModule } from 'ngx-logger';
 import { AllCardsService } from '../../services/all-cards.service';
+import { GameDbService } from '../../services/game-db.service';
+import { MemoryInspectionService } from '../../services/plugins/memory-inspection.service';
 
 console.log('version is ' + process.env.APP_VERSION);
 console.log('env is', process.env.NODE_ENV);
@@ -72,18 +72,18 @@ export class SentryErrorHandler implements ErrorHandler {
 		{ provide: ErrorHandler, useClass: SentryErrorHandler },
 
 		GameParserService,
-		GameStorageService,
+		GameDbService,
 		LogListenerService,
 		UserPreferences,
 		LocalStorageService,
 		ReplayManager,
 		LogUtils,
+		MemoryInspectionService,
 		Events,
 		ReplayUploader,
 		FileUploadService,
 		LogRegisterService,
 		DeckParserService,
-		StorageHelperService,
 		GameHelper,
 		SimpleIOService,
 		DebugService,

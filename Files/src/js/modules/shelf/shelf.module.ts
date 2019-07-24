@@ -11,13 +11,10 @@ import { LZStringModule, LZStringService } from 'ng-lz-string';
 
 import { ShelfComponent } from '../../components/shelf/shelf.component';
 
-import { GameRetrieveService } from '../../services/game-retrieve.service';
-import { StorageHelperService } from '../../services/storage-helper.service';
 import { GameParserService } from '../../services/game-parser.service';
 import { AccountService } from '../../services/account.service';
 import { UserPreferences } from '../../services/user-preferences.service';
 import { FileUploadService } from '../../services/file-upload.service';
-import { GameStorageService } from '../../services/game-storage.service';
 import { GameUploadService } from '../../services/game-upload.service';
 import { DebugService } from '../../services/debug.service';
 import { Events } from '../../services/events.service';
@@ -33,6 +30,7 @@ import { SettingsMenuComponent } from '../../components/shelf/settings-menu.comp
 import { ShelfStoreService } from '../../services/shelf/store/shelf-store.service';
 import { ShelfApiListenerService } from '../../services/shelf/shelf-api-listener.service';
 import { LoginModalComponent } from '../../components/shelf/login-modal.component';
+import { GameDbService } from '../../services/game-db.service';
 
 console.log('version is ' + process.env.APP_VERSION);
 
@@ -78,16 +76,14 @@ export class SentryErrorHandler implements ErrorHandler {
 		ShelfComponent,
 	],
 	providers: [
-		GameRetrieveService,
+		GameDbService,
 		GameParserService,
 		UserPreferences,
 		LocalStorageService,
 		AccountService,
 		FileUploadService,
-		GameStorageService,
 		Events,
 		GameHelper,
-		StorageHelperService,
 		GameUploadService,
 		DebugService,
 		SharingService,

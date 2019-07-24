@@ -8,6 +8,7 @@ import { GameParserService } from '../game-parser.service';
 import { GameEvents } from '../game-events.service';
 import { Events } from '../events.service';
 import { DeckParserService } from '../deck/deck-parser.service';
+import { NGXLogger } from 'ngx-logger';
 
 @Injectable()
 export class GameMonitorService {
@@ -21,18 +22,24 @@ export class GameMonitorService {
 		'tavernbrawl',
 	];
 
+	private currentGameId: string;
+
 	constructor(
 			private gameHelper: GameHelper,
 			private gameParserService: GameParserService,
 			private gameEvents: GameEvents,
+			private logger: NGXLogger,
 			private deckService: DeckParserService,
 			private events: Events) {
-		console.log('starting debug service');
 		this.gameEvents.allEvents.subscribe(
 			(gameEvent: GameEvent) => {
 				this.handleEvent(gameEvent);
 			}
 		);
+		this.events.on(Events.NEW_GAME_ID).subscribe(event => {
+			this.logger.debug('Received new game id event', event);
+			this.currentGameId = event.data[0];
+		});
 	}
 
 	private handleEvent(gameEvent: GameEvent) {
@@ -44,7 +51,8 @@ export class GameMonitorService {
 				if (!replayXml) {
 					console.warn('could not convert replay');
 				}
-				const game: Game = Game.createEmptyGame();
+				this.logger.debug('Creating new game', this.currentGameId);
+				const game: Game = Game.createEmptyGame(this.currentGameId);
 				game.gameFormat = this.toFormatType(gameResult.FormatType);
 				game.gameMode = this.toGameType(gameResult.GameType);
 				if (this.supportedModesDeckRetrieve.indexOf(game.gameMode) !== -1) {

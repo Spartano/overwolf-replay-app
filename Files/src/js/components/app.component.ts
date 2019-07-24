@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 
 import { LogListenerService } from '../services/log-listener.service';
-import { GameStorageService } from '../services/game-storage.service';
 import { GameMonitorService } from '../services/gameparsing/game-monitor.service';
 import { OwCommunicationService } from '../services/ow-communcation.service';
 import { ReplayManager } from '../services/replay-manager.service';
@@ -12,6 +11,8 @@ import { DebugService } from '../services/debug.service';
 import { Game } from '../models/game';
 import { LogRegisterService } from '../services/log-register.service';
 import { OverwolfService } from '../services/overwolf.service';
+import { GameDbService } from '../services/game-db.service';
+import { MemoryInspectionService } from '../services/plugins/memory-inspection.service';
 
 @Component({
 	selector: 'zh-app',
@@ -30,7 +31,8 @@ export class AppComponent {
 			private logListenerService: LogListenerService,
 			private gameMonitorService: GameMonitorService,
 			private logRegister: LogRegisterService,
-			private gameStorageService: GameStorageService,
+			private init_gameDb: GameDbService,
+			private init_memory: MemoryInspectionService,
 			private ow: OverwolfService,
 			private owCommunicationService: OwCommunicationService,
 			private events: Events,

@@ -13,6 +13,7 @@ export class Events {
 	public static readonly START_LOG_FILE_DETECTION = 'start-log-file-detection';
 	public static readonly STREAMING_LOG_FILE = 'streaming-log-file';
 
+	public static NEW_GAME_ID = 'new-game-id';
 	public static REPLAY_SAVED = 'replay-saved';
 	public static REPLAY_CREATED = 'replay-created';
 

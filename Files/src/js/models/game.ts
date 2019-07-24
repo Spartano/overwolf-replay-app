@@ -1,5 +1,3 @@
-declare var LZString: any;
-
 export class Game {
 	id: string;
 	reviewId: string;
@@ -22,15 +20,13 @@ export class Game {
 	opponent: Player = new Player();
 
 	deckstring: string;
-	public replay: string;
+	replay: string;
 	path: string;
 	replayBytes: any[];
 
-	private _url: string;
-
-	static createEmptyGame(): Game {
+	static createEmptyGame(id: string): Game {
 		const game = new Game();
-		game.id = '' + Date.now();
+		game.id = id;
 		return game;
 	}
 

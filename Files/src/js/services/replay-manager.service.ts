@@ -4,8 +4,8 @@ import { Game } from '../models/game';
 import { Events } from './events.service';
 import { SimpleIOService } from './plugins/simple-io.service';
 import { GameHelper } from './gameparsing/game-helper.service';
-import { GameStorageService } from './game-storage.service';
 import { OverwolfService } from './overwolf.service';
+import { GameDbService } from './game-db.service';
 
 @Injectable()
 export class ReplayManager {
@@ -13,8 +13,7 @@ export class ReplayManager {
 	constructor(
 			private events: Events,
 			private gameHelper: GameHelper,
-			private gameStorage: GameStorageService,
-			private ow: OverwolfService,
+			private gameDb: GameDbService,
 			private plugin: SimpleIOService) {
 		console.log('starting replay-manager service');
 	}
@@ -39,21 +38,9 @@ export class ReplayManager {
 				for (let i = 0; i < split.length; i++) {
 					bytes[i] = parseInt(split[i]);
 				}
-				// console.log('built byte array', bytes);
-
 				game.replayBytes = bytes;
-				const res = await this.ow.getRunningGameInfo();
-				// const sessionId = await this.ow.getCurrentSessionId();
-				// console.log("getRunningGameInfo to save game: " + JSON.stringify(res));
-				if (res && res.sessionId) {
-					console.log('adding replay to storage');
-					this.gameStorage.addGame(res.sessionId, game, (session) => {
-						console.log('replay saved', session.id, session.games.length);
-						this.events.broadcast(Events.REPLAY_SAVED, directory + fileName, JSON.stringify(game));
-					});
-				}
-				const res2 = await this.ow.getSessionInfo();
-				console.warn('retrieved session info', res2);
+				await this.gameDb.save(game);
+				this.events.broadcast(Events.REPLAY_SAVED, directory + fileName, JSON.stringify(game));
 			});
 		});
 	}
