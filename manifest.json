@@ -4,7 +4,7 @@
 	"meta":{
 		"name":"Manastorm - a Hearthstone replay viewer",
 		"author":"Sébastien Tromp",
-		"version":"1.9.12",
+		"version":"1.9.13",
 		"minimum-overwolf-version":"0.102.213.0",
 		"access-name": "com.zerotoheroes.overwolf.hs",
 		"description":"A replay viewer to rewatch your Hearthstone games in a format that makes play analysis easier",
