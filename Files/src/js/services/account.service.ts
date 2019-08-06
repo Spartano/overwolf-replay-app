@@ -19,18 +19,18 @@ const DISCONNECT_ACCOUNT_URL = 'https://www.zerotoheroes.com/api/disconnectAccou
 
 @Injectable()
 export class AccountService {
-
 	accountClaimStatusSubject: Subject<boolean> = new Subject<boolean>();
 
 	private userId: string;
 
 	constructor(
-			private http: HttpClient,
-			private events: Events,
-			private ow: OverwolfService,
-			private logger: NGXLogger,
-			private userPreferences: UserPreferences,
-			private localStorageService: LocalStorageService) {
+		private http: HttpClient,
+		private events: Events,
+		private ow: OverwolfService,
+		private logger: NGXLogger,
+		private userPreferences: UserPreferences,
+		private localStorageService: LocalStorageService,
+	) {
 		this.init();
 	}
 
@@ -52,12 +52,24 @@ export class AccountService {
 		const httpHeaders = new HttpHeaders().set('x-auth-token', authToken);
 
 		const machineIdUrl = CLAIM_ACCOUNT_URL + user.machineId;
-		this.http.post(machineIdUrl, {}, { headers: httpHeaders })
-			.subscribe((data) => { this.accountClaimHandler(data, true); }, (err) => { this.accountClaimErrorHandler(err); });
+		this.http.post(machineIdUrl, {}, { headers: httpHeaders }).subscribe(
+			data => {
+				this.accountClaimHandler(data, true);
+			},
+			err => {
+				this.accountClaimErrorHandler(err);
+			},
+		);
 
 		const accountUrl = CLAIM_ACCOUNT_URL + user.userId;
-		this.http.post(accountUrl, {}, { headers: httpHeaders })
-			.subscribe((data) => { this.accountClaimHandler(data, true); }, (err) => { this.accountClaimErrorHandler(err); });
+		this.http.post(accountUrl, {}, { headers: httpHeaders }).subscribe(
+			data => {
+				this.accountClaimHandler(data, true);
+			},
+			err => {
+				this.accountClaimErrorHandler(err);
+			},
+		);
 	}
 
 	public async disconnect() {
@@ -67,22 +79,37 @@ export class AccountService {
 		const httpHeaders = new HttpHeaders().set('x-auth-token', authToken);
 
 		const machineIdUrl = DISCONNECT_ACCOUNT_URL + user.machineId;
-		this.http.post(machineIdUrl, {}, { headers: httpHeaders })
-			.subscribe((data) => { this.accountClaimHandler(data, false); }, (err) => { this.accountDisconnectErrorHandler(err, user.machineId); });
+		this.http.post(machineIdUrl, {}, { headers: httpHeaders }).subscribe(
+			data => {
+				this.accountClaimHandler(data, false);
+			},
+			err => {
+				this.accountDisconnectErrorHandler(err, user.machineId);
+			},
+		);
 
 		const accountUrl = DISCONNECT_ACCOUNT_URL + user.userId;
-		this.http.post(accountUrl, {}, { headers: httpHeaders })
-			.subscribe((data) => { this.accountClaimHandler(data, false); }, (err) => { this.accountDisconnectErrorHandler(err, user.userId); });
+		this.http.post(accountUrl, {}, { headers: httpHeaders }).subscribe(
+			data => {
+				this.accountClaimHandler(data, false);
+			},
+			err => {
+				this.accountDisconnectErrorHandler(err, user.userId);
+			},
+		);
 
 		this.localStorageService.remove('username', 'auth-token');
 		this.userPreferences.setAutoUpload(true);
 	}
 
-	public async createAccount(credentials: { username: string, password: string, email: string }):
-			Promise<{ username?: string, error?: string, errorField?: LoginField }> {
+	public async createAccount(credentials: {
+		username: string;
+		password: string;
+		email: string;
+	}): Promise<{ username?: string; error?: string; errorField?: LoginField }> {
 		const accountInfo = {
 			...credentials,
-			registerLocation: 'overwolf-egs'
+			registerLocation: 'overwolf-egs',
 		};
 		try {
 			const result = await this.http.post(SIGN_UP_URL, accountInfo).toPromise();
@@ -119,14 +146,13 @@ export class AccountService {
 		}
 	}
 
-	public async login(username: string, password: string):
-			Promise<{ username?: string, error?: string, errorField?: LoginField }> {
+	public async login(username: string, password: string): Promise<{ username?: string; error?: string; errorField?: LoginField }> {
 		const credentials = {
 			username: username,
-			password: password
+			password: password,
 		};
 		try {
-			const result = await this.http.post(SIGN_IN_URL, credentials, {observe: 'response'}).toPromise();
+			const result = await this.http.post(SIGN_IN_URL, credentials, { observe: 'response' }).toPromise();
 			this.logger.debug('Login result', result);
 			const authToken = result.headers.get('x-auth-token');
 			this.localStorageService.set('auth-token', authToken);
@@ -150,12 +176,12 @@ export class AccountService {
 		}
 	}
 
-	public async resetPassword(username: string): Promise<{ error?: string, errorField?: LoginField }> {
+	public async resetPassword(username: string): Promise<{ error?: string; errorField?: LoginField }> {
 		const credentials = {
-			username: username
+			username: username,
 		};
 		try {
-			const result = await this.http.post(FORGOTTEN_PASSWORD_URL, credentials, {observe: 'response'}).toPromise();
+			const result = await this.http.post(FORGOTTEN_PASSWORD_URL, credentials, { observe: 'response' }).toPromise();
 			this.logger.debug('Reset password result', result);
 			return {};
 		} catch (e) {
@@ -165,7 +191,7 @@ export class AccountService {
 			switch (e.status) {
 				case 404:
 				case 406:
-					errorMessage = 'We could\'t find any account with this identified';
+					errorMessage = "We could't find any account with this identified";
 					errorField = 'loginId';
 					break;
 				default:
@@ -176,11 +202,11 @@ export class AccountService {
 		}
 	}
 
-	public getLoggedInUser(): { loggedIn: boolean, username?: string } {
+	public getLoggedInUser(): { loggedIn: boolean; username?: string } {
 		const authToken: string = this.localStorageService.get('auth-token');
 		const username: string = this.localStorageService.get('username');
 		if (authToken && username) {
-			return { loggedIn: true, username: username};
+			return { loggedIn: true, username: username };
 		}
 		return { loggedIn: false };
 	}
@@ -194,17 +220,16 @@ export class AccountService {
 
 		const url = CLAIM_ACCOUNT_URL + this.userId;
 		this.logger.debug('checking account claimed status', url);
-		this.http.get(url)
-			.subscribe(
-				(response) => {
-					this.logger.debug('account claimed', this.userId, response);
-					this.setAccountClaimed(true);
-				},
-				(err) => {
-					this.logger.debug('account not claimed', this.userId, err);
-					this.accountClaimStatusSubject.next(false);
-				}
-			);
+		this.http.get(url).subscribe(
+			response => {
+				this.logger.debug('account claimed', this.userId, response);
+				this.setAccountClaimed(true);
+			},
+			err => {
+				this.logger.debug('account not claimed', this.userId, err);
+				this.accountClaimStatusSubject.next(false);
+			},
+		);
 	}
 
 	private accountClaimHandler(data, isClaimed: boolean) {

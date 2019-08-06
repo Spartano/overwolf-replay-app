@@ -1,8 +1,7 @@
 import { ShelfStoreEvent } from '../shelf-store-event';
 
 export class LogoutEvent implements ShelfStoreEvent {
-
-	constructor() { }
+	constructor() {}
 
 	public static eventName(): string {
 		return 'LogoutEvent';

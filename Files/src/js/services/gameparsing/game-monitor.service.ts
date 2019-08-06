@@ -12,30 +12,21 @@ import { NGXLogger } from 'ngx-logger';
 
 @Injectable()
 export class GameMonitorService {
-
-	private readonly supportedModesDeckRetrieve = [
-		'practice',
-		'friendly',
-		'ranked',
-		'casual',
-		'arena',
-		'tavernbrawl',
-	];
+	private readonly supportedModesDeckRetrieve = ['practice', 'friendly', 'ranked', 'casual', 'arena', 'tavernbrawl'];
 
 	private currentGameId: string;
 
 	constructor(
-			private gameHelper: GameHelper,
-			private gameParserService: GameParserService,
-			private gameEvents: GameEvents,
-			private logger: NGXLogger,
-			private deckService: DeckParserService,
-			private events: Events) {
-		this.gameEvents.allEvents.subscribe(
-			(gameEvent: GameEvent) => {
-				this.handleEvent(gameEvent);
-			}
-		);
+		private gameHelper: GameHelper,
+		private gameParserService: GameParserService,
+		private gameEvents: GameEvents,
+		private logger: NGXLogger,
+		private deckService: DeckParserService,
+		private events: Events,
+	) {
+		this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {
+			this.handleEvent(gameEvent);
+		});
 		this.events.on(Events.NEW_GAME_ID).subscribe(event => {
 			this.logger.debug('Received new game id event', event);
 			this.currentGameId = event.data[0];

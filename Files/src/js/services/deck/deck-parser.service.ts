@@ -6,7 +6,6 @@ import { GameEvent } from '../../models/game-event';
 
 @Injectable()
 export class DeckParserService {
-
 	private readonly deckContentsRegex = new RegExp('I \\d*:\\d*:\\d*.\\d* Deck Contents Received(.*)');
 	private readonly deckEditOverRegex = new RegExp('I \\d*:\\d*:\\d*.\\d* Finished Editing Deck(.*)');
 
@@ -42,7 +41,7 @@ export class DeckParserService {
 			return;
 		}
 
-		if (this.lastDeckTimestamp && (Date.now() - this.lastDeckTimestamp) < 1000 && this.currentBlock !== 'DECK_SLECTED') {
+		if (this.lastDeckTimestamp && Date.now() - this.lastDeckTimestamp < 1000 && this.currentBlock !== 'DECK_SLECTED') {
 			// console.log('[decks] Doesnt look like a deck selection, exiting block', this.currentBlock);
 			this.reset();
 			return;
@@ -53,7 +52,7 @@ export class DeckParserService {
 		if (match) {
 			console.log('[decks] matching log line for deck name', data);
 			this.currentDeck = {
-				name: match[1]
+				name: match[1],
 			};
 			console.log('[decks] deck init', this.currentDeck);
 			return;

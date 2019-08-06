@@ -6,11 +6,7 @@ import { GameSelectedEvent } from './store/events/game-selected-event';
 
 @Injectable()
 export class ShelfApiListenerService {
-
-	constructor(
-			private logger: NGXLogger,
-			private shelfApi: ShelfApiService,
-			private store: ShelfStoreService) {
+	constructor(private logger: NGXLogger, private shelfApi: ShelfApiService, private store: ShelfStoreService) {
 		this.shelfApi.currentGame.subscribe(game => {
 			this.logger.info('[shelf-api-listener] Updating current game', game);
 			this.store.publishEvent(new GameSelectedEvent(game));

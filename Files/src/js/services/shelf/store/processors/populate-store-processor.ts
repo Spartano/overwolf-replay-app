@@ -5,8 +5,7 @@ import { AccountService } from '../../../account.service';
 import { User } from '../../../../models/shelf/user';
 
 export class PopulateStoreProcessor implements Processor {
-
-	constructor(private account: AccountService) { }
+	constructor(private account: AccountService) {}
 
 	public async process(event: PopulateStoreEvent, currentState: ShelfState): Promise<ShelfState> {
 		// Check login status
@@ -14,8 +13,8 @@ export class PopulateStoreProcessor implements Processor {
 		return Object.assign(new ShelfState(), currentState, {
 			user: Object.assign(new User(), currentState.user, {
 				loggedIn: loggedInUser.loggedIn,
-				username: loggedInUser.username
-			} as User)
+				username: loggedInUser.username,
+			} as User),
 		} as ShelfState);
 	}
 }

@@ -9,7 +9,6 @@ import { OverwolfService } from './overwolf.service';
 
 @Injectable()
 export class GameEvents {
-
 	public allEvents = new EventEmitter<GameEvent>();
 	public newLogLineEvents = new EventEmitter<GameEvent>();
 	public onGameStart = new EventEmitter<GameEvent>();
@@ -21,7 +20,8 @@ export class GameEvents {
 		private gameEventsPlugin: GameEventsPluginService,
 		private io: SimpleIOService,
 		private ow: OverwolfService,
-		private s3: S3FileUploadService) {
+		private s3: S3FileUploadService,
+	) {
 		this.init();
 	}
 
@@ -37,7 +37,7 @@ export class GameEvents {
 				this.uploadLogsAndSendException(first, second);
 			}
 		});
-		plugin.onGameEvent.addListener((gameEvent) => {
+		plugin.onGameEvent.addListener(gameEvent => {
 			this.dispatchGameEvent(JSON.parse(gameEvent));
 		});
 		plugin.initRealtimeLogConversion(() => {
@@ -51,7 +51,7 @@ export class GameEvents {
 			this.processingLines = true;
 			let toProcess: string[] = [];
 			let shouldDebug = false;
-			if (this.logLines.some((data) => data.indexOf('CREATE_GAME') !== -1)) {
+			if (this.logLines.some(data => data.indexOf('CREATE_GAME') !== -1)) {
 				console.log('[game-events] preparing log lines that include game creation to feed to the plugin', this.logLines);
 				shouldDebug = true;
 			}
@@ -69,8 +69,7 @@ export class GameEvents {
 			} else {
 				this.processingLines = false;
 			}
-		},
-		500);
+		}, 500);
 	}
 
 	public dispatchGameEvent(gameEvent) {
@@ -97,7 +96,7 @@ export class GameEvents {
 				this.allEvents.next(new GameEvent(GameEvent.GAME_END, gameEvent.Value.Game, gameEvent.Value.ReplayXml));
 				break;
 			default:
-				// console.log('unsupported game event', gameEvent);
+			// console.log('unsupported game event', gameEvent);
 		}
 	}
 
@@ -148,7 +147,7 @@ export class GameEvents {
 					pluginLogsFileKey: pluginLogsFileKey,
 					firestoneLogs: firstoneLogsKey,
 					typeScriptLogLines: this.logLines,
-				}
+				},
 			});
 			console.log('uploaded event to sentry');
 		} catch (e) {

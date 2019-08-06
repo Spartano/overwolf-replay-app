@@ -22,22 +22,22 @@ import { MemoryInspectionService } from '../services/plugins/memory-inspection.s
 	`,
 })
 export class AppComponent {
-
 	retriesForEgsLeft = 10;
 	retryForEgsDelay = 2000;
 
 	constructor(
-			private debugService: DebugService,
-			private logListenerService: LogListenerService,
-			private gameMonitorService: GameMonitorService,
-			private logRegister: LogRegisterService,
-			private init_gameDb: GameDbService,
-			private init_memory: MemoryInspectionService,
-			private ow: OverwolfService,
-			private owCommunicationService: OwCommunicationService,
-			private events: Events,
-			private replayManager: ReplayManager,
-			private replayUploader: ReplayUploader) {
+		private debugService: DebugService,
+		private logListenerService: LogListenerService,
+		private gameMonitorService: GameMonitorService,
+		private logRegister: LogRegisterService,
+		private init_gameDb: GameDbService,
+		private init_memory: MemoryInspectionService,
+		private ow: OverwolfService,
+		private owCommunicationService: OwCommunicationService,
+		private events: Events,
+		private replayManager: ReplayManager,
+		private replayUploader: ReplayUploader,
+	) {
 		console.log('init started');
 		this.init();
 	}
@@ -48,12 +48,11 @@ export class AppComponent {
 				this.closeApp();
 			}
 		});
-		this.events.on(Events.REPLAY_CREATED)
-			.subscribe(event => {
-				console.log('received game from event', event);
-				const game: Game = JSON.parse(event.data[0]);
-				this.replayManager.saveLocally(game);
-			});
+		this.events.on(Events.REPLAY_CREATED).subscribe(event => {
+			console.log('received game from event', event);
+			const game: Game = JSON.parse(event.data[0]);
+			this.replayManager.saveLocally(game);
+		});
 		this.requestDisplayOnShelf();
 	}
 
@@ -75,12 +74,15 @@ export class AppComponent {
 		if (egsEnabledResult.status === 'success' && egsEnabledResult.isEnabled) {
 			const displayRequestResult = await this.ow.requestGSDisplay();
 			if (displayRequestResult.status === 'success') {
-				console.log('request to display is a success, OW should call shelf.html '
-						+ 'which will trigger status listening process updates on its side', this.retriesForEgsLeft);
+				console.log(
+					'request to display is a success, OW should call shelf.html ' +
+						'which will trigger status listening process updates on its side',
+					this.retriesForEgsLeft,
+				);
 			} else {
 				const extra = {
 					status: displayRequestResult.status,
-					result: displayRequestResult
+					result: displayRequestResult,
 				};
 				console.log('Request to display shelf failed', { extra: extra });
 				this.retryEgs(() => console.log('Request to display shelf failed', { extra: extra }));
@@ -89,7 +91,7 @@ export class AppComponent {
 			const extra = {
 				status: egsEnabledResult.status,
 				isEnabled: egsEnabledResult.isEnabled,
-				result: egsEnabledResult
+				result: egsEnabledResult,
 			};
 			console.log('EGS is not enabled', { extra: extra });
 			this.retryEgs(() => console.log('EGS is not enabled', { extra: extra }));
@@ -97,7 +99,7 @@ export class AppComponent {
 	}
 
 	private exitGame(gameInfoResult: any): boolean {
-		return (!gameInfoResult || !gameInfoResult.gameInfo || !gameInfoResult.gameInfo.isRunning);
+		return !gameInfoResult || !gameInfoResult.gameInfo || !gameInfoResult.gameInfo.isRunning;
 	}
 
 	private async closeApp() {

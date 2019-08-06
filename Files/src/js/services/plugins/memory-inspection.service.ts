@@ -6,21 +6,17 @@ import { NGXLogger } from 'ngx-logger';
 
 @Injectable()
 export class MemoryInspectionService {
-
-	readonly g_interestedInFeatures = [
-		'match',
-		'scene_state'
-	];
+	readonly g_interestedInFeatures = ['match', 'scene_state'];
 
 	constructor(private events: Events, private ow: OverwolfService, private logger: NGXLogger) {
 		this.init();
 	}
 
 	private async init() {
-		this.ow.addGameInfoUpdatedListener((res) => {
+		this.ow.addGameInfoUpdatedListener(res => {
 			if (this.ow.gameLaunched(res)) {
-			  	this.registerEvents();
-			  	setTimeout(() => this.setFeatures(), 1000);
+				this.registerEvents();
+				setTimeout(() => this.setFeatures(), 1000);
 			}
 		});
 		const gameInfo = await this.ow.getRunningGameInfo();
@@ -32,15 +28,15 @@ export class MemoryInspectionService {
 
 	private registerEvents() {
 		// general events errors
-		this.ow.addGameEventsErrorListener((info) => console.log('[memory service] Error: ', info));
+		this.ow.addGameEventsErrorListener(info => console.log('[memory service] Error: ', info));
 
 		// "static" data changed
 		// This will also be triggered the first time we register
 		// for events and will contain all the current information
-		this.ow.addGameEventInfoUpdates2Listener((info) => this.handleInfoUpdate(info));
+		this.ow.addGameEventInfoUpdates2Listener(info => this.handleInfoUpdate(info));
 
 		// an event triggerd
-		this.ow.addGameEventsListener((info) => console.log('[memory service] EVENT FIRED: ', info));
+		this.ow.addGameEventsListener(info => console.log('[memory service] EVENT FIRED: ', info));
 	}
 
 	private handleInfoUpdate(info) {

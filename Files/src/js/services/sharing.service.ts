@@ -8,7 +8,6 @@ import { Game } from '../models/game';
 
 @Injectable()
 export class SharingService {
-
 	public uploadDoneNotifier: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
 	private game: Game;
@@ -45,24 +44,22 @@ export class SharingService {
 		if (!this.subscribedUploadStatus) {
 			console.log('subscribing to uploadStatus', this.upload.uploadStatus);
 			this.subscribedUploadStatus = true;
-			this.upload.uploadStatus.subscribe(
-				(data) => {
-					if (data === GameUploadService.UPLOAD_COMPLETE) {
-						console.log('Upload complete!', this.game.reviewId, this.reviewId);
-						if (this.reviewId) {
-							// console.log('notifying subscriptions', this.uploadDoneNotifier);
-							this.uploadDoneNotifier.next(true);
-							// Reset
-							// console.log('resetting subscriptions', this.uploadDoneNotifier);
-							this.uploadDoneNotifier.next(false);
-						} else if (!this.reviewId) {
-							console.log('Upload complete, showing sharing popup!');
-							this.events.broadcast(Events.START_SHARING_AFTER_UPLOAD);
-						}
-						this.handlingZetoh = false;
+			this.upload.uploadStatus.subscribe(data => {
+				if (data === GameUploadService.UPLOAD_COMPLETE) {
+					console.log('Upload complete!', this.game.reviewId, this.reviewId);
+					if (this.reviewId) {
+						// console.log('notifying subscriptions', this.uploadDoneNotifier);
+						this.uploadDoneNotifier.next(true);
+						// Reset
+						// console.log('resetting subscriptions', this.uploadDoneNotifier);
+						this.uploadDoneNotifier.next(false);
+					} else if (!this.reviewId) {
+						console.log('Upload complete, showing sharing popup!');
+						this.events.broadcast(Events.START_SHARING_AFTER_UPLOAD);
 					}
+					this.handlingZetoh = false;
 				}
-			);
+			});
 		}
 		this.upload.upload(this.game);
 	}
@@ -77,7 +74,7 @@ export class SharingService {
 		if (!this.subscribedUploadDone) {
 			this.subscribedUploadDone = true;
 			console.log('subscribing to uploadDoneNotifier');
-			this.uploadDoneNotifier.subscribe((status) => {
+			this.uploadDoneNotifier.subscribe(status => {
 				if (this.handlingZetoh && status) {
 					console.log('upload done', status, this.handlingZetoh);
 					this.handlingZetoh = false;

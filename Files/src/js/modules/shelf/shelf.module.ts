@@ -37,20 +37,20 @@ console.log('version is ' + process.env.APP_VERSION);
 init({
 	dsn: 'https://04ea3bd09a4643afa04bce95efcd80b1@sentry.io/1405254',
 	enabled: process.env.NODE_ENV === 'production',
-	release: process.env.APP_VERSION
+	release: process.env.APP_VERSION,
 } as BrowserOptions);
 
 @Injectable()
 export class SentryErrorHandler implements ErrorHandler {
-  	constructor() {}
-  	handleError(error) {
+	constructor() {}
+	handleError(error) {
 		captureException(error.originalError || error);
 		throw error;
-  	}
+	}
 }
 
 @NgModule({
-	imports:      [
+	imports: [
 		BrowserModule,
 		HttpClientModule,
 		// For ShareButtons, need to use https://www.npmjs.com/package/ngx-social-button instead
@@ -72,9 +72,7 @@ export class SentryErrorHandler implements ErrorHandler {
 		SettingsMenuComponent,
 		LoginModalComponent,
 	],
-	bootstrap: [
-		ShelfComponent,
-	],
+	bootstrap: [ShelfComponent],
 	providers: [
 		GameDbService,
 		GameParserService,
@@ -95,5 +93,4 @@ export class SentryErrorHandler implements ErrorHandler {
 		ShelfApiListenerService,
 	],
 })
-
-export class ShelfModule { }
+export class ShelfModule {}

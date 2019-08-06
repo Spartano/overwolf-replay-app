@@ -10,7 +10,6 @@ declare var OverwolfPlugin: any;
 
 @Injectable()
 export class GameParserService {
-
 	plugin: any;
 	initialized: boolean;
 
@@ -20,13 +19,13 @@ export class GameParserService {
 
 	init(): void {
 		// console.log('init game conevrter plugin');
-		const plugin = this.plugin = new OverwolfPlugin('overwolf-replay-converter', true);
+		const plugin = (this.plugin = new OverwolfPlugin('overwolf-replay-converter', true));
 		// console.log('plugin', plugin);
 		// let that = this;
 
 		plugin.initialize((status: boolean) => {
 			if (status === false) {
-				console.warn('Plugin couldn\'t be loaded??');
+				console.warn("Plugin couldn't be loaded??");
 				// Raven.captureMessage('overwolf-replay-converter plugin could not be loaded');
 				return;
 			}
@@ -41,7 +40,6 @@ export class GameParserService {
 
 	// Not externalized, as this will be done inline later on
 	convertLogsToXml(stringLogs: string, callback: Function): void {
-
 		if (!this.initialized) {
 			// console.log('waiting for game converter plugin initialization');
 			setTimeout(() => {
@@ -140,7 +138,6 @@ export class GameParserService {
 		for (const entity of showEntities) {
 			// console.log('going over', entity, parseInt(entity.getAttribute('entity')));
 			if (entity.getAttribute('cardID')) {
-
 				for (const fullEntity of fullEntities) {
 					// console.log('\ttrying to match with', parseInt(fullEntity.getAttribute('id')));
 					if (parseInt(fullEntity.getAttribute('id')) === parseInt(entity.getAttribute('entity'))) {
@@ -209,7 +206,6 @@ export class GameParserService {
 	}
 
 	extractResult(replayXml: any, mainPlayerId: number): string {
-
 		const tagChanges = replayXml.getElementsByTagName('TagChange');
 		// console.log('found ' + tagChanges.length + ' tag changes');
 		let winnerTag: any;

@@ -5,7 +5,6 @@ import { Preferences } from '../models/preferences';
 
 @Injectable()
 export class UserPreferences {
-
 	constructor(private localStorageService: LocalStorageService) {
 		let preferences: Preferences = this.getPreferences();
 		if (!preferences) {
@@ -15,7 +14,7 @@ export class UserPreferences {
 	}
 
 	isAutoUpload(): boolean {
-		 return true; // this.getPreferences().autoUpload;
+		return true; // this.getPreferences().autoUpload;
 	}
 
 	setAutoUpload(value: boolean): void {
@@ -26,7 +25,7 @@ export class UserPreferences {
 	}
 
 	isDontAskAutoUpload(): boolean {
-		 return true; // this.getPreferences().dontAskAutoUpload;
+		return true; // this.getPreferences().dontAskAutoUpload;
 	}
 
 	setDontAskAutoUpload(value: boolean): void {

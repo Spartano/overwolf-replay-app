@@ -1,5 +1,4 @@
 export class GameEvent {
-
 	public static readonly MATCH_METADATA = 'MATCH_METADATA';
 	public static readonly PLAYER = 'PLAYER';
 	public static readonly LOCAL_PLAYER = 'LOCAL_PLAYER';
@@ -46,5 +45,4 @@ export class GameEvent {
 		this.type = type;
 		this.data = data;
 	}
-
 }

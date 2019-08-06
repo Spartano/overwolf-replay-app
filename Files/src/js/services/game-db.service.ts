@@ -4,7 +4,6 @@ import { Game } from '../models/game';
 
 @Injectable()
 export class GameDbService {
-
 	private dbInit: boolean;
 	private db: AngularIndexedDB;
 
@@ -42,27 +41,29 @@ export class GameDbService {
 	private init() {
 		console.log('[games] [storage] starting init of indexeddb');
 		this.db = new AngularIndexedDB('hs-games-db', 2);
-		this.db.openDatabase(2, (evt) => {
-			console.log('[games] [storage] opendb successful', evt);
-			if (evt.oldVersion < 1) {
-				console.log('[games] [storage] creating games store');
-				evt.currentTarget.result.createObjectStore('games', { keyPath: 'id' });
-			}
-			console.log('[games] [storage] indexeddb upgraded');
-			this.dbInit = true;
-		}).then(
-			() => {
-				console.log('[games] [storage] openDatabase successful', this.db.dbWrapper.dbName);
+		this.db
+			.openDatabase(2, evt => {
+				console.log('[games] [storage] opendb successful', evt);
+				if (evt.oldVersion < 1) {
+					console.log('[games] [storage] creating games store');
+					evt.currentTarget.result.createObjectStore('games', { keyPath: 'id' });
+				}
+				console.log('[games] [storage] indexeddb upgraded');
 				this.dbInit = true;
-			},
-			(e) => {
-				console.log('[games] [storage] error in openDatabase', e.message, e.name, e);
-			}
-		);
+			})
+			.then(
+				() => {
+					console.log('[games] [storage] openDatabase successful', this.db.dbWrapper.dbName);
+					this.dbInit = true;
+				},
+				e => {
+					console.log('[games] [storage] error in openDatabase', e.message, e.name, e);
+				},
+			);
 	}
 
 	private waitForDbInit(): Promise<void> {
-		return new Promise<void>((resolve) => {
+		return new Promise<void>(resolve => {
 			const dbWait = () => {
 				if (this.dbInit) {
 					resolve();

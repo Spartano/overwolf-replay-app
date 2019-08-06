@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef, Input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { User } from '../../models/shelf/user';
 import { SettingsMenu } from '../../models/shelf/settings-menu';
@@ -17,24 +17,23 @@ import { LogoutEvent } from '../../services/shelf/store/events/logout-event';
 		`../../../css/component/shelf/settings-menu.component.scss`,
 	],
 	template: `
-        <header class="settings-menu-container">
-			<button class="gs-icon btn-gs-icon menu"
-					(click)="toggle()"
-					[ngClass]="{ 'toggled': toggled}">
-                <svg>
-                    <use xlink:href="/Files/assets/svg/ui-icons.svg#hamburger-menu" />
-                </svg>
+		<header class="settings-menu-container">
+			<button class="gs-icon btn-gs-icon menu" (click)="toggle()" [ngClass]="{ 'toggled': toggled }">
+				<svg>
+					<use xlink:href="/Files/assets/svg/ui-icons.svg#hamburger-menu" />
+				</svg>
 			</button>
-			<div class="modal-wrapper modal-wrapper-settings-menu" *ngIf="toggled"
-					[ngClass]="{ 'active': toggled}">
+			<div class="modal-wrapper modal-wrapper-settings-menu" *ngIf="toggled" [ngClass]="{ 'active': toggled }">
 				<div class="modal-inner settings-menu">
 					<header class="settings-menu-header divided" *ngIf="loggedIn">
 						<h1 class="settings-menu-header-title">Connected as</h1>
-						<h2 class="settings-menu-header-subtitle"><strong>{{username}}</strong></h2>
+						<h2 class="settings-menu-header-subtitle">
+							<strong>{{ username }}</strong>
+						</h2>
 					</header>
 					<ul class="settings-menu-list">
 						<li *ngIf="loggedIn">
-							<a target="_blank" href="{{profileUrl}}">My profile</a>
+							<a target="_blank" href="{{ profileUrl }}">My profile</a>
 						</li>
 						<li>
 							<a target="_blank" href="https://discord.gg/suKNN92">Help</a>
@@ -51,18 +50,17 @@ import { LogoutEvent } from '../../services/shelf/store/events/logout-event';
 					</ul>
 				</div>
 			</div>
-        </header>
-    `,
-	changeDetection: ChangeDetectionStrategy.OnPush
+		</header>
+	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsMenuComponent {
-
 	loggedIn: boolean;
 	username: string;
 	profileUrl: string;
 	toggled: boolean;
 
-	constructor(private logger: NGXLogger, private store: ShelfStoreService) { }
+	constructor(private logger: NGXLogger, private store: ShelfStoreService) {}
 
 	@Input('user') set user(value: User) {
 		this.logger.debug('[settings-menu] setting user', value);

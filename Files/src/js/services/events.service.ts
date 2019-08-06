@@ -1,5 +1,5 @@
-import {map, filter} from 'rxjs/operators';
-import {Subject, Observable} from 'rxjs';
+import { map, filter } from 'rxjs/operators';
+import { Subject, Observable } from 'rxjs';
 
 interface BroadcastEvent {
 	key: any;
@@ -8,7 +8,6 @@ interface BroadcastEvent {
 
 // https://blog.lacolaco.net/post/event-broadcasting-in-angular-2/
 export class Events {
-
 	public static readonly NO_LOG_FILE = 'no-log-file';
 	public static readonly START_LOG_FILE_DETECTION = 'start-log-file-detection';
 	public static readonly STREAMING_LOG_FILE = 'streaming-log-file';
@@ -36,12 +35,13 @@ export class Events {
 
 	broadcast(key: any, ...data: any[]) {
 		// console.log('broadcasting', key, data);
-		this._eventBus.next({key, data});
+		this._eventBus.next({ key, data });
 	}
 
 	on(key: any): Observable<BroadcastEvent> {
 		return this._eventBus.asObservable().pipe(
 			filter(event => event.key === key),
-			map(event => event), );
+			map(event => event),
+		);
 	}
 }

@@ -6,7 +6,6 @@ import { NGXLogger } from 'ngx-logger';
 
 @Injectable()
 export class OwCommunicationService {
-
 	constructor(private events: Events, private logger: NGXLogger, private ow: OverwolfService) {
 		console.log('starting ow communication service');
 		this.init();
@@ -14,7 +13,7 @@ export class OwCommunicationService {
 
 	private init() {
 		this.events.on(Events.REPLAY_CREATED).subscribe(event => this.sendMatchCountInfo());
-		this.ow.addSessionInfoChangedLisetner((data) => console.warn('session info changed', data));
+		this.ow.addSessionInfoChangedLisetner(data => console.warn('session info changed', data));
 	}
 
 	private async sendMatchCountInfo() {

@@ -66,4 +66,3 @@ export class Player {
 	class: string;
 	hero: string;
 }
-

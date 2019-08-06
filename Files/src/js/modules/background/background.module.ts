@@ -9,7 +9,7 @@ import { LZStringModule, LZStringService } from 'ng-lz-string';
 
 import { AppComponent } from '../../components/app.component';
 
-import { OwCommunicationService	} from '../../services/ow-communcation.service';
+import { OwCommunicationService } from '../../services/ow-communcation.service';
 import { LogListenerService } from '../../services/log-listener.service';
 import { GameParserService } from '../../services/game-parser.service';
 import { ReplayManager } from '../../services/replay-manager.service';
@@ -39,16 +39,16 @@ console.log('env is', process.env.NODE_ENV);
 init({
 	dsn: 'https://04ea3bd09a4643afa04bce95efcd80b1@sentry.io/1405254',
 	enabled: process.env.NODE_ENV === 'production',
-	release: process.env.APP_VERSION
+	release: process.env.APP_VERSION,
 } as BrowserOptions);
 
 @Injectable()
 export class SentryErrorHandler implements ErrorHandler {
-  	constructor() {}
-  	handleError(error) {
+	constructor() {}
+	handleError(error) {
 		captureException(error.originalError || error);
 		throw error;
-  	}
+	}
 }
 
 @NgModule({
@@ -62,12 +62,8 @@ export class SentryErrorHandler implements ErrorHandler {
 		LZStringModule,
 		LoggerModule.forRoot({ level: NgxLoggerLevel.DEBUG }),
 	],
-	declarations: [
-		AppComponent,
-	],
-	bootstrap: [
-		AppComponent,
-	],
+	declarations: [AppComponent],
+	bootstrap: [AppComponent],
 	providers: [
 		{ provide: ErrorHandler, useClass: SentryErrorHandler },
 
@@ -98,5 +94,4 @@ export class SentryErrorHandler implements ErrorHandler {
 		OverwolfService,
 	],
 })
-
-export class AppModule { }
+export class AppModule {}

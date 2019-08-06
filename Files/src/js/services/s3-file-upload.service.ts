@@ -7,7 +7,6 @@ const BUCKET = 'com.zerotoheroes.support';
 
 @Injectable()
 export class S3FileUploadService {
-
 	public async postLogs(logString: string): Promise<string> {
 		const fileKey = uuid();
 		AWS.config.region = 'us-west-2';
@@ -20,7 +19,7 @@ export class S3FileUploadService {
 			Body: logString,
 		};
 		console.log('uploading log to S3 with params', params);
-		return new Promise<string>((resolve) => {
+		return new Promise<string>(resolve => {
 			s3.makeUnauthenticatedRequest('putObject', params, (err, data2) => {
 				// There Was An Error With Your S3 Config
 				if (err) {
@@ -53,7 +52,7 @@ export class S3FileUploadService {
 			Body: blob,
 		};
 		console.log('uploading log to S3 with params', params);
-		return new Promise<string>((resolve) => {
+		return new Promise<string>(resolve => {
 			s3.makeUnauthenticatedRequest('putObject', params, (err, data2) => {
 				// There Was An Error With Your S3 Config
 				if (err) {
@@ -65,5 +64,4 @@ export class S3FileUploadService {
 			});
 		});
 	}
-
 }

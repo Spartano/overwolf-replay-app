@@ -10,19 +10,18 @@ import { GameHelper } from '../../services/gameparsing/game-helper.service';
 		`../../../css/component/shelf/manastorm-themes.scss`,
 		`../../../css/component/shelf/manastorm-fonts.scss`,
 		`../../../css/global.scss`,
-		`../../../css/component/shelf/game-replay.component.scss`
+		`../../../css/component/shelf/game-replay.component.scss`,
 	],
 	template: `
 		<div class="manastorm-player">
-            <div id="externalPlayer" class="external-player">
-                Waiting waiting
-            </div>
+			<div id="externalPlayer" class="external-player">
+				Waiting waiting
+			</div>
 		</div>
 	`,
-	changeDetection: ChangeDetectionStrategy.OnPush
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GameReplayComponent implements OnInit {
-
 	private initDone = false;
 
 	constructor(private logger: NGXLogger, private gameHelper: GameHelper) {}
@@ -50,13 +49,13 @@ export class GameReplayComponent implements OnInit {
 		const coliseum = (window as any).coliseum;
 		coliseum.zone.run(() => {
 			coliseum.component.loadReplay(replay, {
-				reviewId: reviewId
+				reviewId: reviewId,
 			});
 		});
 	}
 
 	private waitForViewerInit(): Promise<void> {
-		return new Promise<void>((resolve) => {
+		return new Promise<void>(resolve => {
 			const viewerWait = () => {
 				if (this.initDone) {
 					resolve();

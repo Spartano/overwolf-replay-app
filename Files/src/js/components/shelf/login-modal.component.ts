@@ -39,33 +39,52 @@ import { ResetPasswordEvent } from '../../services/shelf/store/events/reset-pass
 									</legend>
 									<section class="log-in-form-section input-hint-tooltip-container">
 										<label class="log-in-form-label" for="email">Email</label>
-										<input class="input-text" tabindex="0" type="email"
-												id="email" name="email" placeholder=""
-												[ngClass]="{ 'invalid': errorField === 'email' }"
-												(blur)="resetErrorMessage('email')"
-												[(ngModel)]="email">
+										<input
+											class="input-text"
+											tabindex="0"
+											type="email"
+											id="email"
+											name="email"
+											placeholder=""
+											[ngClass]="{ 'invalid': errorField === 'email' }"
+											(blur)="resetErrorMessage('email')"
+											[(ngModel)]="email"
+										/>
 										<div class="hint-tooltip hint-tooltip-bottom hint-tooltip-aligned-right dark-theme">
 											<span [innerHTML]="emailErrorMessage"></span>
 										</div>
 									</section>
 									<section class="log-in-form-section input-hint-tooltip-container">
 										<label class="log-in-form-label" for="username">Username</label>
-										<input class="input-text" tabindex="0" type="text" id="username"
-												name="username" placeholder="" pattern=".{3,}"
-												[ngClass]="{ 'invalid': errorField === 'username' }"
-												(blur)="resetErrorMessage('username')"
-												[(ngModel)]="username">
+										<input
+											class="input-text"
+											tabindex="0"
+											type="text"
+											id="username"
+											name="username"
+											placeholder=""
+											pattern=".{3,}"
+											[ngClass]="{ 'invalid': errorField === 'username' }"
+											(blur)="resetErrorMessage('username')"
+											[(ngModel)]="username"
+										/>
 										<div class="hint-tooltip hint-tooltip-bottom hint-tooltip-aligned-right dark-theme">
 											<span [innerHTML]="usernameErrorMessage"></span>
 										</div>
 									</section>
 									<section class="log-in-form-section input-hint-tooltip-container">
 										<label class="log-in-form-label" for="password">Password</label>
-										<input class="input-text" type="password" id="password"
-												name="password" placeholder="" pattern=".{6,}"
-												[ngClass]="{ 'invalid': errorField === 'password' }"
-												(blur)="resetErrorMessage('password')"
-												[(ngModel)]="passwordInput">
+										<input
+											class="input-text"
+											type="password"
+											id="password"
+											name="password"
+											placeholder=""
+											pattern=".{6,}"
+											[ngClass]="{ 'invalid': errorField === 'password' }"
+											(blur)="resetErrorMessage('password')"
+											[(ngModel)]="passwordInput"
+										/>
 										<div class="hint-tooltip hint-tooltip-bottom hint-tooltip-aligned-right dark-theme">
 											<span [innerHTML]="passwordErrorMessage"></span>
 										</div>
@@ -89,11 +108,16 @@ import { ResetPasswordEvent } from '../../services/shelf/store/events/reset-pass
 									</legend>
 									<section class="log-in-form-section input-hint-tooltip-container">
 										<label class="log-in-form-label" for="username">Username or Email</label>
-										<input class="input-text" tabindex="0"
-												id="loginId" name="loginId" placeholder=""
-												[ngClass]="{ 'invalid': errorField === 'loginId' }"
-												(blur)="resetErrorMessage('loginId')"
-												[(ngModel)]="loginId">
+										<input
+											class="input-text"
+											tabindex="0"
+											id="loginId"
+											name="loginId"
+											placeholder=""
+											[ngClass]="{ 'invalid': errorField === 'loginId' }"
+											(blur)="resetErrorMessage('loginId')"
+											[(ngModel)]="loginId"
+										/>
 										<div class="hint-tooltip hint-tooltip-bottom hint-tooltip-aligned-right dark-theme">
 											<span [innerHTML]="loginIdErrorMessage"></span>
 										</div>
@@ -103,11 +127,17 @@ import { ResetPasswordEvent } from '../../services/shelf/store/events/reset-pass
 											<span>Password</span>
 											<a class="text-link" href="#reset-password">Forgot password?</a>
 										</label>
-										<input class="input-text" type="password" id="password"
-												name="password" placeholder="" pattern=".{6,}"
-												[ngClass]="{ 'invalid': errorField === 'password' }"
-												(blur)="resetErrorMessage('password')"
-												[(ngModel)]="passwordInput">
+										<input
+											class="input-text"
+											type="password"
+											id="password"
+											name="password"
+											placeholder=""
+											pattern=".{6,}"
+											[ngClass]="{ 'invalid': errorField === 'password' }"
+											(blur)="resetErrorMessage('password')"
+											[(ngModel)]="passwordInput"
+										/>
 										<div class="hint-tooltip hint-tooltip-bottom hint-tooltip-aligned-right dark-theme">
 											<span [innerHTML]="passwordErrorMessage"></span>
 										</div>
@@ -131,11 +161,16 @@ import { ResetPasswordEvent } from '../../services/shelf/store/events/reset-pass
 									</legend>
 									<section class="log-in-form-section input-hint-tooltip-container">
 										<label class="log-in-form-label" for="username">Username or Email</label>
-										<input class="input-text" tabindex="0"
-												id="loginId" name="loginId" placeholder=""
-												[ngClass]="{ 'invalid': errorField === 'loginId' }"
-												(blur)="resetErrorMessage('loginId')"
-												[(ngModel)]="loginId">
+										<input
+											class="input-text"
+											tabindex="0"
+											id="loginId"
+											name="loginId"
+											placeholder=""
+											[ngClass]="{ 'invalid': errorField === 'loginId' }"
+											(blur)="resetErrorMessage('loginId')"
+											[(ngModel)]="loginId"
+										/>
 										<div class="hint-tooltip hint-tooltip-bottom hint-tooltip-aligned-right dark-theme">
 											<span [innerHTML]="loginIdErrorMessage"></span>
 										</div>
@@ -143,8 +178,10 @@ import { ResetPasswordEvent } from '../../services/shelf/store/events/reset-pass
 									<button class="btn btn-red" (click)="forgotPassword()">Submit</button>
 
 									<!-- display after submit -->
-									<p class="log-in-form-text-box" *ngIf="passwordResetSent">An email with instractions was sent to this
-											address. <button class="text-link" (click)="forgotPassword()">Send again</button></p>
+									<p class="log-in-form-text-box" *ngIf="passwordResetSent">
+										An email with instractions was sent to this address.
+										<button class="text-link" (click)="forgotPassword()">Send again</button>
+									</p>
 								</fieldset>
 							</form>
 							<footer class="log-in-item-footer">
@@ -157,8 +194,10 @@ import { ResetPasswordEvent } from '../../services/shelf/store/events/reset-pass
 						<!-- server error -->
 						<li id="server-error" class="log-in-item log-in-item-error">
 							<h1 class="log-in-item-h1">Something went wrong</h1>
-							<p class="log-in-item-p">An unknown error has happened. Please try again in a
-							few minutes, or contact the support with: Code {{errorCode}}</p>
+							<p class="log-in-item-p">
+								An unknown error has happened. Please try again in a few minutes, or contact the support with: Code
+								{{ errorCode }}
+							</p>
 						</li>
 					</ul>
 				</main>
@@ -172,12 +211,11 @@ import { ResetPasswordEvent } from '../../services/shelf/store/events/reset-pass
 				</div>
 			</div>
 		</div>
-    `,
-	changeDetection: ChangeDetectionStrategy.OnPush
+	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginModalComponent implements AfterViewInit {
-
-	private static readonly EMAIL_DEFAULT_MESSAGE = 'This doesn\'t look<br>like a valid email';
+	private static readonly EMAIL_DEFAULT_MESSAGE = "This doesn't look<br>like a valid email";
 	private static readonly USERNAME_DEFAULT_MESSAGE = 'Username must be<br>at least 3 characters long';
 	private static readonly PASSWORD_DEFAULT_MESSAGE = 'Password must be<br>at least 6 characters long';
 
@@ -196,7 +234,7 @@ export class LoginModalComponent implements AfterViewInit {
 
 	private errorDiv;
 
-	constructor(private logger: NGXLogger, private store: ShelfStoreService, private el: ElementRef) { }
+	constructor(private logger: NGXLogger, private store: ShelfStoreService, private el: ElementRef) {}
 
 	ngAfterViewInit() {
 		this.errorDiv = this.el.nativeElement.querySelector('#server-error');
@@ -228,7 +266,7 @@ export class LoginModalComponent implements AfterViewInit {
 				if (value.errorMessage) {
 					this.logger.debug('No error field, showing generic error message', this.errorDiv);
 					this.errorCode = value.errorMessage;
-					this.errorDiv.scrollIntoView({behavior: 'smooth'});
+					this.errorDiv.scrollIntoView({ behavior: 'smooth' });
 				}
 		}
 
@@ -262,7 +300,7 @@ export class LoginModalComponent implements AfterViewInit {
 		const credentials = {
 			username: this.username,
 			password: this.passwordInput,
-			email: this.email
+			email: this.email,
 		};
 		this.store.publishEvent(new CreateAccountEvent(credentials));
 	}
@@ -280,12 +318,11 @@ export class LoginModalComponent implements AfterViewInit {
 			loginId: this.loginId,
 		};
 		this.store.publishEvent(new ResetPasswordEvent(credentials));
-
 	}
 
 	@HostListener('wheel', ['$event'])
 	handleWheelEvent(event) {
-	  	event.preventDefault();
+		event.preventDefault();
 	}
 
 	close() {

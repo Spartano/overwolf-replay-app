@@ -8,7 +8,6 @@ import { OverwolfService } from './overwolf.service';
 
 @Injectable()
 export class LogListenerService {
-
 	public subject = new Subject();
 
 	logFile: string;
@@ -81,7 +80,9 @@ export class LogListenerService {
 			this.listenOnFileUpdate(logsLocation);
 		} else {
 			this.fileInitiallyPresent = false;
-			setTimeout( () => { this.listenOnFileCreation(logsLocation); }, 1000);
+			setTimeout(() => {
+				this.listenOnFileCreation(logsLocation);
+			}, 1000);
 		}
 	}
 

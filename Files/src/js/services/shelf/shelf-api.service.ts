@@ -7,7 +7,6 @@ import { GameDbService } from '../game-db.service';
 
 @Injectable()
 export class ShelfApiService {
-
 	public currentGame = new BehaviorSubject<Game>(null);
 
 	constructor(private ow: OverwolfService, private gameDb: GameDbService, private logger: NGXLogger) {

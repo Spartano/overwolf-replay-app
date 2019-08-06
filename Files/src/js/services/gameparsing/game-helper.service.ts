@@ -6,10 +6,7 @@ import { Game } from '../../models/game';
 
 @Injectable()
 export class GameHelper {
-
-	constructor(private lz: LZStringService) {
-
-	}
+	constructor(private lz: LZStringService) {}
 
 	public setXmlReplay(game: Game, xml: string) {
 		const compressed = this.lz.compress(xml);

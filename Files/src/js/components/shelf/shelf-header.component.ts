@@ -13,24 +13,23 @@ import { SettingsMenu } from '../../models/shelf/settings-menu';
 		`../../../css/component/shelf/header.component.scss`,
 	],
 	template: `
-        <header class="manastorm-header">
-            <h1 class="manastorm-header-title">{{title}}</h1>
-            <social-share [game]="_game"></social-share>
+		<header class="manastorm-header">
+			<h1 class="manastorm-header-title">{{ title }}</h1>
+			<social-share [game]="_game"></social-share>
 			<div class="gs-icon-divider"></div>
 			<settings-menu [user]="_user" [menu]="_menu"></settings-menu>
-        </header>
-    `,
-	changeDetection: ChangeDetectionStrategy.OnPush
+		</header>
+	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShelfHeaderComponent {
-
 	_game: Game;
 	_user: User;
 	_menu: SettingsMenu;
 
 	title: string;
 
-	constructor(private logger: NGXLogger) { }
+	constructor(private logger: NGXLogger) {}
 
 	@Input('game') set game(value: Game) {
 		this.logger.debug('[header] setting game', value);

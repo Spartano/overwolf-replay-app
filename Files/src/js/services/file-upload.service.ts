@@ -12,15 +12,11 @@ const BUCKET = 'com.zerotoheroes.batch';
 
 @Injectable()
 export class FileUploadService {
-
-	constructor(
-			private http: HttpClient,
-			private ow: OverwolfService,
-			private gameDb: GameDbService) { }
+	constructor(private http: HttpClient, private ow: OverwolfService, private gameDb: GameDbService) {}
 
 	public getRemoteReview(reviewId: string, callback: Function) {
 		console.log('getting remove review', reviewId);
-		this.http.get(GET_REVIEW_ENDPOINT + reviewId).subscribe((res) => {
+		this.http.get(GET_REVIEW_ENDPOINT + reviewId).subscribe(res => {
 			console.log('retrieved review', res);
 			callback(res);
 		});
@@ -32,7 +28,7 @@ export class FileUploadService {
 		const userId = user.userId || user.machineId || user.username || 'unauthenticated_user';
 
 		// Build an empty review
-		this.http.post(REVIEW_INIT_ENDPOINT, null).subscribe((res) => {
+		this.http.post(REVIEW_INIT_ENDPOINT, null).subscribe(res => {
 			const reviewId: string = res as string;
 			console.log('Created empty shell review', res, reviewId);
 			if (progressMonitor) {
@@ -53,10 +49,6 @@ export class FileUploadService {
 			const fileKey = this.slugify(fileName) + '_' + reviewId + '.hszip';
 			console.log('built file key', fileKey);
 
-			const file = new File([blob], fileKey);
-			// console.log('built file', file);
-
-			// console.log('Configuring AWS', AWS);
 			// Configure The S3 Object
 			AWS.config.region = 'us-west-2';
 			AWS.config.httpOptions.timeout = 3600 * 1000 * 10;
@@ -82,9 +74,9 @@ export class FileUploadService {
 					'user-key': userId,
 					'file-type': 'hszip',
 					'review-text': 'Created by [Overwolf](http://www.overwolf.com)',
-					'game-rank': (rank && rank !== 'legend') ? rank.toString() : '',
+					'game-rank': rank && rank !== 'legend' ? rank.toString() : '',
 					'game-legend-rank': rank === 'legend' ? rank.toString() : '',
-					'opponent-game-rank': (game.opponentRank && game.opponentRank !== 'legend') ? game.opponentRank.toString() : '',
+					'opponent-game-rank': game.opponentRank && game.opponentRank !== 'legend' ? game.opponentRank.toString() : '',
 					'opponent-game-legend-rank': game.opponentRank === 'legend' ? game.opponentRank.toString() : '',
 					'game-mode': game.gameMode,
 					'game-format': game.gameMode !== 'Arena' ? game.gameFormat : '',
@@ -120,11 +112,21 @@ export class FileUploadService {
 	}
 
 	private extractFileName(path: string) {
-		return path.replace(/\\/g, '/').replace(/\s/g, '_').replace(/\(/g, '_').replace(/\)/g, '_').split('\/').pop().split('\.')[0];
+		return path
+			.replace(/\\/g, '/')
+			.replace(/\s/g, '_')
+			.replace(/\(/g, '_')
+			.replace(/\)/g, '_')
+			.split('/')
+			.pop()
+			.split('.')[0];
 	}
 
 	private slugify(str: string): string {
-	  	return str.toString().toLowerCase().trim()
+		return str
+			.toString()
+			.toLowerCase()
+			.trim()
 			.replace(/[^\w\s-]/g, '') // remove non-word [a-z0-9_], non-whitespace, non-hyphen characters
 			.replace(/[\s_-]+/g, '_') // swap any length of whitespace, underscore, hyphen characters with a single _
 			.replace(/^-+|-+$/g, ''); // remove leading, trailing -

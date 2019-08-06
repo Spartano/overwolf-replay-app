@@ -6,7 +6,6 @@ import { FileUploadService } from '../services/file-upload.service';
 
 @Injectable()
 export class GameUploadService {
-
 	public static readonly UPLOAD_COMPLETE = 'UPLOAD_COMPLETE';
 	public static readonly UPLOAD_STARTED = 'UPLOAD_STARTED';
 	public static readonly EMPTY_SHELL_CREATED = 'EMPTY_SHELL_CREATED';
@@ -16,9 +15,7 @@ export class GameUploadService {
 
 	uploadStatus: BehaviorSubject<string> = new BehaviorSubject<string>('initialStatus');
 
-	constructor(private fileUpload: FileUploadService) {
-
-	}
+	constructor(private fileUpload: FileUploadService) {}
 
 	public upload(game: Game) {
 		console.log('about to upload before sharing');
@@ -28,7 +25,7 @@ export class GameUploadService {
 		} else {
 			const monitor = new BehaviorSubject<string>('');
 
-			monitor.subscribe((status) => {
+			monitor.subscribe(status => {
 				// this.uploadStatus = status;
 				switch (status) {
 					case 'UPLOAD_STARTED':
@@ -71,10 +68,9 @@ export class GameUploadService {
 		}
 	}
 
-
 	private checkProcessingProgress(game: Game, monitor: BehaviorSubject<string>) {
 		console.log('checking processing progress', game);
-		this.fileUpload.getRemoteReview(game.reviewId, (result) => {
+		this.fileUpload.getRemoteReview(game.reviewId, result => {
 			const review = JSON.parse(result._body);
 			console.log('result', review.published);
 			if (review.published === true) {
@@ -82,8 +78,7 @@ export class GameUploadService {
 			} else {
 				setTimeout(() => {
 					this.checkProcessingProgress(game, monitor);
-				},
-				1000);
+				}, 1000);
 			}
 		});
 	}

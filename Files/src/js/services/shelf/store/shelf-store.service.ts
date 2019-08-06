@@ -25,18 +25,15 @@ import { ResetPasswordProcessor } from './processors/reset-password-processor';
 
 @Injectable()
 export class ShelfStoreService {
-
 	private state: ShelfState = new ShelfState();
 	private stateUpdater = new EventEmitter<ShelfStoreEvent>();
 	private stateEmitter = new BehaviorSubject<ShelfState>(this.state);
 
-	private processors: Map<String, Processor>;
+	private processors: Map<string, Processor>;
 	private eventQueue: ShelfStoreEvent[] = [];
 	private isProcessing = false;
 
-	constructor(
-			private logger: NGXLogger,
-			private accountService: AccountService) {
+	constructor(private logger: NGXLogger, private accountService: AccountService) {
 		this.processors = this.buildProcessors();
 		this.stateUpdater.subscribe((event: ShelfStoreEvent) => {
 			this.eventQueue.push(event);
@@ -74,16 +71,24 @@ export class ShelfStoreService {
 		this.isProcessing = false;
 	}
 
-	private buildProcessors(): Map<String, Processor> {
+	private buildProcessors(): Map<string, Processor> {
 		return Map.of(
-			PopulateStoreEvent.eventName(), new PopulateStoreProcessor(this.accountService),
-			GameSelectedEvent.eventName(), new GameSelectedProcessor(),
-			SettingsMenuToggleEvent.eventName(), new SettingsMenuToggleProcessor(),
-			LoginModalToggleEvent.eventName(), new LoginModalToggleProcessor(),
-			CreateAccountEvent.eventName(), new CreateAccountProcessor(this.accountService, this.logger),
-			LoginEvent.eventName(), new LoginProcessor(this.accountService, this.logger),
-			LogoutEvent.eventName(), new LogoutProcessor(this.accountService, this.logger),
-			ResetPasswordEvent.eventName(), new ResetPasswordProcessor(this.accountService, this.logger),
+			PopulateStoreEvent.eventName(),
+			new PopulateStoreProcessor(this.accountService),
+			GameSelectedEvent.eventName(),
+			new GameSelectedProcessor(),
+			SettingsMenuToggleEvent.eventName(),
+			new SettingsMenuToggleProcessor(),
+			LoginModalToggleEvent.eventName(),
+			new LoginModalToggleProcessor(),
+			CreateAccountEvent.eventName(),
+			new CreateAccountProcessor(this.accountService, this.logger),
+			LoginEvent.eventName(),
+			new LoginProcessor(this.accountService, this.logger),
+			LogoutEvent.eventName(),
+			new LogoutProcessor(this.accountService, this.logger),
+			ResetPasswordEvent.eventName(),
+			new ResetPasswordProcessor(this.accountService, this.logger),
 		);
 	}
 }

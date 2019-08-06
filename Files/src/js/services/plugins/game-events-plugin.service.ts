@@ -4,7 +4,6 @@ declare var OverwolfPlugin: any;
 
 @Injectable()
 export class GameEventsPluginService {
-
 	private gameEventsPlugin: any;
 	initialized = false;
 
@@ -17,7 +16,7 @@ export class GameEventsPluginService {
 		this.initialized = false;
 		this.gameEventsPlugin.initialize((status: boolean) => {
 			if (status === false) {
-				console.error('[game-events] Plugin couldn\'t be loaded??');
+				console.error("[game-events] Plugin couldn't be loaded??");
 				return;
 			}
 			console.log('[game-events] Plugin ' + this.gameEventsPlugin.get()._PluginName_ + ' was loaded!');
@@ -31,7 +30,7 @@ export class GameEventsPluginService {
 	}
 
 	private waitForInit(): Promise<void> {
-		return new Promise<void>((resolve) => {
+		return new Promise<void>(resolve => {
 			const dbWait = () => {
 				// console.log('Promise waiting for db');
 				if (this.initialized) {
