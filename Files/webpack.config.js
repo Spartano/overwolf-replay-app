@@ -2,6 +2,7 @@ const webpack = require("@artonge/webpack");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const AngularCompilerPlugin = webpack.AngularCompilerPlugin;
+const ReplaceInFileWebpackPlugin = require('replace-in-file-webpack-plugin');
 const DefinePlugin = require("webpack").DefinePlugin;
 const TSLintPlugin = require('tslint-webpack-plugin');
 
@@ -124,6 +125,25 @@ module.exports = function(env, argv) {
                 { from: path.join(process.cwd(), "dependencies"), to: "dependencies" },
                 { from: path.join(process.cwd(), "plugins"), to: "plugins" },
             ]),
+        
+			// Replace the version in the manifest
+			new ReplaceInFileWebpackPlugin([{
+				dir: 'dist',
+				files: ['manifest.json'],
+				rules: [{
+					search: '@app-version@',
+					replace: env.appversion
+				}]
+			}]),
+			// Automatically update the version in sentry.properties
+			new ReplaceInFileWebpackPlugin([{
+				dir: '.',
+				files: ['sentry.properties'],
+				rules: [{
+					search: '@app-version@',
+					replace: env.appversion
+				}]
+			}]),
         ]
     };
 };
