@@ -4,7 +4,6 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const AngularCompilerPlugin = webpack.AngularCompilerPlugin;
 const ReplaceInFileWebpackPlugin = require('replace-in-file-webpack-plugin');
 const DefinePlugin = require("webpack").DefinePlugin;
-const TSLintPlugin = require('tslint-webpack-plugin');
 
 var path = require("path");
 
@@ -69,7 +68,7 @@ module.exports = function(env, argv) {
                 {
                     test: /\.ts$/,
                     exclude: /node_modules/,
-                    use: "@artonge/webpack"
+					use: ['@artonge/webpack', 'eslint-loader']
                 },
                 {
                     test: /.js$/,
