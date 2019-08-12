@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-
+import { NGXLogger } from 'ngx-logger';
 import { Events } from '../events.service';
 import { OverwolfService } from '../overwolf.service';
-import { NGXLogger } from 'ngx-logger';
 
 @Injectable()
 export class MemoryInspectionService {
-	readonly g_interestedInFeatures = ['match', 'scene_state'];
+	readonly g_interestedInFeatures = ['match', 'scene_state', 'match_info'];
 
 	constructor(private events: Events, private ow: OverwolfService, private logger: NGXLogger) {
 		this.init();
@@ -41,10 +40,8 @@ export class MemoryInspectionService {
 
 	private handleInfoUpdate(info) {
 		// console.log('[memory service] INFO UPDATE: ', info);
-		if (info.feature === 'match') {
-			this.logger.warn('[memory-service] Sending fake game ID, as official way is not supported yet');
-			this.events.broadcast(Events.NEW_GAME_ID, 'game' + new Date().getDate());
-			// this.events.broadcast(Events.NEW_GAME_ID, info);
+		if (info.feature === 'match_info' && info.info && info.info.match_info && info.info.match_info.pseudo_match_id) {
+			this.events.broadcast(Events.NEW_GAME_ID, info.info.match_info.pseudo_match_id);
 		}
 	}
 
@@ -54,7 +51,6 @@ export class MemoryInspectionService {
 			window.setTimeout(() => this.setFeatures(), 2000);
 			return;
 		}
-		console.log('[memory service] Set required features:', this.g_interestedInFeatures);
-		console.log('[memory service] ', info);
+		console.log('[memory service] Set required features:', this.g_interestedInFeatures, info);
 	}
 }

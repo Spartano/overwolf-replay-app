@@ -72,6 +72,10 @@ export class OverwolfService {
 		overwolf.egs.onSessionInfoChanged.addListener(callback);
 	}
 
+	public addMatchSelectionInfoChangedListener(callback) {
+		overwolf.egs.onMatchSelectionChanged.addListener(callback);
+	}
+
 	public openUrlInOverwolfBrowser(url) {
 		overwolf.utils.openUrlInOverwolfBrowser(url);
 	}
@@ -88,6 +92,15 @@ export class OverwolfService {
 		return new Promise<string>(resolve => {
 			overwolf.extensions.getManifest(extensionId, result => {
 				resolve(result.meta.version);
+			});
+		});
+	}
+
+	public async getSelectedMatch(): Promise<{ gameId: number; matchId: string; sessionId: string }> {
+		return new Promise<{ gameId: number; matchId: string; sessionId: string }>(resolve => {
+			overwolf.egs.getSelectedMatch(selectedMatchInfo => {
+				console.log('[overwolf-service] retrieve match from API', selectedMatchInfo);
+				resolve(selectedMatchInfo);
 			});
 		});
 	}
