@@ -1,12 +1,21 @@
-import { Component, ChangeDetectionStrategy, Input, HostListener, ElementRef, AfterViewInit } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	ElementRef,
+	HostListener,
+	Input,
+	ViewRef,
+} from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
-import { ShelfStoreService } from '../../services/shelf/store/shelf-store.service';
-import { LoginModalToggleEvent } from '../../services/shelf/store/events/login-modal-toggle-event';
-import { CreateAccountEvent } from '../../services/shelf/store/events/create-account-event';
-import { LoginModalInfo } from '../../models/shelf/login-modal-info';
 import { LoginField } from '../../models/shelf/login-field.type';
+import { LoginModalInfo } from '../../models/shelf/login-modal-info';
+import { CreateAccountEvent } from '../../services/shelf/store/events/create-account-event';
 import { LoginEvent } from '../../services/shelf/store/events/login-event';
+import { LoginModalToggleEvent } from '../../services/shelf/store/events/login-modal-toggle-event';
 import { ResetPasswordEvent } from '../../services/shelf/store/events/reset-password-event';
+import { ShelfStoreService } from '../../services/shelf/store/shelf-store.service';
 
 @Component({
 	selector: 'login-modal',
@@ -31,7 +40,7 @@ import { ResetPasswordEvent } from '../../services/shelf/store/events/reset-pass
 				<main class="modal-log-in-main" spellcheck="false">
 					<ul class="log-in-sections">
 						<!-- sign up -->
-						<li id="sign-up" class="log-in-item">
+						<li id="sign-up" class="log-in-item" cdkTrapFocus="activeSection === 'sign-up'">
 							<form action="" class="log-in-form">
 								<fieldset class="log-in-form-fieldset">
 									<legend class="log-in-form-legend">
@@ -94,13 +103,14 @@ import { ResetPasswordEvent } from '../../services/shelf/store/events/reset-pass
 							</form>
 							<footer class="log-in-item-footer">
 								<p class="log-in-item-p log-in-item-footer-text">
-									Already have an account? <a class="text-link" href="#log-in">Log in</a>
+									Already have an account?
+									<a class="text-link" href="#log-in" (click)="changeActiceSection('sign-in')">Log in</a>
 								</p>
 							</footer>
 						</li>
 
 						<!-- log in -->
-						<li id="log-in" class="log-in-item">
+						<li id="log-in" class="log-in-item" cdkTrapFocus="activeSection === 'sign-in'">
 							<form action="" class="log-in-form">
 								<fieldset class="log-in-form-fieldset">
 									<legend class="log-in-form-legend">
@@ -125,7 +135,9 @@ import { ResetPasswordEvent } from '../../services/shelf/store/events/reset-pass
 									<section class="log-in-form-section input-hint-tooltip-container">
 										<label class="log-in-form-label" for="password">
 											<span>Password</span>
-											<a class="text-link" href="#reset-password">Forgot password?</a>
+											<a class="text-link" href="#reset-password" (click)="changeActiceSection('reset-password')"
+												>Forgot password?</a
+											>
 										</label>
 										<input
 											class="input-text"
@@ -147,13 +159,14 @@ import { ResetPasswordEvent } from '../../services/shelf/store/events/reset-pass
 							</form>
 							<footer class="log-in-item-footer">
 								<p class="log-in-item-p log-in-item-footer-text">
-									Don't have an account? <a class="text-link" href="#sign-up">Sign up</a>
+									Don't have an account?
+									<a class="text-link" href="#sign-up" (click)="changeActiceSection('sign-up')">Sign up</a>
 								</p>
 							</footer>
 						</li>
 
 						<!-- reset password -->
-						<li id="reset-password" class="log-in-item">
+						<li id="reset-password" class="log-in-item" cdkTrapFocus="activeSection === 'reset-password'">
 							<form action="" class="log-in-form">
 								<fieldset class="log-in-form-fieldset">
 									<legend class="log-in-form-legend">
@@ -186,13 +199,14 @@ import { ResetPasswordEvent } from '../../services/shelf/store/events/reset-pass
 							</form>
 							<footer class="log-in-item-footer">
 								<p class="log-in-item-p log-in-item-footer-text">
-									Don't have an account? <a class="text-link" href="#sign-up">Sign up</a>
+									Don't have an account?
+									<a class="text-link" href="#sign-up" (click)="changeActiceSection('sign-up')">Sign up</a>
 								</p>
 							</footer>
 						</li>
 
 						<!-- server error -->
-						<li id="server-error" class="log-in-item log-in-item-error">
+						<li id="server-error" class="log-in-item log-in-item-error" cdkTrapFocus="activeSection === 'error'">
 							<h1 class="log-in-item-h1">Something went wrong</h1>
 							<p class="log-in-item-p">
 								An unknown error has happened. Please try again in a few minutes, or contact the support with: Code
@@ -219,6 +233,8 @@ export class LoginModalComponent implements AfterViewInit {
 	private static readonly USERNAME_DEFAULT_MESSAGE = 'Username must be<br>at least 3 characters long';
 	private static readonly PASSWORD_DEFAULT_MESSAGE = 'Password must be<br>at least 6 characters long';
 
+	activeSection: string = 'sign-up';
+
 	email: string;
 	username: string;
 	passwordInput: string;
@@ -234,7 +250,7 @@ export class LoginModalComponent implements AfterViewInit {
 
 	private errorDiv;
 
-	constructor(private logger: NGXLogger, private store: ShelfStoreService, private el: ElementRef) {}
+	constructor(private logger: NGXLogger, private store: ShelfStoreService, private el: ElementRef, private cdr: ChangeDetectorRef) {}
 
 	ngAfterViewInit() {
 		this.errorDiv = this.el.nativeElement.querySelector('#server-error');
@@ -267,10 +283,19 @@ export class LoginModalComponent implements AfterViewInit {
 					this.logger.debug('No error field, showing generic error message', this.errorDiv);
 					this.errorCode = value.errorMessage;
 					this.errorDiv.scrollIntoView({ behavior: 'smooth' });
+					this.activeSection = 'error';
 				}
 		}
 
 		this.passwordResetSent = value.passwordResetSent;
+	}
+
+	changeActiveSection(newSection: string): void {
+		this.logger.debug('[login-modal] changing active section', newSection);
+		this.activeSection = newSection;
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	resetErrorMessage(field: LoginField) {
@@ -326,6 +351,7 @@ export class LoginModalComponent implements AfterViewInit {
 	}
 
 	close() {
+		this.activeSection = 'sign-up';
 		this.store.publishEvent(new LoginModalToggleEvent(false));
 	}
 
