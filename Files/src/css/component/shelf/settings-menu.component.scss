@@ -85,6 +85,10 @@ ul.settings-menu-list {
 			top: -5px;
 		}
 	}
+
+	&:not(.logged-in) li:first-of-type a {
+		padding-top: 5px;
+	}
 }
 
 ul.settings-menu-list li a {

@@ -31,7 +31,7 @@ import { ShelfStoreService } from '../../services/shelf/store/shelf-store.servic
 							<strong>{{ username }}</strong>
 						</h2>
 					</header>
-					<ul class="settings-menu-list">
+					<ul class="settings-menu-list" [ngClass]="{ 'logged-in': loggedIn }">
 						<li *ngIf="loggedIn">
 							<a target="_blank" href="{{ profileUrl }}">My profile</a>
 						</li>
