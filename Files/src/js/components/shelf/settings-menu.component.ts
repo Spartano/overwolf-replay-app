@@ -1,11 +1,11 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
-import { User } from '../../models/shelf/user';
 import { SettingsMenu } from '../../models/shelf/settings-menu';
-import { ShelfStoreService } from '../../services/shelf/store/shelf-store.service';
-import { SettingsMenuToggleEvent } from '../../services/shelf/store/events/settings-menu-toggle-event';
+import { User } from '../../models/shelf/user';
 import { LoginModalToggleEvent } from '../../services/shelf/store/events/login-modal-toggle-event';
 import { LogoutEvent } from '../../services/shelf/store/events/logout-event';
+import { SettingsMenuToggleEvent } from '../../services/shelf/store/events/settings-menu-toggle-event';
+import { ShelfStoreService } from '../../services/shelf/store/shelf-store.service';
 
 @Component({
 	selector: 'settings-menu',
@@ -23,7 +23,7 @@ import { LogoutEvent } from '../../services/shelf/store/events/logout-event';
 					<use xlink:href="/Files/assets/svg/ui-icons.svg#hamburger-menu" />
 				</svg>
 			</button>
-			<div class="modal-wrapper modal-wrapper-settings-menu" *ngIf="toggled" [ngClass]="{ 'active': toggled }">
+			<div class="modal-wrapper modal-wrapper-settings-menu" [ngClass]="{ 'active': toggled }">
 				<div class="modal-inner settings-menu">
 					<header class="settings-menu-header divided" *ngIf="loggedIn">
 						<h1 class="settings-menu-header-title">Connected as</h1>
