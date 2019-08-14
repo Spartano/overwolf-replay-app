@@ -271,20 +271,20 @@ export class LoginModalComponent implements AfterViewInit {
 		this.loginIdErrorMessage = undefined;
 		this.errorCode = undefined;
 
-		this.logger.debug('[shelf] [login-modal] setting active section', value, this._activeSection);
+		// this.logger.debug('[shelf] [login-modal] setting active section', value, this._activeSection);
 		if (value.currentSection && this._activeSection !== value.currentSection) {
 			this._activeSection = value.currentSection;
 			// We're not scrolling, so we want to directly show the new element
 			if (!this.previouslyVisible && value.toggled) {
 				const listElement: HTMLElement = this.el.nativeElement.querySelector(`ul`);
-				this.logger.debug('[shelf] [login-modal] list element', listElement);
+				// this.logger.debug('[shelf] [login-modal] list element', listElement);
 				listElement.classList.remove('smooth-scroll');
-				this.logger.debug('[shelf] [login-modal] quickly changing active section');
+				// this.logger.debug('[shelf] [login-modal] quickly changing active section');
 				document.location.href = `#${this._activeSection}`;
 				listElement.classList.add('smooth-scroll');
 			} else if (value.toggled) {
 				const element: HTMLElement = this.el.nativeElement.querySelector(`#${this._activeSection}`);
-				this.logger.debug('[shelf] [login-modal] retrieved section element', element, `#${this._activeSection}`);
+				// this.logger.debug('[shelf] [login-modal] retrieved section element', element, `#${this._activeSection}`);
 				// I'm not sure why we need the timeout. Without the timeout I can properly
 				// switch between sign-up and sign-in, but it doesn't work for reset-password
 				setTimeout(() => element.scrollIntoView({ behavior: 'smooth' }));
@@ -368,7 +368,7 @@ export class LoginModalComponent implements AfterViewInit {
 	}
 
 	changeActiveSection(newSection: LoginModalSection): void {
-		this.logger.debug('[shelf] [login-modal] changing active section', newSection);
+		// this.logger.debug('[shelf] [login-modal] changing active section', newSection);
 		// this._activeSection = newSection;
 		this.store.publishEvent(new ChangeLoginActiveSectionEvent(newSection));
 		// if (!(this.cdr as ViewRef).destroyed) {
@@ -387,7 +387,7 @@ export class LoginModalComponent implements AfterViewInit {
 	}
 
 	private validateEmail(): boolean {
-		this.logger.debug('[shelf] [login-modal] validating email', this.email);
+		// this.logger.debug('[shelf] [login-modal] validating email', this.email);
 		return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email);
 	}
 
