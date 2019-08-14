@@ -31,7 +31,7 @@ import { ShelfStoreService } from '../../services/shelf/store/shelf-store.servic
 					aside illustration
 				</aside>
 				<main class="modal-log-in-main" spellcheck="false">
-					<ul class="log-in-sections">
+					<ul class="log-in-sections smooth-scroll">
 						<!-- sign up -->
 						<li id="sign-up" class="log-in-item" cdkTrapFocus="_activeSection === 'sign-up'">
 							<form action="" class="log-in-form">
@@ -240,6 +240,7 @@ export class LoginModalComponent implements AfterViewInit {
 	errorCode: string = undefined;
 
 	private errorDiv;
+	private previouslyVisible = false;
 
 	constructor(private logger: NGXLogger, private store: ShelfStoreService, private el: ElementRef, private cdr: ChangeDetectorRef) {}
 
@@ -258,13 +259,23 @@ export class LoginModalComponent implements AfterViewInit {
 		this.logger.debug('[shelf] [login-modal] setting active section', value, this._activeSection);
 		if (value.currentSection && this._activeSection !== value.currentSection) {
 			this._activeSection = value.currentSection;
-			const element: HTMLElement = this.el.nativeElement.querySelector(`#${this._activeSection}`);
-			this.logger.debug('[shelf] [login-modal] retrieved section element', element, `#${this._activeSection}`);
-			element.scrollIntoView({ behavior: 'smooth' });
-			// I'm not sure why we need the timeout. Without the timeout I can properly
-			// switch between sign-up and sign-in, but it doesn't work for reset-password
-			setTimeout(() => element.scrollIntoView({ behavior: 'smooth' }));
+			// We're not scrolling, so we want to directly show the new element
+			if (!this.previouslyVisible && value.toggled) {
+				const listElement: HTMLElement = this.el.nativeElement.querySelector(`ul`);
+				this.logger.debug('[shelf] [login-modal] list element', listElement);
+				listElement.classList.remove('smooth-scroll');
+				this.logger.debug('[shelf] [login-modal] quickly changing active section');
+				document.location.href = `#${this._activeSection}`;
+				listElement.classList.add('smooth-scroll');
+			} else if (value.toggled) {
+				const element: HTMLElement = this.el.nativeElement.querySelector(`#${this._activeSection}`);
+				this.logger.debug('[shelf] [login-modal] retrieved section element', element, `#${this._activeSection}`);
+				// I'm not sure why we need the timeout. Without the timeout I can properly
+				// switch between sign-up and sign-in, but it doesn't work for reset-password
+				setTimeout(() => element.scrollIntoView({ behavior: 'smooth' }));
+			}
 		}
+		this.previouslyVisible = value.toggled;
 		this._activeSection = value.currentSection;
 
 		this.errorField = value.errorField;
@@ -357,7 +368,7 @@ export class LoginModalComponent implements AfterViewInit {
 
 	close() {
 		// this._activeSection = 'sign-up';
-		this.store.publishEvent(new LoginModalToggleEvent(false));
+		this.store.publishEvent(new LoginModalToggleEvent(false, 'sign-up'));
 	}
 
 	private validateEmail(): boolean {

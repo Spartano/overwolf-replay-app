@@ -79,7 +79,7 @@ export class SettingsMenuComponent {
 	}
 
 	login() {
-		this.store.publishEvent(new LoginModalToggleEvent(true));
+		this.store.publishEvent(new LoginModalToggleEvent(true, 'sign-up'));
 	}
 
 	logout() {

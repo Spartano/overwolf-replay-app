@@ -31,7 +31,7 @@ import { ShelfStoreService } from '../../services/shelf/store/shelf-store.servic
 				</p>
 				<p class="empty-state-p"><strong>Please sign up to continue</strong></p>
 				<button class="btn btn-red" (click)="signup()">Sign up</button>
-				<p class="empty-state-p">Already have an accoun? <a class="text-link" (click)="login()" )>Log in</a></p>
+				<p class="empty-state-p">Already have an accoun? <a class="text-link" (click)="login()">Log in</a></p>
 			</ng-container>
 
 			<!-- old sessions error - logged in -->
@@ -40,7 +40,7 @@ import { ShelfStoreService } from '../../services/shelf/store/shelf-store.servic
 				<p class="empty-state-p">
 					This session is not supported in the new player,<br />but you can still view it on the Zero to Heroes site.
 				</p>
-				<a href="" target="_blank" class="btn btn-red">View online</a>
+				<a href="https://www.zerotoheroes.com/s/hearthstone/myVideos/" target="_blank" class="btn btn-red">View online</a>
 			</ng-container>
 
 			<!-- general error -->
@@ -73,10 +73,10 @@ export class EmptyStateComponent {
 	}
 
 	login() {
-		// this.store.publishEvent(new LoginModalToggleEvent(true, 'sign-in'));
+		this.store.publishEvent(new LoginModalToggleEvent(true, 'sign-in'));
 	}
 
 	signup() {
-		this.store.publishEvent(new LoginModalToggleEvent(true));
+		this.store.publishEvent(new LoginModalToggleEvent(true, 'sign-up'));
 	}
 }

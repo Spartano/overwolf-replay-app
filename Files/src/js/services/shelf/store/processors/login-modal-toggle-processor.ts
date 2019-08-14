@@ -14,7 +14,7 @@ export class LoginModalToggleProcessor implements Processor {
 				toggled: event.value,
 				errorMessage: undefined,
 				passwordResetSent: undefined,
-				currentSection: event.value ? currentState.loginModalInfo.currentSection : undefined,
+				currentSection: event.activeSection,
 			} as LoginModalInfo),
 		} as ShelfState);
 	}

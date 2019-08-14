@@ -1,6 +1,6 @@
 .modal-wrapper-log-in {
 	opacity: 0;
-	background-color: #{rgba(black, .8)};
+	background-color: #{rgba(black, 0.8)};
 }
 
 .modal-log-in {
@@ -35,9 +35,12 @@ ul.log-in-sections {
 	flex-direction: column;
 	overflow: hidden;
 	overflow-y: overlay;
-	scroll-behavior: smooth;
 	scroll-snap-type: y mandatory;
 	--scrollbar-size: 0;
+}
+
+ul.smooth-scroll {
+	scroll-behavior: smooth;
 }
 
 li.log-in-item {
