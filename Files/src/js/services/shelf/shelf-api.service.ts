@@ -39,9 +39,7 @@ export class ShelfApiService {
 		// If we don't have a game, it means that the GS recorded the game, but for
 		// some reason there was a bug and we didn't save the game in our DB
 		if (!game) {
-			this.store.publishEvent(new GlobalErrorEvent('old-session'));
-			console.warn('incorrect event, dev stuff');
-			// this.store.publishEvent(new GlobalErrorEvent('no-match-found'));
+			this.store.publishEvent(new GlobalErrorEvent('no-match-found'));
 			return;
 		}
 		this.store.publishEvent(new GameSelectedEvent(game));
