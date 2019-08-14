@@ -1,9 +1,8 @@
-import { Component, ChangeDetectionStrategy, OnInit, ChangeDetectorRef } from '@angular/core';
-
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
-import { ShelfStoreService } from '../../services/shelf/store/shelf-store.service';
 import { ShelfState } from '../../models/shelf/shelf-state';
-import { ShelfApiListenerService } from '../../services/shelf/shelf-api-listener.service';
+import { ShelfApiService } from '../../services/shelf/shelf-api.service';
+import { ShelfStoreService } from '../../services/shelf/store/shelf-store.service';
 
 @Component({
 	selector: 'manastorm-shelf',
@@ -15,10 +14,11 @@ import { ShelfApiListenerService } from '../../services/shelf/shelf-api-listener
 	],
 	template: `
 		<div class="manastorm-shelf light-theme" *ngIf="state">
-			<shelf-header *ngIf="state.currentGame" [game]="state.currentGame" [user]="state.user" [menu]="state.settingsMenu">
+			<shelf-header class="ignored-wrapper" [game]="state.currentGame" [user]="state.user" [menu]="state.settingsMenu">
 			</shelf-header>
-			<login-modal *ngIf="state.loginModalInfo.toggled" [info]="state.loginModalInfo"></login-modal>
-			<game-replay [game]="state.currentGame"></game-replay>
+			<login-modal class="ignored-wrapper" *ngIf="state.loginModalInfo.toggled" [info]="state.loginModalInfo"></login-modal>
+			<game-replay class="ignored-wrapper" [game]="state.currentGame"></game-replay>
+			<empty-state class="ignored-wrapper" [error]="state.globalError" [user]="state.user"></empty-state>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -28,7 +28,7 @@ export class ShelfComponent implements OnInit {
 
 	constructor(
 		private store: ShelfStoreService,
-		private init_ShelfApiListenerService: ShelfApiListenerService,
+		private init_shelfApi: ShelfApiService,
 		private logger: NGXLogger,
 		private cdr: ChangeDetectorRef,
 	) {}

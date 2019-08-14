@@ -1,28 +1,23 @@
-@import "manastorm-vars";
-
-:host() {
-    flex: 0 0 40px;
-    display: flex;
-    align-items: center;
-}
+@import 'manastorm-vars';
 
 .manastorm-header {
-    display: flex;
-    align-items: center;
-    width: 100%;
+	flex: 0 0 40px;
+	display: flex;
+	align-items: center;
+	width: 100%;
 }
 
 .manastorm-header-title {
-    font-size: 16px;
-    cursor: default;
-    flex-grow: 1;
+	font-size: 16px;
+	cursor: default;
+	flex-grow: 1;
 }
 
 .manastorm-header-subtitle {
-    text-align: right;
-    font-size: 14px;
-    margin-right: 5px;
-    cursor: default;
+	text-align: right;
+	font-size: 14px;
+	margin-right: 5px;
+	cursor: default;
 }
 
 .gs-icon {

@@ -1,8 +1,8 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { Game } from '../../models/game';
-import { User } from '../../models/shelf/user';
 import { SettingsMenu } from '../../models/shelf/settings-menu';
+import { User } from '../../models/shelf/user';
 
 @Component({
 	selector: 'shelf-header',
@@ -15,9 +15,9 @@ import { SettingsMenu } from '../../models/shelf/settings-menu';
 	template: `
 		<header class="manastorm-header">
 			<h1 class="manastorm-header-title">{{ title }}</h1>
-			<social-share [game]="_game"></social-share>
+			<social-share class="ignored-wrapper" [game]="_game"></social-share>
 			<div class="gs-icon-divider"></div>
-			<settings-menu [user]="_user" [menu]="_menu"></settings-menu>
+			<settings-menu class="ignored-wrapper" [user]="_user" [menu]="_menu"></settings-menu>
 		</header>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

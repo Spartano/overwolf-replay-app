@@ -1,11 +1,8 @@
 @import 'manastorm-vars';
 
-:host() {
+.manastorm-header-share-section {
 	display: flex;
 	align-items: center;
-}
-
-.manastorm-header-share-section {
 	margin-left: auto;
 	display: flex;
 	align-items: center;

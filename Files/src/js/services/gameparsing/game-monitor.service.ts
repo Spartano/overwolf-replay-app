@@ -1,14 +1,12 @@
 import { Injectable } from '@angular/core';
-
+import { NGXLogger } from 'ngx-logger';
 import { Game } from '../../models/game';
 import { GameEvent } from '../../models/game-event';
-
-import { GameHelper } from './game-helper.service';
-import { GameParserService } from '../game-parser.service';
-import { GameEvents } from '../game-events.service';
-import { Events } from '../events.service';
 import { DeckParserService } from '../deck/deck-parser.service';
-import { NGXLogger } from 'ngx-logger';
+import { Events } from '../events.service';
+import { GameEvents } from '../game-events.service';
+import { GameParserService } from '../game-parser.service';
+import { GameHelper } from './game-helper.service';
 
 @Injectable()
 export class GameMonitorService {
@@ -36,26 +34,30 @@ export class GameMonitorService {
 	private handleEvent(gameEvent: GameEvent) {
 		switch (gameEvent.type) {
 			case 'GAME_END':
-				// console.log('handling game end event', gameEvent);
-				const gameResult = gameEvent.data[0];
-				const replayXml = gameEvent.data[1];
-				if (!replayXml) {
-					console.warn('could not convert replay');
+				try {
+					const gameResult = gameEvent.data[0];
+					const replayXml = gameEvent.data[1];
+					if (!replayXml) {
+						console.warn('could not convert replay');
+					}
+					this.logger.debug('Creating new game', this.currentGameId);
+					const game: Game = Game.createEmptyGame(this.currentGameId);
+					game.gameFormat = this.toFormatType(gameResult.FormatType);
+					game.gameMode = this.toGameType(gameResult.GameType);
+					if (this.supportedModesDeckRetrieve.indexOf(game.gameMode) !== -1) {
+						game.deckstring = this.deckService.currentDeck.deckstring;
+					}
+					this.gameHelper.setXmlReplay(game, replayXml);
+					this.gameParserService.extractMatchup(game);
+					this.gameParserService.extractDuration(game);
+					this.deckService.reset();
+					console.log('broadcasting end of game', game.player, game.opponent, game.gameFormat, game.gameMode);
+					this.events.broadcast(Events.REPLAY_CREATED, JSON.stringify(game));
+					break;
+				} catch (e) {
+					console.log('exception while trying to handle GAME_END event', e);
+					this.deckService.reset();
 				}
-				this.logger.debug('Creating new game', this.currentGameId);
-				const game: Game = Game.createEmptyGame(this.currentGameId);
-				game.gameFormat = this.toFormatType(gameResult.FormatType);
-				game.gameMode = this.toGameType(gameResult.GameType);
-				if (this.supportedModesDeckRetrieve.indexOf(game.gameMode) !== -1) {
-					game.deckstring = this.deckService.currentDeck.deckstring;
-				}
-				this.gameHelper.setXmlReplay(game, replayXml);
-				this.gameParserService.extractMatchup(game);
-				this.gameParserService.extractDuration(game);
-				this.deckService.reset();
-				console.log('broadcasting end of game', game.player, game.opponent, game.gameFormat, game.gameMode);
-				this.events.broadcast(Events.REPLAY_CREATED, JSON.stringify(game));
-				break;
 			default:
 				break;
 		}

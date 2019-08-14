@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-
 import { Game } from '../models/game';
 import { Events } from './events.service';
-import { SimpleIOService } from './plugins/simple-io.service';
-import { GameHelper } from './gameparsing/game-helper.service';
 import { GameDbService } from './game-db.service';
+import { GameHelper } from './gameparsing/game-helper.service';
+import { SimpleIOService } from './plugins/simple-io.service';
 
 @Injectable()
 export class ReplayManager {
@@ -14,6 +13,10 @@ export class ReplayManager {
 
 	public async saveLocally(game: Game) {
 		console.log('ready to save game locally');
+		if (!game.player || !game.opponent) {
+			console.error('[replay-manager] Could not find player and opponent, not saving replay', game.player, game.opponent, game);
+			return;
+		}
 		const plugin = await this.plugin.get();
 		const directory = plugin.LOCALAPPDATA + '/Overwolf/ZeroToHeroes/Replays/';
 		const playerName = game.player.name.replace('"', '');

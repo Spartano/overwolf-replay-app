@@ -8,6 +8,7 @@ import { BrowserOptions, captureException, init } from '@sentry/browser';
 import { LocalStorageModule, LocalStorageService } from 'angular-2-local-storage';
 import { LZStringModule, LZStringService } from 'ng-lz-string';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
+import { EmptyStateComponent } from '../../components/shelf/empty-state.component';
 import { GameReplayComponent } from '../../components/shelf/game-replay.component';
 import { LoginModalComponent } from '../../components/shelf/login-modal.component';
 import { SettingsMenuComponent } from '../../components/shelf/settings-menu.component';
@@ -24,7 +25,6 @@ import { GameUploadService } from '../../services/game-upload.service';
 import { GameHelper } from '../../services/gameparsing/game-helper.service';
 import { OverwolfService } from '../../services/overwolf.service';
 import { SharingService } from '../../services/sharing.service';
-import { ShelfApiListenerService } from '../../services/shelf/shelf-api-listener.service';
 import { ShelfApiService } from '../../services/shelf/shelf-api.service';
 import { ShelfStoreService } from '../../services/shelf/store/shelf-store.service';
 import { UserPreferences } from '../../services/user-preferences.service';
@@ -69,6 +69,7 @@ export class SentryErrorHandler implements ErrorHandler {
 		SocialShareComponent,
 		SettingsMenuComponent,
 		LoginModalComponent,
+		EmptyStateComponent,
 	],
 	bootstrap: [ShelfComponent],
 	providers: [
@@ -88,7 +89,6 @@ export class SentryErrorHandler implements ErrorHandler {
 
 		ShelfApiService,
 		ShelfStoreService,
-		ShelfApiListenerService,
 	],
 })
 export class ShelfModule {}

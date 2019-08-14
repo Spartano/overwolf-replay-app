@@ -1,6 +1,5 @@
 @import 'component/shelf/manastorm-vars';
 
-
 // reset
 * {
 	margin: 0;
@@ -23,10 +22,12 @@ a:active {
 	text-decoration: none;
 }
 
-a { color: inherit; }
+a {
+	color: inherit;
+}
 
-strong {  
-	font-family: "KlavikaWebBasicMedium";
+strong {
+	font-family: 'KlavikaWebBasicMedium';
 }
 
 img {
@@ -34,11 +35,12 @@ img {
 	max-width: 100%;
 }
 
-input, button {
+input,
+button {
 	font: inherit;
 	border: none;
 	background-color: transparent;
-	transition: .15s;
+	transition: 0.15s;
 }
 
 fieldset {
@@ -59,14 +61,15 @@ fieldset {
 
 [type='range'] {
 	background-color: transparent;
-	
-	&, &::-webkit-slider-thumb {
+
+	&,
+	&::-webkit-slider-thumb {
 		-webkit-appearance: none;
 	}
 }
 
 .ignored-wrapper {
-	display: contents;
+	display: contents !important;
 }
 
 // icons
@@ -79,7 +82,7 @@ fieldset {
 	width: var(--size);
 	height: var(--size);
 	flex-shrink: 0;
-	
+
 	svg {
 		width: 100%;
 		height: 100%;
@@ -88,7 +91,7 @@ fieldset {
 
 .btn-gs-icon {
 	color: var(--foreground-third);
-	
+
 	&:hover,
 	&.toggled {
 		color: var(--foreground-secondary);
@@ -110,11 +113,11 @@ fieldset {
 .btn-round {
 	color: var(--foreground-third);
 	border-radius: 50%;
-	
+
 	&:hover,
 	&.active {
 		color: var(--foreground-secondary);
-		background-color: var(--background-secondary);    
+		background-color: var(--background-secondary);
 	}
 }
 
@@ -125,38 +128,60 @@ fieldset {
 		left: 0;
 		opacity: 0;
 	}
-	
-	svg:nth-of-type(1) { opacity: 1; }
-	svg:nth-of-type(2) { opacity: 0; }
+
+	svg:nth-of-type(1) {
+		opacity: 1;
+	}
+	svg:nth-of-type(2) {
+		opacity: 0;
+	}
 }
 
 .toggle-icons.toggled {
-	svg:nth-of-type(1) { opacity: 0; }
-	svg:nth-of-type(2) { opacity: 1; }
+	svg:nth-of-type(1) {
+		opacity: 0;
+	}
+	svg:nth-of-type(2) {
+		opacity: 1;
+	}
 }
 
 // social colors
-.discord { --social-color: #{$discord}; }
-.twitter { --social-color: #{$twitter}; }
-.facebook { --social-color: #{$facebook}; }
-.youtube { --social-color: #{$youtube}; }
-.reddit { --social-color: #{$reddit}; }
-.gfycat { --social-color: #{$gfycat}; }
-.zero-to-heroes { --social-color: #{$zero-to-heroes}; }
+.discord {
+	--social-color: #{$discord};
+}
+.twitter {
+	--social-color: #{$twitter};
+}
+.facebook {
+	--social-color: #{$facebook};
+}
+.youtube {
+	--social-color: #{$youtube};
+}
+.reddit {
+	--social-color: #{$reddit};
+}
+.gfycat {
+	--social-color: #{$gfycat};
+}
+.zero-to-heroes {
+	--social-color: #{$zero-to-heroes};
+}
 
 kbd {
 	font: inherit;
 	padding: 3px 0;
 	display: inline-flex;
 	align-items: center;
-	
+
 	&:before {
-		content: "[";
+		content: '[';
 		padding-right: 3px;
 	}
-	
+
 	&:after {
-		content: "]";
+		content: ']';
 		padding-left: 3px;
 	}
 }
@@ -173,8 +198,8 @@ kbd {
 	justify-content: center;
 	color: var(--btn-color);
 	background-color: var(--btn-background-color);
-	transition: .15s;
-	
+	transition: 0.15s;
+
 	&:hover {
 		background-color: var(--btn-background-color-hover);
 	}
@@ -189,8 +214,8 @@ kbd {
 .text-link {
 	color: $red01;
 	cursor: pointer;
-	
+
 	&:hover {
 		color: $red02;
 	}
-}  
+}

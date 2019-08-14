@@ -1,8 +1,8 @@
-import { Processor } from '../processor';
+import { LoginModalInfo } from '../../../../models/shelf/login-modal-info';
+import { SettingsMenu } from '../../../../models/shelf/settings-menu';
 import { ShelfState } from '../../../../models/shelf/shelf-state';
 import { LoginModalToggleEvent } from '../events/login-modal-toggle-event';
-import { SettingsMenu } from '../../../../models/shelf/settings-menu';
-import { LoginModalInfo } from '../../../../models/shelf/login-modal-info';
+import { Processor } from '../processor';
 
 export class LoginModalToggleProcessor implements Processor {
 	public async process(event: LoginModalToggleEvent, currentState: ShelfState): Promise<ShelfState> {
@@ -14,6 +14,7 @@ export class LoginModalToggleProcessor implements Processor {
 				toggled: event.value,
 				errorMessage: undefined,
 				passwordResetSent: undefined,
+				currentSection: event.value ? currentState.loginModalInfo.currentSection : undefined,
 			} as LoginModalInfo),
 		} as ShelfState);
 	}
