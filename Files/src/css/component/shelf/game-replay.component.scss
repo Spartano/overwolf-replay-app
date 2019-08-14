@@ -1,5 +1,10 @@
 .external-player {
-	::ng-deep .coliseum {
+	// Forcing it to be taken into account over native css
+	::ng-deep .coliseum.coliseum {
 		overflow: hidden;
+
+		turn-narrator {
+			height: 30px;
+		}
 	}
 }
