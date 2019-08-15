@@ -1,7 +1,7 @@
 import { A11yModule } from '@angular/cdk/a11y';
 import { HttpClientModule } from '@angular/common/http';
 import { ErrorHandler, Injectable, NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { ShareModule } from '@ngx-share/core';
 import { BrowserOptions, captureException, init } from '@sentry/browser';
@@ -56,7 +56,6 @@ export class SentryErrorHandler implements ErrorHandler {
 			storageType: 'localStorage',
 		}),
 		FormsModule,
-		ReactiveFormsModule,
 		A11yModule,
 		LZStringModule,
 		LoggerModule.forRoot({ level: NgxLoggerLevel.DEBUG }),
