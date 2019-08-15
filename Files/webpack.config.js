@@ -5,6 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const AngularCompilerPlugin = webpack.AngularCompilerPlugin;
 const ReplaceInFileWebpackPlugin = require('replace-in-file-webpack-plugin');
 const DefinePlugin = require('webpack').DefinePlugin;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 var path = require('path');
@@ -147,7 +148,7 @@ module.exports = function(env, argv) {
 				},
 			]),
 
-			new BundleAnalyzerPlugin(),
+			// new BundleAnalyzerPlugin(),
 		],
 	};
 };
