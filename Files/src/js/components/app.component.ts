@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Game } from '../models/game';
+import { AllCardsService } from '../services/all-cards.service';
 import { DebugService } from '../services/debug.service';
 import { Events } from '../services/events.service';
 import { GameDbService } from '../services/game-db.service';
@@ -29,6 +30,7 @@ export class AppComponent {
 		private logRegister: LogRegisterService,
 		private init_gameDb: GameDbService,
 		private init_memory: MemoryInspectionService,
+		private cardsDb: AllCardsService,
 		private ow: OverwolfService,
 		private events: Events,
 		private replayManager: ReplayManager,
@@ -92,6 +94,7 @@ export class AppComponent {
 			console.log('EGS is not enabled', { extra: extra });
 			this.retryEgs(() => console.log('EGS is not enabled', { extra: extra }));
 		}
+		await this.cardsDb.initializeCardsDb();
 	}
 
 	private exitGame(gameInfoResult: any): boolean {

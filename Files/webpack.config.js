@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const webpack = require('@artonge/webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const AngularCompilerPlugin = webpack.AngularCompilerPlugin;
 const ReplaceInFileWebpackPlugin = require('replace-in-file-webpack-plugin');
 const DefinePlugin = require('webpack').DefinePlugin;
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 var path = require('path');
 
@@ -109,12 +111,13 @@ module.exports = function(env, argv) {
 			}),
 
 			new CopyWebpackPlugin([
-				{ from: path.join(process.cwd(), 'src/html/background.html'), to: 'html' },
-				{ from: path.join(process.cwd(), 'src/html/shelf.html'), to: 'html' },
-				{ from: path.join(process.cwd(), '/../*') },
+				{ from: path.join(process.cwd(), 'src/html/background.html') },
+				{ from: path.join(process.cwd(), 'src/html/shelf.html') },
 				{ from: path.join(process.cwd(), 'src/assets'), to: 'assets' },
-				{ from: path.join(process.cwd(), 'dependencies'), to: 'dependencies' },
+				{ from: path.join(process.cwd(), 'dependencies/coliseum.js') },
+				{ from: path.join(process.cwd(), 'dependencies/cards.json') },
 				{ from: path.join(process.cwd(), 'plugins'), to: 'plugins' },
+				{ from: path.join(process.cwd(), '/../*') },
 			]),
 
 			// Replace the version in the manifest
@@ -143,6 +146,8 @@ module.exports = function(env, argv) {
 					],
 				},
 			]),
+
+			new BundleAnalyzerPlugin(),
 		],
 	};
 };
