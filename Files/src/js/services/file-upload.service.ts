@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import AWS from 'aws-sdk';
-import { Game } from '../models/game';
-import { OverwolfService } from './overwolf.service';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import S3 from 'aws-sdk/clients/s3';
+import AWS from 'aws-sdk/global';
+import { BehaviorSubject } from 'rxjs';
+import { Game } from '../models/game';
 import { GameDbService } from './game-db.service';
+import { OverwolfService } from './overwolf.service';
 
 const GET_REVIEW_ENDPOINT = 'https://nx16sjfatc.execute-api.us-west-2.amazonaws.com/prod/get-review/';
 const REVIEW_INIT_ENDPOINT = 'https://husxs4v58a.execute-api.us-west-2.amazonaws.com/prod';
@@ -62,7 +63,7 @@ export class FileUploadService {
 				}
 			}
 			// console.log('setting rank', rank);
-			const s3 = new AWS.S3();
+			const s3 = new S3();
 			const params = {
 				Bucket: BUCKET,
 				Key: fileKey,
