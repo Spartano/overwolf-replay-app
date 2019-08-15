@@ -20,8 +20,8 @@ import { ReplayUploader } from '../services/replay-uploader.service';
 	`,
 })
 export class AppComponent {
-	retriesForEgsLeft = 10;
-	retryForEgsDelay = 2000;
+	retriesForEgsLeft = 20;
+	retryForEgsDelay = 4000;
 
 	constructor(
 		private debugService: DebugService,
@@ -82,7 +82,7 @@ export class AppComponent {
 					status: displayRequestResult.status,
 					result: displayRequestResult,
 				};
-				console.log('Request to display shelf failed', { extra: extra });
+				console.log('Request to display shelf failed', { extra: extra }, this.retriesForEgsLeft);
 				this.retryEgs(() => console.log('Request to display shelf failed', { extra: extra }));
 			}
 		} else {
