@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
-
-import $ from 'jquery';
-
-import { GameHelper } from './gameparsing/game-helper.service';
 import { Game, Player } from '../models/game';
 import { AllCardsService } from './all-cards.service';
+import { GameHelper } from './gameparsing/game-helper.service';
 
 declare var OverwolfPlugin: any;
 
@@ -55,15 +52,21 @@ export class GameParserService {
 	}
 
 	extractDuration(game: Game) {
-		const replayXml = $.parseXML(this.gameHelper.getXmlReplay(game));
+		const parser = new DOMParser();
+		const replayXml = parser.parseFromString(this.gameHelper.getXmlReplay(game), 'text/xml');
+		console.log('parsed', replayXml);
 
-		const timestampedNodes = $(replayXml).find('[ts]');
-		const firstTimestampInSeconds = this.toTimestamp($(timestampedNodes[0]).attr('ts'));
-		const lastTimestampInSeconds = this.toTimestamp($(timestampedNodes[timestampedNodes.length - 1]).attr('ts'));
+		const timestampedNodes = replayXml.querySelectorAll('[ts]');
+		console.log('timestampedNodes', timestampedNodes);
+		const firstTimestampInSeconds = this.toTimestamp(timestampedNodes[0].getAttribute('ts'));
+		console.log('firstTimestampInSeconds', firstTimestampInSeconds);
+		const lastTimestampInSeconds = this.toTimestamp(timestampedNodes[timestampedNodes.length - 1].getAttribute('ts'));
+		console.log('lastTimestampInSeconds', lastTimestampInSeconds);
 		const durationInSeconds = lastTimestampInSeconds - firstTimestampInSeconds;
 		game.durationTimeSeconds = durationInSeconds;
 
-		const tagChangeNodes = $(replayXml).find('TagChange[entity="1"][tag="19"][value="6"]');
+		const tagChangeNodes = replayXml.querySelectorAll('TagChange[entity="1"][tag="19"][value="6"]');
+		console.log('tagChangeNodes', tagChangeNodes);
 		// Count the number of times the player gets a turn
 		game.durationTurns = (tagChangeNodes.length + 1) / 2;
 	}
@@ -75,7 +78,9 @@ export class GameParserService {
 	}
 
 	extractMatchup(game: Game): void {
-		const replayXml = $.parseXML(this.gameHelper.getXmlReplay(game));
+		const parser = new DOMParser();
+		const replayXml = parser.parseFromString(this.gameHelper.getXmlReplay(game), 'text/xml');
+		console.log('parsed', replayXml);
 		// console.log('replayXML', replayXml);
 		if (!replayXml) {
 			console.warn('invalid game, not adding any meta data');
