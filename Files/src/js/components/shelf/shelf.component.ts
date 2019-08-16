@@ -16,7 +16,7 @@ import { ShelfStoreService } from '../../services/shelf/store/shelf-store.servic
 		<div class="manastorm-shelf light-theme" *ngIf="state">
 			<shelf-header class="ignored-wrapper" [game]="state.currentGame" [user]="state.user" [menu]="state.settingsMenu">
 			</shelf-header>
-			<login-modal class="ignored-wrapper" *ngIf="state.loginModalInfo.toggled" [info]="state.loginModalInfo"></login-modal>
+			<login-modal class="ignored-wrapper" [info]="state.loginModalInfo"> </login-modal>
 			<game-replay class="ignored-wrapper" [game]="state.currentGame"></game-replay>
 			<empty-state class="ignored-wrapper" [error]="state.globalError" [user]="state.user"></empty-state>
 		</div>
@@ -35,7 +35,7 @@ export class ShelfComponent implements OnInit {
 
 	ngOnInit() {
 		this.store.onStateChanged((newState: ShelfState) => {
-			this.logger.info('[shelf] Updating current state', newState);
+			this.logger.info('[shelf] Updating current state', newState, newState.loginModalInfo.toggled);
 			this.state = newState;
 			this.cdr.detectChanges();
 		});
