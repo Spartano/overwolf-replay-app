@@ -1,4 +1,4 @@
-@import "manastorm-vars";
+@import 'manastorm-vars';
 
 form {
 	margin-block-end: 1em;
@@ -29,15 +29,15 @@ form {
 	> * + * {
 		margin-top: 10px;
 	}
-	
+
 	> .log-in-form-legend + .log-in-form-section {
 		margin-top: 20px;
 	}
-	
+
 	.btn {
 		margin-top: 30px;
 	}
-	
+
 	.log-in-form-text-box {
 		margin-top: 20px;
 	}
@@ -56,7 +56,7 @@ form {
 	color: var(--foreground-third);
 	height: 20px;
 	align-items: center;
-	
+
 	.text-link {
 		text-transform: capitalize;
 		margin-left: auto;
@@ -71,19 +71,20 @@ form {
 	outline: solid 1px var(--background-third);
 	outline-offset: -1px;
 	background-color: var(--main-color);
-	transition: .15s;
-	
+	transition: 0.15s;
+
 	&:hover,
 	&:focus {
-		
-		&, &:not(:valid) {
+		&,
+		&:not(:valid) {
 			color: var(--foreground-secondary);
 			outline-color: currentcolor;
 		}
 	}
 }
 
-.input-text:not(:valid), .input-text.invalid {
+.input-text:not(:valid),
+.input-text.invalid {
 	outline-color: $red01;
 }
 
@@ -95,16 +96,20 @@ form {
 // tooltip visibility
 .input-hint-tooltip-container {
 	position: relative;
-	
+
 	.hint-tooltip {
 		--hhtt-arrow-indent: 12px;
 		opacity: 0;
 		z-index: 1;
-		transition: .15s;
+		transition: 0.15s;
 	}
 }
 
-.input-text:not(:valid):not(:focus), .input-text.invalid:not(:focus) {
+.input-text:not(:valid):not(:focus),
+// Invalid doesn't have the focus requirement because that's the 
+// state we are when an error is sent back from validation, and 
+// focus is automatically set to the first element
+.input-text.invalid {
 	+ .hint-tooltip {
 		opacity: 1;
 	}

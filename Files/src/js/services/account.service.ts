@@ -1,14 +1,12 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
-
 import { LocalStorageService } from 'angular-2-local-storage';
-
-import { UserPreferences } from './user-preferences.service';
+import { NGXLogger } from 'ngx-logger';
+import { Subject } from 'rxjs';
+import { LoginField } from '../models/shelf/login-field.type';
 import { Events } from './events.service';
 import { OverwolfService } from './overwolf.service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { NGXLogger } from 'ngx-logger';
-import { LoginField } from '../models/shelf/login-field.type';
+import { UserPreferences } from './user-preferences.service';
 
 const SIGN_IN_URL = 'https://www.zerotoheroes.com/api/login';
 const SIGN_UP_URL = 'https://www.zerotoheroes.com/api/users';
@@ -107,6 +105,14 @@ export class AccountService {
 		password: string;
 		email: string;
 	}): Promise<{ username?: string; error?: string; errorField?: LoginField }> {
+		if (!this.validateEmail(credentials.email)) {
+			return { error: 'This email address is already in use.', errorField: 'email' };
+		} else if (!this.validatePassword(credentials.password)) {
+			return { error: 'This password is not strong enough, please use at least 6 characters', errorField: 'password' };
+		} else if (!this.validatePassword(credentials.username)) {
+			return { error: 'This username is invalid', errorField: 'username' };
+		}
+
 		const accountInfo = {
 			...credentials,
 			registerLocation: 'overwolf-egs',
@@ -255,5 +261,17 @@ export class AccountService {
 	private setAccountClaimed(isClaimed: boolean) {
 		this.accountClaimStatusSubject.next(isClaimed);
 		this.localStorageService.set('account-claimed', isClaimed);
+	}
+
+	private validateEmail(email: string): boolean {
+		return /^[^\s]+@[^\s]+\.[^\s]+$/.test(email);
+	}
+
+	private validatePassword(passwordInput: string): boolean {
+		return passwordInput && passwordInput.length >= 6;
+	}
+
+	private validateUsername(username): boolean {
+		return username && username.length >= 3;
 	}
 }

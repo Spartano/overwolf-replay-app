@@ -114,7 +114,7 @@ import { ShelfStoreService } from '../../services/shelf/store/shelf-store.servic
 											<span [innerHTML]="passwordErrorMessage"></span>
 										</div>
 									</section>
-									<button class="btn btn-red" (click)="signUp()">Sign up</button>
+									<button class="btn btn-red" (click)="register()" #registerButton>Sign up</button>
 								</fieldset>
 							</form>
 							<footer class="log-in-item-footer">
@@ -167,7 +167,7 @@ import { ShelfStoreService } from '../../services/shelf/store/shelf-store.servic
 											<span [innerHTML]="passwordErrorMessage"></span>
 										</div>
 									</section>
-									<button class="btn btn-red" (click)="logIn()">Log in</button>
+									<button class="btn btn-red" (click)="logIn()" #loginButton>Log in</button>
 								</fieldset>
 							</form>
 							<footer class="log-in-item-footer">
@@ -205,7 +205,7 @@ import { ShelfStoreService } from '../../services/shelf/store/shelf-store.servic
 									<!-- display after submit -->
 									<p class="log-in-form-text-box" *ngIf="passwordResetSent">
 										An email with instractions was sent to this address.
-										<button class="text-link" (click)="forgotPassword()">Send again</button>
+										<button class="text-link" (click)="forgotPassword()" #resetPasswordButton>Send again</button>
 									</p>
 								</fieldset>
 							</form>
@@ -249,6 +249,9 @@ export class LoginModalComponent implements AfterViewInit {
 	@ViewChild('signIn', { static: true }) signInEl: ElementRef;
 	@ViewChild('resetPassword', { static: true }) resetPasswordEl: ElementRef;
 	@ViewChild('errorSection', { static: true }) errorEl: ElementRef;
+	@ViewChild('registerButton', { static: true }) registerButtonEl: ElementRef;
+	@ViewChild('loginButton', { static: true }) loginButtonEl: ElementRef;
+	@ViewChild('resetPasswordButton', { static: true }) resetPasswordButtonEl: ElementRef;
 
 	toggled: boolean;
 	_activeSection: string = 'sign-up';
@@ -289,10 +292,11 @@ export class LoginModalComponent implements AfterViewInit {
 		this.passwordErrorMessage = LoginModalComponent.PASSWORD_DEFAULT_MESSAGE;
 		this.loginIdErrorMessage = undefined;
 		this.errorCode = undefined;
+		// this._activeSection = value.currentSection;
 
 		// this.logger.debug('[shelf] [login-modal] setting active section', value, this._activeSection);
 		if (value.currentSection && this._activeSection !== value.currentSection) {
-			this.changeActiveSectionInternal(value.currentSection);
+			this.changeActiveSectionInternal(value.currentSection, value);
 			// this._activeSection = value.currentSection;
 			// We're not scrolling, so we want to directly show the new element
 			if (!this.previouslyVisible && value.toggled) {
@@ -312,8 +316,9 @@ export class LoginModalComponent implements AfterViewInit {
 			// Focus first element in the group
 		}
 		this.previouslyVisible = value.toggled;
-		this.changeActiveSectionInternal(value.currentSection);
-		// this._activeSection = value.currentSection;
+		this.changeActiveSectionInternal(value.currentSection, value);
+
+		this.passwordResetSent = value.passwordResetSent;
 
 		this.errorField = value.errorField;
 		switch (value.errorField) {
@@ -338,11 +343,10 @@ export class LoginModalComponent implements AfterViewInit {
 					this._activeSection = 'error';
 				}
 		}
-
-		this.passwordResetSent = value.passwordResetSent;
 	}
 
 	resetErrorMessage(field: LoginField) {
+		this.logger.debug('resetting error message');
 		this.errorField = undefined;
 		switch (field) {
 			case 'email':
@@ -360,12 +364,9 @@ export class LoginModalComponent implements AfterViewInit {
 		}
 	}
 
-	signUp() {
-		const valid = this.validateEmail() && this.validatePassword() && this.validateUsername();
-		if (!valid) {
-			this.logger.warn('[shelf] [login-modal] trying to sign up with invalid email, username or password', this.username, this.email);
-			return;
-		}
+	register() {
+		// Switch focus to button to avoid blur event after the error message has been set
+		this.registerButtonEl.nativeElement.focus();
 		const credentials = {
 			username: this.username,
 			password: this.passwordInput,
@@ -375,6 +376,8 @@ export class LoginModalComponent implements AfterViewInit {
 	}
 
 	logIn() {
+		// Switch focus to button to avoid blur event after the error message has been set
+		this.loginButtonEl.nativeElement.focus();
 		const credentials = {
 			loginId: this.loginId,
 			password: this.passwordInput,
@@ -383,6 +386,7 @@ export class LoginModalComponent implements AfterViewInit {
 	}
 
 	forgotPassword() {
+		this.resetPasswordButtonEl.nativeElement.focus();
 		const credentials = {
 			loginId: this.loginId,
 		};
@@ -408,12 +412,17 @@ export class LoginModalComponent implements AfterViewInit {
 		this.store.publishEvent(new LoginModalToggleEvent(false, 'sign-up'));
 	}
 
-	private async changeActiveSectionInternal(newSection: LoginModalSection) {
-		this.email = undefined;
-		this.username = undefined;
-		this.passwordInput = undefined;
-		this.loginId = undefined;
-		this.passwordResetSent = undefined;
+	private async changeActiveSectionInternal(newSection: LoginModalSection, info: LoginModalInfo) {
+		// Don't remove the info if it's an error state, so the user can
+		// fix their input
+		this.logger.debug('should reset?', this.errorCode, this.errorField);
+		if (!info.errorField && !info.errorMessage) {
+			this.email = undefined;
+			this.username = undefined;
+			this.passwordInput = undefined;
+			this.loginId = undefined;
+			this.passwordResetSent = undefined;
+		}
 		this._activeSection = newSection;
 		const sectionRootElement = this.getSectionRootElement(newSection);
 		const focusTrap = this.focusTrap.create(sectionRootElement);
@@ -434,18 +443,5 @@ export class LoginModalComponent implements AfterViewInit {
 				this.logger.warn('[login-modal] returning default', section);
 				return this.signUpEl.nativeElement;
 		}
-	}
-
-	private validateEmail(): boolean {
-		// this.logger.debug('[shelf] [login-modal] validating email', this.email);
-		return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email);
-	}
-
-	private validatePassword(): boolean {
-		return this.passwordInput && this.passwordInput.length >= 6;
-	}
-
-	private validateUsername(): boolean {
-		return this.username && this.username.length >= 3;
 	}
 }

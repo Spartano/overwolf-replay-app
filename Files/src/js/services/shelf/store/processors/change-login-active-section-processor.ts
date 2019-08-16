@@ -12,6 +12,8 @@ export class ChangeLoginActiveSectionProcessor implements Processor {
 			} as SettingsMenu),
 			loginModalInfo: Object.assign(new LoginModalInfo(), currentState.loginModalInfo, {
 				currentSection: event.value,
+				errorField: undefined,
+				errorMessage: undefined,
 			} as LoginModalInfo),
 		} as ShelfState);
 	}
