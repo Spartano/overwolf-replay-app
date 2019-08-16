@@ -27,7 +27,7 @@ import { ShelfStoreService } from '../../services/shelf/store/shelf-store.servic
 			<ng-container *ngIf="_error === 'old-session' && !_user.loggedIn">
 				<h1 class="empty-state-h1">This session is only available online</h1>
 				<p class="empty-state-p">
-					This session is not supported in the new player,<br />but you can still view it on the Zero to Heroes site.
+					This session is not supported in the new player,<br />but you can still view it on the Zero to Heroes site
 				</p>
 				<p class="empty-state-p"><strong>Please sign up to continue</strong></p>
 				<button class="btn btn-red" (click)="signup()">Sign up</button>
@@ -38,7 +38,7 @@ import { ShelfStoreService } from '../../services/shelf/store/shelf-store.servic
 			<ng-container *ngIf="_error === 'old-session' && _user.loggedIn">
 				<h1 class="empty-state-h1">This session is only available online</h1>
 				<p class="empty-state-p">
-					This session is not supported in the new player,<br />but you can still view it on the Zero to Heroes site.
+					This session is not supported in the new player,<br />but you can still view it on the Zero to Heroes site
 				</p>
 				<a href="https://www.zerotoheroes.com/s/hearthstone/myVideos/" target="_blank" class="btn btn-red">View online</a>
 			</ng-container>
