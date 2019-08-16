@@ -22,9 +22,9 @@ module.exports = function(env, argv) {
 		mode: env.production ? 'production' : 'development',
 
 		entry: {
+			polyfills: './src/polyfills.ts',
 			background: './src/js/modules/background/main.ts',
 			shelf: './src/js/modules/shelf/main.ts',
-			polyfills: './src/polyfills.ts',
 		},
 
 		optimization: {
