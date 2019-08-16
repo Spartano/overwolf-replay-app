@@ -4,13 +4,15 @@
 	flex: 0 0 40px;
 	display: flex;
 	align-items: center;
-	width: 100%;
+
+	.gs-icon-divider {
+		--divider-gap: 3px;
+	}
 }
 
 .manastorm-header-title {
 	font-size: 16px;
 	cursor: default;
-	flex-grow: 1;
 }
 
 .manastorm-header-subtitle {

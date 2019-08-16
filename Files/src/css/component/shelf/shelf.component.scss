@@ -1,17 +1,15 @@
 @import 'manastorm-vars';
 
 .manastorm-shelf {
+	position: relative;
 	font-size: 14px;
 	font-family: 'nice ampersand', 'KlavikaWebBasicRegular';
 	display: flex;
 	flex-direction: column;
 	padding: 0 10px;
-	padding-bottom: 20px;
+	padding-bottom: 10px;
 	color: var(--foreground-main);
 	background-color: var(--background-main);
-	display: flex;
-	flex-direction: column;
-	position: relative;
 
 	> *:not(.manastorm-player) {
 		flex-shrink: 0;

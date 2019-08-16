@@ -14,7 +14,7 @@ import { User } from '../../models/shelf/user';
 	],
 	template: `
 		<header class="manastorm-header">
-			<h1 class="manastorm-header-title">{{ title }}</h1>
+			<h1 class="manastorm-header-title">{{ playerName }} Vs. {{ opponentName }}</h1>
 			<social-share class="ignored-wrapper" [game]="_game"></social-share>
 			<div class="gs-icon-divider"></div>
 			<settings-menu class="ignored-wrapper" [user]="_user" [menu]="_menu"></settings-menu>
@@ -27,14 +27,16 @@ export class ShelfHeaderComponent {
 	_user: User;
 	_menu: SettingsMenu;
 
-	title: string;
+	playerName: string;
+	opponentName: string;
 
 	constructor(private logger: NGXLogger) {}
 
 	@Input('game') set game(value: Game) {
 		this.logger.debug('[header] setting game', value);
 		this._game = value;
-		this.title = this.buildTitle(value);
+		this.playerName = value && value.player.name;
+		this.opponentName = value && value.opponent.name;
 	}
 
 	@Input('user') set user(value: User) {
@@ -45,9 +47,5 @@ export class ShelfHeaderComponent {
 	@Input('menu') set menu(value: SettingsMenu) {
 		this.logger.debug('[settings-menu] setting menu', value);
 		this._menu = value;
-	}
-
-	private buildTitle(game: Game) {
-		return game && `${game.player.name} Vs. ${game.opponent.name}`;
 	}
 }

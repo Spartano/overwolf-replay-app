@@ -1,7 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Game } from '../../models/game';
-import { NGXLogger } from 'ngx-logger';
 import { ChangeDetectionStrategy } from '@angular/compiler/src/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { NGXLogger } from 'ngx-logger';
+import { Game } from '../../models/game';
 import { GameHelper } from '../../services/gameparsing/game-helper.service';
 
 @Component({
@@ -13,7 +13,7 @@ import { GameHelper } from '../../services/gameparsing/game-helper.service';
 		`../../../css/component/shelf/game-replay.component.scss`,
 	],
 	template: `
-		<div class="manastorm-player">
+		<div>
 			<div id="externalPlayer" class="external-player">
 				Waiting waiting
 			</div>
