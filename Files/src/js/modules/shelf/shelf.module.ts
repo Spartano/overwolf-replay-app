@@ -72,6 +72,8 @@ export class SentryErrorHandler implements ErrorHandler {
 	],
 	bootstrap: [ShelfComponent],
 	providers: [
+		{ provide: ErrorHandler, useClass: SentryErrorHandler },
+
 		GameDbService,
 		GameParserService,
 		UserPreferences,
