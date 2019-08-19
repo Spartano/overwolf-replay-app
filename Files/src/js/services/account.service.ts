@@ -106,7 +106,7 @@ export class AccountService {
 		email: string;
 	}): Promise<{ username?: string; error?: string; errorField?: LoginField }> {
 		if (!this.validateEmail(credentials.email)) {
-			return { error: 'This email address is already in use.', errorField: 'email' };
+			return { error: 'This email address is invalid.', errorField: 'email' };
 		} else if (!this.validatePassword(credentials.password)) {
 			return { error: 'This password is not strong enough, please use at least 6 characters', errorField: 'password' };
 		} else if (!this.validatePassword(credentials.username)) {
