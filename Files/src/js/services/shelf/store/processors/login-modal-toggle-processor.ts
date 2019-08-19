@@ -13,6 +13,7 @@ export class LoginModalToggleProcessor implements Processor {
 			loginModalInfo: Object.assign(new LoginModalInfo(), currentState.loginModalInfo, {
 				toggled: event.value,
 				errorMessage: undefined,
+				errorField: undefined,
 				passwordResetSent: undefined,
 				currentSection: event.activeSection,
 			} as LoginModalInfo),
