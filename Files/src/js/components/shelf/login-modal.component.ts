@@ -200,12 +200,12 @@ import { ShelfStoreService } from '../../services/shelf/store/shelf-store.servic
 											<span [innerHTML]="loginIdErrorMessage"></span>
 										</div>
 									</section>
-									<button class="btn btn-red" (click)="forgotPassword()">Submit</button>
+									<button class="btn btn-red" (click)="forgotPassword()" #resetPasswordButton>Submit</button>
 
 									<!-- display after submit -->
 									<p class="log-in-form-text-box" *ngIf="passwordResetSent">
 										An email with instractions was sent to this address.
-										<button class="text-link" (click)="forgotPassword()" #resetPasswordButton>Send again</button>
+										<button class="text-link" (click)="forgotPassword()">Send again</button>
 									</p>
 								</fieldset>
 							</form>
@@ -386,10 +386,15 @@ export class LoginModalComponent implements AfterViewInit {
 	}
 
 	forgotPassword() {
+		this.logger.debug('[login-modal] requested password reset');
+		this.logger.debug('[login-modal] button el', this.resetPasswordButtonEl);
+		this.logger.debug('[login-modal] button el native', this.resetPasswordButtonEl.nativeElement);
 		this.resetPasswordButtonEl.nativeElement.focus();
+		this.logger.debug('[login-modal] focused reset element');
 		const credentials = {
 			loginId: this.loginId,
 		};
+		this.logger.debug('[login-modal] resetting password');
 		this.store.publishEvent(new ResetPasswordEvent(credentials));
 	}
 
