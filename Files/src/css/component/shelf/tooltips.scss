@@ -1,148 +1,148 @@
-@import "manastorm-vars";
+@import 'manastorm-vars';
 
 // visibility
 .hint-tooltip-container {
-    position: relative;
-    
-    .hint-tooltip {
-        opacity: 0;
-        z-index: 1;
-        transition: .15s;
-    }
+	position: relative;
+
+	.hint-tooltip {
+		opacity: 0;
+		z-index: 100;
+		transition: 0.15s;
+	}
 }
 
 .hint-tooltip-container:focus-visible,
 .hint-tooltip-container:hover {
-    .hint-tooltip {
-        opacity: 1;
-        transition-delay: .5s;
-    }
+	.hint-tooltip {
+		opacity: 1;
+		transition-delay: 0.5s;
+	}
 }
 
 .hint-tooltip {
-    font-size: 13px;
-    text-align: center;
-    padding: 7px 10px;
-    white-space: nowrap;
-    pointer-events: none;
-    color: var(--hntt-color, $light-foreground-main); // default light theme
-    background-color: var(--hntt-bg-color, $light-background-main); // default light theme
-    filter: drop-shadow(0 0 3px rgba(black, .6));
-    
-    kbd {
-        color: var(--foreground-third);
-    }
+	font-size: 13px;
+	text-align: center;
+	padding: 7px 10px;
+	white-space: nowrap;
+	pointer-events: none;
+	color: var(--hntt-color, $light-foreground-main); // default light theme
+	background-color: var(--hntt-bg-color, $light-background-main); // default light theme
+	filter: drop-shadow(0 0 3px rgba(black, 0.6));
+
+	kbd {
+		color: var(--foreground-third);
+	}
 }
 
 // arrow
 .hint-tooltip:after {
-    content: "";
-    position: absolute;
-    margin: auto;
-    background-color: inherit;
+	content: '';
+	position: absolute;
+	margin: auto;
+	background-color: inherit;
 }
 
 // position
 .hint-tooltip {
-    position: absolute;
-    margin: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+	position: absolute;
+	margin: auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .hint-tooltip-right,
 .hint-tooltip-left {
-    &:after {
-        width: 6px;
-        height: 18px;
-    }
+	&:after {
+		width: 6px;
+		height: 18px;
+	}
 }
 
 .hint-tooltip-right {
-    right: 0;
-    transform: translateX(100%);
-    
-    &:after {
-        left: -4px;
-        clip-path: polygon(0 50%, 100% 0, 100% 100%);
-    }
+	right: 0;
+	transform: translateX(100%);
+
+	&:after {
+		left: -4px;
+		clip-path: polygon(0 50%, 100% 0, 100% 100%);
+	}
 }
 
 .hint-tooltip-left {
-    left: 0;
-    transform: translateX(-100%);
-    
-    &:after {
-        right: -4px;
-        clip-path: polygon(0 0, 100% 50%, 0 100%);
-    }
+	left: 0;
+	transform: translateX(-100%);
+
+	&:after {
+		right: -4px;
+		clip-path: polygon(0 0, 100% 50%, 0 100%);
+	}
 }
 
 .hint-tooltip-top,
 .hint-tooltip-bottom {
-    &:after {
-        width: 18px;
-        height: 6px;
-    }
+	&:after {
+		width: 18px;
+		height: 6px;
+	}
 }
 
 .hint-tooltip-top {
-    top: 0;
-    transform: translateY(-100%);
-    
-    &:after {
-        bottom: -4px;
-        clip-path: polygon(0 0, 100% 0, 50% 100%)
-    }
+	top: 0;
+	transform: translateY(-100%);
+
+	&:after {
+		bottom: -4px;
+		clip-path: polygon(0 0, 100% 0, 50% 100%);
+	}
 }
 
 .hint-tooltip-bottom {
-    bottom: 0;
-    transform: translateY(100%);
-    
-    &:after {
-        top: -4px;
-        clip-path: polygon(50% 0, 0 100%, 100% 100%)
-    }
+	bottom: 0;
+	transform: translateY(100%);
+
+	&:after {
+		top: -4px;
+		clip-path: polygon(50% 0, 0 100%, 100% 100%);
+	}
 }
 
 // special alignment
 .hint-tooltip-aligned-right,
 .hint-tooltip-aligned-left {
-    --hhtt-arrow-indent: calc(var(--size) / 2);
+	--hhtt-arrow-indent: calc(var(--size) / 2);
 }
 
 .hint-tooltip-aligned-right {
-    right: 0;
-    
-    &:after {
-        right: var(--hhtt-arrow-indent);
-        transform: translateX(50%);
-    }
+	right: 0;
+
+	&:after {
+		right: var(--hhtt-arrow-indent);
+		transform: translateX(50%);
+	}
 }
 
 .hint-tooltip-aligned-left {
-    left: 0;
-    
-    &:after {
-        left: var(--hhtt-arrow-indent);
-        transform: translateX(-50%);
-    }
+	left: 0;
+
+	&:after {
+		left: var(--hhtt-arrow-indent);
+		transform: translateX(-50%);
+	}
 }
 
 // light theme
 .light-theme {
-    --hntt-color: #{$light-foreground-main};
-    --hntt-bg-color: #{$light-background-main};
+	--hntt-color: #{$light-foreground-main};
+	--hntt-bg-color: #{$light-background-main};
 }
 
 // dark theme
 .dark-theme {
-    --hntt-color: #{$dark-foreground-main};
-    --hntt-bg-color: #{$dark-background-main};
+	--hntt-color: #{$dark-foreground-main};
+	--hntt-bg-color: #{$dark-background-main};
 }
 
 .hint-tooltip.dark-theme {
-    filter: none;
+	filter: none;
 }

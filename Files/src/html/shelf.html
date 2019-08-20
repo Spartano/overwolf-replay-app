@@ -3,49 +3,56 @@
 	<head>
 		<!-- Google Analytics -->
 		<script>
-		    var _gaq = _gaq || [];
-		    _gaq.push(['_setAccount', 'UA-65945334-4']);
-		    _gaq.push(['_trackPageview']);
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-65945334-4']);
+			_gaq.push(['_trackPageview']);
 
-		    (function(i, s, o, g, r, a, m) {
-		        i['GoogleAnalyticsObject'] = r;
-		        i[r] = i[r] || function() {
-		            (i[r].q = i[r].q || []).push(arguments)
-		        }, i[r].l = 1 * new Date();
-		        a = s.createElement(o),
-		            m = s.getElementsByTagName(o)[0];
-		        a.async = 1;
-		        a.src = g;
-		        m.parentNode.insertBefore(a, m)
-		    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+			(function(i, s, o, g, r, a, m) {
+				i['GoogleAnalyticsObject'] = r;
+				(i[r] =
+					i[r] ||
+					function() {
+						(i[r].q = i[r].q || []).push(arguments);
+					}),
+					(i[r].l = 1 * new Date());
+				(a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]);
+				a.async = 1;
+				a.src = g;
+				m.parentNode.insertBefore(a, m);
+			})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
-		    ga('create', 'UA-65945334-4', 'auto');
-		    console.log('create ga', ga.q);
-		    ga('set', 'checkProtocolTask', null);
+			ga('create', 'UA-65945334-4', 'auto');
+			console.log('create ga', ga.q);
+			ga('set', 'checkProtocolTask', null);
 		</script>
 
 		<title>Manastorm - a Hearthstone Replay Viewer</title>
-    	<meta charset="UTF-8">
-		<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+		<meta charset="UTF-8" />
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 
 		<!-- Third-party scripts -->
-  		<script src="./plugins/overwolfplugin.js"></script>
+		<script src="./plugins/overwolfplugin.js"></script>
 		<!-- Other Zero to Heroes libraries -->
 		<script src="./coliseum.js"></script>
 
 		<style>
-			html, body {
+			html,
+			body {
 				margin: 0;
 				max-height: 100vh;
+			}
+
+			body {
+				overflow: hidden;
 			}
 		</style>
 	</head>
 
 	<body>
-		<manastorm-shelf>Loading...</zh-shelf>
+		<manastorm-shelf>Loading...</manastorm-shelf>
 
-  		<script src="./polyfills.js"></script>
-  		<script src="./vendor.js"></script>
-  		<script src="./shelf.js"></script>
+		<script src="./polyfills.js"></script>
+		<script src="./vendor.js"></script>
+		<script src="./shelf.js"></script>
 	</body>
 </html>

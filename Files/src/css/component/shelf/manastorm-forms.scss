@@ -100,7 +100,7 @@ form {
 	.hint-tooltip {
 		--hhtt-arrow-indent: 12px;
 		opacity: 0;
-		z-index: 1;
+		z-index: 100;
 		transition: 0.15s;
 	}
 }
