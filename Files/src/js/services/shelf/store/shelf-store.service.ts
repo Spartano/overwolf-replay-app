@@ -58,21 +58,28 @@ export class ShelfStoreService {
 
 	// We want events to be processed sequentially
 	private async processQueue() {
-		if (this.isProcessing || this.eventQueue.length === 0) {
+		if (this.eventQueue.length === 0) {
 			return;
 		}
+		if (this.isProcessing) {
+			this.logger.debug('[store] queue already processing, returning');
+			return;
+		}
+		this.logger.debug('[store] will process event');
 		this.isProcessing = true;
 		const event = this.eventQueue.shift();
-		this.logger.debug('[store] processing event', event.eventName(), event);
+		this.logger.debug('[store] processing event', event.eventName());
 		const processor: Processor = this.processors.get(event.eventName());
 		const newState = await processor.process(event, this.state);
 		if (newState) {
 			this.state = newState;
+			this.logger.debug('[store] emitted new state', this.state);
 			this.stateEmitter.next(this.state);
 		} else {
 			this.logger.debug('[store] no new state to emit');
 		}
 		this.isProcessing = false;
+		this.logger.debug('[store] processing event over', event.eventName());
 	}
 
 	private buildProcessors(): Map<string, Processor> {

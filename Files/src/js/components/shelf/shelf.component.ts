@@ -34,8 +34,9 @@ export class ShelfComponent implements OnInit {
 	) {}
 
 	ngOnInit() {
+		this.logger.debug('[shelf] subscribing to store', this.store);
 		this.store.onStateChanged((newState: ShelfState) => {
-			this.logger.info('[shelf] Updating current state', newState, newState.loginModalInfo.toggled);
+			this.logger.debug('[shelf] Updating current state', newState);
 			this.state = newState;
 			this.cdr.detectChanges();
 		});

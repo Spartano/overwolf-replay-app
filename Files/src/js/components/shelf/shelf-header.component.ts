@@ -33,7 +33,10 @@ export class ShelfHeaderComponent {
 	constructor(private logger: NGXLogger) {}
 
 	@Input('game') set game(value: Game) {
-		this.logger.debug('[header] setting game', value);
+		if (this._game && value && this._game.id == value.id) {
+			return;
+		}
+		this.logger.debug('[header] setting game', value && value.id, this._game && this._game.id);
 		this._game = value;
 		this.playerName = value && value.player.name;
 		this.opponentName = value && value.opponent.name;
