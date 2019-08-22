@@ -109,7 +109,7 @@ export class AccountService {
 			return { error: 'This email address is invalid.', errorField: 'email' };
 		} else if (!this.validatePassword(credentials.password)) {
 			return { error: 'This password is not strong enough, please use at least 6 characters', errorField: 'password' };
-		} else if (!this.validatePassword(credentials.username)) {
+		} else if (!this.validateUsername(credentials.username)) {
 			return { error: 'This username is invalid', errorField: 'username' };
 		}
 
