@@ -197,7 +197,7 @@ export class AccountService {
 			switch (e.status) {
 				case 404:
 				case 406:
-					errorMessage = "We could't find any account with this identified";
+					errorMessage = "We couldn't find any account for this user";
 					errorField = 'loginId';
 					break;
 				default:
