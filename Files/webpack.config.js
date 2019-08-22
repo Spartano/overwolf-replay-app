@@ -114,6 +114,7 @@ module.exports = function(env, argv) {
 			new CopyWebpackPlugin([
 				{ from: path.join(process.cwd(), 'src/html/background.html') },
 				{ from: path.join(process.cwd(), 'src/html/shelf.html') },
+				{ from: path.join(process.cwd(), 'src/html/shelf_redirect.html'), to: 'html/shelf.html' },
 				{ from: path.join(process.cwd(), 'src/assets'), to: 'assets' },
 				{ from: path.join(process.cwd(), 'dependencies/coliseum.js') },
 				{ from: path.join(process.cwd(), 'dependencies/cards.json') },
