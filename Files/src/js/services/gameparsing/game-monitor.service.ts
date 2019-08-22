@@ -48,6 +48,7 @@ export class GameMonitorService {
 						game.deckstring = this.deckService.currentDeck.deckstring;
 					}
 					this.gameHelper.setXmlReplay(game, replayXml);
+					game.uncompressedXmlReplay = replayXml;
 					this.gameParserService.extractMatchup(game);
 					this.gameParserService.extractDuration(game);
 					this.deckService.reset();

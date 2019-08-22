@@ -27,9 +27,9 @@ export class GameReplayComponent implements OnInit {
 	constructor(private logger: NGXLogger, private gameHelper: GameHelper) {}
 
 	@Input('game') set game(value: Game) {
-		this.logger.debug('[game-replay] setting game', value);
 		if (value) {
-			const replay = this.gameHelper.getXmlReplay(value);
+			this.logger.debug('[game-replay] setting game', value.id);
+			const replay = value.uncompressedXmlReplay;
 			this.reload(replay, value.reviewId);
 		}
 	}
