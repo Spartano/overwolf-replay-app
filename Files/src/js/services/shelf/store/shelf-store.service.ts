@@ -65,7 +65,7 @@ export class ShelfStoreService {
 			this.logger.debug('[store] queue already processing, returning');
 			return;
 		}
-		this.logger.debug('[store] will process event');
+		// this.logger.debug('[store] will process event');
 		this.isProcessing = true;
 		const event = this.eventQueue.shift();
 		this.logger.debug('[store] processing event', event.eventName());
@@ -73,13 +73,13 @@ export class ShelfStoreService {
 		const newState = await processor.process(event, this.state);
 		if (newState) {
 			this.state = newState;
-			this.logger.debug('[store] emitted new state', this.state);
+			// this.logger.debug('[store] emitted new state', this.state);
 			this.stateEmitter.next(this.state);
 		} else {
 			this.logger.debug('[store] no new state to emit');
 		}
 		this.isProcessing = false;
-		this.logger.debug('[store] processing event over', event.eventName());
+		// this.logger.debug('[store] processing event over', event.eventName());
 	}
 
 	private buildProcessors(): Map<string, Processor> {
