@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { Game } from '../../models/game';
 
@@ -16,7 +16,7 @@ declare var ga: any;
 	template: `
 		<section class="manastorm-header-share-section">
 			<p class="manastorm-header-subtitle">Share</p>
-			<button class="gs-icon btn-gs-icon share-icon hint-tooltip-container" shareButton="facebook" [url]="url">
+			<button class="gs-icon btn-gs-icon share-icon hint-tooltip-container" shareButton="facebook" [url]="url('facebook')">
 				<svg>
 					<use xlink:href="/Files/assets/svg/share-icons.svg#share-on-facebook" />
 				</svg>
@@ -24,7 +24,7 @@ declare var ga: any;
 					<span>Share on Facebook</span>
 				</div>
 			</button>
-			<button class="gs-icon btn-gs-icon share-icon hint-tooltip-container" shareButton="twitter" [url]="url">
+			<button class="gs-icon btn-gs-icon share-icon hint-tooltip-container" shareButton="twitter" [url]="url('twitter')">
 				<svg>
 					<use xlink:href="/Files/assets/svg/share-icons.svg#share-on-twitter" />
 				</svg>
@@ -32,7 +32,7 @@ declare var ga: any;
 					<span>Share on Twitter</span>
 				</div>
 			</button>
-			<button class="gs-icon btn-gs-icon share-icon hint-tooltip-container" shareButton="reddit" [url]="url">
+			<button class="gs-icon btn-gs-icon share-icon hint-tooltip-container" shareButton="reddit" [url]="url('reddit')">
 				<svg>
 					<use xlink:href="/Files/assets/svg/share-icons.svg#share-on-reddit" />
 				</svg>
@@ -45,14 +45,18 @@ declare var ga: any;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SocialShareComponent {
-	url: string;
+	private baseUrl: string;
 
 	constructor(private logger: NGXLogger) {}
 
 	@Input('game') set game(value: Game) {
 		this.logger.debug('[header] setting game', value);
 		if (value) {
-			this.url = `http://replays.firestoneapp.com/?reviewId=${value.reviewId}`;
+			this.baseUrl = `http://replays.firestoneapp.com/?reviewId=${value.reviewId}`;
 		}
+	}
+
+	url(source: string): string {
+		return `${this.baseUrl}&source=${source}`;
 	}
 }
