@@ -1,7 +1,8 @@
-import { Processor } from '../processor';
+import { LoginModalInfo } from '../../../../models/shelf/login-modal-info';
+import { SettingsMenu } from '../../../../models/shelf/settings-menu';
 import { ShelfState } from '../../../../models/shelf/shelf-state';
 import { SettingsMenuToggleEvent } from '../events/settings-menu-toggle-event';
-import { SettingsMenu } from '../../../../models/shelf/settings-menu';
+import { Processor } from '../processor';
 
 export class SettingsMenuToggleProcessor implements Processor {
 	public async process(event: SettingsMenuToggleEvent, currentState: ShelfState): Promise<ShelfState> {
@@ -10,6 +11,9 @@ export class SettingsMenuToggleProcessor implements Processor {
 		} as SettingsMenu);
 		return Object.assign(new ShelfState(), currentState, {
 			settingsMenu: newMenu,
+			loginModalInfo: Object.assign(new LoginModalInfo(), currentState.loginModalInfo, {
+				toggled: false,
+			} as LoginModalInfo),
 		} as ShelfState);
 	}
 }
