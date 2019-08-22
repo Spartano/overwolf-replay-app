@@ -106,11 +106,11 @@ export class AccountService {
 		email: string;
 	}): Promise<{ username?: string; error?: string; errorField?: LoginField }> {
 		if (!this.validateEmail(credentials.email)) {
-			return { error: 'This email address is invalid.', errorField: 'email' };
+			return { error: 'This email address is invalid', errorField: 'email' };
 		} else if (!this.validatePassword(credentials.password)) {
-			return { error: 'This password is not strong enough, please use at least 6 characters', errorField: 'password' };
+			return { error: 'Password must have at least 6 characters', errorField: 'password' };
 		} else if (!this.validateUsername(credentials.username)) {
-			return { error: 'This username is invalid', errorField: 'username' };
+			return { error: 'Username must have at least 3 characters long', errorField: 'username' };
 		}
 
 		const accountInfo = {
@@ -131,15 +131,15 @@ export class AccountService {
 					const reason: string = e.error.reason;
 					switch (reason) {
 						case 'USERNAME':
-							errorMessage = 'This username is already in use.';
+							errorMessage = 'This username is already in use';
 							errorField = 'username';
 							break;
 						case 'EMAIL':
-							errorMessage = 'This email address is already in use.';
+							errorMessage = 'This email address is already in use';
 							errorField = 'email';
 							break;
 						case 'PASSWORD':
-							errorMessage = 'Please provide a password to secure your account.';
+							errorMessage = 'Please provide a password to secure your account';
 							errorField = 'password';
 							break;
 					}
@@ -171,8 +171,8 @@ export class AccountService {
 			let errorField: LoginField;
 			switch (e.status) {
 				case 401:
-					errorMessage = 'Invalid login/password combination';
-					errorField = 'loginId';
+					errorMessage = 'Username or password is incorrect';
+					errorField = 'password';
 					break;
 				default:
 					errorMessage = `login_${e.status}_${e.error.message}`;
@@ -191,7 +191,7 @@ export class AccountService {
 			this.logger.debug('Reset password result', result);
 			return {};
 		} catch (e) {
-			this.logger.warn('Could not reste password', e);
+			this.logger.warn('Could not reset password', e);
 			let errorMessage = '';
 			let errorField: LoginField;
 			switch (e.status) {
