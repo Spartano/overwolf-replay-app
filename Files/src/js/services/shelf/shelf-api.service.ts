@@ -17,13 +17,11 @@ export class ShelfApiService {
 		// setTimeout(() => this.init(), 50);
 		this.ow.addMatchSelectionInfoChangedListener(async (matchInfo: { gameId: number; matchId: string; sessionId: string }) => {
 			this.logger.debug('[shelf-api] Match selected', matchInfo);
-			this.loadGame(matchInfo.matchId);
+			this.loadGame(matchInfo ? matchInfo.matchId : null);
 		});
 		const matchInfo = await this.ow.getSelectedMatch();
 		this.logger.debug('[shelf-api] Retrieved match', matchInfo);
-		if (matchInfo.matchId) {
-			this.loadGame(matchInfo.matchId);
-		}
+		this.loadGame(matchInfo ? matchInfo.matchId : null);
 	}
 
 	private async loadGame(matchId: string): Promise<void> {
