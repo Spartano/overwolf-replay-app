@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { ShelfState } from '../../models/shelf/shelf-state';
+import { DebugService } from '../../services/debug.service';
 import { ShelfApiService } from '../../services/shelf/shelf-api.service';
 import { ShelfStoreService } from '../../services/shelf/store/shelf-store.service';
 
@@ -29,6 +30,7 @@ export class ShelfComponent implements OnInit {
 	constructor(
 		private store: ShelfStoreService,
 		private init_shelfApi: ShelfApiService,
+		private init_debug: DebugService,
 		private logger: NGXLogger,
 		private cdr: ChangeDetectorRef,
 	) {}
