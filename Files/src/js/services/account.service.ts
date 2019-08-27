@@ -110,7 +110,7 @@ export class AccountService {
 		} else if (!this.validatePassword(credentials.password)) {
 			return { error: 'Password must have at least 6 characters', errorField: 'password' };
 		} else if (!this.validateUsername(credentials.username)) {
-			return { error: 'Username must have at least 3 characters long', errorField: 'username' };
+			return { error: 'Username must have at least 3 characters', errorField: 'username' };
 		}
 
 		const accountInfo = {
