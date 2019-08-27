@@ -31,13 +31,18 @@ export class GameReplayComponent implements OnInit {
 			this.logger.debug('[game-replay] setting game', value.id);
 			const replay = value.uncompressedXmlReplay;
 			this.reload(replay, value.reviewId);
+		} else {
+			// Resetting the game
+			this.logger.debug('[game-replay] resetting player');
+			this.ngOnInit();
 		}
 	}
 
 	async ngOnInit() {
-		this.logger.debug('initializing coliseum');
+		// this.logger.debug('initializing coliseum');
 		const coliseum = (window as any).coliseum;
 		await coliseum.init();
+		coliseum.zone.run(() => coliseum.component.reset());
 		this.logger.debug('coliseum init done');
 		this.initDone = true;
 	}

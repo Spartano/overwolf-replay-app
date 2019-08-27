@@ -31,7 +31,8 @@ export class ShelfApiService {
 			this.store.publishEvent(new GlobalErrorEvent('old-session'));
 			return;
 		}
-		// TODO: reset game at this point to show the loader?
+		// Reset game at this point to show the loader
+		this.store.publishEvent(new GameSelectedEvent(null));
 		this.logger.debug('[shelf-api] Loading match with id', matchId);
 		const game: Game = await this.gameDb.getGame(matchId);
 		// If we don't have a game, it means that the GS recorded the game, but for
