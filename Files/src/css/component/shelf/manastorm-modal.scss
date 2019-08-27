@@ -29,20 +29,28 @@
 	}
 }
 
-.modal-wrapper {
-	transition: 0.25s;
-	transition-delay: 0.15s;
-}
-
 .modal-inner {
 	transform: translateY(-100%);
 	transition: 0.25s;
-	transition-delay: 0s;
 }
 
 .modal-wrapper.active {
-	transition-delay: 0s;
+	.modal-inner {
+		transform: none;
+	}
+}
 
+.modal-wrapper-visible {
+	transition: 0.25s;
+	transition-delay: 0.15s;
+
+	.modal-inner {
+		transition-delay: 0s;
+	}
+}
+
+.modal-wrapper-visible.active {
+	transition-delay: 0s;
 	.modal-inner {
 		transform: none;
 		transition-delay: 0.15s;

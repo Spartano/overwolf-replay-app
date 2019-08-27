@@ -35,7 +35,7 @@ import { ShelfStoreService } from '../../services/shelf/store/shelf-store.servic
 		`../../../css/component/shelf/login-modal.component.scss`,
 	],
 	template: `
-		<div class="modal-wrapper modal-wrapper-log-in" [ngClass]="{ 'active': toggled }">
+		<div class="modal-wrapper modal-wrapper-visible modal-wrapper-log-in" [ngClass]="{ 'active': toggled }">
 			<div class="modal-inner modal-log-in">
 				<aside class="modal-log-in-aside">
 					<svg
