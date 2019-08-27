@@ -32,9 +32,7 @@ export class GameReplayComponent implements OnInit {
 			const replay = value.uncompressedXmlReplay;
 			this.reload(replay, value.reviewId);
 		} else {
-			// Resetting the game
-			this.logger.debug('[game-replay] resetting player');
-			this.ngOnInit();
+			this.resetGame();
 		}
 	}
 
@@ -57,6 +55,14 @@ export class GameReplayComponent implements OnInit {
 				reviewId: reviewId,
 			});
 		});
+	}
+
+	async resetGame() {
+		// Resetting the game
+		await this.waitForViewerInit();
+		this.logger.debug('[game-replay] resetting player');
+		const coliseum = (window as any).coliseum;
+		coliseum.zone.run(() => coliseum.component.reset());
 	}
 
 	private waitForViewerInit(): Promise<void> {
