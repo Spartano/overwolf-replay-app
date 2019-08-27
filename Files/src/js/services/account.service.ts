@@ -34,7 +34,7 @@ export class AccountService {
 
 	private async init() {
 		const user = await this.ow.getCurrentUser();
-		this.logger.debug('current user', user);
+		this.logger.debug('current user', user.userId, user.machineId, user.username);
 		this.userId = user.userId || user.machineId || user.username;
 		if (this.userId) {
 			// this.accountClaimUrlSubject.next(CLAIM_ACCOUNT_URL + this.userId);
@@ -232,7 +232,7 @@ export class AccountService {
 				this.setAccountClaimed(true);
 			},
 			err => {
-				this.logger.debug('account not claimed', this.userId, err);
+				this.logger.debug('account not claimed', this.userId);
 				this.accountClaimStatusSubject.next(false);
 			},
 		);

@@ -36,7 +36,7 @@ export class ShelfHeaderComponent {
 		if (this._game && value && this._game.id == value.id) {
 			return;
 		}
-		this.logger.debug('[header] setting game', value && value.id, this._game && this._game.id);
+		this.logger.debug('[header] setting game');
 		this._game = value;
 		this.playerName = value && value.player.name;
 		this.opponentName = value && value.opponent.name;

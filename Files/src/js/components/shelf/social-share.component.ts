@@ -50,7 +50,7 @@ export class SocialShareComponent {
 	constructor(private logger: NGXLogger) {}
 
 	@Input('game') set game(value: Game) {
-		this.logger.debug('[header] setting game', value);
+		this.logger.debug('[social-share] setting game');
 		if (value) {
 			this.baseUrl = `http://replays.firestoneapp.com/?reviewId=${value.reviewId}`;
 		}
