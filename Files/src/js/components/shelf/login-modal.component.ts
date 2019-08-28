@@ -420,7 +420,7 @@ export class LoginModalComponent implements AfterViewInit {
 	private async changeActiveSectionInternal(newSection: LoginModalSection, info: LoginModalInfo) {
 		// Don't remove the info if it's an error state, so the user can
 		// fix their input
-		this.logger.debug('should reset?', this.errorCode, this.errorField);
+		// this.logger.debug('should reset?', this.errorCode, this.errorField);
 		if (!info.errorField && !info.errorMessage) {
 			this.email = undefined;
 			this.username = undefined;
