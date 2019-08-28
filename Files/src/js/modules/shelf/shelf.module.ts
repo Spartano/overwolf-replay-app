@@ -8,6 +8,7 @@ import { BrowserOptions, captureException, init } from '@sentry/browser';
 import { LocalStorageModule, LocalStorageService } from 'angular-2-local-storage';
 import { LZStringModule, LZStringService } from 'ng-lz-string';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
+import { EmptyStateIllustrationComponent } from '../../components/shelf/empty-state-illustration.component';
 import { EmptyStateComponent } from '../../components/shelf/empty-state.component';
 import { GameReplayComponent } from '../../components/shelf/game-replay.component';
 import { LoginModalComponent } from '../../components/shelf/login-modal.component';
@@ -69,6 +70,7 @@ export class SentryErrorHandler implements ErrorHandler {
 		SettingsMenuComponent,
 		LoginModalComponent,
 		EmptyStateComponent,
+		EmptyStateIllustrationComponent,
 	],
 	bootstrap: [ShelfComponent],
 	providers: [

@@ -15,13 +15,7 @@ import { ShelfStoreService } from '../../services/shelf/store/shelf-store.servic
 	],
 	template: `
 		<div class="modal-empty-state" [ngClass]="{ 'active': _error }">
-			<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">
-				<polygon points="30 20 62 40 30 60 30 20" fill="#b6b6b6" />
-				<path
-					d="M40,0A40,40,0,1,0,80,40,40,40,0,0,0,40,0Zm0,4a35.89,35.89,0,0,1,24,9.18L13.18,64A36,36,0,0,1,40,4Zm0,72a35.89,35.89,0,0,1-24-9.18L66.82,16A36,36,0,0,1,40,76Z"
-					fill="#dedede"
-				/>
-			</svg>
+			<empty-state-illustration></empty-state-illustration>
 
 			<!-- old sessions error - not logged in -->
 			<ng-container *ngIf="_error === 'old-session' && !_user.loggedIn">
