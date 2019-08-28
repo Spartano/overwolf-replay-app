@@ -14,9 +14,7 @@ import { GameHelper } from '../../services/gameparsing/game-helper.service';
 	],
 	template: `
 		<div>
-			<div id="externalPlayer" class="external-player">
-				Waiting waiting
-			</div>
+			<div id="externalPlayer" class="external-player"></div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
