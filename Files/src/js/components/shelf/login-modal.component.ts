@@ -445,7 +445,6 @@ export class LoginModalComponent implements AfterViewInit {
 			case 'reset-password': return this.resetPasswordEl.nativeElement;
 			case 'error': return this.errorEl.nativeElement;
 			default: 
-				this.logger.warn('[login-modal] returning default', section);
 				return this.signUpEl.nativeElement;
 		}
 	}
