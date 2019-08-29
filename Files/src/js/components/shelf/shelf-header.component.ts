@@ -36,10 +36,10 @@ export class ShelfHeaderComponent {
 		if (this._game && value && this._game.id == value.id) {
 			return;
 		}
-		this.logger.debug('[header] setting game');
+		this.logger.debug('[header] setting game', value);
 		this._game = value;
-		this.playerName = value && value.player.name;
-		this.opponentName = value && value.opponent.name;
+		this.playerName = value ? value.player.name : this.playerName;
+		this.opponentName = value ? value.opponent.name : this.opponentName;
 	}
 
 	@Input('user') set user(value: User) {
