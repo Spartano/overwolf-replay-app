@@ -101,7 +101,6 @@ export class EmptyStateIllustrationComponent implements AfterViewInit {
 		const tvBody = document.querySelector('.tv-body');
 		const tvHeadWrapper = document.querySelector('.tv-head-wrapper');
 		const tvAntennas = document.querySelectorAll('.tv-antenna');
-		const tvBtns = document.querySelectorAll('.tv-btn');
 		const tvBtnMain: any = document.querySelector('.tv-btn-main');
 		const tvBtnSecondary = document.querySelector('.tv-btn-secondary');
 
