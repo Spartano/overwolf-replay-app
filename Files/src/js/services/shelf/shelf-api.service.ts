@@ -9,6 +9,8 @@ import { ShelfStoreService } from './store/shelf-store.service';
 
 @Injectable()
 export class ShelfApiService {
+	private matchIdBeingLoaded: string;
+
 	constructor(private logger: NGXLogger, private ow: OverwolfService, private gameDb: GameDbService, private store: ShelfStoreService) {
 		this.init();
 	}
@@ -31,6 +33,11 @@ export class ShelfApiService {
 			this.store.publishEvent(new GlobalErrorEvent('old-session'));
 			return;
 		}
+		if (matchId === this.matchIdBeingLoaded) {
+			this.logger.debug('[shelf-api] already loading current match, returning', matchId);
+			return;
+		}
+		this.matchIdBeingLoaded = matchId;
 		// Reset game at this point to show the loader
 		this.store.publishEvent(new GameSelectedEvent(null));
 		this.logger.debug('[shelf-api] Loading match with id', matchId);
@@ -44,5 +51,6 @@ export class ShelfApiService {
 		}
 		this.logger.debug('[shelf-api] Loaded game', game.id);
 		this.store.publishEvent(new GameSelectedEvent(game));
+		this.matchIdBeingLoaded = undefined;
 	}
 }
