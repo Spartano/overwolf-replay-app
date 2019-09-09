@@ -9,6 +9,7 @@ import { AppComponent } from '../../components/app.component';
 import { AllCardsService } from '../../services/all-cards.service';
 import { DebugService } from '../../services/debug.service';
 import { DeckParserService } from '../../services/deck/deck-parser.service';
+import { EndGameUploaderService } from '../../services/endgame/end-game-uploader.service';
 import { Events } from '../../services/events.service';
 import { FileUploadService } from '../../services/file-upload.service';
 import { GameDbService } from '../../services/game-db.service';
@@ -80,6 +81,7 @@ export class SentryErrorHandler implements ErrorHandler {
 		DebugService,
 		GameEvents,
 		GameMonitorService,
+		EndGameUploaderService,
 		LZStringService,
 		S3FileUploadService,
 		GameEventsPluginService,

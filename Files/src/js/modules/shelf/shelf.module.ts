@@ -21,7 +21,6 @@ import { DebugService } from '../../services/debug.service';
 import { Events } from '../../services/events.service';
 import { FileUploadService } from '../../services/file-upload.service';
 import { GameDbService } from '../../services/game-db.service';
-import { GameParserService } from '../../services/game-parser.service';
 import { GameUploadService } from '../../services/game-upload.service';
 import { GameHelper } from '../../services/gameparsing/game-helper.service';
 import { OverwolfService } from '../../services/overwolf.service';
@@ -77,7 +76,7 @@ export class SentryErrorHandler implements ErrorHandler {
 		{ provide: ErrorHandler, useClass: SentryErrorHandler },
 
 		GameDbService,
-		GameParserService,
+		// GameParserService,
 		UserPreferences,
 		LocalStorageService,
 		AccountService,

@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy } from '@angular/compiler/src/core';
 import { Component, Input, OnInit } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { Game } from '../../models/game';
-import { GameHelper } from '../../services/gameparsing/game-helper.service';
 
 @Component({
 	selector: 'game-replay',
@@ -22,7 +21,7 @@ import { GameHelper } from '../../services/gameparsing/game-helper.service';
 export class GameReplayComponent implements OnInit {
 	private initDone = false;
 
-	constructor(private logger: NGXLogger, private gameHelper: GameHelper) {}
+	constructor(private logger: NGXLogger) {}
 
 	@Input('game') set game(value: Game) {
 		if (value) {
