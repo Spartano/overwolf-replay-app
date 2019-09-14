@@ -40,7 +40,15 @@ export class AppComponent {
 		this.init();
 	}
 
-	init(): void {
+	async init() {
+		const inHS: boolean = await this.ow.inGame();
+		if (!inHS) {
+			console.warn('App launched while we are not in HS, this is an issue!');
+			setTimeout(() => {
+				this.init();
+			}, 1000);
+			return;
+		}
 		this.ow.addGameInfoUpdatedListener((res: any) => {
 			if (this.exitGame(res)) {
 				this.closeApp();
