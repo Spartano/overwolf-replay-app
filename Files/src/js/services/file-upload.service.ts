@@ -82,6 +82,7 @@ export class FileUploadService {
 					'game-mode': game.gameMode,
 					'game-format': game.gameMode !== 'Arena' ? game.gameFormat : '',
 					'deckstring': game.deckstring,
+					'deck-name': game.deckName,
 				},
 			};
 			console.log('uploading with params', params);

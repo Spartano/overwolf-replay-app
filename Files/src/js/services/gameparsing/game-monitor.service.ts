@@ -30,7 +30,11 @@ export class GameMonitorService {
 		switch (gameEvent.type) {
 			case 'GAME_END':
 				try {
-					const game = await this.endGameUploader.upload(gameEvent, this.currentGameId, this.deckService.currentDeck.deckstring);
+					const game = await this.endGameUploader.upload(
+						gameEvent, 
+						this.currentGameId, 
+						this.deckService.currentDeck.deckstring, 
+						this.deckService.currentDeck.name);
 					this.deckService.reset();
 					console.log('broadcasting end of game', game.player, game.opponent, game.gameFormat, game.gameMode);
 					this.events.broadcast(Events.REPLAY_CREATED, JSON.stringify(game));

@@ -20,6 +20,7 @@ export class Game {
 	opponent: Player = new Player();
 
 	deckstring: string;
+	deckName: string;
 	replay: string;
 	// We don't send this over the network, but it avoids compression / decompression when
 	// using it locally in the GS

@@ -11,7 +11,7 @@ export class EndGameUploaderService {
 
 	constructor(private logger: NGXLogger, private gameHelper: GameHelper, private gameParserService: GameParserService) {}
 
-	public async upload(gameEvent: GameEvent, currentGameId: string, deckstring: any): Promise<Game> {
+	public async upload(gameEvent: GameEvent, currentGameId: string, deckstring: string, deckName: string): Promise<Game> {
 		const gameResult = gameEvent.data[0];
 		const replayXml = gameEvent.data[1];
 		if (!replayXml) {
@@ -23,6 +23,7 @@ export class EndGameUploaderService {
 		game.gameMode = this.toGameType(gameResult.GameType);
 		if (this.supportedModesDeckRetrieve.indexOf(game.gameMode) !== -1) {
 			game.deckstring = deckstring;
+			game.deckName = deckName;
 		}
 		this.gameHelper.setXmlReplay(game, replayXml);
 		game.uncompressedXmlReplay = replayXml;
