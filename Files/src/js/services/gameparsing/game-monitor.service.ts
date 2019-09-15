@@ -11,6 +11,8 @@ export class GameMonitorService {
 	private currentGameId: string;
 	private currentDeckstring: string;
 	private currentDeckname: string;
+	private currentBuildNumber: number;
+	private currentScenarioId: string;
 
 	constructor(
 		private gameEvents: GameEventsEmitterService,
@@ -34,6 +36,10 @@ export class GameMonitorService {
 				this.currentDeckstring = this.deckService.currentDeck.deckstring;
 				this.currentDeckname = this.deckService.currentDeck.name;
 				break;
+			case 'MATCH_METADATA':
+				this.currentBuildNumber = gameEvent.additionalData.metaData.BuildNumber;
+				this.currentScenarioId = gameEvent.additionalData.metaData.ScenarioID;
+				break;
 			case 'GAME_END':
 				try {
 					console.log('game-monitor, game_ned', gameEvent, this.deckService);
@@ -42,10 +48,13 @@ export class GameMonitorService {
 						this.currentGameId,
 						this.currentDeckstring,
 						this.currentDeckname,
+						this.currentBuildNumber,
+						this.currentScenarioId,
 					);
 					this.deckService.reset();
 					this.currentDeckstring = undefined;
 					this.currentDeckname = undefined;
+					this.currentBuildNumber = undefined;
 					console.log('broadcasting end of game', game.player, game.opponent, game.gameFormat, game.gameMode, game.deckstring);
 					this.events.broadcast(Events.REPLAY_CREATED, JSON.stringify(game));
 					break;

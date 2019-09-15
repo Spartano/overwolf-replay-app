@@ -17,7 +17,14 @@ export class EndGameUploaderService {
 		private playersInfo: PlayersInfoService,
 	) {}
 
-	public async upload(gameEvent: GameEvent, currentGameId: string, deckstring: string, deckName: string): Promise<Game> {
+	public async upload(
+		gameEvent: GameEvent,
+		currentGameId: string,
+		deckstring: string,
+		deckName: string,
+		buildNumber: number,
+		scenarioId: string,
+	): Promise<Game> {
 		const gameResult = gameEvent.additionalData.game;
 		const replayXml = gameEvent.additionalData.replayXml;
 		if (!replayXml) {
@@ -27,6 +34,8 @@ export class EndGameUploaderService {
 		const game: Game = Game.createEmptyGame(currentGameId);
 		game.gameFormat = this.toFormatType(gameResult.FormatType);
 		game.gameMode = this.toGameType(gameResult.GameType);
+		game.buildNumber = buildNumber;
+		game.scenarioId = scenarioId;
 		if (this.supportedModesDeckRetrieve.indexOf(game.gameMode) !== -1) {
 			game.deckstring = deckstring;
 			game.deckName = deckName;
@@ -66,16 +75,6 @@ export class EndGameUploaderService {
 		}
 		game.opponentRank = opponentRank;
 		game.playerRank = playerRank;
-		console.log(
-			'finished adding meta data',
-			game.gameFormat,
-			game.gameMode,
-			game.playerRank,
-			game.opponentRank,
-			game,
-			playerInfo,
-			opponentInfo,
-		);
 		return game;
 	}
 
@@ -116,7 +115,7 @@ export class EndGameUploaderService {
 			case 20:
 			case 21:
 			case 22:
-				return 'tavernbrawl';
+				return 'tavern-brawl';
 			case 23:
 				return 'tournament';
 			default:

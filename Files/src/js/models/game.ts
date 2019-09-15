@@ -7,6 +7,8 @@ export class Game {
 
 	gameMode: string;
 	gameFormat: string;
+	buildNumber: number;
+	scenarioId: string;
 	playerRank: string;
 	opponentRank: string;
 	result: string;
