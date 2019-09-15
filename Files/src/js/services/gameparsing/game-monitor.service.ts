@@ -9,6 +9,8 @@ import { Events } from '../events.service';
 @Injectable()
 export class GameMonitorService {
 	private currentGameId: string;
+	private currentDeckstring: string;
+	private currentDeckname: string;
 
 	constructor(
 		private gameEvents: GameEventsEmitterService,
@@ -28,17 +30,23 @@ export class GameMonitorService {
 
 	private async handleEvent(gameEvent: GameEvent) {
 		switch (gameEvent.type) {
+			case 'LOCAL_PLAYER':
+				this.currentDeckstring = this.deckService.currentDeck.deckstring;
+				this.currentDeckname = this.deckService.currentDeck.name;
+				break;
 			case 'GAME_END':
 				try {
-					console.log('game-monitor, game_ned', gameEvent);
+					console.log('game-monitor, game_ned', gameEvent, this.deckService);
 					const game = await this.endGameUploader.upload(
 						gameEvent,
 						this.currentGameId,
-						this.deckService.currentDeck.deckstring,
-						this.deckService.currentDeck.name,
+						this.currentDeckstring,
+						this.currentDeckname,
 					);
 					this.deckService.reset();
-					console.log('broadcasting end of game', game.player, game.opponent, game.gameFormat, game.gameMode);
+					this.currentDeckstring = undefined;
+					this.currentDeckname = undefined;
+					console.log('broadcasting end of game', game.player, game.opponent, game.gameFormat, game.gameMode, game.deckstring);
 					this.events.broadcast(Events.REPLAY_CREATED, JSON.stringify(game));
 					break;
 				} catch (e) {
