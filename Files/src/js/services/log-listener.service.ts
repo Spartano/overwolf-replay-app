@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-
 import { Subject } from 'rxjs';
-
-import { SimpleIOService } from './plugins/simple-io.service';
+import { OverwolfService } from '../hs-integration/services/overwolf.service';
+import { SimpleIOService } from '../hs-integration/services/simple-io.service';
 import { Events } from './events.service';
-import { OverwolfService } from './overwolf.service';
 
 @Injectable()
 export class LogListenerService {

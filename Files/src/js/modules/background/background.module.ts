@@ -6,27 +6,30 @@ import { LocalStorageModule, LocalStorageService } from 'angular-2-local-storage
 import { LZStringModule, LZStringService } from 'ng-lz-string';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { AppComponent } from '../../components/app.component';
+import { DeckParserService } from '../../hs-integration/services/deck-parser.service';
+import { GameEventsEmitterService } from '../../hs-integration/services/game-events-emitter.service';
+import { GameEventsPluginService } from '../../hs-integration/services/game-events-plugin.service';
+import { GameEvents } from '../../hs-integration/services/game-events.service';
+import { LogsUploaderService } from '../../hs-integration/services/logs-uploader.service';
+import { MemoryInspectionService } from '../../hs-integration/services/memory-inspection.service';
+import { OverwolfService } from '../../hs-integration/services/overwolf.service';
+import { PlayersInfoService } from '../../hs-integration/services/players-info.service';
+import { S3FileUploadService } from '../../hs-integration/services/s3-file-upload.service';
+import { SimpleIOService } from '../../hs-integration/services/simple-io.service';
 import { AllCardsService } from '../../services/all-cards.service';
 import { DebugService } from '../../services/debug.service';
-import { DeckParserService } from '../../services/deck/deck-parser.service';
 import { EndGameUploaderService } from '../../services/endgame/end-game-uploader.service';
 import { Events } from '../../services/events.service';
 import { FileUploadService } from '../../services/file-upload.service';
 import { GameDbService } from '../../services/game-db.service';
-import { GameEvents } from '../../services/game-events.service';
 import { GameParserService } from '../../services/game-parser.service';
 import { GameHelper } from '../../services/gameparsing/game-helper.service';
 import { GameMonitorService } from '../../services/gameparsing/game-monitor.service';
 import { LogUtils } from '../../services/gameparsing/log-utils.service';
 import { LogListenerService } from '../../services/log-listener.service';
 import { LogRegisterService } from '../../services/log-register.service';
-import { OverwolfService } from '../../services/overwolf.service';
-import { GameEventsPluginService } from '../../services/plugins/game-events-plugin.service';
-import { MemoryInspectionService } from '../../services/plugins/memory-inspection.service';
-import { SimpleIOService } from '../../services/plugins/simple-io.service';
 import { ReplayManager } from '../../services/replay-manager.service';
 import { ReplayUploader } from '../../services/replay-uploader.service';
-import { S3FileUploadService } from '../../services/s3-file-upload.service';
 import { UserPreferences } from '../../services/user-preferences.service';
 
 console.log('version is ' + process.env.APP_VERSION);
@@ -62,6 +65,10 @@ export class SentryErrorHandler implements ErrorHandler {
 	bootstrap: [AppComponent],
 	providers: [
 		{ provide: ErrorHandler, useClass: SentryErrorHandler },
+
+		GameEventsEmitterService,
+		PlayersInfoService,
+		LogsUploaderService,
 
 		GameParserService,
 		GameDbService,

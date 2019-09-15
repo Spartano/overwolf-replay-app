@@ -3,9 +3,9 @@ import { Injectable } from '@angular/core';
 import S3 from 'aws-sdk/clients/s3';
 import AWS from 'aws-sdk/global';
 import { BehaviorSubject } from 'rxjs';
+import { OverwolfService } from '../hs-integration/services/overwolf.service';
 import { Game } from '../models/game';
 import { GameDbService } from './game-db.service';
-import { OverwolfService } from './overwolf.service';
 
 const GET_REVIEW_ENDPOINT = 'https://nx16sjfatc.execute-api.us-west-2.amazonaws.com/prod/get-review/';
 const REVIEW_INIT_ENDPOINT = 'https://husxs4v58a.execute-api.us-west-2.amazonaws.com/prod';
@@ -54,12 +54,12 @@ export class FileUploadService {
 			AWS.config.region = 'us-west-2';
 			AWS.config.httpOptions.timeout = 3600 * 1000 * 10;
 
-			let rank = game.rank;
+			let playerRank = game.playerRank;
 			if ('Arena' === game.gameMode) {
 				if (game.arenaInfo) {
-					rank = game.arenaInfo.Wins;
+					playerRank = game.arenaInfo.Wins;
 				} else {
-					rank = null;
+					playerRank = undefined;
 				}
 			}
 			// console.log('setting rank', rank);
@@ -75,12 +75,10 @@ export class FileUploadService {
 					'user-key': userId,
 					'file-type': 'hszip',
 					'review-text': 'Created by [Overwolf](http://www.overwolf.com)',
-					'game-rank': rank && rank !== 'legend' ? rank.toString() : '',
-					'game-legend-rank': rank === 'legend' ? rank.toString() : '',
-					'opponent-game-rank': game.opponentRank && game.opponentRank !== 'legend' ? game.opponentRank.toString() : '',
-					'opponent-game-legend-rank': game.opponentRank === 'legend' ? game.opponentRank.toString() : '',
+					'player-rank': playerRank ? '' + playerRank : '',
+					'opponent-rank': game.opponentRank ? '' + game.opponentRank : '',
 					'game-mode': game.gameMode,
-					'game-format': game.gameMode !== 'Arena' ? game.gameFormat : '',
+					'game-format': game.gameFormat,
 					'deckstring': game.deckstring,
 					'deck-name': game.deckName,
 				},

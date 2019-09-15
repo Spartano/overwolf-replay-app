@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
+import { SimpleIOService } from '../hs-integration/services/simple-io.service';
 import { Game } from '../models/game';
 import { Events } from './events.service';
 import { GameDbService } from './game-db.service';
 import { GameHelper } from './gameparsing/game-helper.service';
-import { SimpleIOService } from './plugins/simple-io.service';
 
 @Injectable()
 export class ReplayManager {

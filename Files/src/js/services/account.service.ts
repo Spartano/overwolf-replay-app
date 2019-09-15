@@ -3,9 +3,9 @@ import { Injectable } from '@angular/core';
 import { LocalStorageService } from 'angular-2-local-storage';
 import { NGXLogger } from 'ngx-logger';
 import { Subject } from 'rxjs';
+import { OverwolfService } from '../hs-integration/services/overwolf.service';
 import { LoginField } from '../models/shelf/login-field.type';
 import { Events } from './events.service';
-import { OverwolfService } from './overwolf.service';
 import { UserPreferences } from './user-preferences.service';
 
 const SIGN_IN_URL = 'https://www.zerotoheroes.com/api/login';

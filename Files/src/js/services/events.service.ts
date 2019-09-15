@@ -1,5 +1,5 @@
-import { map, filter } from 'rxjs/operators';
-import { Subject, Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 
 interface BroadcastEvent {
 	key: any;
@@ -12,7 +12,13 @@ export class Events {
 	public static readonly START_LOG_FILE_DETECTION = 'start-log-file-detection';
 	public static readonly STREAMING_LOG_FILE = 'streaming-log-file';
 
-	public static NEW_GAME_ID = 'new-game-id';
+	public static readonly NEW_GAME_ID = 'new-game-id';
+	public static readonly SCENE_CHANGED = 'scene-changed';
+	public static readonly PLAYER_INFO = 'player-info';
+	public static readonly OPPONENT_INFO = 'opponent-info';
+
+	public static readonly GAME_STATS_UPDATED = 'events-game-stats-updated';
+
 	public static REPLAY_SAVED = 'replay-saved';
 	public static REPLAY_CREATED = 'replay-created';
 

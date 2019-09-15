@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-
-import { SimpleIOService } from './plugins/simple-io.service';
-import { GameEvents } from './game-events.service';
+import { DeckParserService } from '../hs-integration/services/deck-parser.service';
+import { GameEvents } from '../hs-integration/services/game-events.service';
+import { OverwolfService } from '../hs-integration/services/overwolf.service';
+import { SimpleIOService } from '../hs-integration/services/simple-io.service';
 import { LogListenerService } from './log-listener.service';
-import { DeckParserService } from './deck/deck-parser.service';
-import { OverwolfService } from './overwolf.service';
 
 @Injectable()
 export class LogRegisterService {

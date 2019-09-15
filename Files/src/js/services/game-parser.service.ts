@@ -54,19 +54,19 @@ export class GameParserService {
 	extractDuration(game: Game) {
 		const parser = new DOMParser();
 		const replayXml = parser.parseFromString(this.gameHelper.getXmlReplay(game), 'text/xml');
-		console.log('parsed', replayXml);
+		// console.log('parsed', replayXml);
 
 		const timestampedNodes = replayXml.querySelectorAll('[ts]');
-		console.log('timestampedNodes', timestampedNodes);
+		// console.log('timestampedNodes', timestampedNodes);
 		const firstTimestampInSeconds = this.toTimestamp(timestampedNodes[0].getAttribute('ts'));
-		console.log('firstTimestampInSeconds', firstTimestampInSeconds);
+		// console.log('firstTimestampInSeconds', firstTimestampInSeconds);
 		const lastTimestampInSeconds = this.toTimestamp(timestampedNodes[timestampedNodes.length - 1].getAttribute('ts'));
-		console.log('lastTimestampInSeconds', lastTimestampInSeconds);
+		// console.log('lastTimestampInSeconds', lastTimestampInSeconds);
 		const durationInSeconds = lastTimestampInSeconds - firstTimestampInSeconds;
 		game.durationTimeSeconds = durationInSeconds;
 
 		const tagChangeNodes = replayXml.querySelectorAll('TagChange[entity="1"][tag="19"][value="6"]');
-		console.log('tagChangeNodes', tagChangeNodes);
+		// console.log('tagChangeNodes', tagChangeNodes);
 		// Count the number of times the player gets a turn
 		game.durationTurns = (tagChangeNodes.length + 1) / 2;
 	}

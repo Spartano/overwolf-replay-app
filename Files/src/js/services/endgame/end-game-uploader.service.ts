@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
+import { GameEvent } from '../../hs-integration/models/game-event';
+import { PlayersInfoService } from '../../hs-integration/services/players-info.service';
 import { Game } from '../../models/game';
-import { GameEvent } from '../../models/game-event';
 import { GameParserService } from '../game-parser.service';
 import { GameHelper } from '../gameparsing/game-helper.service';
 
@@ -9,11 +10,16 @@ import { GameHelper } from '../gameparsing/game-helper.service';
 export class EndGameUploaderService {
 	private readonly supportedModesDeckRetrieve = ['practice', 'friendly', 'ranked', 'casual', 'arena', 'tavernbrawl'];
 
-	constructor(private logger: NGXLogger, private gameHelper: GameHelper, private gameParserService: GameParserService) {}
+	constructor(
+		private logger: NGXLogger,
+		private gameHelper: GameHelper,
+		private gameParserService: GameParserService,
+		private playersInfo: PlayersInfoService,
+	) {}
 
 	public async upload(gameEvent: GameEvent, currentGameId: string, deckstring: string, deckName: string): Promise<Game> {
-		const gameResult = gameEvent.data[0];
-		const replayXml = gameEvent.data[1];
+		const gameResult = gameEvent.additionalData.game;
+		const replayXml = gameEvent.additionalData.replayXml;
 		if (!replayXml) {
 			console.warn('could not convert replay');
 		}
@@ -29,6 +35,47 @@ export class EndGameUploaderService {
 		game.uncompressedXmlReplay = replayXml;
 		this.gameParserService.extractMatchup(game);
 		this.gameParserService.extractDuration(game);
+		const [playerInfo, opponentInfo] = await Promise.all([this.playersInfo.getPlayerInfo(), this.playersInfo.getOpponentInfo()]);
+		let playerRank;
+		if (playerInfo && game.gameFormat === 'standard') {
+			if (playerInfo.standardLegendRank > 0) {
+				playerRank = 'legend';
+			} else {
+				playerRank = playerInfo.standardRank;
+			}
+		} else if (playerInfo && game.gameFormat === 'wild') {
+			if (playerInfo.wildLegendRank > 0) {
+				playerRank = 'legend';
+			} else {
+				playerRank = playerInfo.wildRank;
+			}
+		}
+		let opponentRank;
+		if (opponentInfo && game.gameFormat === 'standard') {
+			if (opponentInfo.standardLegendRank > 0) {
+				opponentRank = 'legend';
+			} else {
+				opponentRank = opponentInfo.standardRank;
+			}
+		} else if (opponentInfo && game.gameFormat === 'wild') {
+			if (opponentInfo.wildLegendRank > 0) {
+				opponentRank = 'legend';
+			} else {
+				opponentRank = opponentInfo.wildRank;
+			}
+		}
+		game.opponentRank = opponentRank;
+		game.playerRank = playerRank;
+		console.log(
+			'finished adding meta data',
+			game.gameFormat,
+			game.gameMode,
+			game.playerRank,
+			game.opponentRank,
+			game,
+			playerInfo,
+			opponentInfo,
+		);
 		return game;
 	}
 

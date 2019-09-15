@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
+import { OverwolfService } from '../../hs-integration/services/overwolf.service';
 import { Game } from '../../models/game';
 import { GameDbService } from '../game-db.service';
-import { OverwolfService } from '../overwolf.service';
 import { GameSelectedEvent } from './store/events/game-selected-event';
 import { GlobalErrorEvent } from './store/events/global-error-event';
 import { ShelfStoreService } from './store/shelf-store.service';

@@ -16,6 +16,7 @@ import { SettingsMenuComponent } from '../../components/shelf/settings-menu.comp
 import { ShelfHeaderComponent } from '../../components/shelf/shelf-header.component';
 import { ShelfComponent } from '../../components/shelf/shelf.component';
 import { SocialShareComponent } from '../../components/shelf/social-share.component';
+import { OverwolfService } from '../../hs-integration/services/overwolf.service';
 import { AccountService } from '../../services/account.service';
 import { DebugService } from '../../services/debug.service';
 import { Events } from '../../services/events.service';
@@ -23,7 +24,6 @@ import { FileUploadService } from '../../services/file-upload.service';
 import { GameDbService } from '../../services/game-db.service';
 import { GameUploadService } from '../../services/game-upload.service';
 import { GameHelper } from '../../services/gameparsing/game-helper.service';
-import { OverwolfService } from '../../services/overwolf.service';
 import { SharingService } from '../../services/sharing.service';
 import { ShelfApiService } from '../../services/shelf/shelf-api.service';
 import { ShelfStoreService } from '../../services/shelf/store/shelf-store.service';

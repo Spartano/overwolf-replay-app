@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { MemoryInspectionService } from '../hs-integration/services/memory-inspection.service';
+import { OverwolfService } from '../hs-integration/services/overwolf.service';
 import { Game } from '../models/game';
 import { AllCardsService } from '../services/all-cards.service';
 import { DebugService } from '../services/debug.service';
@@ -7,8 +9,6 @@ import { GameDbService } from '../services/game-db.service';
 import { GameMonitorService } from '../services/gameparsing/game-monitor.service';
 import { LogListenerService } from '../services/log-listener.service';
 import { LogRegisterService } from '../services/log-register.service';
-import { OverwolfService } from '../services/overwolf.service';
-import { MemoryInspectionService } from '../services/plugins/memory-inspection.service';
 import { ReplayManager } from '../services/replay-manager.service';
 import { ReplayUploader } from '../services/replay-uploader.service';
 
@@ -43,12 +43,12 @@ export class AppComponent {
 	async init() {
 		const inHS: boolean = await this.ow.inGame();
 		if (!inHS) {
-			console.warn('App launched while we are not in HS, this is an issue!');
 			setTimeout(() => {
 				this.init();
 			}, 1000);
 			return;
 		}
+		console.log('In HS, starting init');
 		this.ow.addGameInfoUpdatedListener((res: any) => {
 			if (this.exitGame(res)) {
 				this.closeApp();

@@ -29,13 +29,13 @@ export class AllCardsService {
 		this.logger.debug('[all-cards] initializing card db');
 		return new Promise<void>((resolve, reject) => {
 			if (this.allCards) {
-				this.logger.debug('[all-cards] already loaded all cards', this.allCards);
+				this.logger.debug('[all-cards] already loaded all cards');
 				resolve();
 				return;
 			}
 			this.http.get('./cards.json').subscribe(
 				(result: any[]) => {
-					this.logger.debug('[all-cards] retrieved all cards locally', result);
+					this.logger.debug('[all-cards] retrieved all cards locally');
 					this.allCards = result;
 					resolve();
 				},
@@ -43,7 +43,7 @@ export class AllCardsService {
 					this.logger.debug('[all-cards] Could not retrieve cards locally, getting them from CDN', error);
 					this.http.get(CARDS_CDN_URL).subscribe(
 						(result: any[]) => {
-							this.logger.debug('[all-cards] retrieved all cards from CDN', result);
+							this.logger.debug('[all-cards] retrieved all cards from CDN');
 							this.allCards = result;
 							resolve();
 						},
