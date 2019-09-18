@@ -16,7 +16,12 @@ declare var ga: any;
 	template: `
 		<section class="manastorm-header-share-section">
 			<p class="manastorm-header-subtitle">Share</p>
-			<button class="gs-icon btn-gs-icon share-icon hint-tooltip-container" shareButton="facebook" [url]="url('facebook')">
+			<button
+				class="gs-icon btn-gs-icon share-icon hint-tooltip-container"
+				shareButton="facebook"
+				[url]="url('facebook')"
+				(click)="sendShareStat('facebook')"
+			>
 				<svg>
 					<use xlink:href="/Files/assets/svg/share-icons.svg#share-on-facebook" />
 				</svg>
@@ -24,7 +29,12 @@ declare var ga: any;
 					<span>Share on Facebook</span>
 				</div>
 			</button>
-			<button class="gs-icon btn-gs-icon share-icon hint-tooltip-container" shareButton="twitter" [url]="url('twitter')">
+			<button
+				class="gs-icon btn-gs-icon share-icon hint-tooltip-container"
+				shareButton="twitter"
+				[url]="url('twitter')"
+				(click)="sendShareStat('twitter')"
+			>
 				<svg>
 					<use xlink:href="/Files/assets/svg/share-icons.svg#share-on-twitter" />
 				</svg>
@@ -32,7 +42,12 @@ declare var ga: any;
 					<span>Share on Twitter</span>
 				</div>
 			</button>
-			<button class="gs-icon btn-gs-icon share-icon hint-tooltip-container" shareButton="reddit" [url]="url('reddit')">
+			<button
+				class="gs-icon btn-gs-icon share-icon hint-tooltip-container"
+				shareButton="reddit"
+				[url]="url('reddit')"
+				(click)="sendShareStat('reddit')"
+			>
 				<svg>
 					<use xlink:href="/Files/assets/svg/share-icons.svg#share-on-reddit" />
 				</svg>
@@ -58,5 +73,9 @@ export class SocialShareComponent {
 
 	url(source: string): string {
 		return `${this.baseUrl}&source=${source}`;
+	}
+
+	sendShareStat(source: string) {
+		ga('send', 'event', 'share', source);
 	}
 }

@@ -3,6 +3,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { Game } from '../../models/game';
 
+declare var ga;
+
 @Component({
 	selector: 'game-replay',
 	styleUrls: [
@@ -43,6 +45,7 @@ export class GameReplayComponent implements OnInit {
 	}
 
 	async reload(replay: string, reviewId: string) {
+		ga('send', 'event', 'load-game');
 		this.logger.debug('requested replay load');
 		await this.waitForViewerInit();
 		this.logger.debug('loading replay');

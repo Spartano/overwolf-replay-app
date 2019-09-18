@@ -1,5 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef } from '@angular/core';
 
+declare var ga;
+
 @Component({
 	selector: 'empty-state-illustration',
 	styleUrls: [
@@ -132,6 +134,7 @@ export class EmptyStateIllustrationComponent implements AfterViewInit {
 		tvBody.addEventListener('dblclick', e => {
 			tvWrapper.classList.add('shake');
 			tvWrapper.classList.add('smacked');
+			ga('send', 'event', 'empty-state', 'tv-body-doubleclick');
 
 			setTimeout(() => {
 				tvWrapper.classList.remove('smacked');
@@ -148,12 +151,14 @@ export class EmptyStateIllustrationComponent implements AfterViewInit {
 
 		tvWrapper.addEventListener('mouseenter', () => {
 			if (btnsHintIsOn) {
+				ga('send', 'event', 'empty-state', 'tv-wrapper-mouseenter');
 				tvWrapper.classList.add('hovered');
 				btnsHintIsOn = false;
 			}
 		});
 
 		tvHeadWrapper.addEventListener('mouseenter', () => {
+			ga('send', 'event', 'empty-state', 'tv-headwrapper-mouseenter');
 			updateAntennasStateSvgData(tvAntennaStates.shy);
 		});
 
@@ -170,21 +175,25 @@ export class EmptyStateIllustrationComponent implements AfterViewInit {
 		);
 
 		tvBtnMain.addEventListener('click', e => {
+			ga('send', 'event', 'empty-state', 'tv-buttonmain-click');
 			e.stopPropagation();
 			updateMainBtn();
 		});
 
 		tvBtnSecondary.addEventListener('click', e => {
+			ga('send', 'event', 'empty-state', 'tv-buttonsecondary-click');
 			e.stopPropagation();
 			tvBody.classList.toggle('faded');
 			updateAntennasState();
 		});
 
 		tvBtnMain.addEventListener('dblclick', e => {
+			ga('send', 'event', 'empty-state', 'tv-buttonmain-doubleclick');
 			e.stopPropagation();
 		});
 
 		tvBtnSecondary.addEventListener('dblclick', e => {
+			ga('send', 'event', 'empty-state', 'tv-buttonsecondary-doubleclick');
 			e.stopPropagation();
 		});
 
