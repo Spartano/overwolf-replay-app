@@ -108,6 +108,12 @@ export class FileUploadService {
 					if (progressMonitor) {
 						progressMonitor.next('GAME_REPLAY_SENT');
 					}
+					const info = {
+						type: 'new-review',
+						reviewId: reviewId,
+						replayUrl: `http://replays.firestoneapp.com/?reviewId=${reviewId}`,
+					};
+					this.ow.setExtensionInfo(JSON.stringify(info));
 				}
 			});
 		});
