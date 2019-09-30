@@ -23,99 +23,112 @@ export class FileUploadService {
 		});
 	}
 
-	public async uploadFromPath(filePath: string, game: Game, progressMonitor?: BehaviorSubject<string>) {
+	public async uploadFromPath(filePath: string, game: Game, progressMonitor?: BehaviorSubject<string>, retriesLeft = 30) {
+		if (retriesLeft < 0) {
+			console.error('Could not create empty review', filePath);
+			return;
+		}
 		console.log('Requesting reading file from disk', filePath);
 		const user = await this.ow.getCurrentUser();
 		const userId = user.userId || user.machineId || user.username || 'unauthenticated_user';
 
 		// Build an empty review
-		this.http.post(REVIEW_INIT_ENDPOINT, null).subscribe(res => {
-			const reviewId: string = res as string;
-			console.log('Created empty shell review', res, reviewId);
-			if (progressMonitor) {
-				progressMonitor.next('EMPTY_SHELL_CREATED');
+		this.http.post(REVIEW_INIT_ENDPOINT, null).subscribe(
+			res => {
+				const reviewId: string = res as string;
+				console.log('Created empty shell review', res, reviewId);
+				this.postFullReview(reviewId, userId, filePath, game, progressMonitor);
+			},
+			error => {
+				setTimeout(() => this.uploadFromPath(filePath, game, progressMonitor, retriesLeft - 1), 1000);
+			},
+		);
+	}
+
+	private postFullReview(reviewId: string, userId: string, filePath: string, game: Game, progressMonitor?: BehaviorSubject<string>) {
+		if (progressMonitor) {
+			progressMonitor.next('EMPTY_SHELL_CREATED');
+		}
+
+		// console.log('processing game');
+		const bytes = game.replayBytes;
+		// console.log('loaded bytes', bytes);
+
+		// http://stackoverflow.com/questions/35038884/download-file-from-bytes-in-javascript
+		const byteArray = new Uint8Array(bytes);
+		const blob = new Blob([byteArray], { type: 'application/zip' });
+		// console.log('built blob', blob);
+
+		const fileName = this.extractFileName(filePath);
+		// console.log('extracted filename', fileName);
+		const fileKey = this.slugify(fileName) + '_' + reviewId + '.hszip';
+		console.log('built file key', fileKey);
+
+		// Configure The S3 Object
+		AWS.config.region = 'us-west-2';
+		AWS.config.httpOptions.timeout = 3600 * 1000 * 10;
+
+		let playerRank = game.playerRank;
+		if ('Arena' === game.gameMode) {
+			if (game.arenaInfo) {
+				playerRank = game.arenaInfo.Wins;
+			} else {
+				playerRank = undefined;
 			}
-
-			// console.log('processing game');
-			const bytes = game.replayBytes;
-			// console.log('loaded bytes', bytes);
-
-			// http://stackoverflow.com/questions/35038884/download-file-from-bytes-in-javascript
-			const byteArray = new Uint8Array(bytes);
-			const blob = new Blob([byteArray], { type: 'application/zip' });
-			// console.log('built blob', blob);
-
-			const fileName = this.extractFileName(filePath);
-			// console.log('extracted filename', fileName);
-			const fileKey = this.slugify(fileName) + '_' + reviewId + '.hszip';
-			console.log('built file key', fileKey);
-
-			// Configure The S3 Object
-			AWS.config.region = 'us-west-2';
-			AWS.config.httpOptions.timeout = 3600 * 1000 * 10;
-
-			let playerRank = game.playerRank;
-			if ('Arena' === game.gameMode) {
-				if (game.arenaInfo) {
-					playerRank = game.arenaInfo.Wins;
-				} else {
-					playerRank = undefined;
+		}
+		// console.log('setting rank', rank);
+		const s3 = new S3();
+		const params = {
+			Bucket: BUCKET,
+			Key: fileKey,
+			ACL: 'public-read-write',
+			Body: blob,
+			Metadata: {
+				'review-id': reviewId,
+				'application-key': 'overwolf',
+				'user-key': userId,
+				'file-type': 'hszip',
+				'review-text': 'Created by [Overwolf](http://www.overwolf.com)',
+				'player-rank': playerRank ? '' + playerRank : '',
+				'opponent-rank': game.opponentRank ? '' + game.opponentRank : '',
+				'game-mode': game.gameMode,
+				'game-format': game.gameFormat,
+				'build-number': '' + game.buildNumber,
+				'deckstring': game.deckstring,
+				'deck-name': game.deckName,
+				'scenario-id': '' + game.scenarioId,
+			},
+		};
+		console.log('uploading with params', params);
+		if (progressMonitor) {
+			progressMonitor.next('SENDING_GAME_REPLAY');
+		}
+		s3.makeUnauthenticatedRequest('putObject', params, async (err, data2) => {
+			// There Was An Error With Your S3 Config
+			if (err) {
+				if (progressMonitor) {
+					progressMonitor.next('ERROR_SENDING_GAME_REPLAY');
 				}
-			}
-			// console.log('setting rank', rank);
-			const s3 = new S3();
-			const params = {
-				Bucket: BUCKET,
-				Key: fileKey,
-				ACL: 'public-read-write',
-				Body: blob,
-				Metadata: {
-					'review-id': reviewId,
-					'application-key': 'overwolf',
-					'user-key': userId,
-					'file-type': 'hszip',
-					'review-text': 'Created by [Overwolf](http://www.overwolf.com)',
-					'player-rank': playerRank ? '' + playerRank : '',
-					'opponent-rank': game.opponentRank ? '' + game.opponentRank : '',
-					'game-mode': game.gameMode,
-					'game-format': game.gameFormat,
-					'build-number': '' + game.buildNumber,
-					'deckstring': game.deckstring,
-					'deck-name': game.deckName,
-					'scenario-id': '' + game.scenarioId,
-				},
-			};
-			console.log('uploading with params', params);
-			if (progressMonitor) {
-				progressMonitor.next('SENDING_GAME_REPLAY');
-			}
-			s3.makeUnauthenticatedRequest('putObject', params, async (err, data2) => {
-				// There Was An Error With Your S3 Config
-				if (err) {
-					if (progressMonitor) {
-						progressMonitor.next('ERROR_SENDING_GAME_REPLAY');
-					}
 
-					console.warn('An error during upload', err);
-					// Raven.captureMessage('Error while sending game replay to AWS', { extra: {
-					// 	error: err,
-					// 	params: params,
-					// }});
-				} else {
-					console.log('Uploaded game', data2, reviewId);
-					game.reviewId = reviewId;
-					this.gameDb.save(game);
-					if (progressMonitor) {
-						progressMonitor.next('GAME_REPLAY_SENT');
-					}
-					const info = {
-						type: 'new-review',
-						reviewId: reviewId,
-						replayUrl: `http://replays.firestoneapp.com/?reviewId=${reviewId}`,
-					};
-					this.ow.setExtensionInfo(JSON.stringify(info));
+				console.warn('An error during upload', err);
+				// Raven.captureMessage('Error while sending game replay to AWS', { extra: {
+				// 	error: err,
+				// 	params: params,
+				// }});
+			} else {
+				console.log('Uploaded game', data2, reviewId);
+				game.reviewId = reviewId;
+				this.gameDb.save(game);
+				if (progressMonitor) {
+					progressMonitor.next('GAME_REPLAY_SENT');
 				}
-			});
+				const info = {
+					type: 'new-review',
+					reviewId: reviewId,
+					replayUrl: `http://replays.firestoneapp.com/?reviewId=${reviewId}`,
+				};
+				this.ow.setExtensionInfo(JSON.stringify(info));
+			}
 		});
 	}
 
