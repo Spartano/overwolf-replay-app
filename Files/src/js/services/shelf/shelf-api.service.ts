@@ -47,6 +47,7 @@ export class ShelfApiService {
 		if (!game) {
 			this.logger.debug('[shelf-api] no match found for id', matchId);
 			this.store.publishEvent(new GlobalErrorEvent('no-match-found'));
+			this.matchIdBeingLoaded = undefined;
 			return;
 		}
 		this.logger.debug('[shelf-api] Loaded game', game.id);
