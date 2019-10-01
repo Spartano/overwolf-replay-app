@@ -27,7 +27,7 @@ export class GameReplayComponent implements OnInit {
 
 	@Input('game') set game(value: Game) {
 		if (value) {
-			this.logger.debug('[game-replay] setting game', value.id);
+			this.logger.debug('[game-replay] setting game', value.id, value.reviewId);
 			const replay = value.uncompressedXmlReplay;
 			this.reload(replay, value.reviewId);
 		} else {
