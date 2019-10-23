@@ -6,7 +6,7 @@ import { OverwolfService } from './overwolf.service';
 @Injectable()
 export class MemoryInspectionService {
 	private collectionTriesLeft = 50;
-	private playersInfoTriesLeft = 50;
+	// private playersInfoTriesLeft = 50;
 
 	// https://overwolf.github.io/docs/api/overwolf-games-events-heartstone
 	readonly g_interestedInFeatures = [
@@ -30,7 +30,7 @@ export class MemoryInspectionService {
 	}
 
 	public getPlayerInfo(): Promise<{ localPlayer: any; opponent: any }> {
-		this.playersInfoTriesLeft = 20;
+		// this.playersInfoTriesLeft = 20;
 		return new Promise<{ localPlayer: any; opponent: any }>(resolve => {
 			this.getPlayerInfoInternal((playersInfo: { localPlayer: any; opponent: any }) => {
 				resolve(playersInfo);
@@ -81,9 +81,12 @@ export class MemoryInspectionService {
 		}, delay);
 	}
 
-	private async getPlayerInfoInternal(callback) {
-		// console.log('[memory service] trying to get player info');
-		this.playersInfoTriesLeft--;
+	private async getPlayerInfoInternal(callback, retriesLeft = 15) {
+		if (retriesLeft <= 0) {
+			console.error('[memory-service] could not get playersInfo from GEP');
+			callback(null);
+			return;
+		}
 		const info = await this.ow.getGameEventsInfo();
 		if (info && info.res && info.res.playersInfo) {
 			console.log('[memory-service] fetched playersInfo', info.res.playersInfo);
@@ -95,7 +98,7 @@ export class MemoryInspectionService {
 			});
 			return;
 		}
-		setTimeout(() => this.getPlayerInfoInternal(callback), 2000);
+		setTimeout(() => this.getPlayerInfoInternal(callback, retriesLeft - 1), 2000);
 		// console.warn('[memory-service] could not fetch playersInfo', info);
 		// resolve(null);
 	}
