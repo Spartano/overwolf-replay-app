@@ -120,7 +120,7 @@ module.exports = function(env, argv) {
 				{ from: path.join(process.cwd(), 'dependencies/cards.json') },
 				{ from: path.join(process.cwd(), 'plugins'), to: 'plugins' },
 				// All the OW stuff, like manifest.json
-				{ from: path.join(process.cwd(), '/../*') },
+				{ from: path.join(process.cwd(), 'overwolf/*'), to: '..', flatten: true },
 			]),
 
 			// Replace the version in the manifest

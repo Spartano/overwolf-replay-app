@@ -1,0 +1,86 @@
+{
+	"manifest_version": 1,
+	"type": "WebApp",
+	"meta": {
+		"name": "Manastorm - a Hearthstone replay viewer",
+		"author": "Sébastien Tromp",
+		"version": "@app-version@",
+		"minimum-overwolf-version": "0.102.213.0",
+		"access-name": "com.zerotoheroes.overwolf.hs",
+		"description": "A replay viewer to rewatch your Hearthstone games in a format that makes play analysis easier",
+		"dock_button_title": "Replay viewer",
+		"icon": "IconStore.png",
+		"icon_gray": "IconStore.png",
+		"store_icon": "IconStore.png"
+	},
+	"permissions": ["Logging", "GameInfo", "FileSystem", "Extensions", "Profile"],
+	"disable_dockbutton": true,
+	"hide_from_store": true,
+	"data": {
+		"start_window": "MainWindow",
+		"windows": {
+			"MainWindow": {
+				"file": "Files/background.html",
+				"transparent": true,
+				"resizable": false,
+				"show_in_taskbar": false,
+				"size": { "width": 0, "height": 0 },
+				"min_size": { "width": 0, "height": 0 },
+				"max_size": { "width": 0, "height": 0 }
+			},
+			"ShelfWindow": {
+				"file": "Files/shelf.html",
+				"transparent": true,
+				"show_in_taskbar": false,
+				"block_top_window_navigation": true,
+				"popup_blocker": false
+			},
+			"egs_shelf_window": {
+				"min_size": { "width": 694, "height": 420 },
+				"file": "Files/shelf.html",
+				"egs_shelf": {
+					"show_as_iframe": true,
+					"title": "Hearthstone Replay Viewer;Powered by Zero to Heroes",
+					"loading_text": "Loading session games...",
+					"tooltip_text": "Get play by play recaps based on your game log.<br>Reveal hidden opponent cards, fast forward to<br>epic moments, and make the most out of your<br>victories and losses",
+					"tooltip_url": "http://www.zerotoheroes.com",
+					"logo": "zero-to-heroes-logo.svg",
+					"background": "#daac76;#131313;#131313",
+					"ftue_header": "Relive your matches",
+					"ftue_body": "Get play by play recaps based on your game log. Reveal hidden opponent cards, fast forward to epic moments, and make the most out of your victories and losses"
+				},
+				"block_top_window_navigation": true,
+				"popup_blocker": false
+			}
+		},
+		"force_browser": "user",
+		"game_events": ["9898"],
+		"launch_events": [
+			{
+				"event": "GameLaunch",
+				"event_data": {
+					"game_ids": [9898]
+				},
+				"start_minimized": false
+			}
+		],
+		"externally_connectable": {
+			"matches": [
+				"http://www.zerotoheroes.com",
+				"https://www.zerotoheroes.com",
+				"https://www.googletagmanager.com",
+				"http://www.googletagmanager.com"
+			]
+		},
+		"extra-objects": {
+			"simple-io-plugin-zip": {
+				"file": "Files/plugins/simple-io-plugin-zip.dll",
+				"class": "overwolf.plugins.SimpleIOPluginZip"
+			},
+			"overwolf-replay-converter": {
+				"file": "Files/plugins/HearthstoneReplays.dll",
+				"class": "HearthstoneReplays.ReplayConverterPlugin"
+			}
+		}
+	}
+}
