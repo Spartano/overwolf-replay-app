@@ -1,4 +1,4 @@
-/Files/node_modules
+/node_modules
 /npm-debug.log
-/Files/dist
-/Files/npm-debug.log
+/dist
+/npm-debug.log
