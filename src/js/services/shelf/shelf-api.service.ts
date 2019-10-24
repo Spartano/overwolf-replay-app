@@ -7,6 +7,8 @@ import { GameSelectedEvent } from './store/events/game-selected-event';
 import { GlobalErrorEvent } from './store/events/global-error-event';
 import { ShelfStoreService } from './store/shelf-store.service';
 
+declare var ga;
+
 @Injectable()
 export class ShelfApiService {
 	private matchIdBeingLoaded: string;
@@ -31,6 +33,7 @@ export class ShelfApiService {
 		// we're dealing with an old session
 		if (!matchId) {
 			this.store.publishEvent(new GlobalErrorEvent('old-session'));
+			ga('send', 'event', 'error', 'old-session');
 			return;
 		}
 		if (matchId === this.matchIdBeingLoaded) {
@@ -47,6 +50,7 @@ export class ShelfApiService {
 		if (!game) {
 			this.logger.debug('[shelf-api] no match found for id', matchId);
 			this.store.publishEvent(new GlobalErrorEvent('no-match-found'));
+			ga('send', 'event', 'error', 'no-match-found');
 			this.matchIdBeingLoaded = undefined;
 			return;
 		}
