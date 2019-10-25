@@ -22,9 +22,7 @@ import { DebugService } from '../../services/debug.service';
 import { Events } from '../../services/events.service';
 import { FileUploadService } from '../../services/file-upload.service';
 import { GameDbService } from '../../services/game-db.service';
-import { GameUploadService } from '../../services/game-upload.service';
 import { GameHelper } from '../../services/gameparsing/game-helper.service';
-import { SharingService } from '../../services/sharing.service';
 import { ShelfApiService } from '../../services/shelf/shelf-api.service';
 import { ShelfStoreService } from '../../services/shelf/store/shelf-store.service';
 import { UserPreferences } from '../../services/user-preferences.service';
@@ -83,9 +81,7 @@ export class SentryErrorHandler implements ErrorHandler {
 		FileUploadService,
 		Events,
 		GameHelper,
-		GameUploadService,
 		DebugService,
-		SharingService,
 		LZStringService,
 		OverwolfService,
 

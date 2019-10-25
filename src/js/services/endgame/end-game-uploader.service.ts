@@ -19,6 +19,7 @@ export class EndGameUploaderService {
 
 	public async upload(
 		gameEvent: GameEvent,
+		currentReviewId: string,
 		currentGameId: string,
 		deckstring: string,
 		deckName: string,
@@ -32,6 +33,7 @@ export class EndGameUploaderService {
 		}
 		this.logger.debug('Creating new game', currentGameId);
 		const game: Game = Game.createEmptyGame(currentGameId);
+		game.reviewId = currentReviewId;
 		game.gameFormat = this.toFormatType(gameResult.FormatType);
 		game.gameMode = this.toGameType(gameResult.GameType);
 		game.buildNumber = buildNumber;

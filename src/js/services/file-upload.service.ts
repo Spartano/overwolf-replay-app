@@ -23,26 +23,39 @@ export class FileUploadService {
 		});
 	}
 
-	public async uploadFromPath(filePath: string, game: Game, progressMonitor?: BehaviorSubject<string>, retriesLeft = 30) {
-		if (retriesLeft < 0) {
-			console.error('Could not create empty review', filePath);
-			return;
-		}
-		console.log('Requesting reading file from disk', filePath);
-		const user = await this.ow.getCurrentUser();
-		const userId = user.userId || user.machineId || user.username || 'unauthenticated_user';
+	public async createEmptyReview(): Promise<string> {
+		return new Promise<string>(resolve => {
+			this.createEmptyReviewInternal(reviewId => resolve(reviewId), 10);
+		});
+	}
 
-		// Build an empty review
+	private createEmptyReviewInternal(callback, retriesLeft = 10) {
+		if (retriesLeft < 0) {
+			console.error('Could not create empty review');
+			callback(null);
+		}
 		this.http.post(REVIEW_INIT_ENDPOINT, null).subscribe(
 			res => {
 				const reviewId: string = res as string;
 				console.log('Created empty shell review', res, reviewId);
-				this.postFullReview(reviewId, userId, filePath, game, progressMonitor);
+				callback(reviewId);
 			},
 			error => {
-				setTimeout(() => this.uploadFromPath(filePath, game, progressMonitor, retriesLeft - 1), 1000);
+				setTimeout(() => this.createEmptyReviewInternal(callback, retriesLeft - 1), 1000);
 			},
 		);
+	}
+
+	public async uploadFromPath(filePath: string, game: Game, progressMonitor?: BehaviorSubject<string>) {
+		const user = await this.ow.getCurrentUser();
+		const userId = user.userId || user.machineId || user.username || 'unauthenticated_user';
+
+		if (!game.reviewId) {
+			console.error('Could not upload game, no review id is associated to it');
+			return;
+		}
+
+		this.postFullReview(game.reviewId, userId, filePath, game, progressMonitor);
 	}
 
 	private postFullReview(reviewId: string, userId: string, filePath: string, game: Game, progressMonitor?: BehaviorSubject<string>) {
@@ -117,7 +130,6 @@ export class FileUploadService {
 				// }});
 			} else {
 				console.log('Uploaded game', data2, reviewId);
-				game.reviewId = reviewId;
 				this.gameDb.save(game);
 				if (progressMonitor) {
 					progressMonitor.next('GAME_REPLAY_SENT');
