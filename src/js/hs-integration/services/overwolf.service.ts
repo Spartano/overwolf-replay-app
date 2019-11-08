@@ -7,6 +7,8 @@ const HEARTHSTONE_GAME_ID = 9898;
 
 @Injectable()
 export class OverwolfService {
+	public static FIRESTONE_ID = 'lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob';
+
 	public static MAIN_WINDOW = 'MainWindow';
 	public static COLLECTION_WINDOW = 'CollectionWindow';
 	public static SETTINGS_WINDOW = 'SettingsWindow';
@@ -518,11 +520,19 @@ export class OverwolfService {
 		});
 	}
 
-	public async isManastormRunning(): Promise<boolean> {
+	public async registerInfo(id: string, eventsCallback): Promise<any> {
+		return new Promise<any>(resolve => {
+			overwolf.extensions.registerInfo(id, eventsCallback, () => {
+				resolve();
+			});
+		});
+	}
+
+	public async isFirestoneRunning(): Promise<boolean> {
 		return new Promise<boolean>(resolve => {
-			overwolf.extensions.getRunningState('kfnacgfblhkjdgcndfdobooemjaapcefaminngbk', (res: any) => {
-				console.warn('[overwolf-service] is Manastorm running?', res);
-				resolve(res);
+			overwolf.extensions.getRunningState(OverwolfService.FIRESTONE_ID, (res: any) => {
+				console.log('[overwolf-service] is Firestone running?', res);
+				resolve(res && res.isRunning);
 			});
 		});
 	}

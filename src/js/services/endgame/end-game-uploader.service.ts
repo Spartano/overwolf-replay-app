@@ -47,6 +47,7 @@ export class EndGameUploaderService {
 		this.gameParserService.extractMatchup(game);
 		this.gameParserService.extractDuration(game);
 		const [playerInfo, opponentInfo] = await Promise.all([this.playersInfo.getPlayerInfo(), this.playersInfo.getOpponentInfo()]);
+		console.log('player infos', playerInfo, opponentInfo);
 		let playerRank;
 		if (playerInfo && game.gameFormat === 'standard') {
 			if (playerInfo.standardLegendRank > 0) {
@@ -119,7 +120,7 @@ export class EndGameUploaderService {
 			case 22:
 				return 'tavern-brawl';
 			case 23:
-				return 'tournament';
+				return 'battlegrounds';
 			default:
 				console.log('unsupported game type', gameType);
 				return 'unknown';
