@@ -11,6 +11,8 @@ const GET_REVIEW_ENDPOINT = 'https://nx16sjfatc.execute-api.us-west-2.amazonaws.
 const REVIEW_INIT_ENDPOINT = 'https://husxs4v58a.execute-api.us-west-2.amazonaws.com/prod';
 const BUCKET = 'com.zerotoheroes.batch';
 
+declare var ga;
+
 @Injectable()
 export class FileUploadService {
 	constructor(private http: HttpClient, private ow: OverwolfService, private gameDb: GameDbService) {}
@@ -130,6 +132,7 @@ export class FileUploadService {
 				// }});
 			} else {
 				console.log('Uploaded game', data2, reviewId);
+				ga('send', 'event', 'review-created');
 				this.gameDb.save(game);
 				if (progressMonitor) {
 					progressMonitor.next('GAME_REPLAY_SENT');

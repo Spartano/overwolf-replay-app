@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
+import { OverwolfService } from '../../hs-integration/services/overwolf.service';
 import { Game } from '../../models/game';
 
 declare var ga: any;
@@ -62,7 +63,7 @@ declare var ga: any;
 export class SocialShareComponent {
 	private baseUrl: string;
 
-	constructor(private logger: NGXLogger) {}
+	constructor(private logger: NGXLogger, private readonly ow: OverwolfService) {}
 
 	@Input('game') set game(value: Game) {
 		this.logger.debug('[social-share] setting game');
@@ -75,7 +76,8 @@ export class SocialShareComponent {
 		return `${this.baseUrl}&source=${source}`;
 	}
 
-	sendShareStat(source: string) {
+	async sendShareStat(source: string) {
 		ga('send', 'event', 'share', source);
+		ga('send', 'event', 'firestone-user', await this.ow.isFirestoneRunning());
 	}
 }
