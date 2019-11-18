@@ -44,8 +44,12 @@ export class EndGameUploaderService {
 		}
 		this.gameHelper.setXmlReplay(game, replayXml);
 		game.uncompressedXmlReplay = replayXml;
-		this.gameParserService.extractMatchup(game);
-		this.gameParserService.extractDuration(game);
+		try {
+			this.gameParserService.extractMatchup(game);
+			this.gameParserService.extractDuration(game);
+		} catch (e) {
+			console.error('Could not extract match info', e);
+		}
 		const [playerInfo, opponentInfo] = await Promise.all([this.playersInfo.getPlayerInfo(), this.playersInfo.getOpponentInfo()]);
 		console.log('player infos', playerInfo, opponentInfo);
 		let playerRank;
