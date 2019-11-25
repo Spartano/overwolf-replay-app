@@ -62,7 +62,7 @@ export class ShelfStoreService {
 			return;
 		}
 		if (this.isProcessing) {
-			this.logger.debug('[store] queue already processing, returning');
+			// this.logger.debug('[store] queue already processing, returning');
 			return;
 		}
 		// this.logger.debug('[store] will process event');

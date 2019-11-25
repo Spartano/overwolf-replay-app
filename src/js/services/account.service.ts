@@ -44,60 +44,65 @@ export class AccountService {
 
 	public async claimAccounts(authToken: string) {
 		this.logger.debug('claiming accounts');
-		const user = await this.ow.getCurrentUser();
-		this.logger.debug('claiming machineId account');
+		setTimeout(async () => {
+			const user = await this.ow.getCurrentUser();
+			this.logger.debug('claiming machineId account');
 
-		const httpHeaders = new HttpHeaders().set('x-auth-token', authToken);
+			const httpHeaders = new HttpHeaders().set('x-auth-token', authToken);
 
-		const machineIdUrl = CLAIM_ACCOUNT_URL + user.machineId;
-		this.http.post(machineIdUrl, {}, { headers: httpHeaders }).subscribe(
-			data => {
-				this.accountClaimHandler(data, true);
-			},
-			err => {
-				this.accountClaimErrorHandler(err);
-			},
-		);
+			const machineIdUrl = CLAIM_ACCOUNT_URL + user.machineId;
+			this.http.post(machineIdUrl, {}, { headers: httpHeaders }).subscribe(
+				data => {
+					this.accountClaimHandler(data, true);
+				},
+				err => {
+					this.accountClaimErrorHandler(err);
+				},
+			);
 
-		const accountUrl = CLAIM_ACCOUNT_URL + user.userId;
-		this.http.post(accountUrl, {}, { headers: httpHeaders }).subscribe(
-			data => {
-				this.accountClaimHandler(data, true);
-			},
-			err => {
-				this.accountClaimErrorHandler(err);
-			},
-		);
+			const accountUrl = CLAIM_ACCOUNT_URL + user.userId;
+			this.http.post(accountUrl, {}, { headers: httpHeaders }).subscribe(
+				data => {
+					this.accountClaimHandler(data, true);
+				},
+				err => {
+					this.accountClaimErrorHandler(err);
+				},
+			);
+		});
 	}
 
 	public async disconnect() {
 		const authToken: string = this.localStorageService.get('auth-token');
 		this.logger.debug('disconnecting accounts');
-		const user = await this.ow.getCurrentUser();
-		const httpHeaders = new HttpHeaders().set('x-auth-token', authToken);
+		setTimeout(async () => {
+			const user = await this.ow.getCurrentUser();
+			this.logger.debug('retrieved current user', user);
+			const httpHeaders = new HttpHeaders().set('x-auth-token', authToken);
 
-		const machineIdUrl = DISCONNECT_ACCOUNT_URL + user.machineId;
-		this.http.post(machineIdUrl, {}, { headers: httpHeaders }).subscribe(
-			data => {
-				this.accountClaimHandler(data, false);
-			},
-			err => {
-				this.accountDisconnectErrorHandler(err, user.machineId);
-			},
-		);
+			const machineIdUrl = DISCONNECT_ACCOUNT_URL + user.machineId;
+			this.http.post(machineIdUrl, {}, { headers: httpHeaders }).subscribe(
+				data => {
+					this.accountClaimHandler(data, false);
+				},
+				err => {
+					this.accountDisconnectErrorHandler(err, user.machineId);
+				},
+			);
 
-		const accountUrl = DISCONNECT_ACCOUNT_URL + user.userId;
-		this.http.post(accountUrl, {}, { headers: httpHeaders }).subscribe(
-			data => {
-				this.accountClaimHandler(data, false);
-			},
-			err => {
-				this.accountDisconnectErrorHandler(err, user.userId);
-			},
-		);
+			const accountUrl = DISCONNECT_ACCOUNT_URL + user.userId;
+			this.http.post(accountUrl, {}, { headers: httpHeaders }).subscribe(
+				data => {
+					this.accountClaimHandler(data, false);
+				},
+				err => {
+					this.accountDisconnectErrorHandler(err, user.userId);
+				},
+			);
 
-		this.localStorageService.remove('username', 'auth-token');
-		this.userPreferences.setAutoUpload(true);
+			this.localStorageService.remove('username', 'auth-token');
+			this.userPreferences.setAutoUpload(true);
+		});
 	}
 
 	public async createAccount(credentials: {

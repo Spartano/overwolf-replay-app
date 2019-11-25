@@ -166,7 +166,9 @@ export class OverwolfService {
 	}> {
 		return new Promise<{ status: string; username: string; userId: string; machineId: string; partnerId: number; channel: string }>(
 			resolve => {
+				console.log('retrieving current user');
 				overwolf.profile.getCurrentUser(user => {
+					console.log('ow current user', user);
 					resolve(user);
 				});
 			},
