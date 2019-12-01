@@ -360,7 +360,7 @@ export class GameEvents {
 				);
 				break;
 			default:
-				console.log('unsupported game event', gameEvent);
+			// console.log('unsupported game event', gameEvent);
 		}
 	}
 
