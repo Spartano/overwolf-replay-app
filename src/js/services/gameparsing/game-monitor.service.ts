@@ -43,6 +43,7 @@ export class GameMonitorService {
 			if (info && info.type === 'new-review') {
 				const game: Game = info.game;
 				await this.gameDb.save(game);
+				this.logger.debug('game saved in db', game.id);
 			} else if (info && info.type === 'new-empty-review') {
 				this.currentReviewId = info.reviewId;
 			}
