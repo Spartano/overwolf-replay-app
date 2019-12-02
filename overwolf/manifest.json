@@ -69,7 +69,12 @@
 				"http://www.zerotoheroes.com",
 				"https://www.zerotoheroes.com",
 				"https://www.googletagmanager.com",
-				"http://www.googletagmanager.com"
+				"http://www.googletagmanager.com",
+				"https://*.firestoneapp.com",
+				"http://*.amazonaws.com",
+				"https://*.amazonaws.com",
+				"http://static.zerotoheroes.com",
+				"https://static.zerotoheroes.com"
 			]
 		},
 		"extra-objects": {
