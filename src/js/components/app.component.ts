@@ -59,6 +59,7 @@ export class AppComponent {
 			const game: Game = JSON.parse(event.data[0]);
 			this.replayManager.saveLocally(game);
 		});
+		await this.cardsDb.initializeCardsDb();
 		this.requestDisplayOnShelf();
 	}
 
@@ -86,23 +87,11 @@ export class AppComponent {
 					this.retriesForEgsLeft,
 				);
 			} else {
-				const extra = {
-					status: displayRequestResult.status,
-					result: displayRequestResult,
-				};
-				console.log('Request to display shelf failed', { extra: extra }, this.retriesForEgsLeft);
-				this.retryEgs(() => console.log('Request to display shelf failed', { extra: extra }));
+				this.retryEgs(() => console.log('Request to display shelf failed', displayRequestResult));
 			}
 		} else {
-			const extra = {
-				status: egsEnabledResult.status,
-				isEnabled: egsEnabledResult.isEnabled,
-				result: egsEnabledResult,
-			};
-			console.log('EGS is not enabled', { extra: extra });
-			this.retryEgs(() => console.log('EGS is not enabled', { extra: extra }));
+			this.retryEgs(() => console.log('EGS is not enabled', egsEnabledResult));
 		}
-		await this.cardsDb.initializeCardsDb();
 	}
 
 	private exitGame(gameInfoResult: any): boolean {

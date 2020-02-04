@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { Game } from '../../models/game';
 import { SettingsMenu } from '../../models/shelf/settings-menu';
-import { User } from '../../models/shelf/user';
 
 @Component({
 	selector: 'shelf-header',
@@ -17,14 +16,13 @@ import { User } from '../../models/shelf/user';
 			<h1 class="manastorm-header-title">{{ playerName }} Vs. {{ opponentName }}</h1>
 			<social-share class="ignored-wrapper" [game]="_game"></social-share>
 			<div class="gs-icon-divider"></div>
-			<settings-menu class="ignored-wrapper" [user]="_user" [menu]="_menu"></settings-menu>
+			<settings-menu class="ignored-wrapper" [menu]="_menu"></settings-menu>
 		</header>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShelfHeaderComponent {
 	_game: Game;
-	_user: User;
 	_menu: SettingsMenu;
 
 	playerName: string;
@@ -40,11 +38,6 @@ export class ShelfHeaderComponent {
 		this._game = value;
 		this.playerName = value ? value.player.name : this.playerName;
 		this.opponentName = value ? value.opponent.name : this.opponentName;
-	}
-
-	@Input('user') set user(value: User) {
-		this.logger.debug('[header] setting user', value);
-		this._user = value;
 	}
 
 	@Input('menu') set menu(value: SettingsMenu) {

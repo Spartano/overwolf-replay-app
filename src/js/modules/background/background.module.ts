@@ -30,7 +30,6 @@ import { LogListenerService } from '../../services/log-listener.service';
 import { LogRegisterService } from '../../services/log-register.service';
 import { ReplayManager } from '../../services/replay-manager.service';
 import { ReplayUploader } from '../../services/replay-uploader.service';
-import { UserPreferences } from '../../services/user-preferences.service';
 
 console.log('version is ' + process.env.APP_VERSION);
 console.log('env is', process.env.NODE_ENV);
@@ -73,7 +72,6 @@ export class SentryErrorHandler implements ErrorHandler {
 		GameParserService,
 		GameDbService,
 		LogListenerService,
-		UserPreferences,
 		LocalStorageService,
 		ReplayManager,
 		LogUtils,

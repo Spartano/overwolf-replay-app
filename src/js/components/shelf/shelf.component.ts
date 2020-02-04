@@ -15,11 +15,9 @@ import { ShelfStoreService } from '../../services/shelf/store/shelf-store.servic
 	],
 	template: `
 		<div class="manastorm-shelf light-theme" *ngIf="state">
-			<shelf-header class="ignored-wrapper" [game]="state.currentGame" [user]="state.user" [menu]="state.settingsMenu">
-			</shelf-header>
-			<login-modal class="ignored-wrapper" [info]="state.loginModalInfo"> </login-modal>
+			<shelf-header class="ignored-wrapper" [game]="state.currentGame" [menu]="state.settingsMenu"> </shelf-header>
 			<game-replay class="ignored-wrapper" [game]="state.currentGame"></game-replay>
-			<empty-state class="ignored-wrapper" [error]="state.globalError" [user]="state.user"></empty-state>
+			<empty-state class="ignored-wrapper" [error]="state.globalError"></empty-state>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

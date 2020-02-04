@@ -3,27 +3,14 @@ import { Map } from 'immutable';
 import { NGXLogger } from 'ngx-logger';
 import { BehaviorSubject } from 'rxjs';
 import { ShelfState } from '../../../models/shelf/shelf-state';
-import { AccountService } from '../../account.service';
-import { ChangeLoginActiveSectionEvent } from './events/change-login-active-section-event';
-import { CreateAccountEvent } from './events/create-account-event';
 import { GameSelectedEvent } from './events/game-selected-event';
 import { GlobalErrorEvent } from './events/global-error-event';
-import { LoginEvent } from './events/login-event';
-import { LoginModalToggleEvent } from './events/login-modal-toggle-event';
-import { LogoutEvent } from './events/logout-event';
 import { PopulateStoreEvent } from './events/populate-store-event';
-import { ResetPasswordEvent } from './events/reset-password-event';
 import { SettingsMenuToggleEvent } from './events/settings-menu-toggle-event';
 import { Processor } from './processor';
-import { ChangeLoginActiveSectionProcessor } from './processors/change-login-active-section-processor';
-import { CreateAccountProcessor } from './processors/create-account-processor';
 import { GameSelectedProcessor } from './processors/game-selected-processor';
 import { GlobalEventProcessor } from './processors/global-event-processor';
-import { LoginModalToggleProcessor } from './processors/login-modal-toggle-processor';
-import { LoginProcessor } from './processors/login-processor';
-import { LogoutProcessor } from './processors/logout-processor';
 import { PopulateStoreProcessor } from './processors/populate-store-processor';
-import { ResetPasswordProcessor } from './processors/reset-password-processor';
 import { SettingsMenuToggleProcessor } from './processors/settings-menu-toggle-processor';
 import { ShelfStoreEvent } from './shelf-store-event';
 
@@ -37,7 +24,7 @@ export class ShelfStoreService {
 	private eventQueue: ShelfStoreEvent[] = [];
 	private isProcessing = false;
 
-	constructor(private logger: NGXLogger, private accountService: AccountService) {
+	constructor(private logger: NGXLogger) {
 		this.processors = this.buildProcessors();
 		this.stateUpdater.subscribe((event: ShelfStoreEvent) => {
 			this.eventQueue.push(event);
@@ -85,31 +72,13 @@ export class ShelfStoreService {
 	private buildProcessors(): Map<string, Processor> {
 		return Map.of(
 			PopulateStoreEvent.eventName(),
-			new PopulateStoreProcessor(this.accountService),
+			new PopulateStoreProcessor(),
 
 			GameSelectedEvent.eventName(),
 			new GameSelectedProcessor(),
 
 			SettingsMenuToggleEvent.eventName(),
 			new SettingsMenuToggleProcessor(),
-
-			LoginModalToggleEvent.eventName(),
-			new LoginModalToggleProcessor(),
-
-			ChangeLoginActiveSectionEvent.eventName(),
-			new ChangeLoginActiveSectionProcessor(),
-
-			CreateAccountEvent.eventName(),
-			new CreateAccountProcessor(this.accountService, this.logger),
-
-			LoginEvent.eventName(),
-			new LoginProcessor(this.accountService, this.logger),
-
-			LogoutEvent.eventName(),
-			new LogoutProcessor(this.accountService, this.logger),
-
-			ResetPasswordEvent.eventName(),
-			new ResetPasswordProcessor(this.accountService, this.logger),
 
 			GlobalErrorEvent.eventName(),
 			new GlobalEventProcessor(),

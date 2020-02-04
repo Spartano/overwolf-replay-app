@@ -11,13 +11,11 @@ import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { EmptyStateIllustrationComponent } from '../../components/shelf/empty-state-illustration.component';
 import { EmptyStateComponent } from '../../components/shelf/empty-state.component';
 import { GameReplayComponent } from '../../components/shelf/game-replay.component';
-import { LoginModalComponent } from '../../components/shelf/login-modal.component';
 import { SettingsMenuComponent } from '../../components/shelf/settings-menu.component';
 import { ShelfHeaderComponent } from '../../components/shelf/shelf-header.component';
 import { ShelfComponent } from '../../components/shelf/shelf.component';
 import { SocialShareComponent } from '../../components/shelf/social-share.component';
 import { OverwolfService } from '../../hs-integration/services/overwolf.service';
-import { AccountService } from '../../services/account.service';
 import { DebugService } from '../../services/debug.service';
 import { Events } from '../../services/events.service';
 import { FileUploadService } from '../../services/file-upload.service';
@@ -25,7 +23,6 @@ import { GameDbService } from '../../services/game-db.service';
 import { GameHelper } from '../../services/gameparsing/game-helper.service';
 import { ShelfApiService } from '../../services/shelf/shelf-api.service';
 import { ShelfStoreService } from '../../services/shelf/store/shelf-store.service';
-import { UserPreferences } from '../../services/user-preferences.service';
 
 console.log('version is ' + process.env.APP_VERSION);
 
@@ -65,7 +62,6 @@ export class SentryErrorHandler implements ErrorHandler {
 		ShelfHeaderComponent,
 		SocialShareComponent,
 		SettingsMenuComponent,
-		LoginModalComponent,
 		EmptyStateComponent,
 		EmptyStateIllustrationComponent,
 	],
@@ -75,9 +71,7 @@ export class SentryErrorHandler implements ErrorHandler {
 
 		GameDbService,
 		// GameParserService,
-		UserPreferences,
 		LocalStorageService,
-		AccountService,
 		FileUploadService,
 		Events,
 		GameHelper,

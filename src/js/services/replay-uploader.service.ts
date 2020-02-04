@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Events } from './events.service';
 import { Game } from '../models/game';
+import { Events } from './events.service';
 import { FileUploadService } from './file-upload.service';
-import { UserPreferences } from './user-preferences.service';
 
 @Injectable()
 export class ReplayUploader {
-	constructor(private events: Events, private fileUpload: FileUploadService, private userPreferences: UserPreferences) {
+	constructor(private events: Events, private fileUpload: FileUploadService) {
 		console.log('starting replay uploader service');
 		this.init();
 	}
