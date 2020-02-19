@@ -7,7 +7,7 @@ import { OverwolfService } from '../hs-integration/services/overwolf.service';
 import { Game } from '../models/game';
 import { GameDbService } from './game-db.service';
 
-const GET_REVIEW_ENDPOINT = 'https://nx16sjfatc.execute-api.us-west-2.amazonaws.com/prod/get-review/';
+const GET_REVIEW_ENDPOINT = 'https://nj8w9uc6p5.execute-api.us-west-2.amazonaws.com/Prod/';
 const REVIEW_INIT_ENDPOINT = 'https://husxs4v58a.execute-api.us-west-2.amazonaws.com/prod';
 const BUCKET = 'com.zerotoheroes.batch';
 
