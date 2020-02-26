@@ -40,4 +40,10 @@ export class Player {
 	name: string;
 	class: string;
 	hero: string;
+
+	constructor() {
+		this.name = 'unknown';
+		this.class = 'unknown';
+		this.hero = 'unknown';
+	}
 }

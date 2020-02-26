@@ -38,6 +38,15 @@ export class MemoryInspectionService {
 		});
 	}
 
+	public getBattlegroundsRating(): Promise<number> {
+		// this.playersInfoTriesLeft = 20;
+		return new Promise<number>(resolve => {
+			this.getBattlegroundsRatingInternal(rating => {
+				resolve(rating);
+			});
+		});
+	}
+
 	private async init() {
 		this.ow.addGameInfoUpdatedListener(res => {
 			if (this.ow.gameLaunched(res)) {
@@ -103,8 +112,26 @@ export class MemoryInspectionService {
 		// resolve(null);
 	}
 
+	private async getBattlegroundsRatingInternal(callback, retriesLeft = 15) {
+		if (retriesLeft <= 0) {
+			console.error('[memory-service] could not getBattlegroundsRatingInternal from GEP');
+			callback(null);
+			return;
+		}
+		const info = await this.ow.getGameEventsInfo();
+		console.log('[memory-service] info from GEP', info);
+		if (info && info.res && info.res.match_info && info.res.match_info.battlegrounds_rating != null) {
+			console.log('[memory-service] fetched getBattlegroundsRatingInternal', info.res.match_info.battlegrounds_rating);
+			callback(parseInt(info.res.match_info.battlegrounds_rating));
+			return;
+		}
+		setTimeout(() => this.getBattlegroundsRatingInternal(callback, retriesLeft - 1), 2000);
+		// console.warn('[memory-service] could not fetch playersInfo', info);
+		// resolve(null);
+	}
+
 	private handleInfoUpdate(info) {
-		// console.log('[memory service] INFO UPDATE: ', info, info.feature, info.info);
+		console.log('[memory service] INFO UPDATE: ', info, info.feature, info.info);
 		if (info.feature === 'scene_state') {
 			// console.log('[memory service] INFO UPDATE: ', info, info.feature, info.info);
 			this.events.broadcast(Events.SCENE_CHANGED, info.info.game_info.scene_state);

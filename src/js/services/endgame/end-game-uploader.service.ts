@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { GameEvent } from '../../hs-integration/models/game-event';
+import { MemoryInspectionService } from '../../hs-integration/services/memory-inspection.service';
 import { PlayersInfoService } from '../../hs-integration/services/players-info.service';
 import { Game } from '../../models/game';
 import { GameParserService } from '../game-parser.service';
@@ -15,6 +16,7 @@ export class EndGameUploaderService {
 		private gameHelper: GameHelper,
 		private gameParserService: GameParserService,
 		private playersInfo: PlayersInfoService,
+		private memoryInspection: MemoryInspectionService,
 	) {}
 
 	public async upload(
@@ -53,7 +55,11 @@ export class EndGameUploaderService {
 		const [playerInfo, opponentInfo] = await Promise.all([this.playersInfo.getPlayerInfo(), this.playersInfo.getOpponentInfo()]);
 		console.log('player infos', playerInfo, opponentInfo);
 		let playerRank;
-		if (playerInfo && game.gameFormat === 'standard') {
+		if (game.gameMode === 'battlegrounds') {
+			const battlegroundsInfo = await this.memoryInspection.getBattlegroundsRating();
+			playerRank = battlegroundsInfo;
+			console.log('updated player rank for battlegrounds', playerRank);
+		} else if (playerInfo && game.gameFormat === 'standard') {
 			if (playerInfo.standardLegendRank > 0) {
 				playerRank = `legend-${playerInfo.standardLegendRank}`;
 			} else {
