@@ -1,6 +1,6 @@
 {
 	"name": "manastorm",
-	"version": "2.2.15",
+	"version": "2.2.16",
 	"scripts": {
 		"lint": "eslint --color --fix --ext .ts ./src/",
 		"dev": "rimraf dist && webpack --watch --config webpack.config.js --env.appversion=%npm_package_version% --env.development --progress --profile --bail --colors",
@@ -50,7 +50,7 @@
 		"file-loader": "3.0.1",
 		"html-loader": "0.5.5",
 		"mini-css-extract-plugin": "0.6.0",
-		"node-sass": "^4.13.1",
+		"node-sass": "^4.14.1",
 		"prettier": "1.18.2",
 		"raw-loader": "1.0.0",
 		"replace-in-file-webpack-plugin": "1.0.6",
@@ -63,7 +63,7 @@
 		"typescript": "3.4.5",
 		"webpack": "4.30.0",
 		"webpack-bundle-analyzer": "3.4.1",
-		"webpack-cli": "3.3.0",
+		"webpack-cli": "^3.3.11",
 		"webpack-dev-server": "3.3.1"
 	}
 }
