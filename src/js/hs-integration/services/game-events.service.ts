@@ -388,6 +388,7 @@ export class GameEvents {
 
 	private async uploadLogsAndSendException(first, second) {
 		try {
+			return;
 			const s3LogFileKey = await this.logService.uploadGameLogs();
 			const fullLogsFromPlugin = second.indexOf('/#/') !== -1 ? second.split('/#/')[0] : second;
 			const pluginLogsFileKey = await this.s3.postLogs(fullLogsFromPlugin);
