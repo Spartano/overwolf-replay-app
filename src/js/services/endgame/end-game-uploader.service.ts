@@ -63,13 +63,13 @@ export class EndGameUploaderService {
 			if (playerInfo.standardLegendRank > 0) {
 				playerRank = `legend-${playerInfo.standardLegendRank}`;
 			} else {
-				playerRank = playerInfo.standardRank;
+				playerRank = this.parseRank(playerInfo.standardRank);
 			}
 		} else if (playerInfo && game.gameFormat === 'wild') {
 			if (playerInfo.wildLegendRank > 0) {
 				playerRank = `legend-${playerInfo.wildLegendRank}`;
 			} else {
-				playerRank = playerInfo.wildRank;
+				playerRank = this.parseRank(playerInfo.wildRank);
 			}
 		}
 		let opponentRank;
@@ -77,18 +77,44 @@ export class EndGameUploaderService {
 			if (opponentInfo.standardLegendRank > 0) {
 				opponentRank = `legend-${opponentInfo.standardLegendRank}`;
 			} else {
-				opponentRank = opponentInfo.standardRank;
+				opponentRank = this.parseRank(opponentInfo.standardRank);
 			}
 		} else if (opponentInfo && game.gameFormat === 'wild') {
 			if (opponentInfo.wildLegendRank > 0) {
 				opponentRank = `legend-${opponentInfo.wildLegendRank}`;
 			} else {
-				opponentRank = opponentInfo.wildRank;
+				opponentRank = this.parseRank(opponentInfo.wildRank);
 			}
 		}
 		game.opponentRank = opponentRank;
 		game.playerRank = playerRank;
 		return game;
+	}
+
+	private parseRank(initialRank: string): string {
+		if (initialRank.indexOf(' ') !== -1) {
+			const leagueName = initialRank.split(' ')[0];
+			const leagueId = this.leagueNameToId(leagueName);
+			let rank = parseInt(initialRank.split(' ')[1]);
+			rank = isNaN(rank) ? -1 : rank;
+			return leagueId + '-' + rank;
+		}
+	}
+
+	private leagueNameToId(leagueName: string): number {
+		switch (leagueName) {
+			case 'Bronze':
+				return 5;
+			case 'Silver':
+				return 4;
+			case 'Gold':
+				return 3;
+			case 'Platinum':
+				return 2;
+			case 'Diamond':
+				return 1;
+		}
+		return -1;
 	}
 
 	private toFormatType(formatType: number) {

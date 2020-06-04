@@ -2,8 +2,8 @@ export interface PlayerInfo {
 	readonly name: string;
 	readonly cardId: string;
 	readonly cardBackId: number;
-	readonly standardRank: number;
+	readonly standardRank: string;
 	readonly standardLegendRank: number;
-	readonly wildRank: number;
+	readonly wildRank: string;
 	readonly wildLegendRank: number;
 }

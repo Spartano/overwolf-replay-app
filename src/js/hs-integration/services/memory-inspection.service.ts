@@ -103,7 +103,7 @@ export class MemoryInspectionService {
 			const opponent: string = info.res.playersInfo.opponent;
 			callback({
 				localPlayer: JSON.parse(localPlayer),
-				oppoennt: JSON.parse(opponent),
+				opponent: JSON.parse(opponent),
 			});
 			return;
 		}
@@ -131,7 +131,7 @@ export class MemoryInspectionService {
 	}
 
 	private handleInfoUpdate(info) {
-		console.log('[memory service] INFO UPDATE: ', info, info.feature, info.info);
+		// console.log('[memory service] INFO UPDATE: ', info, info.feature, info.info);
 		if (info.feature === 'scene_state') {
 			// console.log('[memory service] INFO UPDATE: ', info, info.feature, info.info);
 			this.events.broadcast(Events.SCENE_CHANGED, info.info.game_info.scene_state);
