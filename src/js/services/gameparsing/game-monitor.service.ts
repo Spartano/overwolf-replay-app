@@ -9,6 +9,7 @@ import { EndGameUploaderService } from '../endgame/end-game-uploader.service';
 import { Events } from '../events.service';
 import { FileUploadService } from '../file-upload.service';
 import { GameDbService } from '../game-db.service';
+import { uuid } from '../utils';
 
 @Injectable()
 export class GameMonitorService {
@@ -56,7 +57,7 @@ export class GameMonitorService {
 				// This is here only during the transition period, when Firestone still has the old version
 				// and manastorm is updated
 				this.logger.warn('[manastorm-bridge] Creating empty review, should be removed once firestone is updated');
-				const currentReviewId = await this.fileUpload.createEmptyReview();
+				const currentReviewId = uuid();
 				const info = {
 					type: 'new-empty-review',
 					reviewId: currentReviewId,
@@ -83,7 +84,7 @@ export class GameMonitorService {
 						return;
 					}
 					console.log('game-monitor, game_ned', gameEvent, this.deckService);
-					const currentReviewId = await this.fileUpload.createEmptyReview();
+					const currentReviewId = uuid();
 					const game = await this.endGameUploader.upload(
 						gameEvent,
 						currentReviewId,

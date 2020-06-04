@@ -8,7 +8,6 @@ import { Game } from '../models/game';
 import { GameDbService } from './game-db.service';
 
 const GET_REVIEW_ENDPOINT = 'https://nj8w9uc6p5.execute-api.us-west-2.amazonaws.com/Prod/';
-const REVIEW_INIT_ENDPOINT = 'https://husxs4v58a.execute-api.us-west-2.amazonaws.com/prod';
 const BUCKET = 'com.zerotoheroes.batch';
 
 declare var ga;
@@ -23,29 +22,6 @@ export class FileUploadService {
 			console.log('retrieved review', res);
 			callback(res);
 		});
-	}
-
-	public async createEmptyReview(): Promise<string> {
-		return new Promise<string>(resolve => {
-			this.createEmptyReviewInternal(reviewId => resolve(reviewId), 10);
-		});
-	}
-
-	private createEmptyReviewInternal(callback, retriesLeft = 10) {
-		if (retriesLeft < 0) {
-			console.error('Could not create empty review');
-			callback(null);
-		}
-		this.http.post(REVIEW_INIT_ENDPOINT, null).subscribe(
-			res => {
-				const reviewId: string = res as string;
-				console.log('Created empty shell review', res, reviewId);
-				callback(reviewId);
-			},
-			error => {
-				setTimeout(() => this.createEmptyReviewInternal(callback, retriesLeft - 1), 1000);
-			},
-		);
 	}
 
 	public async uploadFromPath(filePath: string, game: Game, progressMonitor?: BehaviorSubject<string>) {
