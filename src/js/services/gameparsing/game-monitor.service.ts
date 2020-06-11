@@ -53,17 +53,6 @@ export class GameMonitorService {
 
 	private async handleEvent(gameEvent: GameEvent) {
 		switch (gameEvent.type) {
-			case GameEvent.GAME_START:
-				// This is here only during the transition period, when Firestone still has the old version
-				// and manastorm is updated
-				this.logger.warn('[manastorm-bridge] Creating empty review, should be removed once firestone is updated');
-				const currentReviewId = uuid();
-				const info = {
-					type: 'new-empty-review',
-					reviewId: currentReviewId,
-					replayUrl: undefined,
-				};
-				this.ow.setExtensionInfo(JSON.stringify(info));
 			case GameEvent.LOCAL_PLAYER:
 				this.currentDeckstring = this.deckService.currentDeck.deckstring;
 				this.currentDeckname = this.deckService.currentDeck.name;

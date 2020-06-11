@@ -97,6 +97,7 @@ export class MemoryInspectionService {
 			return;
 		}
 		const info = await this.ow.getGameEventsInfo();
+		console.log('[memory-service] info', info);
 		if (info && info.res && info.res.playersInfo) {
 			console.log('[memory-service] fetched playersInfo', info.res.playersInfo);
 			const localPlayer: string = info.res.playersInfo.localPlayer;

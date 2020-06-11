@@ -73,17 +73,19 @@ export class EndGameUploaderService {
 			}
 		}
 		let opponentRank;
-		if (opponentInfo && game.gameFormat === 'standard') {
-			if (opponentInfo.standardLegendRank > 0) {
-				opponentRank = `legend-${opponentInfo.standardLegendRank}`;
-			} else {
-				opponentRank = this.parseRank(opponentInfo.standardRank);
-			}
-		} else if (opponentInfo && game.gameFormat === 'wild') {
-			if (opponentInfo.wildLegendRank > 0) {
-				opponentRank = `legend-${opponentInfo.wildLegendRank}`;
-			} else {
-				opponentRank = this.parseRank(opponentInfo.wildRank);
+		if (game.gameMode !== 'battlegrounds') {
+			if (opponentInfo && game.gameFormat === 'standard') {
+				if (opponentInfo.standardLegendRank > 0) {
+					opponentRank = `legend-${opponentInfo.standardLegendRank}`;
+				} else {
+					opponentRank = this.parseRank(opponentInfo.standardRank);
+				}
+			} else if (opponentInfo && game.gameFormat === 'wild') {
+				if (opponentInfo.wildLegendRank > 0) {
+					opponentRank = `legend-${opponentInfo.wildLegendRank}`;
+				} else {
+					opponentRank = this.parseRank(opponentInfo.wildRank);
+				}
 			}
 		}
 		game.opponentRank = opponentRank;
