@@ -18,9 +18,9 @@ export class PlayersInfoService {
 	}
 
 	public async getPlayerInfo(): Promise<PlayerInfo> {
-		if (this.playerInfo) {
-			return this.playerInfo;
-		}
+		// if (this.playerInfo) {
+		// 	return this.playerInfo;
+		// }
 		console.warn('[players-info] playerInfo not present in cache, fetching it from GEP');
 		const infoFromGep = await this.memoryService.getPlayerInfo();
 		if (!infoFromGep) {
@@ -31,9 +31,9 @@ export class PlayersInfoService {
 	}
 
 	public async getOpponentInfo(): Promise<PlayerInfo> {
-		if (this.opponentInfo) {
-			return this.opponentInfo;
-		}
+		// if (this.opponentInfo) {
+		// 	return this.opponentInfo;
+		// }
 		// It's usually less important to have the opponent info, so we only add this as a log
 		console.log('[players-info] opponentInfo not present in cache, fetching it from GEP');
 		const infoFromGep = await this.memoryService.getPlayerInfo();

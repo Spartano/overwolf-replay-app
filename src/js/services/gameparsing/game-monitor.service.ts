@@ -72,8 +72,9 @@ export class GameMonitorService {
 						this.logger.debug('[manastorm-bridge] Firestone is running and initialized a review, no need to upload a review');
 						return;
 					}
-					console.log('game-monitor, game_ned', gameEvent, this.deckService);
+					console.log('game-monitor, game_ned', gameEvent);
 					const currentReviewId = uuid();
+					console.log('current review id', currentReviewId);
 					const game = await this.endGameUploader.upload(
 						gameEvent,
 						currentReviewId,
@@ -83,6 +84,7 @@ export class GameMonitorService {
 						this.currentBuildNumber,
 						this.currentScenarioId,
 					);
+					console.log('built game', game);
 					this.deckService.reset();
 					this.currentDeckstring = undefined;
 					this.currentDeckname = undefined;

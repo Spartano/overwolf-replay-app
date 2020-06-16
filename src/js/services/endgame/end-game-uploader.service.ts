@@ -33,7 +33,7 @@ export class EndGameUploaderService {
 		if (!replayXml) {
 			console.warn('could not convert replay');
 		}
-		this.logger.debug('Creating new game', currentGameId);
+		console.log('Creating new game', currentGameId);
 		const game: Game = Game.createEmptyGame(currentGameId);
 		game.reviewId = currentReviewId;
 		game.gameFormat = this.toFormatType(gameResult.FormatType);
@@ -72,6 +72,7 @@ export class EndGameUploaderService {
 				playerRank = this.parseRank(playerInfo.wildRank);
 			}
 		}
+		console.log('parsed player rank', playerRank);
 		let opponentRank;
 		if (game.gameMode !== 'battlegrounds') {
 			if (opponentInfo && game.gameFormat === 'standard') {
@@ -88,19 +89,21 @@ export class EndGameUploaderService {
 				}
 			}
 		}
+		console.log('parsed opponent rank', opponentRank);
 		game.opponentRank = opponentRank;
 		game.playerRank = playerRank;
 		return game;
 	}
 
 	private parseRank(initialRank: string): string {
-		if (initialRank.indexOf(' ') !== -1) {
+		if (initialRank && initialRank.indexOf && initialRank.indexOf(' ') !== -1) {
 			const leagueName = initialRank.split(' ')[0];
 			const leagueId = this.leagueNameToId(leagueName);
 			let rank = parseInt(initialRank.split(' ')[1]);
 			rank = isNaN(rank) ? -1 : rank;
 			return leagueId + '-' + rank;
 		}
+		return initialRank;
 	}
 
 	private leagueNameToId(leagueName: string): number {
