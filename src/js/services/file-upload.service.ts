@@ -32,6 +32,10 @@ export class FileUploadService {
 			console.error('Could not upload game, no review id is associated to it');
 			return;
 		}
+		if (game.gameMode !== 'battlegrounds') {
+			console.warn('not uploading non-bgs games anymore');
+			return;
+		}
 
 		this.postFullReview(game.reviewId, userId, filePath, game, progressMonitor);
 	}
